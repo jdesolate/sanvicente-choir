@@ -20,7 +20,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel, Duljo | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | June 20 (Sat) | **First General Assembly** *(special one-time event — new officers already sworn in)* — 4PM Mass San Pedro Chapel, Duljo → 5PM General Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 Major |
 | June 20 | Membership Renewal, Constitution Signing, Officer Onboarding, Personal Goals | 🔵 Admin |
 | Late June | First Officers Meeting — rehearsal schedule planning, availability poll | 🔵 Admin |
@@ -33,7 +33,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | TBD (officers poll) | Monthly Rehearsal | 🟢 Rehearsal |
 | TBD | Semester 1 Rehearsal Schedule Released | 🔵 Admin |
 
@@ -44,7 +44,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
 | August 28 | Feast of St. Augustine *(check if relevant to parish)* | 🟣 Special |
 
@@ -55,8 +55,8 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
-| TBD | **Fiesta of San Nicolas Parish** — confirm exact date with parish | 🔴 Major |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
+| TBD | **Fiesta of the Archiocesan Shrine of San Nicolas de Toletino Parish** — confirm exact date with parish | 🔴 Major |
 | TBD | Additional rehearsals before Fiesta (1–2x/week) | 🟢 Rehearsal |
 | TBD | Monthly Rehearsal (if not covered by Fiesta rehearsals) | 🟢 Rehearsal |
 
@@ -67,7 +67,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | October 1–30 | **Holy Rosary — 30 Days Visiting of Homes** *(coordinate with parish for choir schedule)* | 🔴 Major |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
 | October 31 | All Hallows' Eve *(possible evening mass service)* | 🟣 Special |
@@ -79,7 +79,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | November 1 | **All Saints' Day Mass** | 🔴 Major |
 | November 2 | **All Souls' Day Mass** | 🔴 Major |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
@@ -93,7 +93,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | 1st–2nd week | **Christmas Caroling** *(schedule TBD by officers)* | 🟣 Special |
 | Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm choir schedule with parish | 🔴 Major |
 | December 24 | **Christmas Eve Mass** | 🔴 Major |
@@ -107,7 +107,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | January 1 | **New Year's Day Mass** | 🔴 Major |
 | First 2 weeks | **Santo Niño Novena** — 9-day novena leading to Sinulog | 🔴 Major |
 | 3rd Sunday of January | **Sinulog Sunday — Feast of the Santo Niño** | 🔴 Major |
@@ -121,7 +121,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
 | TBD | **Holy Week Song Selection finalized** by Music Director | 🔵 Admin |
 | TBD | Holy Week Rehearsals Begin (1–2x/week) | 🟢 Rehearsal |
@@ -134,7 +134,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | Ash Wednesday | **Ash Wednesday Mass** | 🔴 Major |
 | Every Friday (Lent) | Possible Stations of the Cross accompaniment *(confirm with parish)* | 🟣 Special |
 | TBD | Holy Week Rehearsals 1–2x/week | 🟢 Rehearsal |
@@ -161,7 +161,7 @@
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
-| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 Core |
+| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
 | 2nd or 3rd Weekend | 🎉 **Choir Anniversary Celebration** | 🔴 Major |
 | 2nd or 3rd Weekend | 🗳️ **Annual Elections — incoming officers voted in** | 🔴 Major |
 | Last week of May | **Oath Taking of Newly Elected Officers** | 🔵 Admin |
@@ -178,7 +178,7 @@
 | Friday before 12NN | Deadline to respond to attendance poll |
 | Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 *(rotating: recreational, seminar, community service, practice, or fellowship — timing and schedule decided by officers, announced 3 days prior)* |
 | Saturday 7PM | Mass — SVF Chapel, Duljo 🟡 |
-| Sunday 7PM | Mass — San Nicolas Parish, Cebu City 🟡 |
+| Sunday 7PM | Mass — Archiocesan Shrine of San Nicolas de Toletino Parish, Cebu City 🟡 |
 | Once a month (TBD) | Mandatory Members Meeting 🔵 *(agenda shared 2 days prior, quorum required)* |
 
 ---

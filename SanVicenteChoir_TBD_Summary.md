@@ -94,11 +94,11 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 ---
 
-### 11. Fiesta of San Nicolas Parish
+### 11. Fiesta of the Archiocesan Shrine of San Nicolas de Toletino Parish
 **Status:** September — exact date unknown
-**Action needed:** Ask the parish coordinator or priest of San Nicolas for the exact fiesta date.
+**Action needed:** Ask the parish coordinator or priest of the Archiocesan Shrine of San Nicolas de Toletino Parish for the exact fiesta date.
 
-> 💡 **Suggestion:** Assign Gabriella (External Coordinator) to follow up with San Nicolas Parish by July. Once confirmed, post in the group chat and update the calendar.
+> 💡 **Suggestion:** Assign Gabriella (External Coordinator) to follow up with the Archiocesan Shrine of San Nicolas de Toletino Parish by July. Once confirmed, post in the group chat and update the calendar.
 
 ---
 
@@ -277,7 +277,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 |---|---|---|
 | 8 | Post Semester 1 rehearsal availability poll | President |
 | 9 | Set monthly meeting day | Officers |
-| 10 | Fiesta of San Nicolas date — confirm with parish | External Coordinator |
+| 10 | Fiesta of the Archiocesan Shrine of San Nicolas de Toletino Parish — confirm date with parish | External Coordinator |
 
 ### 🟡 By August
 

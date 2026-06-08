@@ -22,7 +22,7 @@ This Constitution exists not to punish, but to protect — to give every generat
 
 **Section 1.** The organization shall be known as **San Vicente Choir**, hereafter referred to as "the Choir."
 
-**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and San Nicolas Parish, Cebu (Sunday 7PM Mass).
+**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archiocesan Shrine of San Nicolas de Toletino Parish, Cebu City (Sunday 7PM Mass).
 
 **Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
 
