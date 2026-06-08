@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Vicente Choir — Official Documents</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #7b2d42;
+      --primary-light: #a03d58;
+      --gold: #c9a84c;
+      --bg: #faf8f5;
+      --surface: #ffffff;
+      --text: #2c2c2c;
+      --text-muted: #6b6b6b;
+      --border: #e8e0d8;
+      --nav-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+
+    .header-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .header-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .header-text p {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    .hamburger {
+      display: none;
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ── SIDEBAR ── */
+    nav {
+      width: var(--nav-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      position: sticky;
+      top: 69px;
+      height: calc(100vh - 69px);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .nav-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      padding: 0 20px 8px;
+    }
+
+    nav button {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 11px 20px;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      line-height: 1.4;
+    }
+
+    nav button:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+
+    nav button.active {
+      background: #fdf0f3;
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+    }
+
+    nav button .nav-emoji {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .nav-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 10px 16px;
+    }
+
+    /* ── CONTENT ── */
+    main {
+      flex: 1;
+      padding: 40px 48px;
+      max-width: 860px;
+      min-width: 0;
+    }
+
+    /* ── HERO CARD (home) ── */
+    .home-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #5a1e30 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 40px 44px;
+      margin-bottom: 32px;
+    }
+
+    .home-hero .tagline {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+
+    .home-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .home-hero .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 540px;
+    }
+
+    .home-hero .gold-line {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin: 20px 0;
+    }
+
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .doc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .doc-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 16px rgba(123,45,66,0.1);
+      transform: translateY(-2px);
+    }
+
+    .doc-card .card-emoji { font-size: 24px; }
+    .doc-card .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .doc-card .card-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+
+    .officers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .officer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .officer-card .o-emoji { font-size: 28px; margin-bottom: 6px; }
+    .officer-card .o-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .officer-card .o-role { font-size: 0.72rem; color: var(--primary); margin-top: 3px; }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 28px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* ── RENDERED MARKDOWN ── */
+    .doc-content { animation: fadeIn 0.2s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .doc-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .doc-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin: 32px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .doc-content h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-content p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .doc-content ul, .doc-content ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    .doc-content li {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      margin-bottom: 4px;
+    }
+
+    .doc-content strong { color: var(--primary); }
+
+    .doc-content em { color: var(--text-muted); }
+
+    .doc-content blockquote {
+      border-left: 4px solid var(--gold);
+      background: #fdf8f0;
+      padding: 14px 20px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .doc-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    .doc-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    .doc-content th {
+      background: var(--primary);
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .doc-content td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .doc-content tr:nth-child(even) td { background: #faf8f5; }
+    .doc-content tr:hover td { background: #fdf0f3; }
+
+    .doc-content code {
+      background: #f0ece6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hamburger { display: block; }
+
+      nav {
+        position: fixed;
+        top: 69px;
+        left: -100%;
+        height: calc(100vh - 69px);
+        z-index: 99;
+        transition: left 0.25s ease;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+      }
+
+      nav.open { left: 0; }
+
+      main { padding: 24px 20px; }
+
+      .home-hero { padding: 28px 24px; }
+      .home-hero h2 { font-size: 1.5rem; }
+
+      .doc-content h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">🎵</div>
+  <div class="header-text">
+    <h1>San Vicente Choir</h1>
+    <p>Official Documents — Choir Year 2026–2027</p>
+  </div>
+  <button class="hamburger" onclick="toggleNav()" aria-label="Menu">☰</button>
+</header>
+
+<div class="layout">
+
+  <nav id="sidebar">
+    <div class="nav-label">Navigation</div>
+    <button class="active" onclick="showPage('home', this)">
+      <span class="nav-emoji">🏠</span> Home
+    </button>
+    <hr class="nav-divider"/>
+    <div class="nav-label">Documents</div>
+    <button onclick="showPage('constitution', this)">
+      <span class="nav-emoji">📜</span> Constitution & By-Laws
+    </button>
+    <button onclick="showPage('handbook', this)">
+      <span class="nav-emoji">📖</span> Member Handbook
+    </button>
+    <button onclick="showPage('calendar', this)">
+      <span class="nav-emoji">🗓️</span> Calendar 2026–2027
+    </button>
+    <button onclick="showPage('budget', this)">
+      <span class="nav-emoji">💰</span> Budget Plan
+    </button>
+    <hr class="nav-divider"/>
+    <div class="nav-label">Templates</div>
+    <button onclick="showPage('excuse', this)">
+      <span class="nav-emoji">🎓</span> Excuse Letter
+    </button>
+    <button onclick="showPage('leave', this)">
+      <span class="nav-emoji">💼</span> Leave Request Letter
+    </button>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="doc-content">
+      <div class="home-hero">
+        <div class="tagline">Est. 1972 · Cebu City</div>
+        <h2>San Vicente Choir</h2>
+        <div class="gold-line"></div>
+        <p class="subtitle">
+          "San Vicente Choir is more than a choir — we are a family in faith, using music to serve, inspire, and bring souls closer to God. And in doing so, we grow together." 🙏🏻
+        </p>
+      </div>
+
+      <div class="section-heading">📂 Official Documents</div>
+      <div class="doc-grid">
+        <div class="doc-card" onclick="showPage('constitution', document.querySelector('button[onclick*=constitution]'))">
+          <div class="card-emoji">📜</div>
+          <div class="card-title">Constitution & By-Laws</div>
+          <div class="card-desc">16 Articles covering membership, officers, attendance, conduct, finances, and more.</div>
+        </div>
+        <div class="doc-card" onclick="showPage('handbook', document.querySelector('button[onclick*=handbook]'))">
+          <div class="card-emoji">📖</div>
+          <div class="card-title">Member Handbook</div>
+          <div class="card-desc">English & Bisaya guide for all members — rights, responsibilities, and values.</div>
+        </div>
+        <div class="doc-card" onclick="showPage('calendar', document.querySelector('button[onclick*=calendar]'))">
+          <div class="card-emoji">🗓️</div>
+          <div class="card-title">Calendar 2026–2027</div>
+          <div class="card-desc">Full year calendar of activities, masses, rehearsals, and major events.</div>
+        </div>
+        <div class="doc-card" onclick="showPage('budget', document.querySelector('button[onclick*=budget]'))">
+          <div class="card-emoji">💰</div>
+          <div class="card-title">Budget Plan</div>
+          <div class="card-desc">Suggested spending priorities and monthly cash flow guide for the choir year.</div>
+        </div>
+        <div class="doc-card" onclick="showPage('excuse', document.querySelector('button[onclick*=excuse]'))">
+          <div class="card-emoji">🎓</div>
+          <div class="card-title">Excuse Letter</div>
+          <div class="card-desc">Template for student members needing school excuse letters for choir events.</div>
+        </div>
+        <div class="doc-card" onclick="showPage('leave', document.querySelector('button[onclick*=leave]'))">
+          <div class="card-emoji">💼</div>
+          <div class="card-title">Leave Request Letter</div>
+          <div class="card-desc">Template for working members requesting leave from their employer.</div>
+        </div>
+      </div>
+
+      <div class="section-heading">👥 Core Officers 2026–2027</div>
+      <div class="officers-grid">
+        <div class="officer-card">
+          <div class="o-emoji">👑</div>
+          <div class="o-name">Mervin John Tampus</div>
+          <div class="o-role">President</div>
+        </div>
+        <div class="officer-card">
+          <div class="o-emoji">🤝</div>
+          <div class="o-name">Aravila Dionson</div>
+          <div class="o-role">Vice President & Internal Coordinator</div>
+        </div>
+        <div class="officer-card">
+          <div class="o-emoji">🎓</div>
+          <div class="o-name">Jan Dacillo</div>
+          <div class="o-role">Choir Adviser</div>
+        </div>
+        <div class="officer-card">
+          <div class="o-emoji">🎹</div>
+          <div class="o-name">Vince Raymund Rojas</div>
+          <div class="o-role">Music Director & Liturgical Lead</div>
+        </div>
+        <div class="officer-card">
+          <div class="o-emoji">📝</div>
+          <div class="o-name">Gabriella Amor Lopez</div>
+          <div class="o-role">Secretary & External Coordinator</div>
+        </div>
+      </div>
+
+      <div class="section-heading">ℹ️ About This Document Hub</div>
+      <p style="font-size:0.85rem; color: var(--text-muted); line-height:1.8;">
+        This page contains the official documents of San Vicente Choir ratified on <strong>June 20, 2026</strong>.
+        It is intended for current and incoming members to read before signing their Membership Form.
+        All documents are subject to amendment per Article XV of the Constitution.
+        For questions, contact any officer directly.
+      </p>
+    </div>
+
+    <!-- DOCUMENT PAGES (rendered from markdown) -->
+    <div id="page-constitution" class="doc-content" style="display:none;"></div>
+    <div id="page-handbook"     class="doc-content" style="display:none;"></div>
+    <div id="page-calendar"     class="doc-content" style="display:none;"></div>
+    <div id="page-budget"       class="doc-content" style="display:none;"></div>
+    <div id="page-excuse"       class="doc-content" style="display:none;"></div>
+    <div id="page-leave"        class="doc-content" style="display:none;"></div>
+
+  </main>
+</div>
+
+<footer>
+  🎵 San Vicente Choir · Est. 1972 · San Vicente Ferrer Parish, Duljo, Cebu City · Choir Year 2026–2027
+</footer>
+
+<!-- MARKDOWN CONTENT STORED IN SCRIPT TAGS -->
+
+<script type="text/plain" id="md-constitution">
+# CONSTITUTION AND BY-LAWS
+## San Vicente Choir
+### Established in Service Since 1972 | Formalized June 20, 2026
+
+---
+
+## PREAMBLE
+
+We, the members of San Vicente Choir, united in faith and music for over 54 years of continuous service to God and the community of San Vicente Parish, do hereby establish this Constitution and By-Laws as the foundation of our shared commitment.
+
+We serve willingly — not by force, not by guilt, but by love for God and for each other.
+
+We believe that every member who has offered their voice, however briefly, has contributed to something greater than themselves. We believe that those who serve consistently deserve support and clarity. We believe that those who must step away deserve dignity. And we believe that those who return are always welcome.
+
+This Constitution exists not to punish, but to protect — to give every generation of San Vicente Choir a clear foundation so that the confusion of the past need never repeat itself, and so that every member, from the newest voice to the most veteran, knows exactly where they stand.
+
+*"Sing to the Lord a new song; sing to the Lord, all the earth."* — Psalm 96:1
+
+---
+
+## ARTICLE I — NAME AND IDENTITY
+
+**Section 1.** The organization shall be known as **San Vicente Choir**, hereafter referred to as "the Choir."
+
+**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and San Nicolas Parish, Cebu (Sunday 7PM Mass).
+
+**Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
+
+**Section 4.** This Constitution supersedes all previous informal agreements, rules, or understandings as of June 20, 2026, the date of its ratification.
+
+---
+
+## ARTICLE II — VISION AND MISSION
+
+**Vision:** A choir where every member grows — in confidence, in faith, in skill, in friendship — and can one day say: *"I served God with everything I had, and I am better for it."*
+
+**Mission:** To provide joyful, prepared, and reverent music ministry in service of the parish liturgy, to welcome new members with warmth, to support each other through life's seasons, and to honor the 54-year legacy of those who sang before us.
+
+---
+
+## ARTICLE III — MEMBERSHIP
+
+**Section 1. Eligibility.**
+
+San Vicente Choir welcomes anyone who wishes to serve God through music. The following criteria apply:
+
+**(a) Singing Members**
+- Must be at least in **Junior High School (Grade 7, approximately 13 years old)**
+- No maximum age — service to God has no expiration
+- No prior musical experience or training required — a willingness to learn and to serve is sufficient
+- Must agree to uphold the values, conduct, and attendance expectations in this Constitution
+- Must sign the Membership Form upon joining and at every annual renewal
+
+**(b) Ministry Support Members**
+Instrumentalists and accompanists (e.g., guitarist, keyboardist, bassist) who serve the Choir in a supporting musical capacity. Ministry Support Members:
+- Have no age restriction
+- Must be evaluated by the Music Director as ready to accompany the Choir in a liturgical setting
+- Are subject to the same Code of Conduct, attire, and mass behavior standards as all members
+- Hold voting rights if also registered as Active Singing Members; otherwise, they are non-voting participants unless the officers decide otherwise by majority vote
+
+**(c) Members Below 18 Years Old (Minors)**
+- A parent or guardian must co-sign the Membership Form before the minor may participate in any choir activity
+- The Choir shall exercise appropriate care and discretion in all activities involving minor members
+- Officers may communicate with parents or guardians regarding a minor's welfare, conduct, or participation as necessary
+
+**Section 2. Membership Categories.**
+
+**(a) Active Member**
+A member who has signed the Membership Form, committed to the attendance expectations in Article V, and participates in the weekly attendance poll. Active Members hold voting rights in general assemblies.
+
+**(b) Associate Member (On Leave)**
+A member who, due to personal circumstances (pregnancy, board review, work schedule, health, family), cannot fulfill weekly attendance but wishes to remain part of the Choir community. Associate Members:
+- Are not subject to attendance penalties
+- Remain in the group chat
+- May participate in masses when available and willing
+- Do not hold voting rights while on Associate status
+- May return to Active status at any time by notifying an officer
+
+**(c) Honorary Member**
+A member who has served the Choir for a significant number of years and whose circumstances no longer allow regular participation. Honorary Members are recognized at the annual assembly and are always welcome to sing.
+
+**Section 3. Joining Process.**
+New members must complete the following steps in order:
+
+1. **Express interest** to any officer — in person, through the group chat, or through any available digital platform the Choir maintains
+2. **Fill out the Registration Form** — providing basic personal information before proceeding further
+3. **Receive and read the Member Handbook and this Constitution** — the applicant must be given time to read and understand both documents fully before signing anything
+4. **Sign the Membership Form** — acknowledging they have read, understood, and agreed to the Constitution and Handbook. For minors, a parent or guardian must co-sign.
+5. **Audition** — the applicant sings at least one (1) song of their choice before available choir members and officers. The audition is **not a rejection test** — it is a welcome tradition. Applicants who audition in good faith are accepted into the choir.
+6. **Voice section assignment** — the Music Director assigns the new member to their appropriate voice section
+7. **Introduction to the choir** — the new member is formally introduced to the full choir at the next available mass or meeting
+
+**Section 4. Annual Renewal.**
+Every June, all Active Members will sign a renewal form — an annual moment to personally renew commitment and state a personal goal for the year.
+
+**Section 5. Voluntary Departure.**
+Any member who wishes to leave the Choir permanently shall notify any officer personally and be given a proper farewell. No member shall ever be kicked from the group chat without their consent, nor forcibly removed without the formal process described in Article XI.
+
+---
+
+## ARTICLE IV — OFFICERS
+
+**Section 1. Officer Positions.**
+
+The Choir recognizes the following officer positions. Not all positions need to be filled every term.
+
+**Executive & Advisory**
+
+| Position | Responsibilities |
+|---|---|
+| **President** | Overall leadership, final decisions, represents the Choir to the parish, leads meetings, mediates conflicts |
+| **Vice President & Internal Coordinator** | Supports the President, acts as President in absence, oversees member welfare, morale, and internal communications |
+| **Choir Adviser** | Senior advisory role, provides institutional wisdom, mentors officers, consulted on major decisions |
+
+**Musical Leadership**
+
+| Position | Responsibilities |
+|---|---|
+| **Music Director & Liturgical Lead** | Leads musical preparation, coordinates song selection, trains members, manages Master Repertoire List |
+| **Soprano Section Leader** | Leads and supports soprano members |
+| **Alto Section Leader** | Leads and supports alto members |
+| **Tenor Section Leader** | Leads and supports tenor members |
+| **Bass Section Leader** | Leads and supports bass members |
+
+**Administrative Officers**
+
+| Position | Responsibilities |
+|---|---|
+| **Secretary** | Records minutes, maintains membership records, manages forms, handles announcements, documents history |
+| **External Coordinator** | Liaises with parishes, venues, sponsors, and external groups. May be combined with Secretary role. |
+| **Treasurer** | Manages all funds, records income/expenses, presents financial report at every General Assembly |
+
+**Committee Heads** — reviewed annually, adjustable without Constitution amendment.
+
+| Committee | Responsibilities |
+|---|---|
+| **Music Committee** | Song research, rehearsal coordination, repertoire suggestions |
+| **Membership Committee** | New member onboarding, tracking member status |
+| **Logistics & Property** | Sound system, sheet music, equipment, event setup |
+| **Documentation & Social Media** | Photos, videos, social media, media archiving |
+| **Costume Committee** | *(Optional — activated for performances/competitions)* |
+
+**Section 2. Election.**
+Officers are elected annually at the June General Assembly by majority vote of Active Members present. Any Active Member in good standing may nominate themselves or be nominated. No one may be assigned a role without their consent.
+
+**Section 3. Term.** Officers serve one (1) year, renewable with no term limit.
+
+**Section 4. Resignation & Handover.**
+Any officer may resign by notifying the President in writing. Before being fully released, they must complete a handover: explain responsibilities, turn over all documents and funds, and be available for questions during the transition. No officer who resigns in good standing shall be denied a proper farewell.
+
+**Section 5. Succession.**
+- If the President is unable to serve, the Vice President assumes the role.
+- If the Music Director is unable to serve, the Choir Adviser and most senior instrumentalist jointly assume music leadership until a replacement is designated.
+
+**Section 6. Officer Code of Conduct.**
+All officers commit to: no public call-outs or shaming, addressing concerns privately first, representing all members fairly, maintaining confidentiality, and upholding the principle that members serve willingly, not by guilt.
+
+---
+
+## ARTICLE V — ATTENDANCE
+
+**Section 1. Event Tiers.**
+
+| Tier | Events | Expectation |
+|---|---|---|
+| **Core** | Saturday 7PM Mass (SVF Chapel), Sunday 7PM Mass (San Nicolas) | Expected of all Active Members |
+| **Major** | Christmas, Holy Week, Patron Saint Feast, other significant liturgies | Required unless excused |
+| **Special** | Competitions, concerts, gigs, seminars | Voluntary; announced in advance |
+
+**Section 2. Weekly Attendance Poll.**
+A poll for Saturday and Sunday masses is posted every **Thursday before 9PM**. All Active Members must respond by **Friday 12NN**. No response = absent for planning purposes. Responding "No" is not a penalty — it is responsible communication.
+
+**Section 3. Absence Classification.**
+
+| Type | Definition |
+|---|---|
+| **Excused — No Notice Needed** | Work shift, school exam, medical emergency, family emergency |
+| **Excused — Prior Notice Required** | School org, out of town, personal reason — notify an officer before mass |
+| **Unexcused** | No poll response, no notice, no reason given |
+
+**Section 4. Quorum for Mass.**
+Minimum **4 members, at least 1 per voice part** required to proceed. If not met, the President or designated officer decides whether to proceed or notify the parish. Mass quorum is a musical standard — separate from meeting quorum.
+
+**Section 5. Attendance Review.**
+After 3 consecutive unexcused absences, an officer will reach out privately — not to scold, but to understand. The member may return to regular participation, shift to Associate status voluntarily, or the officer may recommend a status change with the member's knowledge. No status change happens without informing the member personally.
+
+---
+
+## ARTICLE VI — REHEARSALS AND PRACTICES
+
+**Section 1. Definitions.**
+
+**(a) Personal Practice** — Individual preparation at home: listening to songs, studying lyrics, following voice part recordings. Members are encouraged to practice before rehearsals, especially for new songs.
+
+**(b) Rehearsal** — Official group session where members sing together with or without instrumentalists and/or the Choir Director. Scheduled by officers and subject to attendance expectations.
+
+**Section 2. Regular Rehearsal Schedule.**
+- Minimum **one (1) official rehearsal per month** throughout the year
+- Schedule set each semester via **member availability poll**, posted at least 2 weeks before the semester begins
+- During months before Major Events, rehearsals increase to **1–2 sessions per week**
+
+**Section 3. Rehearsal Time Standards.**
+
+| Time | Activity |
+|---|---|
+| 7:30 PM | Call time — members expected to arrive |
+| 7:45 PM | Warm-up begins |
+| 8:00 PM | Rehearsal starts sharp |
+
+Quorum for rehearsal: **4 Active Members**. A song plan must be shared before rehearsal day. The Choir Director oversees all rehearsals.
+
+**Section 4. Rehearsal Cancellation.**
+May be cancelled due to heavy rain/typhoon signal, emergency situations, or force majeure. Officers must announce cancellation as early as possible.
+
+**Section 5. Rehearsal Attendance.**
+Active Members are expected to attend all scheduled rehearsals. Same excused/unexcused rules apply.
+
+**Section 6. Rest Period After Major Events.**
+Mandatory **minimum 1-week rest** after every Major Event. No rehearsals or non-liturgical activities during this period. Saturday and Sunday mass obligations continue. Officers may extend the rest period.
+
+**Section 7. Excuse Letters for Student Members.**
+Upon request, the President or Secretary may issue a signed Excuse Letter for student members. Request at least 3 days in advance. Standard template maintained.
+
+**Section 8. Leave Request Letters for Working Members.**
+Upon request, the President or Secretary may issue a Leave Request Letter addressed to the member's employer. Request at least 5 days in advance; 2–3 weeks for Major Events. Final approval rests with the employer.
+
+---
+
+## ARTICLE VII — CODE OF CONDUCT, ATTIRE, AND MASS DISCIPLINE
+
+**Section 1. Core Values.**
+- **Faith First** — We sing for God before anyone else
+- **Respect** — For each other, the clergy, congregation, and ourselves
+- **Responsibility** — Show up, communicate, follow through
+- **Growth** — Every member is here to grow musically, personally, spiritually
+- **Honesty** — Raise concerns properly, not through gossip or public shaming
+- **Inclusion** — New members welcomed, returning members celebrated, departing members honored
+- **Excellence** — Not perfection, but always our best
+
+**Section 2. Proper Attire.**
+
+*(a) During Rehearsals:* At minimum, a T-shirt with sleeves. No sleeveless or revealing clothing.
+
+*(b) During Masses:* At minimum, a neat T-shirt or collared shirt with pants or jeans. No shorts, sleeveless clothing, very short skirts, or overly casual/revealing clothing. Members not meeting the dress standard may be asked to step back by an officer.
+
+**Section 3. Behavior During Mass.**
+- Talking kept to a minimum — whisper or very low voice only if necessary for music coordination
+- No laughing, giggling, or unnecessary side conversations while singing or at the microphone
+- Phone use limited to music sheet reference only — no social media during mass
+- Attentiveness expected — watch the Music Director for cues
+- Every song sung with intention, even unfamiliar ones
+
+Our behavior reflects on the entire choir community and the parish.
+
+**Section 4. Group Chat Conduct.**
+No public call-outs, threats, or shaming. Concerns raised privately with an officer first. Respectful and encouraging tone at all times.
+
+---
+
+## ARTICLE VIII — FINANCES
+
+**Section 1. Nature of Funds.**
+San Vicente Choir is voluntary and faith-based. The Choir does not require membership dues and does not depend on any single source of income. Funds received are supplemental and managed transparently. *The Choir's ability to serve God does not depend on money. Funds exist to support the group, not define it.*
+
+**Section 2. Sources of Funds.**
+Parish honoraria (if provided), talent fees, donations, sponsorships, and other voluntary contributions.
+
+**Section 3. Use of Funds.**
+- Transportation for choir events
+- Group uniforms or attire
+- Equipment, sound system, music materials
+- Seminars, workshops, formation
+- Group events and fellowship
+- **Community assistance** for members or former members in need (by majority officer vote)
+
+**Section 4. Financial Management.**
+- Treasurer maintains written records of all income and expenses
+- Financial report presented at every General Assembly or upon any member's request
+- Expenditures above **₱300** require majority officer approval
+- Emergency expenditures below ₱300 approved by President + Treasurer jointly, disclosed at next meeting
+
+**Section 5. Transparency.**
+All members may view the Treasurer's records upon request. No funds used for personal benefit of any officer.
+
+**Section 6. End-of-Term Turnover.**
+Outgoing Treasurer presents full financial report and turns over all funds and records to incoming Treasurer, with President and one other officer as witnesses.
+
+---
+
+## ARTICLE IX — COMMUNITY PROGRAMS AND DEVELOPMENT
+
+**Section 1. Purpose.**
+Beyond liturgical service, the Choir is committed to the growth, wellness, and community impact of its members.
+
+**Section 2. Saturday Community Program.**
+On available Saturdays, the Choir organizes group activities to strengthen fellowship and increase mass participation. Timing is flexible:
+- **Before mass (3:00–5:00 PM)** — recreational, seminars, community outreach, fellowship
+- **After mass (8:00 PM onwards)** — optional practice, bonding, or group discussion
+
+| Type | Examples |
+|---|---|
+| 🏃 Recreational / Wellness | Jogging, badminton, pickleball, sports |
+| 🎵 Practice Session | Group rehearsal, sectional practice, music review |
+| 📚 Seminar / Workshop | Vocal training, music ministry, faith formation |
+| 🤝 Community Service | Teaching children to sing, parish outreach |
+| 🎉 Fellowship / Fun | Casual bonding, celebrations |
+
+Activities are optional but encouraged. Schedule announced 3 days in advance.
+
+**Section 3. Community Outreach.**
+The Choir shares its gifts beyond the parish — teaching young children, supporting community events, and participating in music ministry seminars.
+
+**Section 4. Digital Presence and Website.**
+The Choir may maintain official social media and a website for membership information, choir history, events, and sponsorship inquiries. The Choir envisions the website eventually supporting online membership registration, digital document signing, and sponsor solicitation.
+
+---
+
+## ARTICLE X — MUSIC AND REPERTOIRE
+
+**Section 1.** The Music Director coordinates song selection with parish liturgical guidelines and presents a song list to members in advance when possible.
+
+**Section 2. Master Repertoire List** maintained by Secretary and Music Director:
+- *Mastered* — songs the choir can sing confidently
+- *Learning* — songs currently being practiced
+- *Retired* — songs no longer in rotation but part of choir history
+
+**Section 3.** Song selection disputes resolved by discussion between Music Director and Choir Adviser. If unresolved, the President casts the deciding vote.
+
+**Section 4.** Members are encouraged to suggest songs. Suggestions shall be acknowledged and considered, not ignored.
+
+---
+
+## ARTICLE XI — DISCIPLINE AND DUE PROCESS
+
+**Section 1.** San Vicente Choir does not believe in punitive discipline for attendance. Members who cannot attend are reclassified and supported, not fined or penalized.
+
+**Section 2.** Behavior that causes harm to the community — harassment, public shaming, theft of funds, repeated disrespect — is addressed through:
+
+1. Private conversation between officer and member
+2. If unresolved: formal meeting with at least 3 officers
+3. If still unresolved: vote by all Active Members at a General Assembly
+4. Removal requires **two-thirds (2/3) majority vote** of Active Members present
+
+**Section 3.** No member shall be removed without this process being followed in full.
+
+---
+
+## ARTICLE XII — MEETINGS
+
+**Section 1. General Assembly.**
+Held once a year every June to: present financial report, elect officers, renew memberships, share personal goals, and discuss plans.
+
+**Section 2. Monthly Members Meeting.**
+At least **one (1) mandatory meeting per month** for all Active Members. Up to two (2) per month as needed.
+- **Quorum: 5 Active Members** (officers count)
+- Decisions by simple majority of those present
+- Agenda shared at least 2 days in advance
+- Minutes recorded by Secretary and shared after
+
+**Section 3. Officer Meetings.**
+Held as needed. Do not require full member attendance.
+
+**Section 4. Notice.** At least 3 days notice for all meetings via group chat.
+
+**Section 5. Decision-Making.** Simple majority of Active Members present, except as specified elsewhere. President casts deciding vote on ties.
+
+---
+
+## ARTICLE XIII — PERSONAL ANNUAL GOALS
+
+At every June General Assembly, each Active Member is invited — not required — to share one personal goal for the coming year. Goals may be musical, personal, or spiritual. They are not evaluated or graded. They exist so that every member, when they eventually leave the Choir, can look back and say: *"I grew here."*
+
+---
+
+## ARTICLE XIV — DATA PRIVACY AND MEDIA CONSENT
+
+**Section 1.** The Choir respects the privacy and dignity of every member in compliance with the **Republic of the Philippines Data Privacy Act of 2012 (RA 10173).**
+
+**Section 2. Personal Information Collected:** Full name, nickname, contact number, email, voice part, membership status, attendance records, and optional emergency contact. Stored securely by the Secretary and not shared without consent.
+
+**Section 3. Media Consent.** By signing the Membership Form, members consent to photos/videos from choir activities being posted on official platforms. Members may request removal of specific content at any time — honored promptly and without question. Minors require parental/guardian co-signature; the Choir shall not post identifiable photos of minors without consent on file.
+
+**Section 4. Internal Communications.** Group chat content shall not be screenshotted or shared publicly without consent of all parties. Violations addressed under Article XI.
+
+**Section 5. Protection from External Parties.** Officers shall not release member information to external parties (parents of adults, parish staff, public) without the member's written consent, except where required by law.
+
+**Section 6. Data Retention.** Records kept during active membership and up to 3 years after departure, then anonymized or securely disposed of.
+
+**Section 7.** Members may file complaints with the **National Privacy Commission (NPC)** of the Philippines under RA 10173.
+
+---
+
+## ARTICLE XV — AMENDMENTS
+
+Amendments require a **two-thirds (2/3) majority vote** at any General Assembly. Proposed amendments must be shared with all members at least **7 days** before the assembly. All amendments are recorded by the Secretary, signed by the President and Vice President, and attached as a permanent record.
+
+---
+
+## ARTICLE XVI — RATIFICATION
+
+This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratified on **June 20, 2026**, at the General Assembly of San Vicente Choir, Cebu City.
+
+| | |
+|---|---|
+| **Mervin John Tampus** | President |
+| **Aravila Dionson** | Vice President & Internal Coordinator |
+| **Jan Dacillo** | Choir Adviser |
+| **Vince Raymund Rojas** | Music Director & Liturgical Lead |
+| **Gabriella Amor Lopez** | Secretary & External Coordinator |
+
+*This document shall be kept on record by the Secretary and made available to any member upon request.*
+</script>
+
+<script type="text/plain" id="md-handbook">
+# 🎵 SAN VICENTE CHOIR
+## Member Handbook 2026
+### English / Bisaya
+
+---
+
+## 👋 WELCOME! / MALIGAYANG PAGDATING! / WELCOME KA DINHI!
+
+*English:*
+Welcome to San Vicente Choir — a community that has been singing for God for over 54 years. Whether you are new or returning, we are so glad you are here. This handbook is your guide to everything you need to know as a member. Please read it fully and ask any officer if you have questions. We are here for you. 💛
+
+*Bisaya:*
+Welcome sa San Vicente Choir — usa ka komunidad nga nag-awit alang sa Ginoo sulod sa labaw sa 54 ka tuig. Bag-o ka man o nagbalik, nalipay kaayo mi nga naa ka dinhi. Kining handbook imong giya sa tanan nga kinahanglan nimong mahibal-an isip miyembro. Palihug basaha kini bug-os ug pangutana ang bisan unsang opisyal kung adunay pangutana. Naa mi para kanimo. 💛
+
+---
+
+## 🙏 WHY WE EXIST / NGANONG NANHA TA DINHI
+
+*English:* We sing not because we are forced to. We sing because we choose to offer our voices to God. Every voice matters — whether you've been here 30 years or 30 days. You are here because you want to be, and that is enough.
+
+*Bisaya:* Nag-awit ta dili kay gipugos. Nag-awit ta kay gusto nato ihalad ang atong tingog sa Ginoo. Ang matag tingog importante — bisan 30 ka tuig o 30 ka adlaw ka pa lang dinhi. Naa ka dinhi kay gusto nimo — ug igo na kana.
+
+---
+
+## 🎙️ WHO CAN JOIN / KINSA ANG PWEDE MOSALI
+
+*English:*
+
+**Singing Members:** At least Grade 7 (~13 years old). No maximum age. No experience needed — just willingness. Must sign the Membership Form.
+
+**Ministry Support Members** *(Instrumentalists)*: No age restriction. Must be approved by the Music Director. Same conduct and attire standards apply.
+
+**For members below 18:** A parent or guardian must co-sign the Membership Form before joining any activity.
+
+*You do not need to be perfect. You just need to want to be here.* 💛
+
+---
+
+## 📝 HOW TO JOIN / UNSAON SA PAGSALI
+
+*English:*
+1. 🙋 Tell any officer you're interested
+2. 📋 Fill out the Registration Form
+3. 📖 Read this Handbook and the Constitution fully
+4. ✍️ Sign the Membership Form (parent/guardian co-signs if below 18)
+5. 🎤 **Audition** — sing one song of your choice. Not a pass/fail test — a welcome tradition to find your voice section
+6. 🎵 Get your section assignment from the Music Director
+7. 👋 Be introduced to the full choir!
+
+*Everyone who auditions in good faith is welcomed.* 🎶
+
+---
+
+## ✨ YOUR RIGHTS AS A MEMBER / ANG IMONG MGA KATUNGOD
+
+- 📋 Know what is expected of you — clearly, in writing
+- 🤝 Be treated with respect by all officers and members
+- 🌿 Take a leave without guilt
+- 🔄 Return whenever you are ready
+- 🚪 Leave with dignity — you will **never** be kicked from the group chat
+- 💰 Know how the choir's money is spent
+- 🗳️ Vote in elections and decisions
+- 🎶 Suggest songs, raise concerns, and be heard
+
+---
+
+## 💪 YOUR RESPONSIBILITIES / ANG IMONG MGA RESPONSIBILIDAD
+
+1. 📲 Respond to the weekly attendance poll (Thursday → Friday 12NN)
+2. 📢 Notify an officer if you cannot attend — before the mass
+3. ⛪ Attend Saturday and Sunday 7PM masses as much as you are able
+4. 🌟 Be present for Christmas and Holy Week unless you have a valid reason
+5. ❤️ Treat every member with respect — in person and in the group chat
+6. ✍️ Sign your Annual Renewal every June
+
+---
+
+## 👗 DRESS CODE / DAMIT
+
+**During Rehearsals:** ✅ T-shirt with sleeves ❌ No sleeveless
+
+**During Masses:** ✅ Neat T-shirt or collared shirt + pants/jeans ❌ No shorts, no sleeveless, no revealing clothing
+
+*When in doubt — dress like you are visiting someone's home with great respect.* 🎵
+
+---
+
+## 🎤 BEHAVIOR DURING MASS / PAMATASAN SA PANAHON SA MISA
+
+- 🤫 Keep talking to a minimum — whisper only if necessary for music
+- 😊 No laughing or giggling while singing or standing at the mic
+- 📱 Phones for music sheets only — no social media during mass
+- 👀 Be attentive — watch the Music Director for cues
+- 🎵 Sing with intention every song
+- 🙏 Remember: the congregation is praying. We are helping them pray.
+
+*We are a reflection of San Vicente Parish. Let us make them proud.* 💛
+
+---
+
+## 💎 OUR VALUES / ATONG MGA PAGPAPAHALAGA
+
+- 🙏 **Faith First** — We sing for God before anyone else
+- 🤝 **Respect** — For each other, the clergy, congregation, ourselves
+- 📣 **Responsibility** — Show up, communicate, follow through
+- 🌱 **Growth** — Every member is here to grow
+- 💬 **Honesty** — Raise concerns properly, not through gossip
+- 🫂 **Inclusion** — New members welcomed, returning members celebrated
+- 🔥 **Excellence** — Not perfection, but always our best
+
+---
+
+## 📅 WHAT TO EXPECT EVERY REHEARSAL
+
+1. 🕯️ 7:30 PM — Call time (arrive on time)
+2. 🎵 7:45 PM — Warm-up
+3. 📋 8:00 PM — Rehearsal starts sharp
+4. 🆕 Song review and new material
+5. 📢 Announcements from officers
+6. 🙏 Closing prayer
+
+*Come on time. Come prepared. Come with an open heart.* 💛
+
+---
+
+## 🗓️ ATTENDANCE
+
+We do not punish absence. We ask only that you communicate. 💬
+
+| Situation | What to do |
+|---|---|
+| 🏥 Work, exam, medical, family emergency | No explanation needed — update the poll |
+| ✈️ Out of town, school org, personal | Message any officer before mass |
+| 🔇 No response, no notice | The only thing we ask you to avoid |
+
+After 3 consecutive unexcused absences, an officer checks on you — not to scold, but to make sure you're okay. 🫂
+
+---
+
+## 🌿 MEMBER STATUS
+
+- 🟢 **Active Member** — regular participant, voting rights
+- 🟡 **Associate / On Leave** — busy right now, still family, no obligations, return anytime
+- 🏅 **Honorary Member** — long-serving member, always welcome
+
+*Going on leave is not quitting. Returning is always possible.* 💛
+
+---
+
+## 🚪 LEAVING THE CHOIR
+
+Tell any officer personally. You will receive a proper farewell. You will **never** be removed from the group chat without your knowledge and consent. 🎶
+
+---
+
+## 💰 THE CHOIR'S MONEY
+
+San Vicente Choir is voluntary. No membership dues. Funds — from honoraria, talent fees, donations, or sponsorships — belong to all members and are used for group needs: transportation, uniforms, events, equipment, and when needed, to help a member in difficult times. 🤝
+
+Financial report shared at every General Assembly. Any member may ask to see records anytime. Full transparency. 📊
+
+---
+
+## 🔒 YOUR PRIVACY
+
+Your personal info is kept by the Secretary for choir records only — never shared without your consent.
+
+Photos/videos from choir activities may be posted on official platforms. To have any photo of you removed, just message the Secretary — no questions asked. 🙏
+
+Group chat content stays in the group chat. Screenshots shared publicly without consent are a violation of trust.
+
+**Members below 18:** Parent/guardian must co-sign your form. Identifiable photos of minors will not be posted without parental consent.
+
+Rights under RA 10173 — you may file a complaint with the **National Privacy Commission (NPC)** if needed.
+
+---
+
+## 🌟 YOUR PERSONAL GOAL THIS YEAR
+
+Every June, you are invited to share one personal goal for the choir year. Musical, personal, or spiritual — for **you**, not a grade.
+
+> *"I served God with everything I had. I grew here. I made friends for life."* 🙏
+
+---
+
+## 📞 CONTACT YOUR OFFICERS
+
+| Position | Name |
+|---|---|
+| 👑 President | Mervin John Tampus |
+| 🤝 Vice President & Internal Coordinator | Aravila Dionson |
+| 🎓 Choir Adviser | Jan Dacillo |
+| 🎹 Music Director & Liturgical Lead | Vince Raymund Rojas |
+| 📝 Secretary & External Coordinator | Gabriella Amor Lopez |
+
+*For concerns, questions, or anything you need — approach any officer. We are here for you.* 💛
+
+---
+
+*🎶 San Vicente Choir — 54 years of singing for God, and counting. | Ratified June 20, 2026*
+</script>
+
+<script type="text/plain" id="md-calendar">
+# 🗓️ SAN VICENTE CHOIR
+## Calendar of Activities — Choir Year 2026–2027
+### Term of Officers: June 2026 – May 2027
+
+---
+
+> **Legend:**
+> 🔴 Major Required Event | 🟡 Core Weekly Obligation | 🟢 Rehearsal
+> 🔵 Administrative / Meeting | 🟠 Saturday Activity | 🟣 Special / Optional | 😴 Rest Period
+
+---
+
+## JUNE 2026 — NEW BEGINNINGS
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel, Duljo | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| June 20 (Sat) | **First General Assembly** — 4PM Mass San Pedro Chapel → 5PM Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 |
+| June 20 | Membership Renewal, Officer Onboarding, Constitution Signing | 🔵 |
+| Late June | First Officers Meeting — rehearsal schedule, availability poll | 🔵 |
+| Late June | First Official Rehearsal of new term | 🟢 |
+
+## JULY 2026
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| TBD | Monthly Rehearsal | 🟢 |
+| TBD | Semester 1 Schedule Released | 🔵 |
+| Saturdays | Saturday Group Activity (3–5PM or after 8PM) | 🟠 |
+
+## AUGUST 2026
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| TBD | Monthly Rehearsal | 🟢 |
+| Saturdays | Saturday Group Activity | 🟠 |
+
+## SEPTEMBER 2026 — FIESTA SEASON
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| TBD | **Fiesta of San Nicolas Parish** — confirm with parish | 🔴 |
+| TBD | Additional rehearsals before Fiesta (1–2x/week) | 🟢 |
+
+## OCTOBER 2026 — HOLY ROSARY MONTH
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| October 1–30 | **Holy Rosary — 30 Days Visiting of Homes** | 🔴 |
+| TBD | Monthly Rehearsal | 🟢 |
+
+## NOVEMBER 2026
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| November 1 | **All Saints' Day Mass** | 🔴 |
+| November 2 | **All Souls' Day Mass** | 🔴 |
+| TBD | Monthly Rehearsal | 🟢 |
+| Late November | **Christmas Season Rehearsals Begin (1–2x/week)** | 🟢 |
+
+## DECEMBER 2026 — CHRISTMAS SEASON 🎄
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| 1st–2nd week | **Christmas Caroling** *(schedule TBD)* | 🟣 |
+| After Caroling | 🎉 **Christmas Party / Simple Celebration** | 🟣 |
+| Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm with parish | 🔴 |
+| December 24 | **Christmas Eve Mass** | 🔴 |
+| December 25 | **Christmas Day Mass** | 🔴 |
+| Dec 26–31 | 😴 **Mandatory Rest Period** — no rehearsals; mass obligations continue | 😴 |
+
+## JANUARY 2027 — SINULOG SEASON
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
+| Every Sunday | 7PM Mass — San Nicolas Parish | 🟡 |
+| January 1 | **New Year's Day Mass** | 🔴 |
+| First 2 weeks | **Santo Niño Novena** (9-day novena) | 🔴 |
+| 3rd Sunday | **Sinulog Sunday — Feast of Santo Niño** | 🔴 |
+| Mid-January | Rehearsals resume | 🟢 |
+
+## FEBRUARY 2027
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass | 🟡 |
+| Every Sunday | 7PM Mass | 🟡 |
+| TBD | Monthly Rehearsal | 🟢 |
+| TBD | Holy Week Song Selection finalized | 🔵 |
+| TBD | Holy Week Rehearsals Begin (1–2x/week) | 🟢 |
+| TBD | 🟣 Possible competition / singing engagement | 🟣 |
+
+## MARCH 2027 — LENTEN SEASON
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass | 🟡 |
+| Every Sunday | 7PM Mass | 🟡 |
+| Ash Wednesday | **Ash Wednesday Mass** | 🔴 |
+| TBD | Holy Week Rehearsals 1–2x/week | 🟢 |
+
+## APRIL 2027 — HOLY WEEK 🙏
+
+| Date | Activity | Type |
+|---|---|---|
+| Palm Sunday | **Palm Sunday Mass** | 🔴 |
+| Holy Thursday | **Mass of the Lord's Supper** | 🔴 |
+| Good Friday | **Passion of the Lord** | 🔴 |
+| Holy Saturday | **Easter Vigil** | 🔴 |
+| Easter Sunday | **Easter Sunday Mass** | 🔴 |
+| Easter Week | 😴 **Mandatory Rest Period** — mass obligations continue | 😴 |
+
+## MAY 2027 — ANNIVERSARY & ELECTIONS
+
+| Date | Activity | Type |
+|---|---|---|
+| Every Saturday | 7PM Mass | 🟡 |
+| Every Sunday | 7PM Mass | 🟡 |
+| 2nd or 3rd Weekend | 🎉 **Choir Anniversary + Annual Elections** | 🔴 |
+| Last week of May | **Oath Taking of New Officers** | 🔵 |
+| TBD | Outgoing officers complete handover | 🔵 |
+
+---
+
+## EVERY WEEK (ALL YEAR)
+
+| Day | Activity |
+|---|---|
+| Thursday before 9PM | Attendance poll posted |
+| Friday before 12NN | Deadline to respond to poll |
+| Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 |
+| Saturday 7PM | Mass — SVF Chapel 🟡 |
+| Sunday 7PM | Mass — San Nicolas Parish 🟡 |
+| Once a month | Mandatory Members Meeting 🔵 |
+
+---
+
+*All TBD dates confirmed by Secretary as parish schedules are released. Calendar updated throughout the year.*
+</script>
+
+<script type="text/plain" id="md-budget">
+# 💰 SAN VICENTE CHOIR
+## Budget Plan — Choir Year 2026–2027
+### Draft — for officer discussion | Prepared June 2026
+
+---
+
+## STARTING POINT
+
+| Item | Detail |
+|---|---|
+| Honorarium (monthly) | ₱400/month from parish (subject to change) |
+| Projected annual honorarium | ₱4,800 |
+| Current equipment | 1 guitar, 1 bass amp (donated) |
+| Membership dues | None — voluntary group |
+| June 20 General Assembly | ₱1,000 personally sponsored by President (Tuslob Buwa) — a gift, not reimbursed |
+
+> **Guiding Principle:** San Vicente Choir operates on faith and volunteerism first. Choir funds are a supplement — not a lifeline. We do not spend what we do not have, and we do not pressure members to contribute. Every peso spent is decided together.
+
+---
+
+## PROJECTED INCOME
+
+| Source | Estimate |
+|---|---|
+| Parish honorarium (12 months) | ₱4,800 |
+| Talent fees / gigs | ₱500–₱2,000 |
+| Donations / sponsorships | ₱0–₱5,000 |
+| Caroling collections (December) | ₱500–₱2,000 |
+| **Conservative total** | **₱5,300–₱9,800** |
+
+*Plan around ₱5,300. Everything above is a bonus.*
+
+---
+
+## SPENDING PRIORITIES
+
+### 🥇 PRIORITY 1 — Choir Uniform
+**Target: Before Christmas (October–November)**
+
+| Item | Estimated Cost |
+|---|---|
+| Custom choir shirts × 20 members | ₱3,000–₱5,000 |
+
+**Do NOT use honorarium for this.** Funding strategy:
+- Approach 1–2 sponsors (alumni, local businesses, parishioners)
+- Website sponsorship appeal once site is live
+- Parish announcement for uniform donations
+- One singing engagement could cover half the cost
+
+*Target: Secure sponsor by September → order October → wear by Christmas masses.*
+
+---
+
+### 🥈 PRIORITY 2 — Christmas Celebration 🎄
+**Target: December, after caroling**
+
+Simple choir celebration after the caroling season.
+
+| Item | Estimated Cost |
+|---|---|
+| Shared meal / celebration after caroling | ₱500–₱1,500 |
+
+Caroling collections directly fund this. Potluck contributions from members are welcome but never required.
+
+---
+
+### 🥉 PRIORITY 3 — Music Materials
+**Target: July–August**
+
+| Item | Estimated Cost |
+|---|---|
+| Extra guitar strings (2–3 sets) | ₱200–₱400 |
+| Capo | ₱150–₱300 |
+| Song folders / binders × 20 members | ₱400–₱800 |
+| Printed/laminated song sheets | ₱200–₱500 |
+| **Subtotal** | **₱950–₱2,000** |
+
+*Fund from honorarium. Most practical immediate spend.*
+
+---
+
+### 🏅 PRIORITY 4 — Community Assistance Reserve
+**Set aside from Month 1**
+
+₱500–₱1,000 standing reserve. Set aside ₱100–₱200/month. Released only by majority officer vote for genuine emergencies.
+
+---
+
+### 🎉 PRIORITY 5 — Anniversary Celebration (May 2027)
+
+| Item | Estimated Cost |
+|---|---|
+| Simple shared meal or potluck | ₱500–₱1,500 |
+| Token / recognition for outgoing officers *(optional)* | ₱200–₱500 |
+
+---
+
+## CONSERVATIVE BUDGET SUMMARY
+
+| Priority | Item | Cost | Source |
+|---|---|---|---|
+| 1 | Choir Uniform | ₱3,000–₱5,000 | Sponsorship / donations |
+| 2 | Christmas Celebration | ₱500–₱1,500 | Caroling collections |
+| 3 | Music Materials | ₱950–₱2,000 | Honorarium |
+| 4 | Community Assistance Reserve | ₱500–₱1,000 | Honorarium |
+| 5 | Anniversary Celebration | ₱700–₱2,000 | Choir funds |
+| — | Contingency | ₱500 | Choir funds |
+
+---
+
+## MONTH-BY-MONTH GUIDE
+
+| Month | Suggested Action |
+|---|---|
+| June 2026 | Save. June 20 covered personally by President. |
+| July 2026 | Buy music materials (~₱500) |
+| August 2026 | Save. President in Negros — keep spending minimal. |
+| September 2026 | Begin uniform sponsorship outreach |
+| October 2026 | Uniform deposit if sponsor secured |
+| November 2026 | Uniform balance / caroling prep |
+| December 2026 | Christmas party from caroling collections |
+| January–March 2027 | Save / rebuild fund |
+| April 2027 | Holy Week. Rest period after. |
+| May 2027 | Anniversary celebration + elections |
+
+---
+
+## FUNDRAISING IDEAS
+
+| Idea | Potential Yield |
+|---|---|
+| Singing engagement / talent fee | ₱1,000–₱5,000/event |
+| Website sponsorship appeal | ₱1,000–₱10,000+ |
+| Parish announcement for donations | ₱500–₱3,000 |
+| Alumni / former member outreach | ₱500–₱2,000 |
+| Simple raffle at Anniversary | ₱500–₱2,000 |
+
+---
+
+## WHAT NOT TO DO THIS YEAR
+
+- ❌ Do not fund a team outing from choir funds
+- ❌ Do not buy equipment this year — save for Year 2
+- ❌ Do not pressure members to contribute personally
+- ❌ Do not spend the full honorarium all at once
+
+---
+
+*All spending above ₱300 requires majority officer approval. This document is presented at the June 20 General Assembly and updated by the Treasurer throughout the year.*
+</script>
+
+<script type="text/plain" id="md-excuse">
+# SAN VICENTE CHOIR
+## Official Excuse Letter Template — For Student Members
+
+---
+
+*[Date]*
+
+**To:**
+The Class Adviser / School Principal / Concerned Authority
+*[School Name]*
+*[School Address]*
+
+**Re: Excuse Letter for _________________________ — Choir Activity**
+
+Dear Sir/Madam,
+
+We, the officers of **San Vicente Choir**, a music ministry under San Vicente Ferrer Parish, Duljo, Cebu City, respectfully request that the above-named student be excused from class/school on:
+
+**Date/s:** _________________________
+**Time:** _________________________
+**Reason:** The student is required to participate in an official choir activity:
+
+> *(e.g., Liturgical Mass Service / Choir Performance / Choir Rehearsal for [Event Name])*
+
+San Vicente Choir has been serving the parish community for over **54 years** as a volunteer music ministry. We assure you that _________________________ is an active and committed member whose participation in this activity is meaningful to their personal and spiritual development.
+
+We humbly request your kind understanding. Should you require further information, please contact us through the details below.
+
+Thank you and God bless.
+
+Respectfully yours,
+
+---
+
+**________________________________**
+*[Officer Name] | [Position] — San Vicente Choir*
+Contact: *[Number]* | Email: *[Email]*
+Date Signed: *[Date]*
+
+---
+
+*San Vicente Choir | San Vicente Ferrer Parish, Duljo, Cebu City | Est. 1972*
+
+---
+
+> **HOW TO USE:**
+> 1. Fill in all blank fields
+> 2. Print on clean paper or send digitally if accepted
+> 3. Must be signed by President or Secretary
+> 4. Request at least **3 days before** the activity
+> 5. Keep a copy for choir records
+</script>
+
+<script type="text/plain" id="md-leave">
+# SAN VICENTE CHOIR
+## Official Leave Request Letter Template — For Working Members
+
+---
+
+*[Date]*
+
+**To:**
+The Human Resources Department / Immediate Supervisor
+*[Company Name]*
+*[Company Address]*
+
+**Re: Leave Request for _________________________ — Choir Activity / Religious Service**
+
+Dear Sir/Madam,
+
+We, the officers of **San Vicente Choir**, a volunteer music ministry under San Vicente Ferrer Parish, Duljo, Cebu City, respectfully write on behalf of our member **_________________________**, who is currently employed at your company.
+
+We humbly request that the above-named employee be granted a leave of absence on:
+
+**Date/s:** _________________________
+**Time:** _________________________
+**Nature of Activity:**
+
+> *(e.g., Liturgical Mass Service / Major Choir Performance / Holy Week Service / Christmas Mass)*
+
+San Vicente Choir has been faithfully serving the parish community for over **54 years** as a volunteer music ministry. Our members — many of whom are working professionals — generously dedicate their personal time to serve God and the community through music.
+
+We assure you that _________________________ is a responsible and committed member of both your organization and ours. We deeply appreciate your consideration of this request.
+
+Should you require further information, please do not hesitate to contact us.
+
+Thank you for your kindness and understanding. God bless you and your organization.
+
+Respectfully yours,
+
+---
+
+**________________________________**
+*[Officer Name] | [Position] — San Vicente Choir*
+Contact: *[Number]* | Email: *[Email]*
+Date Signed: *[Date]*
+
+---
+
+*San Vicente Choir | San Vicente Ferrer Parish, Duljo, Cebu City | Est. 1972*
+*A volunteer music ministry in service of God and the parish community*
+
+---
+
+> **HOW TO USE:**
+> 1. Fill in all blank fields
+> 2. Print on clean, plain paper
+> 3. Must be signed by President or Secretary
+> 4. Request at least **5 days before** the activity
+> 5. For Major Events (Holy Week, Christmas, Sinulog) — request **2–3 weeks in advance**
+> 6. This letter supports but does not guarantee leave approval — final decision rests with the employer
+> 7. Keep a copy for choir records
+</script>
+
+<script>
+  // Map page IDs to markdown source IDs
+  const docMap = {
+    constitution: 'md-constitution',
+    handbook:     'md-handbook',
+    calendar:     'md-calendar',
+    budget:       'md-budget',
+    excuse:       'md-excuse',
+    leave:        'md-leave'
+  };
+
+  // Pre-render all docs
+  document.addEventListener('DOMContentLoaded', () => {
+    for (const [page, srcId] of Object.entries(docMap)) {
+      const src = document.getElementById(srcId).textContent;
+      document.getElementById('page-' + page).innerHTML = marked.parse(src);
+    }
+  });
+
+  function showPage(name, btn) {
+    // Hide all pages
+    document.querySelectorAll('[id^="page-"]').forEach(el => el.style.display = 'none');
+    // Show target
+    document.getElementById('page-' + name).style.display = 'block';
+    // Update nav active state
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    // Scroll to top
+    document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Close mobile nav
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function toggleNav() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Close nav on outside click (mobile)
+  document.addEventListener('click', (e) => {
+    const nav = document.getElementById('sidebar');
+    const ham = document.querySelector('.hamburger');
+    if (!nav.contains(e.target) && !ham.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>
