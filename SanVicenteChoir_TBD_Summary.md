@@ -181,7 +181,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 **Status:** Not yet started
 **Action needed:** Identify 1–3 potential sponsors to approach for the uniform fund.
 
-> 💡 **Suggestion:** Start with the easiest: former members and alumni (Kuya Danny and other veterans may be willing to donate), then approach local businesses near the parish (sari-sari stores, pharmacies, printing shops). A simple message explaining the choir's history and the uniform goal is enough. Once the website is up, a donate/sponsor page makes this much easier.
+> 💡 **Suggestion:** Start with the easiest: former members and alumni (Kuya Danny and other veterans may be willing to donate), then approach local businesses near the parish. A simple personal message explaining the choir's 54-year history and the uniform goal is enough. Facebook page can also be used to post a sponsorship appeal to reach the wider parish community.
 
 ---
 
@@ -195,27 +195,32 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 ## 🌐 D. WEBSITE / DIGITAL — Next Steps
 
----
-
-### 23. Public Website (full version)
-**Status:** Document hub live at jdesolate.github.io/sanvicente-choir
-**Action needed:** Decide when to build the full public-facing website for marketing, membership, and sponsorship.
-
-> 💡 **Suggestion:** Don't rush this. The current document hub is enough for June 20. Build the full website in Year 2 or after the uniform and first major event — by then you'll have photos, a logo, and a clearer sense of what the choir wants to show the world. When you're ready, your Next.js + Supabase skillset is perfect for it.
+*Note: Facebook handles all choir marketing and announcements. The website's purpose is (1) public choir information and (2) private member data management to reduce paperwork.*
 
 ---
 
-### 24. Custom Domain (optional)
-**Status:** Currently on jdesolate.github.io — tied to your personal GitHub account
+### 23. Full Choir Website
+**Status:** Document hub live at jdesolate.github.io/sanvicente-choir (free, GitHub Pages)
+**Scope:** Two sides —
+- **Public:** About the choir, history, officers, how to join, contact/inquiry form for sponsors and new members
+- **Private (members only):** Digital membership registration, Constitution & Handbook signing, attendance tracking, member status management, yearly renewals, financial records, repertoire list, excuse/leave letter generation, minutes archive
 
-> 💡 **Suggestion:** When you build the full website, register a domain like `sanvicentechoir.org` or `svchoir.com` (around ₱500–₱800/year). This makes the choir look more professional for sponsorship and marketing. Not urgent now — but something to budget for in Year 2.
+> 💡 **Suggestion:** Don't rush. Current document hub is enough for now. Build the full website in Year 2 when the choir is stable. Your Next.js + Supabase skillset is exactly right for this — the Constitution already defines your database structure (members, attendance, status, officers, finances). Deployment stays free on Vercel; only the domain costs money annually.
 
 ---
 
-### 25. GitHub Account for the Choir
-**Status:** Currently hosted under your personal GitHub (jdesolate)
+### 24. Custom Domain
+**Status:** Currently on jdesolate.github.io — free, stays free
+**When needed:** Only when building the full website and if choir funds allow
 
-> 💡 **Suggestion:** Eventually create a separate GitHub organization account for the choir (`github.com/sanvicente-choir`) so the website isn't tied to your personal account. This protects the choir if you step down or pass the presidency. Not urgent for now.
+> 💡 **Suggestion:** Register `sanvicentechoir.org` or `svchoir.com` (~₱500–₱800/year) when the full site is ready. Point it to GitHub Pages for now, then to Vercel when you migrate. Budget for Year 2 — not urgent.
+
+---
+
+### 25. Choir GitHub Organization Account
+**Status:** Currently under personal GitHub account (jdesolate)
+
+> 💡 **Suggestion:** Eventually create `github.com/sanvicente-choir` as a separate org account so the website isn't tied to your personal account. This protects the choir across presidency changes. Transfer the repo there when building the full site — not urgent now.
 
 ---
 
@@ -247,24 +252,50 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 ---
 
-## ✅ QUICK DECISION CHECKLIST FOR JUNE 20
+## ✅ QUICK DECISION CHECKLIST
 
-Use this as your agenda reference during the General Assembly:
+### 🔴 Before June 20 — Prepare in Advance
 
-| # | Item | Who Decides | Urgency |
-|---|---|---|---|
-| 1 | Treasurer assignment | All officers vote | 🔴 Must decide June 20 |
-| 2 | Section Leaders (SATB) | Officers + Music Director | 🔴 Must decide June 20 |
-| 3 | Committee Heads | Officers vote | 🟡 Decide by July |
-| 4 | Regular rehearsal day (Sem 1) | Member availability poll | 🔴 Post poll by June 21 |
-| 5 | Monthly meeting day | Officers decide | 🟡 Decide by July |
-| 6 | Uniform design & supplier | Officers + Documentation | 🟡 Finalize by August |
-| 7 | Logo design | Documentation Committee | 🟡 Finalize by August |
-| 8 | Sponsorship outreach start | President + External Coordinator | 🟡 Begin by July |
-| 9 | Fiesta date confirmation | External Coordinator | 🟡 Confirm by July |
-| 10 | Membership Form creation | Secretary | 🔴 Needed before June 20 signing |
-| 11 | Master Repertoire List | Music Director + Secretary | 🟡 Build by August |
-| 12 | Personal Goals slip for June 20 | Secretary / President | 🔴 Prepare before June 20 |
+| # | Item | Who |
+|---|---|---|
+| 1 | Membership / Registration Form created | Secretary |
+| 2 | Personal Goals slip prepared | Secretary |
+| 3 | Constitution & Handbook printed or shared digitally | Secretary |
+
+### 🔴 At June 20 General Assembly — Decide Together
+
+| # | Item | Who Decides |
+|---|---|---|
+| 4 | Treasurer assignment | Officers vote |
+| 5 | Section Leaders (Soprano, Alto, Tenor, Bass) | Officers + Music Director |
+| 6 | Committee Heads (Music, Membership, Logistics, Documentation) | Officers vote |
+| 7 | Confirm officer positions and titles | All core officers |
+
+### 🟡 Within 2 Weeks After June 20
+
+| # | Item | Who |
+|---|---|---|
+| 8 | Post Semester 1 rehearsal availability poll | President |
+| 9 | Set monthly meeting day | Officers |
+| 10 | Fiesta of San Nicolas date — confirm with parish | External Coordinator |
+
+### 🟡 By August
+
+| # | Item | Who |
+|---|---|---|
+| 11 | Uniform design finalized | Officers + Documentation |
+| 12 | Logo designed | Documentation Committee |
+| 13 | Sponsorship outreach begins | President + External Coordinator |
+| 14 | Master Repertoire List — first draft | Music Director + Secretary |
+
+### 🗓️ Annual Cycle — For Future Reference
+
+| Event | When |
+|---|---|
+| **Elections + Anniversary** | May — 2nd or 3rd weekend |
+| **Oath Taking** | Last week of May |
+| **Officer Handover** | End of May |
+| **General Assembly** (renewal, goals, plans) | June — under new officers |
 
 ---
 
