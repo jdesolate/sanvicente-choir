@@ -13,9 +13,7 @@
 | **Projected annual honorarium** | ₱4,800 |
 | **Current equipment** | 1 guitar, 1 bass amp (donated) |
 | **Membership dues** | None — voluntary group |
-| **June 20 General Assembly meal** | ₱1,000 personally sponsored by President (Tuslob Buwa session) |
-
-*Note: The President's personal sponsorship of ₱1,000 for the June 20 celebration is a gift to the group — not a loan and not reimbursed from choir funds. This sets a generous tone for the new term.*
+| **June 20 General Assembly meal** | ₱1,000 — covered separately, not from choir funds |
 
 ---
 
@@ -142,7 +140,7 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 |---|---|---|---|
 | June 2026 | ₱400 | — | Save. June 20 covered personally by President. |
 | July 2026 | ₱400 | Music materials ~₱500 | Spend on folders + strings. May dip slightly. |
-| August 2026 | ₱400 | Community reserve +₱200 | President in Negros — keep spending minimal. |
+| August 2026 | ₱400 | Community reserve +₱200 | Save. Keep spending minimal. |
 | September 2026 | ₱400 | Community reserve +₱200 | Begin uniform sponsorship outreach. |
 | October 2026 | ₱400 | Uniform deposit if sponsor secured | Order shirts if funds confirmed. |
 | November 2026 | ₱400 | Uniform balance / caroling prep | |
