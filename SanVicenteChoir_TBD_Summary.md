@@ -292,10 +292,10 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 | Event | When |
 |---|---|
-| **Elections + Anniversary** | May — 2nd or 3rd weekend |
-| **Oath Taking** | Last week of May |
-| **Officer Handover** | End of May |
-| **General Assembly** (renewal, goals, plans) | June — under new officers |
+| **Anniversary + Elections** | May — 2nd or 3rd weekend |
+| **Oath Taking of New Officers** | At the May Assembly or within last week of May |
+| **Officer Transition Handover** | End of May — outgoing to incoming |
+| **June General Assembly** (new officers' first meeting: renewal, goals, plans, schedule-setting) | June — led by newly sworn-in officers |
 
 ---
 

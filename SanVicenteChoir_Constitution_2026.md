@@ -451,16 +451,19 @@ The Choir holds two annual assemblies:
 
 **(a) May Anniversary Assembly** — held on the 2nd or 3rd weekend of May, coinciding with the Choir's founding anniversary, to:
 - Celebrate the Choir's anniversary
-- Elect incoming officers
-- Conduct oath-taking of newly elected officers (or schedule separately within the last week of May)
+- **Elect incoming officers** by majority vote of Active Members present
+- **Conduct oath-taking of newly elected officers** — held at the same assembly or within the last week of May, but no later
 - Recognize outgoing officers and long-serving members
+- Outgoing officers begin the transition handover to incoming officers
 
-**(b) June General Assembly** — held every June under the leadership of the newly sworn-in officers, to:
-- Present the annual financial report from the outgoing Treasurer
+**(b) June General Assembly** — held every June as the **first official assembly led by the newly sworn-in officers**, to:
+- Formally open the new choir year under new leadership
 - Complete membership renewal — all members sign the Annual Renewal Form
 - Allow each member to state their personal goal for the year
 - Present plans and priorities for the new choir year
+- Present the annual financial report and opening balance from the Treasurer
 - Formally welcome new members who joined since the last assembly
+- Set the rehearsal schedule and monthly meeting calendar for the semester ahead
 
 **Section 2. Monthly Members Meeting.**
 At least **one (1) mandatory general meeting per month** shall be held for all Active Members. Officers may call up to two (2) meetings per month as needed.

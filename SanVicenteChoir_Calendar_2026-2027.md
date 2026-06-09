@@ -21,9 +21,9 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel, Duljo | 🟡 Core |
 | Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 Core |
-| June 20 (Sat) | **First General Assembly** *(special one-time event — new officers already sworn in)* — 4PM Mass San Pedro Chapel, Duljo → 5PM General Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 Major |
-| June 20 | Membership Renewal, Constitution Signing, Officer Onboarding, Personal Goals | 🔵 Admin |
-| Late June | First Officers Meeting — rehearsal schedule planning, availability poll | 🔵 Admin |
+| June 20 (Sat) | **First General Assembly** *(special one-time inaugural event — new officers already sworn in)* — 4PM Mass San Pedro Chapel, Duljo → 5PM General Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 Major |
+| June 20 | **New Officer Leadership Begins** — Membership Renewal, Constitution Signing, Personal Goals, Financial Report, Plans & Priorities for new choir year | 🔵 Admin |
+| June 20 | First officer agenda: rehearsal schedule planning + semester calendar setting | 🔵 Admin |
 | Late June | First Official Rehearsal of new term | 🟢 Rehearsal |
 
 ---
