@@ -6,7 +6,7 @@
 
 ## PREAMBLE
 
-We, the members of San Vicente Choir, united in faith and music for over 54 years of continuous service to God and the community of San Vicente Parish, do hereby establish this Constitution and By-Laws as the foundation of our shared commitment.
+We, the members of San Vicente Choir, united in faith and music for over 54 years of continuous service to God and the community of Archdiocesan Shrine of San Nicolas de Tolentino Parish, do hereby establish this Constitution and By-Laws as the foundation of our shared commitment.
 
 We serve willingly — not by force, not by guilt, but by love for God and for each other.
 
@@ -22,7 +22,7 @@ This Constitution exists not to punish, but to protect — to give every generat
 
 **Section 1.** The organization shall be known as **San Vicente Choir**, hereafter referred to as "the Choir."
 
-**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City (Sunday 7PM Mass).
+**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Ferrer Chapel, Duljo Brgy. Hall (Saturday 7PM Mass) and Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City (Sunday 7PM Mass).
 
 **Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
 
@@ -340,7 +340,7 @@ When serving during a mass, members are in a visible and sacred role. The follow
 - **Attentiveness is expected.** Members must watch the Music Director for cues and be aware of when to stand, sit, and sing.
 - **Every song should be sung with intention.** Even with an unfamiliar song, members are expected to try.
 
-We are a direct representation of San Vicente Parish during every service. Our behavior — not just our singing — reflects on the entire choir community.
+We are a direct representation of Archdiocesan Shrine of San Nicolas de Tolentino Parish during every service. Our behavior — not just our singing — reflects on the entire choir community.
 
 **Section 5. Group Chat Conduct.**
 - No public call-outs, threats, or shaming of any member in the group chat

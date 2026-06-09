@@ -198,7 +198,7 @@ When we stand before the microphone or in the choir area, we are visible to ever
 - 🎵 **Sing with intention.** Even if the song is unfamiliar — try. A sincere voice is always better than silence.
 - 🙏 **Remember why we are there.** The congregation is praying. We are helping them pray.
 
-We are a reflection of San Vicente Parish. Let us make them proud. 💛
+We are a reflection of Archdiocesan Shrine of San Nicolas de Tolentino Parish. Let us make them proud. 💛
 
 *Bisaya:*
 Kung nagtindog kita sa atubangan sa mikropono o sa lugar sa choir, makita kita sa tanan. Balaan kining lugar ug balaan kining papel. Mao kini kung unsaon nato ang atong kaugalingon:
@@ -210,7 +210,7 @@ Kung nagtindog kita sa atubangan sa mikropono o sa lugar sa choir, makita kita s
 - 🎵 **Mag-awit nga may intensyon.** Bisan dili pamilyar ang awit — sulayi. Ang tapat nga tingog kanunay mas maayo kaysa hilum.
 - 🙏 **Hinumdomi kung nganong naa kita didto.** Nag-ampo ang kongregasyon. Gitabangan nato sila sa ilang pag-ampo.
 
-Usa kita ka salamin sa San Vicente Parish. Pasigarbo nato sila. 💛
+Usa kita ka salamin sa Archdiocesan Shrine of San Nicolas de Tolentino Parish. Pasigarbo nato sila. 💛
 
 ---
 
