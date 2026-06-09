@@ -170,10 +170,10 @@ These are events in the calendar that need exact dates confirmed with the parish
 ---
 
 ### 20. Logo Design
-**Status:** No official choir logo yet
-**Action needed:** A logo is needed before the uniform can be designed and before the public website launches.
+**Status:** A logo is already present on the choir's Facebook page — may need redesign or improvement before use on the uniform and website.
+**Action needed:** Officers review the current Facebook logo and decide: use as-is, refine it, or commission a redesign.
 
-> 💡 **Suggestion:** Ask if any member has graphic design skills — many college students do. Keep it simple: musical notes, a cross, and the choir name. If no one in the group can do it, free tools like Canva work well. You can also use AI image tools or ask the Documentation Committee to take this on.
+> 💡 **Suggestion:** Start by presenting the current Facebook logo to the officers. If the group feels it needs improvement — cleaner lines, better colors, more polished look — ask if any member has graphic design skills (many students do) or use Canva/AI tools. A redesigned version should work well for uniform embroidery and the website header. Assign this to the Documentation & Social Media Committee.
 
 ---
 

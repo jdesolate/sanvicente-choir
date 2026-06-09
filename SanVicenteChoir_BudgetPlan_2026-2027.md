@@ -83,11 +83,9 @@ Small but practical. These are consumables and tools that directly improve rehea
 
 | Item | Estimated Cost |
 |---|---|
-| Extra guitar strings (2–3 sets) | ₱200–₱400 |
-| Capo | ₱150–₱300 |
 | Song folders / binders × 20 members | ₱400–₱800 |
 | Printed/laminated song sheets | ₱200–₱500 |
-| **Subtotal** | **₱950–₱2,000** |
+| **Subtotal** | **₱600–₱1,300** |
 
 *Fund from honorarium. These are the most practical immediate expenses.*
 
@@ -125,7 +123,7 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 |---|---|---|---|
 | 1 | Choir Uniform | ₱3,000–₱5,000 | Sponsorship / donations |
 | 2 | Christmas Celebration | ₱500–₱1,500 | Caroling collections + choir funds |
-| 3 | Music Materials | ₱950–₱2,000 | Honorarium |
+| 3 | Music Materials | ₱600–₱1,300 | Honorarium |
 | 4 | Community Assistance Reserve | ₱500–₱1,000 | Honorarium |
 | 5 | Anniversary Celebration | ₱700–₱2,000 | Choir funds |
 | — | Contingency / miscellaneous | ₱500 | Choir funds |
@@ -138,7 +136,7 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 
 | Month | Income | Suggested Spend | Running Notes |
 |---|---|---|---|
-| June 2026 | ₱400 | — | Save. June 20 covered personally by President. |
+| June 2026 | ₱400 | — | Save. |
 | July 2026 | ₱400 | Music materials ~₱500 | Spend on folders + strings. May dip slightly. |
 | August 2026 | ₱400 | Community reserve +₱200 | Save. Keep spending minimal. |
 | September 2026 | ₱400 | Community reserve +₱200 | Begin uniform sponsorship outreach. |

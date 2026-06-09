@@ -16,7 +16,7 @@ The Class Adviser / School Principal / Concerned Authority
 
 Dear Sir/Madam,
 
-We, the officers of **San Vicente Choir**, a music ministry under San Vicente Ferrer Parish, Duljo, Cebu City, respectfully request that the above-named student be excused from class/school on:
+We, the officers of **San Vicente Choir**, a music ministry serving the Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City and San Vicente Ferrer Parish, Duljo, Cebu City, respectfully request that the above-named student be excused from class/school on:
 
 **Date/s:** _________________________
 **Time:** _________________________
