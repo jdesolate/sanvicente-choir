@@ -25,7 +25,7 @@ We, the officers of **San Vicente Choir**, a music ministry under San Vicente Fe
 > ____________________________________________________________
 > *(e.g., Liturgical Mass Service / Choir Performance / Choir Rehearsal for [Event Name])*
 
-San Vicente Choir has been serving the parish community for over 54 years and our members actively contribute to the spiritual and cultural life of San Vicente Ferrer Parish and Archiocesan Shrine of San Nicolas de Toletino Parish, Cebu City.
+San Vicente Choir has been serving the parish community for over 54 years and our members actively contribute to the spiritual and cultural life of San Vicente Ferrer Parish and Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City.
 
 We assure you that _________________________ is an active and committed member of our choir and that their participation in this activity is both necessary and meaningful to their personal and spiritual development.
 

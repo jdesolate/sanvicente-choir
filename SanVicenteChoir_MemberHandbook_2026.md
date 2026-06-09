@@ -240,6 +240,40 @@ Mao kini ang mga pagpapahalaga nga gidala nato isip mga miyembro sa San Vicente 
 
 ---
 
+## 🕊️ ASSUME POSITIVE INTENTION / PAG-ALAM OG POSITIBONG KINAIYA
+
+*English:*
+We serve God alongside people with different schedules, personalities, and circumstances. Before reacting to a missed mass, a late reply, or a comment that felt wrong — pause and ask: *"Is there a good reason I don't know yet?"*
+
+**Six guidelines to live by:**
+
+1. 🙋 **Before assuming the worst — ask first.** A simple *"Okay ka ba?"* goes much further than a complaint.
+2. 📱 **Tone is hard to read in text.** If a message seems rude or cold, assume it was written in a hurry — not in anger.
+3. 🪑 **Absence is not rejection.** When someone doesn't show up or doesn't reply, they likely have a reason. Check on them — don't judge them.
+4. 🤔 **Disagreement is not a personal attack.** When someone questions a plan, assume they care about the group — not that they're targeting you.
+5. 🗣️ **Speak to the person, not about them.** If something bothers you, bring it to the person directly or to an officer — not in the group chat, not in a side conversation.
+6. 🌿 **Give grace.** Everyone has hard days at school, work, or home. What looks like a bad attitude is sometimes just exhaustion.
+
+*This is not about ignoring real problems. It is about giving every person the dignity of being understood before being judged. That is how a choir becomes a community.* 💛
+
+---
+
+*Bisaya:*
+Nagsilbi kita sa Diyos kauban ang mga tawo nga nagkalain-laing iskedyul, personalidad, ug mga sirkumstansya. Bago moreaksyon sa giwala nga misa, sa wala tubag nga mensahe, o sa komento nga daw sayop — ihunong ug pangutana: *"Aduna bay maayong rason nga wala pa nako mahibal-i?"*
+
+**Unom ka giya sa kinabuhi:**
+
+1. 🙋 **Bago magpalagay og daotan — pangutana una.** Ang simpleng *"Okay ka ba?"* molabaw kaysa sa reklamo.
+2. 📱 **Lisod basahon ang tono sa text.** Kung ang mensahe daw bastos o walay pagtagad, isip nga gisulat kini sa pagdali — dili sa kasuko.
+3. 🪑 **Ang kawala dili pagdumot.** Kung ang usa ka tawo wala moanhi o wala motubag, lagmit aduna silay rason. Tseka sila — dili sila hukman.
+4. 🤔 **Ang dili pagsinabtanay dili personal na pag-atake.** Kung ang usa ka tawo nangutana sa usa ka plano, isip nga nagmalasakit sila sa grupo — dili ka nila ginasalab.
+5. 🗣️ **Sultihi ang tawo, dili ang ubang tawo mahitungod sa iya.** Kung adunay bagay nga nagsamok kanimo, dalhon kini sa tawo direkta o sa opisyal — dili sa group chat, dili sa kilid-kilid na pag-uusap.
+6. 🌿 **Maghatag og grasya.** Ang tanan adunay lisod na mga adlaw sa eskwela, trabaho, o balay. Ang daw masamok na kinaiya usahay pagod ra kana.
+
+*Dili kini pagbaliwala sa mga tinuod na problema. Kini ang paghatag sa matag tawo sa dignidad nga masabtan una bago hukman. Mao kana kung unsaon pagkahimo sa usa ka koro nga komunidad.* 💛
+
+---
+
 ## 📅 WHAT TO EXPECT EVERY PRACTICE / UNSAY MAABTAN SA MATAG ENSAYO
 
 *English:*

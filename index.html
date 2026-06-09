@@ -359,6 +359,40 @@
       font-size: 0.82rem;
     }
 
+    /* ── LANGUAGE TOGGLE (Constitution) ── */
+    .lang-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0 20px 0;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .lang-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .lang-btn {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .lang-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+    .lang-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
     /* ── FOOTER ── */
     footer {
       text-align: center;
@@ -527,7 +561,14 @@
     </div>
 
     <!-- DOCUMENT PAGES (rendered from markdown) -->
-    <div id="page-constitution" class="doc-content" style="display:none;"></div>
+    <div id="page-constitution" class="doc-content" style="display:none;">
+      <div class="lang-bar">
+        <span class="lang-label">📖 Pinulongan / Language:</span>
+        <button class="lang-btn active" id="lang-btn-en" onclick="setConstitutionLang('en')">🇬🇧 English</button>
+        <button class="lang-btn" id="lang-btn-bisaya" onclick="setConstitutionLang('bisaya')">🇵🇭 Bisaya</button>
+      </div>
+      <div id="constitution-content"></div>
+    </div>
     <div id="page-handbook"     class="doc-content" style="display:none;"></div>
     <div id="page-calendar"     class="doc-content" style="display:none;"></div>
     <div id="page-budget"       class="doc-content" style="display:none;"></div>
@@ -569,7 +610,7 @@ This Constitution exists not to punish, but to protect — to give every generat
 
 **Section 1.** The organization shall be known as **San Vicente Choir**, hereafter referred to as "the Choir."
 
-**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archiocesan Shrine of San Nicolas de Toletino Parish, Cebu City (Sunday 7PM Mass).
+**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City (Sunday 7PM Mass).
 
 **Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
 
@@ -784,13 +825,25 @@ Upon request, the President or Secretary may issue a Leave Request Letter addres
 - **Inclusion** — New members welcomed, returning members celebrated, departing members honored
 - **Excellence** — Not perfection, but always our best
 
-**Section 2. Proper Attire.**
+**Section 2. Assume Positive Intention.**
+Before reacting to a missed mass, an unanswered message, or a comment that didn't land well — pause and ask: *"Is there a good reason I don't know yet?"*
+
+- **Before assuming the worst — ask.** A simple *"Okay ka ba?"* goes further than a complaint.
+- **Tone is hard to read in text.** If a message seems cold, assume it was written in a hurry — not in anger.
+- **Absence is not rejection.** When someone doesn't show up or reply, they probably have a reason. Check on them; don't judge them.
+- **Disagreement is not a personal attack.** When someone questions a decision, assume they care about the group.
+- **Speak to the person, not about them.** Bring concerns directly to the person or an officer — not the group chat.
+- **Give grace.** What looks like attitude is sometimes just exhaustion.
+
+*The goal is not blind positivity — it is the discipline to pause before judging. This is how a choir becomes a community.*
+
+**Section 3. Proper Attire.**
 
 *(a) During Rehearsals:* At minimum, a T-shirt with sleeves. No sleeveless or revealing clothing.
 
 *(b) During Masses:* At minimum, a neat T-shirt or collared shirt with pants or jeans. No shorts, sleeveless clothing, very short skirts, or overly casual/revealing clothing. Members not meeting the dress standard may be asked to step back by an officer.
 
-**Section 3. Behavior During Mass.**
+**Section 4. Behavior During Mass.**
 - Talking kept to a minimum — whisper or very low voice only if necessary for music coordination
 - No laughing, giggling, or unnecessary side conversations while singing or at the microphone
 - Phone use limited to music sheet reference only — no social media during mass
@@ -799,7 +852,7 @@ Upon request, the President or Secretary may issue a Leave Request Letter addres
 
 Our behavior reflects on the entire choir community and the parish.
 
-**Section 4. Group Chat Conduct.**
+**Section 5. Group Chat Conduct.**
 No public call-outs, threats, or shaming. Concerns raised privately with an officer first. Respectful and encouraging tone at all times.
 
 ---
@@ -962,6 +1015,426 @@ This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratifie
 *This document shall be kept on record by the Secretary and made available to any member upon request.*
 </script>
 
+<script type="text/plain" id="md-constitution-bisaya">
+# SALIGANG BATAS UG MGA PATAKARAN
+## San Vicente Choir
+### Nagsilbi Sukad 1972 | Gitunhay sa Hunyo 20, 2026
+
+---
+
+## PAUNANG SALITA
+
+Kami, ang mga miyembro sa San Vicente Choir, nagkahiusa sa pagtuo ug musika sulod sa labaw sa 54 ka tuig sa padayon nga serbisyo sa Diyos ug sa komunidad sa San Vicente Parish, nagtatag karon niining Saligang Batas isip pundasyon sa among pinagsamang pangako.
+
+Nagsilbi kita sa kusog sa kalooban — dili sa pamimilit, dili sa panghimaraut, kondili sa pagmahal sa Diyos ug sa usag-usa.
+
+Nagtuo kita nga ang matag miyembro nga naghalad sa ilang tingog, bisan sa unsa kadugay, nakaambag sa usa ka butang mas dako kaysa sa ilang kaugalingon. Nagtuo kita nga ang mga nagsilbi nga konsistente angay suportahan ug klaro ang ilang papel. Nagtuo kita nga ang mga kinahanglan magpahulay angay hatagan og dignidad. Ug nagtuo kita nga ang mga magbalik kanunay giabiabi.
+
+Ang Saligang Batas nga ito wala naglungtad aron magsilot, kondili aron magpanalipod — aron hatagan ang matag henerasyon sa San Vicente Choir og klaro nga pundasyon, aron ang kalibog sa nakaagi dili na maulit, ug aron ang matag miyembro, gikan sa pinakabag-o nga tingog hangtod sa pinakabeterano, mahibal-an mismo kung hain sila.
+
+*"Awiti ang Ginoo og bag-ong awit; awiti ang Ginoo, tibuok kalibotan."* — Salmo 96:1
+
+---
+
+## ARTIKULO I — NGALAN UG PAGKAKILALA
+
+**Seksyon 1.** Ang organisasyon mailhan isip **San Vicente Choir**, ug dinhi tawgon nga "ang Koro."
+
+**Seksyon 2.** Ang Koro usa ka boluntaryo ug faith-based nga music ministry nga nagsilbi sa liturgical nga mga panginahanglan sa San Vicente Parish Chapel (Sabado 7PM Misa) ug Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City (Domingo 7PM Misa).
+
+**Seksyon 3.** Ang Koro dili bayrang ensemble. Ang mga miyembro nagsilbi isip pagsimba ug komunidad. Ang bisan unsang honorarium o pondo nga nadawat komunal nga kahinguhaan kini nga gipahigayon sa transparency sa mga opisyal.
+
+**Seksyon 4.** Kining Saligang Batas nagpuli sa tanang naunang informal nga kasabutan, mga patakaran, o pagsabut sukad Hunyo 20, 2026, ang petsa sa pagpatunhay niini.
+
+---
+
+## ARTIKULO II — BISYON UG MISYON
+
+**Bisyon:** Usa ka koro diin ang matag miyembro motubo — sa pagtuo, sa kahanas, sa pagkatawo, sa pagpangaibog — ug makaingon usa ka adlaw: *"Nagsilbi ko sa Diyos sa akong tibuok kakayahan, ug mas maayo ko tungod niini."*
+
+**Misyon:** Maghatag og malipayong, andam, ug mabudhion nga music ministry alang sa liturgiya sa parokya; pag-abiabi sa mga bag-ong miyembro nga may pagmahal; pagtabang sa usag-usa sa tanang panahon sa kinabuhi; ug pagdayeg sa 54-ka-tuig nga pamana sa mga nag-awit sa atong unahan.
+
+---
+
+## ARTIKULO III — MIYEMBRO
+
+**Seksyon 1. Kwalipikasyon.**
+
+Bukas ang San Vicente Choir sa tanan nga gustong magsilbi sa Diyos pinaagi sa musika.
+
+**(a) Mga Nag-awit**
+- Kinahanglan labing menos nakaadto na sa **Junior High School (Grade 7, mga 13 anyos)**
+- Walay maximum nga edad — ang serbisyo sa Diyos walay expiration
+- Walay kinahanglang naunang kasinatian o training sa musika — ang tinguha lang nga makat-on ug magsilbi igo na
+- Kinahanglan mouyon sa pagpapahalaga, conduct, ug attendance expectations niining Saligang Batas
+- Kinahanglan mag-sign sa Membership Form sa pagsali ug sa matag taunan nga renewal
+
+**(b) Ministry Support Members**
+Mga instrumentalista ug accompanist (pananglitan, gitarista, keyboardist, bassist) nga nagsilbi sa Koro sa suportadong musikal nga kapasidad. Sila:
+- Walay limitasyon sa edad
+- Kinahanglan susihon sa Music Director nga andam na sila mag-accompany sa Koro sa liturgical setting
+- Sakop sa parehas nga Code of Conduct, attire, ug mass behavior standards sa tanang miyembro
+
+**(c) Mga Miyembro nga Wala Pay 18 Anyos**
+- Ang ginikanan o guardian kinahanglan mag-co-sign sa Membership Form bago ang menor de edad makasali sa bisan unsang aktibidad sa koro
+
+**Seksyon 2. Mga Kategorya sa Miyembro.**
+
+**(a) Active Member** — Miyembro nga naka-sign sa Membership Form, nakatuon sa attendance, ug nakaapil sa weekly attendance poll. Adunay katungod sa pagboto sa general assemblies.
+
+**(b) Associate Member (Naka-Leave)** — Miyembro nga, tungod sa personal nga mga sirkumstansya (pagmabdos, board exam, trabaho, kahimsog, pamilya), dili makasunod sa weekly attendance apan gusto magpabilin isip parte sa komunidad sa Koro. Ang mga Associate Member:
+- Dili sakop sa attendance penalties
+- Magpabilin sa group chat
+- Pwedeng moapil sa mga misa kung available ug gusto
+- Dili adunay katungod sa pagboto samtang naka-Associate status
+- Pwedeng mobalik sa Active status bisan kanus-a pinaagi sa pagpahibalo sa opisyal
+
+**(c) Honorary Member** — Miyembro nga nagsilbi sa Koro sulod sa daghang mga tuig ug kansang mga sirkumstansya dili na magtugot sa regular nga pakigsali. Giila sa taunan nga assembly ug kanunay welcome nga moawit.
+
+**Seksyon 3. Proseso sa Pagsali (7 Lakang).**
+
+1. **Ipahayag ang interes** sa bisan unsang opisyal — personal, pinaagi sa group chat, o online
+2. **Pun-a ang Registration Form** — basic personal information
+3. **Dawata ug basaha ang Member Handbook ug kining Saligang Batas** — hatagan og panahon para sabton ang duha ka dokumento
+4. **Pirmahan ang Membership Form** — pagpamatuod nga gibasa, nasabtan, ug gi-uyon. Para sa mga menor de edad, ang ginikanan o guardian kinahanglan mag-co-sign.
+5. **Mag-audition** — usa ka awit sa pagpili sa atubangan sa mga opisyal ug miyembro. Ang audition **dili rejection test** — matahom kini nga tradisyon. Ang tanan nga nag-audition sa maayong pagtuo gidawat.
+6. **Voice section assignment** — ang Music Director naghatag sa bag-ong miyembro sa angay nilang voice section
+7. **Paila sa Koro** — opisyal nga gipaila sa tibuok Koro sa sunod nga available nga misa o pulong
+
+**Seksyon 4. Taunan nga Renewal.**
+Matag Hunyo, ang tanang Active Members mosign og renewal form — usa ka taunan nga higayon para personal nga baguhin ang pangako ug ipahayag ang personal nga tumong para sa tuig.
+
+**Seksyon 5. Boluntaryong Pagbiya.**
+Ang bisan unsang miyembro nga gustong permanenteng mobiya sa Koro kinahanglan magpahibalo sa bisan unsang opisyal ug hatagan og maayong paalam. Walay miyembro ang tangtangon sa group chat nga wala sila mokunsinti, ni makuha sa pwersa nga wala ang pormal nga proseso sa Artikulo XI.
+
+---
+
+## ARTIKULO IV — MGA OPISYAL
+
+**Seksyon 1. Mga Posisyon sa Opisyal.**
+
+**Ehekutibo ug Advisory**
+
+| Posisyon | Mga Responsibilidad |
+|---|---|
+| **Presidente** | Pangkalahatang pamumuno, katapusang desisyon, nagrepresenta sa Koro sa parokya, nagpangulo sa mga pulong, nagpataliwala sa mga away |
+| **Bise-Presidente ug Internal Coordinator** | Suportahan ang Presidente, kumpleto isip Presidente kung wala siya, nagdumala sa kaayohan ug moralidad sa miyembro |
+| **Choir Adviser** | Senior advisory nga papel, naghatag og institutional wisdom, nagmentori sa mga opisyal |
+
+**Musical Leadership**
+
+| Posisyon | Mga Responsibilidad |
+|---|---|
+| **Music Director ug Liturgical Lead** | Nagdumala sa musical preparation, nagkoordina sa pagpili og awit, nagtrain sa mga miyembro, nagdumala sa Master Repertoire List |
+| **Soprano Section Leader** | Nagpanguna ug nagsuporta sa mga soprano |
+| **Alto Section Leader** | Nagpanguna ug nagsuporta sa mga alto |
+| **Tenor Section Leader** | Nagpanguna ug nagsuporta sa mga tenor |
+| **Bass Section Leader** | Nagpanguna ug nagsuporta sa mga bass |
+
+**Administrative Officers**
+
+| Posisyon | Mga Responsibilidad |
+|---|---|
+| **Kalihim** | Nagrekord sa minuto, nagpadayon sa rekord sa miyembro, nagdumala sa mga form, naghandle sa mga anunsyo |
+| **External Coordinator** | Nagkonekta sa mga parokya, venue, sponsor, ug external nga grupo. Pwedeng i-combine sa Kalihim. |
+| **Treasurer** | Nagdumala sa tanang pondo, nagrekord sa kita/gastos, nagpresentar sa financial report sa matag General Assembly |
+
+**Mga Committee Head** — gisusi matag tuig, maadjust nga wala'y amendment sa Saligang Batas.
+
+| Komite | Mga Responsibilidad |
+|---|---|
+| **Music Committee** | Pananaliksik sa awit, koordinasyon sa rehearsal, mga mungkahi sa repertoire |
+| **Membership Committee** | Pag-onboard sa bag-ong miyembro, pagsubaybay sa status sa miyembro |
+| **Logistics ug Property** | Sound system, sheet music, kagamitan, setup sa evento |
+| **Documentation ug Social Media** | Mga litrato, video, social media, media archiving |
+| **Costume Committee** | *(Optional — ginagana para sa mga performance/competition)* |
+
+**Seksyon 2. Eleksyon.**
+Ang mga opisyal napili matag tuig sa **May Anniversary Assembly** (ika-2 o ika-3 weekend sa Mayo) pinaagi sa majority vote sa mga Active Members nga present. Ang oath-taking mosunod sa samang assembly o wala magpalabay ang katapusang semana sa Mayo. Ang bisan unsang Active Member sa maayong pagkatindog pwedeng mag-nominate sa ilang kaugalingon o mapili. Walay mamahimong magdesignar og papel sa wala ang ilang pagtugot.
+
+**Seksyon 3. Termino.** Ang mga opisyal nagsilbi sulod sa usa (1) ka tuig, mabag-o nga wala'y term limit.
+
+**Seksyon 4. Pagbilin ug Handover.**
+Ang bisan unsang opisyal pwedeng magbilin bisan kanus-a pinaagi sa written nga abiso sa Presidente. Bago sila ganap na mailisan, kinahanglan nila tapuson ang handover: ipaliwanag ang mga responsibilidad, itrao ang tanang dokumento ug pondo, ug manaa para sa mga pangutana sa panahon sa transisyon. Walay opisyal nga nagbilin sa maayong dahilan ang dili hatagan og maayong paalam.
+
+**Seksyon 5. Succession.**
+- Kung ang Presidente dili na makaserbisyo, ang Bise-Presidente ang mopuli.
+- Kung ang Music Director dili na makaserbisyo, ang Choir Adviser ug pinaka-senior na instrumentalista ang mag-ampo sa musical leadership hangtod madesignar og kailis.
+
+**Seksyon 6. Code of Conduct sa Opisyal.**
+Ang tanang opisyal nagpangako sa: walay public na pagtawag-atensyon o paghuwit sa kahiya, una sa tanang pagsulbad sa mga alalahanon sa pribadong paraan, pagrepresenta sa tanang miyembro nga patas, pagpadayon sa confidentiality, ug pagsunod sa prinsipyo nga ang mga miyembro nagsilbi sa kusog sa kalooban, dili sa panghimaraut.
+
+---
+
+## ARTIKULO V — PRESENSYA
+
+**Seksyon 1. Mga Tier sa Evento.**
+
+| Tier | Mga Evento | Gipaabut |
+|---|---|---|
+| **Core** | Sabado 7PM Misa (SVF Chapel), Domingo 7PM Misa (San Nicolas) | Gipaabut sa tanang Active Members |
+| **Major** | Pasko, Holy Week, Kapistahan sa Patron Saint, ug uban pang significant na liturgiya | Kinahanglan maliban kung adunay rason |
+| **Special** | Mga kompetisyon, konsiyerto, gig, seminar | Boluntaryo; inanunsyo nang maaga |
+
+**Seksyon 2. Weekly Attendance Poll.**
+Usa ka poll para sa Sabado ug Domingo na misa ang gipost matag **Huwebes bago mag-9PM**. Ang tanang Active Members kinahanglan motubag bago mag-**Biyernes 12NN**. Walay tubag = absent para sa planning. Ang pagtubag og "Dili" dili silot — responsableng komunikasyon kini.
+
+**Seksyon 3. Pag-ila sa Klase sa Kawala.**
+
+| Klase | Kahulogan |
+|---|---|
+| **Excused — Walay Kinahanglang Abiso** | Trabaho, eksam, medikal na emergency, emergency sa pamilya |
+| **Excused — Kinahanglan og Prior na Abiso** | School org, gawas sa lungsod, personal na rason — magpahibalo sa opisyal bago ang misa |
+| **Unexcused** | Walay tubag sa poll, walay abiso, walay gihatag na rason |
+
+**Seksyon 4. Quorum para sa Misa.**
+Minimum **4 miyembro, labing menos 1 bawat voice part** ang kinahanglan para magtuloy. Kung dili maabot, ang Presidente o designated na opisyal ang magdesisyon kung magpadayon o ipahibalo sa parokya.
+
+**Seksyon 5. Attendance Review.**
+Pagkatapos sa 3 sunud-sunod na unexcused na kawala, ang opisyal magkontak sa pribado — dili para mubo, kondili para makasabut. Ang miyembro pwedeng mobalik sa regular na pakigsali, boluntaryong mag-shift sa Associate status, o ang opisyal pwedeng mag-rekomendar sa pagbabago sa status nga adunay kaalaman sa miyembro. Walay pagbabago sa status ang mahimo nga wala personal na pagpapahibalo sa miyembro.
+
+---
+
+## ARTIKULO VI — MGA ENSAYO UG PRAKTIS
+
+**Seksyon 1. Mga Kahulugan.**
+
+**(a) Personal na Praktis** — Individual na paghanda sa balay: pagpaminaw sa mga awit, pag-aralan ang mga lirica, pagsunod sa voice part recordings. Ang mga miyembro gipaabut manggawi bago sa mga ensayo, lalo na para sa mga bag-ong awit.
+
+**(b) Ensayo** — Opisyal na grupo na sesyon diin ang mga miyembro nag-awit nang magkasama. Naiskedyul sa mga opisyal ug sakop sa attendance expectations.
+
+**Seksyon 2. Regular na Iskedyul sa Ensayo.**
+- Minimum **usa (1) opisyal na ensayo kada buwan** sa buong tuig
+- Ang iskedyul itinakda kada semester pinaagi sa **availability poll sa miyembro**, inanunsyo nang dili ubos sa 2 semana bago magsugod ang semester
+- Sa mga buwang bago sa Major Events, ang mga ensayo nagdagdag sa **1–2 sesyon kada semana**
+
+**Seksyon 3. Oras sa Ensayo.**
+
+| Oras | Aktibidad |
+|---|---|
+| 7:30 PM | Call time — gipaabut ang mga miyembro |
+| 7:45 PM | Nagsugod ang warm-up |
+| 8:00 PM | Nagsugod ang ensayo, sharp |
+
+**Seksyon 4. Pagkansela sa Ensayo.**
+Pwedeng kanselahin tungod sa mabughat na ulan/bagyo, emergency, o force majeure. Kinahanglan inanunsyo sa mga opisyal nang mas maaga.
+
+**Seksyon 5. Attendance sa Ensayo.**
+Ang mga Active Member gipaabut sa tanang naiskedyul na ensayo. Parehas nga excused/unexcused na mga patakaran ang naaangkop.
+
+**Seksyon 6. Rest Period Pagkatapos sa Major Events.**
+Mandatory **minimum 1-semanang pahinga** pagkatapos sa matag Major Event. Walay mga ensayo o non-liturgical na aktibidad sa panahon niini. Ang mga obligasyon sa Sabado ug Domingo na misa nagpadayon.
+
+**Seksyon 7. Excuse Letters para sa Mga Estudyante.**
+Sa kahilingan, ang Presidente o Kalihim pwedeng mag-isyu sa signed na Excuse Letter para sa mga estudyanteng miyembro. Mangayo nang dili ubos sa 3 adlaw bago. May standard template.
+
+**Seksyon 8. Leave Request Letters para sa Mga Nagtatrabaho.**
+Sa kahilingan, ang Presidente o Kalihim pwedeng mag-isyu sa Leave Request Letter na nakaadres sa employer sa miyembro. Mangayo nang dili ubos sa 5 adlaw bago; 2–3 semana para sa Major Events. Ang final na approval naa sa employer.
+
+---
+
+## ARTIKULO VII — CODE OF CONDUCT, DAMIT, UG DISIPLINA SA MISA
+
+**Seksyon 1. Mga Pangunahing Pagpapahalaga.**
+- **Una ang Pagtuo** — Nag-awit ta para sa Diyos una sa tanan
+- **Respeto** — Sa usag-usa, sa mga klero, sa kongregasyon, ug sa atong kaugalingon
+- **Responsibilidad** — Moanhi, makigsulti, tumanon
+- **Pagtubo** — Ang matag miyembro dinhi para motubo — musikal, personal, espirituwal
+- **Katinuod** — Ipahayag ang mga alalahanon sa tamang paraan, dili pinaagi sa tsismis o public shaming
+- **Pagsapil** — Giabiabi ang mga bag-ong miyembro, gisaulog ang mga nagbalik, ginagalang ang mga nagpaalam
+- **Kahanas** — Dili perpeksyon, apan kanunay ang atong pinakadako
+
+**Seksyon 2. Pag-alam og Positibong Kinaiya (Assume Positive Intention).**
+Ang atong komunidad nagkakita sa mga tawo nga nagkalain-laing iskedyul, personalidad, ug sirkumstansya. Bago moreaksyon sa giwala nga misa, sa wala tubag nga mensahe, o sa komento nga daw sayop — **ihunong ug pangutana: "Aduna bay maayong rason nga wala pa nako mahibal-i?"**
+
+Mga Praktikal na Giya:
+- **Bago magpalagay og daotan — pangutana una.** Ang simpleng *"Okay ka ba?"* molabaw kaysa sa reklamo.
+- **Lisod basahon ang tono sa text.** Kung ang mensahe daw bastos o walay pagtagad, isip nga gisulat kini sa pagdali — dili sa kasuko.
+- **Ang kawala dili pagdumot.** Kung ang usa ka tawo wala moanhi o wala motubag, lagmit aduna silay rason. Tseka sila — dili sila hukman.
+- **Ang dili pagsinabtanay dili personal na pag-atake.** Kung ang usa ka tawo nangutana sa usa ka desisyon, isip nga nagmalasakit sila sa grupo — dili ka nila ginasalab.
+- **Sultihi ang tawo, dili ang ubang tawo mahitungod sa iya.** Kung adunay bagay nga nagsamok kanimo, dalhon kini sa tawo direkta o sa opisyal — dili sa group chat, dili sa kilid-kilid na pag-uusap.
+- **Maghatag og grasya.** Ang tanan adunay lisod na mga adlaw sa eskwela, trabaho, o balay. Ang daw masamok na kinaiya usahay pagod ra kana.
+
+*Ang tumong dili buta nga pagiging positibo — kundi ang disiplina sa pagpahunong bago maghukom. Mao kana kung unsaon pagkahimo sa usa ka koro nga komunidad.*
+
+**Seksyon 3. Angay nga Damit.**
+
+*(a) Sa Panahon sa Ensayo:* Hindi bababa sa T-shirt na may manggas. Walay sleeveless o revealing na damit.
+
+*(b) Sa Panahon sa Misa:* Labing menos usa ka limpyo na T-shirt o collared shirt na may pantalon o jeans. Walay shorts, sleeveless, sobrang mubo na palda, o labis na casual/revealing na damit. Ang mga miyembro nga dili nakasuot nang angay pwedeng ipauli sa opisyal.
+
+**Seksyon 4. Asal sa Panahon sa Misa.**
+- Limitahan ang pakikipag-usap — bulong o napakababang boses lang kung kinakailangan para sa koordinasyon sa musika
+- Walay tawanan, kigik, o dili kinahanglan na side conversations habang nag-awit o nasa microphone
+- Ang paggamit sa telepono para sa music sheet reference lang — walay social media sa panahon sa misa
+- Manatiling mapanuri — bantayan ang Music Director para sa mga cue
+- Bawat awit awiton nang may layunin, bisan dili pamilyar
+
+Ang atong asal nagpakita sa tibuok komunidad sa koro ug sa parokya.
+
+**Seksyon 5. Asal sa Group Chat.**
+Walay public na pagtawag-atensyon, paghadlok, o paghuwit sa kahiya. Ang mga alalahanon unang ipaambit nang pribado sa opisyal. Kanunay ang mapinangga ug nagpalakas na tono.
+
+---
+
+## ARTIKULO VIII — PINANSIYAL
+
+**Seksyon 1. Kalikasan sa Pondo.**
+Ang San Vicente Choir boluntaryo ug faith-based. Ang Koro wala nanginahanglan og membership dues ug wala nagdepende sa bisan unsang solong pinagkukunan sa kita. Ang mga nadawat na pondo supplemental ug transparent nga gipamahala. *Ang kakayahan sa Koro na magsilbi sa Diyos wala nagdepende sa kwarta. Ang mga pondo para suportahan ang grupo, dili para tukuyon kini.*
+
+**Seksyon 2. Mga Pinagkukunan sa Pondo.**
+Parish honoraria (kung ibinibigay), talent fees, donasyon, sponsorships, ug uban pang boluntaryong kontribusyon.
+
+**Seksyon 3. Paggamit sa Pondo.**
+- Transportasyon para sa mga event sa koro
+- Grupo na uniform o damit
+- Kagamitan, sound system, music materials
+- Mga seminar, workshop, formation
+- Grupo na event ug pakikisama
+- **Community assistance** para sa mga miyembro o dating miyembro sa pangangailangan (pinaagi sa majority vote sa opisyal)
+
+**Seksyon 4. Pamamahala sa Pinansiyal.**
+- Ang Treasurer nagtatago sa nakasulat na rekord sa tanang kita ug gastos
+- Ang financial report ipinepresentar sa matag General Assembly o sa kahilingan sa sinumang miyembro
+- Ang mga gastos na higit sa **₱300** nanginahanglan og majority na approval sa opisyal
+- Ang emergency na gastos na wala pang ₱300 aprubado sa Presidente + Treasurer magkasama, inihayag sa sunod na pulong
+
+**Seksyon 5. Transparency.**
+Ang tanang miyembro pwedeng makita ang mga rekord sa Treasurer sa kahilingan. Walay pondo ang gigamit para sa personal na benepisyo sa sinumang opisyal.
+
+**Seksyon 6. End-of-Term Turnover.**
+Ang palabas na Treasurer nagpepresenta sa kumpletong financial report ug nagpasa sa tanang pondo ug rekord sa papasok na Treasurer, nga adunay Presidente ug usa pa ka opisyal isip mga saksi.
+
+---
+
+## ARTIKULO IX — MGA PROGRAMA SA KOMUNIDAD UG PAGPAUNLAD
+
+**Seksyon 1. Layunin.**
+Labaw pa sa liturgical na serbisyo, ang Koro nakatuon sa paglago, kagalingan, ug epekto sa komunidad sa mga miyembro niini.
+
+**Seksyon 2. Saturday Community Program.**
+Sa mga available na Sabado, ang Koro nag-oorganisa sa mga grupo na aktibidad para palakasin ang samahan ug dagdagan ang pakikilahok sa misa. Ang timing flexible:
+- **Bago ang misa (3:00–5:00 PM)** — recreational, seminar, community outreach, fellowship
+- **Pagkatapos sa misa (8:00 PM pataas)** — optional na praktis, bonding, o grupo na talakayan
+
+| Klase | Mga Halimbawa |
+|---|---|
+| 🏃 Recreational / Wellness | Jogging, badminton, pickleball, sports |
+| 🎵 Sesyon sa Praktis | Grupo na ensayo, sectional practice, music review |
+| 📚 Seminar / Workshop | Vocal training, music ministry, faith formation |
+| 🤝 Community Service | Pagtudlo sa mga bata nga mag-awit, outreach sa parokya |
+| 🎉 Fellowship / Fun | Kaswal na bonding, mga pagdiriwang |
+
+Ang mga aktibidad boluntaryo apan hinihikayat. Ang iskedyul inanunsyo 3 adlaw bago.
+
+**Seksyon 3. Community Outreach.**
+Ang Koro nagpaambit sa iyang mga talento labaw pa sa parokya — pagtudlo sa mga batang bata, suporta sa mga event sa komunidad, ug pakikilahok sa mga seminar sa music ministry.
+
+**Seksyon 4. Digital Presence ug Website.**
+Ang Koro pwedeng magpadayon sa opisyal na social media ug website para sa impormasyon sa miyembro, kasaysayan sa koro, mga event, ug mga katanungan sa sponsorship.
+
+---
+
+## ARTIKULO X — MUSIKA UG REPERTOIRE
+
+**Seksyon 1.** Ang Music Director nagkoordina sa pagpili sa awit kasama ang parish liturgical guidelines ug nagpresentar sa listahan sa awit sa mga miyembro nang maaga kung posible.
+
+**Seksyon 2. Master Repertoire List** nga gipamahala sa Kalihim ug Music Director:
+- *Mastered* — mga awit nga kumpiyansa nang maaawit sa koro
+- *Learning* — mga awit nga kasalukuyang ginepraktisan
+- *Retired* — mga awit nga dili na kasama sa rotation apan parte sa kasaysayan sa koro
+
+**Seksyon 3.** Ang mga dili pagsinabtanay sa pagpili sa awit nasulbad pinaagi sa talakayan sa Music Director ug Choir Adviser. Kung dili pa nasulbad, ang Presidente ang nagbibigay sa deciding vote.
+
+**Seksyon 4.** Ang mga miyembro hinihikayat magmungkahi og mga awit. Ang mga mungkahi kikilalanin ug isasaalang-alang, dili bibiglain.
+
+---
+
+## ARTIKULO XI — DISIPLINA UG DUE PROCESS
+
+**Seksyon 1.** Ang San Vicente Choir wala nagtuo sa punitive na disiplina para sa attendance. Ang mga miyembro nga dili makadalo inirereklasipikal ug sinusuportahan, dili parusahan.
+
+**Seksyon 2.** Ang asal nga nagdulot og pinsala sa komunidad — panghimaraut, public shaming, pagpangawat sa pondo, paulit-ulit na kawalang-galang — tinatugon pinaagi sa:
+
+1. Pribadong pag-uusap sa opisyal ug miyembro
+2. Kung dili pa nasulbad: pormal na pulong nga adunay labing menos 3 opisyal
+3. Kung dili pa rin: boto sa tanang Active Members sa General Assembly
+4. Ang pagpapaalis nanginahanglan og **duha-sa-tulo (2/3) na majority vote** sa mga Active Members nga naroroon
+
+**Seksyon 3.** Walay miyembro ang maaaring alisin nga wala sinusunod ang proseso niini nang buo.
+
+---
+
+## ARTIKULO XII — MGA PULONG
+
+**Seksyon 1. General Assembly.**
+Ang Koro nagdaraos sa duha ka taunan na assembly:
+
+**(a) May Anniversary Assembly** — isinasagawa sa ika-2 o ika-3 weekend sa Mayo para: ipagdiwang ang anibersaryo, **mag-elect sa mga papasok na opisyal**, magsagawa sa oath-taking, ug kilalanin ang mga palabas na opisyal.
+
+**(b) June General Assembly** — ang **unang opisyal na assembly nga pinamumunuan sa mga bag-ong nanumpa na opisyal**, para: opisyal na buksan ang bag-ong taon sa koro, kumpletuhin ang membership renewal, ipahayag ang mga personal na tumong, ipresentar ang financial report, itakda ang mga plano ug iskedyul para sa semester, ug tanggapin ang mga bag-ong miyembro.
+
+**Seksyon 2. Buwanang Pulong sa mga Miyembro.**
+Labing menos **usa (1) mandatory na pulong kada buwan** para sa tanang Active Members. Hangtod duha (2) kada buwan kung kinakailangan.
+- **Quorum: 5 Active Members** (ang mga opisyal binibilang)
+- Ang mga desisyon ginagawa sa simple majority sa mga naroroon
+- Ang agenda ibinabahagi nang dili ubos sa 2 adlaw bago
+- Ang mga minuto itinatala sa Kalihim ug ibinabahagi pagkatapos
+
+**Seksyon 3. Mga Pulong sa Opisyal.**
+Gibuhat kung kinakailangan. Dili kinahanglan sa tanang miyembro.
+
+**Seksyon 4. Abiso.** Labing menos 3 adlaw na abiso para sa tanang pulong pinaagi sa group chat.
+
+**Seksyon 5. Paggawa sa Desisyon.** Simple majority sa mga naroroon na Active Members, gawas kung nabanggit sa ubang parte. Ang Presidente nagbibigay sa deciding vote sa mga tie.
+
+---
+
+## ARTIKULO XIII — PERSONAL NA TAUNAN NA TUMONG
+
+Sa matag June General Assembly, ang matag Active Member giimbitahan — dili sapilitan — na ipahayag ang usa ka personal na tumong para sa ilang panahon sa Koro. Ang mga tumong pwedeng musikal, personal, o espirituwal. Wala kini sinusuri o binibigyan og grado. Naglalayunin kini para sa matag miyembro, kung mobiya na sila sa Koro, makabalik-tanaw ug masulti: *"Nagtubo ko dinhi."*
+
+---
+
+## ARTIKULO XIV — PRIVACY SA DATA UG PAHINTULOT SA MEDIA
+
+**Seksyon 1.** Ang Koro nagrespeto sa privacy ug dignidad sa matag miyembro alinsunod sa **Republic Act 10173 sa Pilipinas (Data Privacy Act of 2012).**
+
+**Seksyon 2. Personal na Impormasyon nga Kinokolekta:** Buong pangalan, palayaw, numero sa kontak, email, voice part, status sa miyembro, rekord sa attendance, ug optional na emergency contact. Luwas nga gipamahala sa Kalihim ug dili ipaambit nga wala'y pahintulot.
+
+**Seksyon 3. Pahintulot sa Media.** Pinaagi sa pagpirma sa Membership Form, ang mga miyembro naghatag sa pahintulot para sa mga litrato/video sa mga aktibidad sa koro nga mai-post sa mga opisyal na platform. Ang mga miyembro pwedeng mangayo na tangtangon ang partikular na content bisan kanus-a — buhaton dayon ug walay pangutana. Ang mga menor de edad nanginahanglan og co-signature sa ginikanan/guardian; ang Koro dili mag-post sa mga identifiable na litrato sa mga menor de edad nga wala'y pahintulot.
+
+**Seksyon 4. Internal na Komunikasyon.** Ang nilalaman sa group chat dili dapat i-screenshot o ibahagi nang pampubliko nga wala'y pahintulot sa tanang partido. Ang mga paglabag tinatugon sa ilalim sa Artikulo XI.
+
+**Seksyon 5. Proteksyon gikan sa External na Partido.** Ang mga opisyal dili maglabas sa impormasyon sa miyembro sa mga external na partido nga wala'y nakasulat na pahintulot sa miyembro, gawas kung kinakailangan sa balaod.
+
+**Seksyon 6. Pagpapanatili sa Data.** Ang mga rekord gipamahala sa panahon sa aktibong miyembrya ug hangtod 3 ka tuig pagkatapos sa pag-alis, pagkatapos ina-anonymize o luwas na itatapon.
+
+**Seksyon 7.** Ang mga miyembro pwedeng mag-file sa mga reklamo sa **National Privacy Commission (NPC)** sa Pilipinas sa ilalim sa RA 10173.
+
+---
+
+## ARTIKULO XV — MGA PAGBABAGO
+
+Ang mga pagbabago nanginahanglan og **duha-sa-tulo (2/3) na majority vote** sa bisan unsang General Assembly. Ang mga iminumungkahing pagbabago kinahanglan ipaambit sa tanang miyembro nang dili ubos sa **7 adlaw** bago ang assembly. Ang tanang pagbabago itinatala sa Kalihim, nilagdaan sa Presidente ug Bise-Presidente, ug nakalakip isip permanenteng rekord.
+
+---
+
+## ARTIKULO XVI — RATIPIKASYON
+
+Ang Saligang Batas ug Mga Patakaran sa San Vicente Choir gitunhay sa **Hunyo 20, 2026**, sa General Assembly sa San Vicente Choir, Cebu City.
+
+| | |
+|---|---|
+| **Mervin John Tampus** | Presidente |
+| **Aravila Dionson** | Bise-Presidente ug Internal Coordinator |
+| **Jan Dacillo** | Choir Adviser |
+| **Vince Raymund Rojas** | Music Director ug Liturgical Lead |
+| **Gabriella Amor Lopez** | Kalihim ug External Coordinator |
+
+*Kining dokumento itipigan sa rekord sa Kalihim ug pwedeng makuha sa sinumang miyembro sa kahilingan.*
+</script>
+
 <script type="text/plain" id="md-handbook">
 # 🎵 SAN VICENTE CHOIR
 ## Member Handbook 2026
@@ -1075,6 +1548,21 @@ Welcome sa San Vicente Choir — usa ka komunidad nga nag-awit alang sa Ginoo su
 
 ---
 
+## 🕊️ ASSUME POSITIVE INTENTION / PAG-ALAM OG POSITIBONG KINAIYA
+
+We serve God alongside people with different schedules, personalities, and circumstances. Before reacting to a missed mass, a late reply, or a comment that felt wrong — pause and ask: *"Is there a good reason I don't know yet?"*
+
+1. 🙋 **Before assuming the worst — ask first.** A simple *"Okay ka ba?"* goes further than a complaint.
+2. 📱 **Tone is hard to read in text.** If a message seems rude or cold, assume it was written in a hurry — not in anger.
+3. 🪑 **Absence is not rejection.** When someone doesn't show up or doesn't reply, they likely have a reason. Check on them — don't judge them.
+4. 🤔 **Disagreement is not a personal attack.** When someone questions a plan, they probably care about the group — not targeting you.
+5. 🗣️ **Speak to the person, not about them.** Bring concerns to the person directly or to an officer — not the group chat or side conversations.
+6. 🌿 **Give grace.** Everyone has hard days at school, work, or home. What looks like bad attitude is sometimes just exhaustion.
+
+*Bisaya: Nagsilbi ta sa Diyos kauban ang mga tawo nga nagkalain-laing iskedyul ug sirkumstansya. Bago moreaksyon — ihunong ug pangutana: "Aduna bay maayong rason nga wala pa nako mahibal-i?" Hatagi ang matag tawo og dignidad nga masabtan una bago hukman. Mao kana kung unsaon pagkahimo sa usa ka koro nga komunidad.* 💛
+
+---
+
 ## 📅 WHAT TO EXPECT EVERY REHEARSAL
 
 1. 🕯️ 7:30 PM — Call time (arrive on time)
@@ -1183,7 +1671,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel, Duljo | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | June 20 (Sat) | **First General Assembly** *(inaugural — new officers lead for the first time)* — 4PM Mass San Pedro Chapel → 5PM Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 |
 | June 20 | **New Officers' First Meeting** — Membership Renewal, Constitution Signing, Personal Goals, Plans & Priorities, Rehearsal Schedule Setting | 🔵 |
 | Late June | First Official Rehearsal of new term | 🟢 |
@@ -1193,7 +1681,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | TBD | Monthly Rehearsal | 🟢 |
 | TBD | Semester 1 Schedule Released | 🔵 |
 | Saturdays | Saturday Group Activity (3–5PM or after 8PM) | 🟠 |
@@ -1203,7 +1691,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | TBD | Monthly Rehearsal | 🟢 |
 | Saturdays | Saturday Group Activity | 🟠 |
 
@@ -1212,8 +1700,8 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
-| TBD | **Fiesta of the Archiocesan Shrine of San Nicolas de Toletino Parish** — confirm with parish | 🔴 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
+| TBD | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** — confirm with parish | 🔴 |
 | TBD | Additional rehearsals before Fiesta (1–2x/week) | 🟢 |
 
 ## OCTOBER 2026 — HOLY ROSARY MONTH
@@ -1221,7 +1709,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | October 1–30 | **Holy Rosary — 30 Days Visiting of Homes** | 🔴 |
 | TBD | Monthly Rehearsal | 🟢 |
 
@@ -1230,7 +1718,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | November 1 | **All Saints' Day Mass** | 🔴 |
 | November 2 | **All Souls' Day Mass** | 🔴 |
 | TBD | Monthly Rehearsal | 🟢 |
@@ -1241,7 +1729,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | 1st–2nd week | **Christmas Caroling** *(schedule TBD)* | 🟣 |
 | After Caroling | 🎉 **Christmas Party / Simple Celebration** | 🟣 |
 | Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm with parish | 🔴 |
@@ -1254,7 +1742,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
-| Every Sunday | 7PM Mass — Archiocesan Shrine of San Nicolas de Toletino Parish | 🟡 |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | January 1 | **New Year's Day Mass** | 🔴 |
 | First 2 weeks | **Santo Niño Novena** (9-day novena) | 🔴 |
 | 3rd Sunday | **Sinulog Sunday — Feast of Santo Niño** | 🔴 |
@@ -1311,7 +1799,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Friday before 12NN | Deadline to respond to poll |
 | Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 |
 | Saturday 7PM | Mass — SVF Chapel 🟡 |
-| Sunday 7PM | Mass — Archiocesan Shrine of San Nicolas de Toletino Parish 🟡 |
+| Sunday 7PM | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish 🟡 |
 | Once a month | Mandatory Members Meeting 🔵 |
 
 ---
@@ -1638,8 +2126,8 @@ Currently combined with Gabriella's Secretary role. Decide if it stays combined 
 
 ## 📅 B. CALENDAR — Dates to Confirm
 
-### 11. Fiesta of the Archiocesan Shrine of San Nicolas de Toletino Parish — September
-Exact date unknown. Needs confirmation from the Archiocesan Shrine of San Nicolas de Toletino Parish.
+### 11. Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish — September
+Exact date unknown. Needs confirmation from the Archdiocesan Shrine of San Nicolas de Tolentino Parish.
 
 > 💡 Assign Gabriella to follow up with San Nicolas by July. Once confirmed, post in group chat and update calendar.
 
@@ -1795,15 +2283,14 @@ Each member shares one personal goal at the General Assembly (Article XIII).
 </script>
 
 <script>
-  // Map page IDs to markdown source IDs
+  // Map page IDs to markdown source IDs (constitution handled separately for lang toggle)
   const docMap = {
-    constitution: 'md-constitution',
-    handbook:     'md-handbook',
-    calendar:     'md-calendar',
-    budget:       'md-budget',
-    excuse:       'md-excuse',
-    leave:        'md-leave',
-    tbd:          'md-tbd'
+    handbook: 'md-handbook',
+    calendar: 'md-calendar',
+    budget:   'md-budget',
+    excuse:   'md-excuse',
+    leave:    'md-leave',
+    tbd:      'md-tbd'
   };
 
   // Pre-render all docs
@@ -1812,7 +2299,20 @@ Each member shares one personal goal at the General Assembly (Article XIII).
       const src = document.getElementById(srcId).textContent;
       document.getElementById('page-' + page).innerHTML = marked.parse(src);
     }
+    // Render constitution (English by default)
+    document.getElementById('constitution-content').innerHTML =
+      marked.parse(document.getElementById('md-constitution').textContent);
   });
+
+  // Constitution language toggle
+  function setConstitutionLang(lang) {
+    const srcId = lang === 'en' ? 'md-constitution' : 'md-constitution-bisaya';
+    document.getElementById('constitution-content').innerHTML =
+      marked.parse(document.getElementById(srcId).textContent);
+    document.getElementById('lang-btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('lang-btn-bisaya').classList.toggle('active', lang === 'bisaya');
+    document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   function showPage(name, btn) {
     // Hide all pages

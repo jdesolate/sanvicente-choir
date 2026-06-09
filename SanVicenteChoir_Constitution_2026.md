@@ -22,7 +22,7 @@ This Constitution exists not to punish, but to protect — to give every generat
 
 **Section 1.** The organization shall be known as **San Vicente Choir**, hereafter referred to as "the Choir."
 
-**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archiocesan Shrine of San Nicolas de Toletino Parish, Cebu City (Sunday 7PM Mass).
+**Section 2.** The Choir is a voluntary, faith-based music ministry primarily serving the liturgical needs of San Vicente Parish Chapel (Saturday 7PM Mass) and Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City (Sunday 7PM Mass).
 
 **Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
 
@@ -305,7 +305,20 @@ Every member of San Vicente Choir commits to upholding the following values in a
 - **Inclusion** — New members are welcomed, returning members are celebrated, departing members are honored
 - **Excellence** — Not perfection, but always giving our best
 
-**Section 2. Proper Attire.**
+**Section 2. Assume Positive Intention.**
+Our community brings together people with different schedules, personalities, and circumstances. Before reacting to a missed mass, an unanswered poll, or a comment that didn't land well, members are expected to pause and ask first: *"Is there a good reason I don't know yet?"*
+
+Practical guidelines:
+- **Before assuming the worst — ask.** A simple *"Okay ka ba?"* goes further than a complaint.
+- **Tone is hard to read in text.** If a message seems curt or cold, assume it was written in a hurry — not in anger.
+- **Absence is not rejection.** When someone doesn't show up or doesn't reply, they probably have a reason. Check on them; don't judge them.
+- **Disagreement is not a personal attack.** When someone questions a decision, assume they care about the group — not that they are opposing you personally.
+- **Speak to the person, not about them.** If something bothers you, raise it directly with the person or with an officer — not in a side conversation or the group chat.
+- **Give grace.** Everyone has hard days at school, at work, at home. What looks like a bad attitude is sometimes just exhaustion.
+
+*The goal is not blind positivity — it is the discipline to pause before judging. This is how a choir becomes a community.*
+
+**Section 3. Proper Attire.**
 How we dress reflects the dignity of our ministry. We are visible to the priest, lay ministers, and the entire congregation.
 
 *(a) During Practices and Rehearsals:*
@@ -318,7 +331,7 @@ How we dress reflects the dignity of our ministry. We are visible to the priest,
 
 Members who arrive for a mass not meeting the dress standard may be asked by an officer to step back until they can change, at the officer's discretion.
 
-**Section 3. Behavior During Mass.**
+**Section 4. Behavior During Mass.**
 When serving during a mass, members are in a visible and sacred role. The following standards apply:
 
 - **Talking must be kept to a minimum.** If communication is necessary for music coordination, it must be done in a whisper or very low voice.
@@ -329,7 +342,7 @@ When serving during a mass, members are in a visible and sacred role. The follow
 
 We are a direct representation of San Vicente Parish during every service. Our behavior — not just our singing — reflects on the entire choir community.
 
-**Section 4. Group Chat Conduct.**
+**Section 5. Group Chat Conduct.**
 - No public call-outs, threats, or shaming of any member in the group chat
 - Concerns about attendance or behavior are to be raised privately with an officer first
 - Announcements and coordination are the primary purpose of the group chat
