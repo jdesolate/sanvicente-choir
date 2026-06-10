@@ -5,13 +5,364 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Song Library — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      .filter-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: none;
+        border: 1px solid var(--gold-dim);
+        color: var(--ivory-dim);
+        padding: 0 16px;
+        min-height: var(--touch-min);
+        font-family: var(--font-ui);
+        font-size: var(--text-sm);
+        cursor: pointer;
+        transition: all var(--t-fast);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .filter-toggle:hover { border-color: var(--gold); color: var(--ivory); }
+      .filter-toggle.has-active { border-color: var(--gold); color: var(--gold); background: var(--gold-faint); }
+
+      .filter-panel { display: none; }
+      .filter-panel.open { display: block; }
+
+      .filter-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+      }
+      @media (min-width: 640px) {
+        .filter-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+
+      .results-meta {
+        font-size: var(--text-sm);
+        color: var(--ivory-muted);
+        margin-bottom: var(--space-4);
+        font-style: italic;
+      }
+
+      .song-list { display: flex; flex-direction: column; gap: 8px; }
+    </style>
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 6: song library -->
-      <p>Song library — coming in Session 6.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Member Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="songs.html" class="sidebar-link active"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>Song Library</h2>
+            <p>Search and browse the choir's repertoire</p>
+          </div>
+
+          <!-- Search + filter toggle -->
+          <div class="search-bar" style="align-items:stretch">
+            <input type="search" id="search-input" placeholder="Search by title or lyrics…"
+              aria-label="Search songs" autocomplete="off">
+            <button class="btn btn-gold" id="search-btn">Search</button>
+            <button class="filter-toggle" id="filter-toggle"
+              aria-expanded="false" aria-controls="filter-panel">⚙ Filters</button>
+          </div>
+
+          <!-- Filter panel -->
+          <div class="filter-panel" id="filter-panel" aria-hidden="true">
+            <div class="filter-grid" style="background:var(--charcoal);border:1px solid var(--gold-dim);padding:var(--space-5);margin-bottom:var(--space-5)">
+              <div>
+                <div class="filter-section-label">Language</div>
+                <div class="filter-chips" id="lang-filter"></div>
+              </div>
+              <div>
+                <div class="filter-section-label">Liturgical Use</div>
+                <div class="filter-chips" id="use-filter"></div>
+              </div>
+              <div>
+                <div class="filter-section-label">Season</div>
+                <div class="filter-chips" id="season-filter"></div>
+              </div>
+              <div style="grid-column:1/-1;margin-top:var(--space-2)">
+                <button class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
+              </div>
+            </div>
+          </div>
+
+          <p id="results-meta" class="results-meta" style="display:none"></p>
+
+          <div id="songs-loading" class="loading-text" style="display:none">
+            <div class="spinner"></div> Loading…
+          </div>
+
+          <div id="songs-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">♪</div>
+            <p>No songs found. Try a different search or clear the filters.</p>
+          </div>
+
+          <div id="song-list" class="song-list" aria-live="polite" aria-label="Song results"></div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('member');
+      if (!profile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open'); backdrop.classList.add('open'); menuBtn.setAttribute('aria-expanded', 'true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Tag definitions (must match admin page values) ─────────
+      const LANG_OPTIONS = [
+        { value: 'bisaya',   label: 'Bisaya' },
+        { value: 'filipino', label: 'Filipino' },
+        { value: 'english',  label: 'English' },
+        { value: 'latin',    label: 'Latin' },
+      ];
+      const USE_OPTIONS = [
+        { value: 'entrance',           label: 'Entrance' },
+        { value: 'offertory',          label: 'Offertory' },
+        { value: 'communion',          label: 'Communion' },
+        { value: 'recessional',        label: 'Recessional' },
+        { value: 'responsorial_psalm', label: 'Responsorial Psalm' },
+        { value: 'gloria',             label: 'Gloria' },
+        { value: 'sanctus',            label: 'Sanctus' },
+        { value: 'agnus_dei',          label: 'Agnus Dei' },
+        { value: 'other',              label: 'Other' },
+      ];
+      const SEASON_OPTIONS = [
+        { value: 'advent',             label: 'Advent' },
+        { value: 'christmas',          label: 'Christmas' },
+        { value: 'lent',               label: 'Lent' },
+        { value: 'easter',             label: 'Easter' },
+        { value: 'ordinary_time',      label: 'Ordinary Time' },
+        { value: 'marian',             label: 'Marian' },
+        { value: 'patron_saint_feast', label: 'Patron Saint Feast' },
+        { value: 'other',              label: 'Other' },
+      ];
+
+      function labelFor(value, options) {
+        return options.find(o => o.value === value)?.label || value;
+      }
+
+      // ── Active filter state ────────────────────────────────────
+      const active = { lang: new Set(), use: new Set(), season: new Set() };
+
+      // ── Build filter chips ─────────────────────────────────────
+      function buildChips(containerId, options, filterSet) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = options.map(o =>
+          `<button class="filter-chip" data-value="${o.value}" type="button">${escHtml(o.label)}</button>`
+        ).join('');
+        el.addEventListener('click', e => {
+          const chip = e.target.closest('.filter-chip');
+          if (!chip) return;
+          const val = chip.dataset.value;
+          if (filterSet.has(val)) { filterSet.delete(val); chip.classList.remove('active'); }
+          else                    { filterSet.add(val);    chip.classList.add('active'); }
+          syncFilterToggle();
+          loadSongs();
+        });
+      }
+
+      buildChips('lang-filter',   LANG_OPTIONS,   active.lang);
+      buildChips('use-filter',    USE_OPTIONS,    active.use);
+      buildChips('season-filter', SEASON_OPTIONS, active.season);
+
+      // ── Filter panel toggle ────────────────────────────────────
+      const filterPanel  = document.getElementById('filter-panel');
+      const filterToggle = document.getElementById('filter-toggle');
+
+      filterToggle.addEventListener('click', () => {
+        const open = filterPanel.classList.toggle('open');
+        filterToggle.setAttribute('aria-expanded', String(open));
+        filterPanel.setAttribute('aria-hidden', String(!open));
+      });
+
+      function syncFilterToggle() {
+        const hasAny = active.lang.size || active.use.size || active.season.size;
+        filterToggle.classList.toggle('has-active', !!hasAny);
+        filterToggle.textContent = hasAny ? `⚙ Filters (${active.lang.size + active.use.size + active.season.size})` : '⚙ Filters';
+      }
+
+      // ── Clear filters ──────────────────────────────────────────
+      document.getElementById('clear-filters').addEventListener('click', () => {
+        active.lang.clear(); active.use.clear(); active.season.clear();
+        document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
+        syncFilterToggle();
+        loadSongs();
+      });
+
+      // ── Search triggers ────────────────────────────────────────
+      document.getElementById('search-btn').addEventListener('click', loadSongs);
+      document.getElementById('search-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') loadSongs();
+      });
+
+      // ── Load songs from Supabase ───────────────────────────────
+      async function loadSongs() {
+        const loadingEl = document.getElementById('songs-loading');
+        const emptyEl   = document.getElementById('songs-empty');
+        const listEl    = document.getElementById('song-list');
+        const metaEl    = document.getElementById('results-meta');
+        const term      = document.getElementById('search-input').value.trim();
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        metaEl.style.display    = 'none';
+        listEl.innerHTML        = '';
+
+        let query = supabase
+          .from('songs')
+          .select('id, title, language_tags, liturgical_use_tags, season_tags, lyrics, gdrive_url, youtube_url');
+
+        if (term) {
+          query = query.or(`title.ilike.%${term}%,lyrics.ilike.%${term}%`);
+        }
+        if (active.lang.size)   query = query.contains('language_tags', [...active.lang]);
+        if (active.use.size)    query = query.contains('liturgical_use_tags', [...active.use]);
+        if (active.season.size) query = query.contains('season_tags', [...active.season]);
+
+        const { data, error } = await query
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        const atLimit = data.length === 20;
+        metaEl.textContent = atLimit
+          ? `Showing first 20 results — refine your search to find more.`
+          : `${data.length} song${data.length !== 1 ? 's' : ''} found.`;
+        metaEl.style.display = 'block';
+
+        listEl.innerHTML = data.map(s => renderSongCard(s)).join('');
+      }
+
+      // ── Render a song card ─────────────────────────────────────
+      function renderSongCard(s) {
+        const allTags = [
+          ...(s.language_tags || []).map(v => labelFor(v, LANG_OPTIONS)),
+          ...(s.liturgical_use_tags || []).map(v => labelFor(v, USE_OPTIONS)),
+          ...(s.season_tags || []).map(v => labelFor(v, SEASON_OPTIONS)),
+        ];
+        const tagHtml = allTags.map(t => `<span class="song-tag">${escHtml(t)}</span>`).join('');
+
+        const links = [
+          s.gdrive_url  ? `<a href="${escHtml(s.gdrive_url)}" target="_blank" rel="noopener noreferrer"
+              class="btn btn-outline btn-sm">↓ PDF Sheet</a>` : '',
+          s.youtube_url ? `<a href="${escHtml(s.youtube_url)}" target="_blank" rel="noopener noreferrer"
+              class="btn btn-ghost btn-sm">▶ YouTube</a>` : '',
+        ].filter(Boolean).join('');
+
+        return `
+          <article class="song-card" id="song-${s.id}">
+            <div class="song-card-header" role="button" tabindex="0"
+              aria-expanded="false" aria-controls="body-${s.id}"
+              data-song-id="${s.id}">
+              <div>
+                <div class="song-card-title">${escHtml(s.title)}</div>
+                ${tagHtml ? `<div class="song-card-tags">${tagHtml}</div>` : ''}
+              </div>
+              <span class="song-card-chevron" aria-hidden="true">▼</span>
+            </div>
+            <div class="song-card-body" id="body-${s.id}">
+              <pre class="song-lyrics">${escHtml(s.lyrics || '')}</pre>
+              ${links ? `<div class="song-links">${links}</div>` : ''}
+            </div>
+          </article>
+        `;
+      }
+
+      // ── Song card expand / collapse (event delegation) ─────────
+      document.getElementById('song-list').addEventListener('click', e => {
+        const header = e.target.closest('.song-card-header');
+        if (!header) return;
+        const card     = header.closest('.song-card');
+        const expanded = card.classList.toggle('expanded');
+        header.setAttribute('aria-expanded', String(expanded));
+      });
+
+      document.getElementById('song-list').addEventListener('keydown', e => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const header = e.target.closest('.song-card-header');
+        if (!header) return;
+        e.preventDefault();
+        header.click();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadSongs();
+      hidePageLoader();
+    </script>
   </body>
 </html>

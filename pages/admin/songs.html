@@ -5,13 +5,413 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Song Management — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      .song-modal { max-width: 680px; }
+      .check-cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0 12px;
+      }
+      .check-cols .check-group { min-height: 36px; }
+    </style>
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 6: admin song management -->
-      <p>Song management — coming in Session 6.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Admin Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+        <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Admin</div>
+        <a href="members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+        <a href="events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+        <a href="songs.html" class="sidebar-link active"><span class="sidebar-icon">♫</span> Manage Songs</a>
+        <a href="fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-8)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Song Management</h2>
+              <p>Add and manage the choir song library</p>
+            </div>
+            <button class="btn btn-gold" id="add-song-btn">+ Add Song</button>
+          </div>
+
+          <div id="songs-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="songs-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">♪</div>
+            <p>No songs yet. Add the first song to begin building the library.</p>
+          </div>
+
+          <div id="songs-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Songs">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Language</th>
+                  <th>Liturgical Use</th>
+                  <th>Season</th>
+                  <th>Links</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="songs-tbody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Add / Edit Song Modal ── -->
+    <div class="modal-overlay" id="song-modal" role="dialog" aria-modal="true" aria-labelledby="song-modal-title">
+      <div class="modal song-modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="song-modal-title">Add Song</h2>
+          <button class="modal-close" id="song-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="song-form" novalidate>
+          <div class="form-group">
+            <label for="song-title">Title <span class="required">*</span></label>
+            <input type="text" id="song-title" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="song-lyrics">Lyrics <span class="required">*</span></label>
+            <textarea id="song-lyrics" required
+              style="min-height:200px;font-family:var(--font-text);font-size:0.95rem;line-height:1.9"
+              placeholder="Paste the full song lyrics here…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Language Tags</label>
+            <div class="check-list check-cols" id="lang-checks"></div>
+          </div>
+          <div class="form-group">
+            <label>Liturgical Use Tags</label>
+            <div class="check-list check-cols" id="use-checks"></div>
+          </div>
+          <div class="form-group">
+            <label>Season Tags</label>
+            <div class="check-list check-cols" id="season-checks"></div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="song-gdrive">Google Drive PDF URL</label>
+              <input type="url" id="song-gdrive" autocomplete="off" placeholder="https://drive.google.com/…">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="song-youtube">YouTube URL</label>
+              <input type="url" id="song-youtube" autocomplete="off" placeholder="https://youtu.be/…">
+            </div>
+          </div>
+          <div id="song-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="song-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="song-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="song-submit">Save Song</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('admin');
+      if (!profile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open'); backdrop.classList.add('open'); menuBtn.setAttribute('aria-expanded', 'true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Tag definitions ────────────────────────────────────────
+      const LANG_OPTIONS = [
+        { value: 'bisaya',   label: 'Bisaya' },
+        { value: 'filipino', label: 'Filipino' },
+        { value: 'english',  label: 'English' },
+        { value: 'latin',    label: 'Latin' },
+      ];
+      const USE_OPTIONS = [
+        { value: 'entrance',           label: 'Entrance' },
+        { value: 'offertory',          label: 'Offertory' },
+        { value: 'communion',          label: 'Communion' },
+        { value: 'recessional',        label: 'Recessional' },
+        { value: 'responsorial_psalm', label: 'Responsorial Psalm' },
+        { value: 'gloria',             label: 'Gloria' },
+        { value: 'sanctus',            label: 'Sanctus' },
+        { value: 'agnus_dei',          label: 'Agnus Dei' },
+        { value: 'other',              label: 'Other' },
+      ];
+      const SEASON_OPTIONS = [
+        { value: 'advent',             label: 'Advent' },
+        { value: 'christmas',          label: 'Christmas' },
+        { value: 'lent',               label: 'Lent' },
+        { value: 'easter',             label: 'Easter' },
+        { value: 'ordinary_time',      label: 'Ordinary Time' },
+        { value: 'marian',             label: 'Marian' },
+        { value: 'patron_saint_feast', label: 'Patron Saint Feast' },
+        { value: 'other',              label: 'Other' },
+      ];
+
+      // ── Build tag checkbox lists ───────────────────────────────
+      function buildChecks(containerId, options) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = options.map(o => `
+          <label class="check-group" style="min-height:36px">
+            <input type="checkbox" name="${containerId}" value="${o.value}">
+            <span style="font-size:var(--text-sm)">${escHtml(o.label)}</span>
+          </label>
+        `).join('');
+      }
+
+      buildChecks('lang-checks', LANG_OPTIONS);
+      buildChecks('use-checks', USE_OPTIONS);
+      buildChecks('season-checks', SEASON_OPTIONS);
+
+      // ── Checkbox helpers ───────────────────────────────────────
+      function getChecked(containerId) {
+        return [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
+      }
+
+      function setChecked(containerId, values = []) {
+        document.querySelectorAll(`#${containerId} input`).forEach(i => {
+          i.checked = values.includes(i.value);
+        });
+      }
+
+      // ── Label lookup ───────────────────────────────────────────
+      function labelsFor(values, options) {
+        return (values || []).map(v => options.find(o => o.value === v)?.label || v);
+      }
+
+      function tagPill(label) {
+        return `<span class="song-tag">${escHtml(label)}</span>`;
+      }
+
+      // ── Load & render song list ────────────────────────────────
+      async function loadSongs() {
+        const loadingEl = document.getElementById('songs-loading');
+        const emptyEl   = document.getElementById('songs-empty');
+        const tableEl   = document.getElementById('songs-table-wrap');
+        const tbody     = document.getElementById('songs-tbody');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+
+        const { data, error } = await supabase
+          .from('songs')
+          .select('id, title, language_tags, liturgical_use_tags, season_tags, gdrive_url, youtube_url')
+          .order('title', { ascending: true });
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        tableEl.style.display = 'block';
+        tbody.innerHTML = data.map(s => {
+          const langPills   = labelsFor(s.language_tags, LANG_OPTIONS).map(tagPill).join(' ');
+          const usePills    = labelsFor(s.liturgical_use_tags, USE_OPTIONS).map(tagPill).join(' ');
+          const seasonPills = labelsFor(s.season_tags, SEASON_OPTIONS).map(tagPill).join(' ');
+          const links = [
+            s.gdrive_url  ? '<span class="badge badge-pending" title="Google Drive PDF">PDF</span>' : '',
+            s.youtube_url ? '<span class="badge badge-associate" title="YouTube">YT</span>' : '',
+          ].filter(Boolean).join(' ') || '—';
+
+          return `
+            <tr>
+              <td style="color:var(--ivory);font-weight:500;min-width:160px">${escHtml(s.title)}</td>
+              <td style="min-width:110px">${langPills || '—'}</td>
+              <td style="min-width:150px">${usePills || '—'}</td>
+              <td style="min-width:140px">${seasonPills || '—'}</td>
+              <td style="white-space:nowrap">${links}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-outline btn-sm js-edit" data-id="${s.id}">Edit</button>
+                  <button class="btn btn-danger btn-sm js-delete" data-id="${s.id}"
+                    data-title="${escHtml(s.title)}">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // ── Table button delegation ────────────────────────────────
+      document.getElementById('songs-tbody').addEventListener('click', async e => {
+        const editBtn   = e.target.closest('.js-edit');
+        const deleteBtn = e.target.closest('.js-delete');
+        if (editBtn)   await openEditModal(editBtn.dataset.id);
+        if (deleteBtn) await confirmDelete(deleteBtn.dataset.id, deleteBtn.dataset.title);
+      });
+
+      async function openEditModal(id) {
+        const { data, error } = await supabase.from('songs').select('*').eq('id', id).single();
+        if (error || !data) { alert('Failed to load song.'); return; }
+        openModal(data);
+      }
+
+      // ── Modal open / close ─────────────────────────────────────
+      let editingId = null;
+
+      function openModal(song = null) {
+        editingId = song?.id || null;
+        document.getElementById('song-modal-title').textContent = editingId ? 'Edit Song' : 'Add Song';
+        document.getElementById('song-title').value   = song?.title       || '';
+        document.getElementById('song-lyrics').value  = song?.lyrics      || '';
+        document.getElementById('song-gdrive').value  = song?.gdrive_url  || '';
+        document.getElementById('song-youtube').value = song?.youtube_url || '';
+        setChecked('lang-checks',   song?.language_tags || []);
+        setChecked('use-checks',    song?.liturgical_use_tags || []);
+        setChecked('season-checks', song?.season_tags || []);
+        document.getElementById('song-error').style.display = 'none';
+        document.getElementById('song-modal').classList.add('open');
+        document.getElementById('song-title').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('song-modal').classList.remove('open');
+        editingId = null;
+      }
+
+      document.getElementById('add-song-btn').addEventListener('click', () => openModal());
+      document.getElementById('song-modal-close').addEventListener('click', closeModal);
+      document.getElementById('song-cancel').addEventListener('click', closeModal);
+      document.getElementById('song-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      // ── Save song ──────────────────────────────────────────────
+      document.getElementById('song-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('song-submit');
+        btn.disabled    = true;
+        btn.textContent = 'Saving…';
+        document.getElementById('song-error').style.display = 'none';
+
+        const title  = document.getElementById('song-title').value.trim();
+        const lyrics = document.getElementById('song-lyrics').value.trim();
+        const gdrive = document.getElementById('song-gdrive').value.trim() || null;
+        const yt     = document.getElementById('song-youtube').value.trim() || null;
+
+        if (!title || !lyrics) {
+          document.getElementById('song-error-text').textContent = 'Title and lyrics are required.';
+          document.getElementById('song-error').style.display = 'flex';
+          btn.disabled    = false;
+          btn.textContent = 'Save Song';
+          return;
+        }
+
+        const payload = {
+          title,
+          lyrics,
+          language_tags:       getChecked('lang-checks'),
+          liturgical_use_tags: getChecked('use-checks'),
+          season_tags:         getChecked('season-checks'),
+          gdrive_url:  gdrive,
+          youtube_url: yt,
+        };
+
+        let error;
+        if (editingId) {
+          ({ error } = await supabase.from('songs').update(payload).eq('id', editingId));
+        } else {
+          ({ error } = await supabase.from('songs').insert({ ...payload, created_by: profile.id }));
+        }
+
+        btn.disabled    = false;
+        btn.textContent = 'Save Song';
+
+        if (error) {
+          document.getElementById('song-error-text').textContent = error.message;
+          document.getElementById('song-error').style.display = 'flex';
+          return;
+        }
+
+        closeModal();
+        await loadSongs();
+      });
+
+      // ── Delete song ────────────────────────────────────────────
+      async function confirmDelete(id, title) {
+        if (!confirm(`Delete "${title}"?\n\nThis cannot be undone.`)) return;
+        const { error } = await supabase.from('songs').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadSongs();
+      }
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadSongs();
+      hidePageLoader();
+    </script>
   </body>
 </html>

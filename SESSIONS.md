@@ -221,7 +221,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 6: Song Library
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Build the member-facing song library and admin song management. Can be developed in parallel with Sessions 4–5.
 
