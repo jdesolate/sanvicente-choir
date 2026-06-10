@@ -101,34 +101,86 @@
       .nav-right {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
       }
-      .nav-links {
-        display: flex;
-        gap: 26px;
-        align-items: center;
-      }
-      .nav-links a {
-        color: var(--ivory-dim);
+      .btn-members {
+        color: var(--gold);
+        border: 1px solid var(--gold-dim);
+        padding: 7px 16px;
         text-decoration: none;
         font-size: 0.7rem;
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        transition: color 0.2s;
-      }
-      .nav-links a:hover { color: var(--gold); }
-      .nav-links a.btn-members {
-        color: var(--gold);
-        border: 1px solid var(--gold-dim);
-        padding: 7px 16px;
+        white-space: nowrap;
         transition: all 0.22s;
       }
-      .nav-links a.btn-members:hover {
+      .btn-members:hover {
         background: var(--gold);
         color: #0A0A0A;
         border-color: var(--gold);
       }
+
+      /* ══ FULL-SCREEN NAV OVERLAY ══ */
+      .nav-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--nav-overlay);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        z-index: 199;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Reserve space for the fixed header so centering uses visible area only */
+        padding-top: 78px;
+        overflow-y: auto;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
+      .nav-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .nav-overlay-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 24px 40px 40px;
+      }
+      .nav-overlay-inner a {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(1.1rem, 2.4vw, 1.9rem);
+        font-weight: 400;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--ivory-dim);
+        text-decoration: none;
+        padding: 6px 0;
+        opacity: 0;
+        transform: translateY(14px);
+        transition: color 0.2s, letter-spacing 0.25s, opacity 0.35s, transform 0.35s;
+      }
+      .nav-overlay.open .nav-overlay-inner a { opacity: 1; transform: translateY(0); }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(1) { transition-delay: 0.04s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(2) { transition-delay: 0.08s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(3) { transition-delay: 0.12s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(4) { transition-delay: 0.17s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(5) { transition-delay: 0.22s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(6) { transition-delay: 0.27s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(7) { transition-delay: 0.32s; }
+      .nav-overlay.open .nav-overlay-inner a:nth-of-type(8) { transition-delay: 0.37s; }
+      .nav-overlay-inner a:hover { color: var(--gold); letter-spacing: 0.30em; }
+      html.light .nav-overlay-inner a { color: rgba(28,23,20,0.72); }
+      html.light .nav-overlay-inner a:hover { color: var(--gold); }
+      .nav-overlay-divider {
+        width: 40px; height: 1px;
+        background: var(--gold-dim);
+        margin: 10px 0;
+      }
+
       .theme-btn {
         display: flex;
         align-items: center;
@@ -147,15 +199,29 @@
         border-color: var(--gold);
       }
       .hamburger {
-        display: none;
+        display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 44px; height: 44px; /* was 36×36 — raised to WCAG minimum */
-        background: none; border: none;
-        color: var(--ivory); font-size: 20px;
+        width: 44px; height: 44px;
+        background: none;
+        border: 1px solid var(--gold-dim);
         cursor: pointer;
         flex-shrink: 0;
+        gap: 5px;
+        padding: 0;
+        transition: border-color 0.2s;
       }
+      .hamburger:hover { border-color: var(--gold); }
+      .ham-line {
+        display: block;
+        width: 18px; height: 1px;
+        background: var(--ivory);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+      .hamburger.open .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .hamburger.open .ham-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      .hamburger.open .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
       /* ══ HERO ══ */
       .hero {
@@ -464,6 +530,7 @@
         color: var(--gold);
         text-align: right;
         padding-top: 2px;
+        padding-right: 12px;
         opacity: 0.8;
       }
       .tl-dot {
@@ -952,35 +1019,6 @@
 
       /* ══ RESPONSIVE ══ */
       @media (max-width: 760px) {
-        /* Fullscreen nav overlay — sits below header (z-index 200) */
-        .nav-links {
-          display: none;
-          position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: var(--nav-overlay);
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          /* Push links down past the header (~70px) so they center in visible area */
-          padding-top: 70px;
-          gap: 22px;
-          z-index: 199;
-        }
-        .nav-links.open { display: flex; }
-        .nav-links a {
-          font-size: 0.9rem;
-          letter-spacing: 0.14em;
-          /* Force light color — overlay is dark in dark mode */
-          color: rgba(245,242,235,0.7);
-        }
-        /* In light mode the overlay is cream → use dark text instead */
-        html.light .nav-links a { color: rgba(28,23,20,0.88); }
-        .nav-links a:hover { color: var(--gold) !important; }
-        .nav-links a.btn-members {
-          border-color: rgba(201,168,106,0.35);
-          color: var(--gold);
-        }
-        .hamburger { display: flex; }
         .nav { padding: 18px 20px; }
         .wrap { padding: 0 20px; }
         /* Hide brand text on narrow screens to prevent overflow */
@@ -1007,11 +1045,13 @@
         .hero-sub { font-size: 1rem; }
         .cta-row { gap: 10px; }
         .btn { padding: 12px 22px; font-size: 0.65rem; }
+        .btn-members { display: none; }
       }
 
       @media (prefers-reduced-motion: reduce) {
         .hero-bg { animation: none; transform: none; }
         .reveal { opacity: 1; transform: none; transition: none; }
+        .nav-overlay-inner a { opacity: 1; transform: none; transition: color 0.2s; }
         * { animation-duration: 0.01ms !important; animation-delay: 0.01ms !important; }
       }
 
@@ -1053,22 +1093,32 @@
           <span class="brand-name">San Vicente Choir</span>
         </a>
         <div class="nav-right">
-          <nav class="nav-links" id="navlinks">
-            <a href="#story">Our Story</a>
-            <a href="#history">History</a>
-            <a href="#do">What We Do</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#performances">Performances</a>
-            <a href="#join">Join Us</a>
-            <a href="#sponsor">Sponsor</a>
-            <a href="#contact">Contact</a>
-            <a class="btn-members" id="nav-portal-link" href="pages/login.html">Member Login</a>
-          </nav>
+          <a class="btn-members" id="nav-portal-link" href="pages/login.html">Member Login</a>
           <button class="theme-btn" id="theme-btn" aria-label="Toggle theme" title="Switch to light mode">☀</button>
-          <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+          <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
         </div>
       </div>
     </header>
+
+    <!-- ══════════ NAV OVERLAY ══════════ -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <nav class="nav-overlay-inner">
+        <a href="#story">Our Story</a>
+        <a href="#history">History</a>
+        <a href="#do">What We Do</a>
+        <div class="nav-overlay-divider"></div>
+        <a href="#gallery">Gallery</a>
+        <a href="#performances">Performances</a>
+        <div class="nav-overlay-divider"></div>
+        <a href="#join">Join Us</a>
+        <a href="#sponsor">Sponsor</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
 
     <main id="main-content">
     <!-- ══════════ HERO ══════════ -->
@@ -1150,16 +1200,16 @@
             <div class="tl-year">Early Years</div>
             <div class="tl-dot"></div>
             <div class="tl-body">
-              <h4>Roots in San Vicente Ferrer</h4>
-              <p>The Choir establishes its home at San Vicente Ferrer Chapel, Duljo — where generations of members would first find their voice and their family.</p>
+              <h4>Roots in San Nicolas Parish</h4>
+              <p>The Choir establishes its home at San Nicolas Parish, C. Padilla St. — where generations of members would first find their voice and their family.</p>
             </div>
           </div>
           <div class="tl-item reveal d3">
             <div class="tl-year">Growing</div>
             <div class="tl-dot"></div>
             <div class="tl-body">
-              <h4>Ministry Expands</h4>
-              <p>Expanded service to the Archdiocesan Shrine of San Nicolas de Tolentino Parish, deepening the Choir's liturgical presence across Cebu City.</p>
+              <h4>Deepening the Ministry</h4>
+              <p>As the home parish was elevated to the Archdiocesan Shrine of San Nicolas de Tolentino, the Choir’s liturgical presence grew in parallel, expanding its musical influence and service across Cebu City.</p>
             </div>
           </div>
           <div class="tl-item reveal d1">
@@ -1526,31 +1576,29 @@
         hdr.classList.toggle('scrolled', window.scrollY > 60);
       }, { passive: true });
 
-      // ── HAMBURGER ──
+      // ── NAV OVERLAY ──
       var ham = document.getElementById('hamburger');
-      var nav = document.getElementById('navlinks');
+      var navOverlay = document.getElementById('nav-overlay');
 
       function openNav(open) {
-        nav.classList.toggle('open', open);
-        hdr.classList.toggle('nav-open', open); // solid bg even when transparent
-        ham.textContent = open ? '✕' : '☰';
+        navOverlay.classList.toggle('open', open);
+        navOverlay.setAttribute('aria-hidden', String(!open));
+        hdr.classList.toggle('nav-open', open);
+        ham.classList.toggle('open', open);
+        ham.setAttribute('aria-expanded', String(open));
         ham.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.style.overflow = open ? 'hidden' : '';
       }
 
       ham.addEventListener('click', function () {
-        openNav(!nav.classList.contains('open'));
+        openNav(!navOverlay.classList.contains('open'));
       });
-      nav.querySelectorAll('a').forEach(function (a) {
+      navOverlay.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', function () { openNav(false); });
       });
-      // Close on outside click
-      document.addEventListener('click', function (e) {
-        if (nav.classList.contains('open') &&
-            !nav.contains(e.target) &&
-            !ham.contains(e.target) &&
-            !themeBtn.contains(e.target)) {
-          openNav(false);
-        }
+      // Close on outside click (clicks on the overlay background itself)
+      navOverlay.addEventListener('click', function (e) {
+        if (e.target === navOverlay) { openNav(false); }
       });
 
       // ── SCROLL REVEAL ──
