@@ -56,8 +56,9 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| TBD | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** — confirm exact date with parish | 🔴 Major |
-| TBD | Additional rehearsals before Fiesta (1–2x/week) | 🟢 Rehearsal |
+| TBD | **Fiesta of San Vicente Ferrer Chapel (SVF), Duljo** — confirm exact date with chapel | 🔴 Major |
+| TBD (around Sept 10) | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** *(Feast of San Nicolas de Tolentino is Sept 10 — confirm exact parish schedule)* | 🔴 Major |
+| TBD | Additional rehearsals before Fiestas (1–2x/week) | 🟢 Rehearsal |
 | TBD | Monthly Rehearsal (if not covered by Fiesta rehearsals) | 🟢 Rehearsal |
 
 ---
@@ -68,8 +69,9 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| October 1–30 | **Holy Rosary — 30 Days Visiting of Homes** *(coordinate with parish for choir schedule)* | 🔴 Major |
+| Whole month | **Holy Rosary — Daily Rosary / Visiting of Homes** *(coordinate with parish for choir schedule)* | 🔴 Major |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
+| October 31 | **Block Rosary** *(community/block rosary — confirm choir role with parish)* | 🔴 Major |
 | October 31 | All Hallows' Eve *(possible evening mass service)* | 🟣 Special |
 
 ---
@@ -82,6 +84,7 @@
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
 | November 1 | **All Saints' Day Mass** | 🔴 Major |
 | November 2 | **All Souls' Day Mass** | 🔴 Major |
+| November 1 or 2 | **Kanta sa Calamba** — singing & *responso* (prayers for the dead) for departed relatives of choir members at Calamba Cemetery | 🔴 Major |
 | TBD | Monthly Rehearsal | 🟢 Rehearsal |
 | Late November | **Christmas Season Rehearsals Begin** (1–2x/week) | 🟢 Rehearsal |
 | Late November | Christmas Song Selection finalized by Music Director | 🔵 Admin |
@@ -94,11 +97,14 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
+| Early Dec | **Intensified practices** for Simbang Gabi / Misa de Gallo and Christmas masses (1–2x/week) | 🟢 Rehearsal |
 | 1st–2nd week | **Christmas Caroling** *(schedule TBD by officers)* | 🟣 Special |
 | Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm choir schedule with parish | 🔴 Major |
 | December 24 | **Christmas Eve Mass** | 🔴 Major |
 | December 25 | **Christmas Day Mass** | 🔴 Major |
-| Dec 26–31 | 😴 **Mandatory Rest Period** — minimum 1 week. No rehearsals. Mass obligations continue. | 😴 Rest |
+| Late Dec (TBD) | 🎉 **Choir Christmas Party** *(fellowship — date set by officers)* | 🟣 Special |
+| December 31 | **New Year's Eve Mass** *(thanksgiving / media noche)* | 🔴 Major |
+| Dec 26–31 | 😴 **Rest Period** — minimum 1 week. No rehearsals. Mass obligations and the Christmas Party continue. | 😴 Rest |
 
 ---
 
@@ -110,49 +116,58 @@
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
 | January 1 | **New Year's Day Mass** | 🔴 Major |
 | First 2 weeks | **Santo Niño Novena** — 9-day novena leading to Sinulog | 🔴 Major |
+| TBD | **Sto. Niño Chapel & Church singing engagements** *(confirm schedule and which services with parish)* | 🔴 Major |
 | 3rd Sunday of January | **Sinulog Sunday — Feast of the Santo Niño** | 🔴 Major |
 | Mid-January | Rehearsals resume post-Christmas rest | 🟢 Rehearsal |
 | Late January | Semester 2 Rehearsal Schedule Released | 🔵 Admin |
 
 ---
 
-## FEBRUARY 2027 — PREPARATION SEASON
+## FEBRUARY 2027 — LENT BEGINS
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| TBD | Monthly Rehearsal | 🟢 Rehearsal |
+| February 10 (Wed) | **Ash Wednesday Mass** — start of Lent | 🔴 Major |
+| Fridays (Feb 12, 19, 26) | Possible Stations of the Cross accompaniment *(confirm with parish)* | 🟣 Special |
 | TBD | **Holy Week Song Selection finalized** by Music Director | 🔵 Admin |
 | TBD | Holy Week Rehearsals Begin (1–2x/week) | 🟢 Rehearsal |
 | TBD | 🟣 Possible competition / singing engagement *(if available and voted on by officers)* | 🟣 Special |
 
 ---
 
-## MARCH 2027 — LENTEN SEASON
+## MARCH 2027 — HOLY WEEK & EASTER 🙏
+
+> *Easter 2027 falls on March 28, so Holy Week is March 21–28.*
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| Ash Wednesday | **Ash Wednesday Mass** | 🔴 Major |
-| Every Friday (Lent) | Possible Stations of the Cross accompaniment *(confirm with parish)* | 🟣 Special |
+| Fridays (Mar 5, 12, 19) | Stations of the Cross accompaniment *(confirm with parish)* | 🟣 Special |
 | TBD | Holy Week Rehearsals 1–2x/week | 🟢 Rehearsal |
-| TBD | 🟣 Possible competition / singing engagement | 🟣 Special |
+| March 21 (Sun) | **Palm Sunday Mass** | 🔴 Major |
+| March 22–24 (Mon–Wed) | Holy Week services *(confirm with parish)* | 🔴 Major |
+| March 24 (Wed) | **Tinieblas** *(evening — confirm with parish)* | 🔴 Major |
+| March 25 (Thu) | **Holy Thursday — Mass of the Lord's Supper + Visita Iglesia** | 🔴 Major |
+| March 26 (Fri) | **Good Friday — Passion of the Lord + Stations of the Cross** | 🔴 Major |
+| March 27 (Sat) | **Black Saturday — Easter Vigil** | 🔴 Major |
+| March 28 (Sun) | **Easter Sunday Mass** | 🔴 Major |
+| Mar 29 – early Apr | 😴 **Mandatory Rest Period** — minimum 1 week. No rehearsals. Mass obligations continue. | 😴 Rest |
 
 ---
 
-## APRIL 2027 — HOLY WEEK 🙏
+## APRIL 2027 — EASTER SEASON
 
 | Date | Activity | Type |
 |---|---|---|
-| Palm Sunday | **Palm Sunday Mass** | 🔴 Major |
-| Holy Monday–Wednesday | Possible services *(confirm with parish)* | 🔴 Major |
-| Holy Thursday | **Mass of the Lord's Supper** | 🔴 Major |
-| Good Friday | **Passion of the Lord / Visita Iglesia** | 🔴 Major |
-| Holy Saturday | **Easter Vigil** | 🔴 Major |
-| Easter Sunday | **Easter Sunday Mass** | 🔴 Major |
-| Easter Week | 😴 **Mandatory Rest Period** — minimum 1 week. No rehearsals. Mass obligations continue. | 😴 Rest |
+| Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
+| Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
+| Early April | Rest Period continues from Holy Week *(see March)* | 😴 Rest |
+| April 4 (Sun) | **Divine Mercy Sunday Mass** | 🔴 Major |
+| Mid-April | Rehearsals resume; preparation for May Anniversary begins | 🟢 Rehearsal |
+| TBD | Monthly Rehearsal | 🟢 Rehearsal |
 
 ---
 

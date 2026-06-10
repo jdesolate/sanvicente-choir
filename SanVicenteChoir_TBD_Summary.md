@@ -82,9 +82,9 @@ These roles are listed in the Constitution but have no assigned person yet. Offi
 ---
 
 ### 10. External Coordinator (standalone or combined with Secretary)
-**Status:** Gabriella is currently Secretary & External Coordinator combined. Decide if this stays combined or splits.
+**Status:** Both the Secretary and External Coordinator seats are currently vacant. Decide whether to fill them separately or combine the two roles under one person.
 
-> 💡 **Suggestion:** Keep it combined for now — Gabriella knows the group's history and external contacts. Only split the role if the workload becomes too heavy, which is unlikely in Year 1.
+> 💡 **Suggestion:** For Year 1, combining Secretary and External Coordinator under one reliable, organized member is fine. Only split the roles if the workload becomes too heavy, which is unlikely early on.
 
 ---
 
@@ -98,7 +98,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 **Status:** September — exact date unknown
 **Action needed:** Ask the parish coordinator or priest of the Archdiocesan Shrine of San Nicolas de Tolentino Parish for the exact fiesta date.
 
-> 💡 **Suggestion:** Assign Gabriella (External Coordinator) to follow up with the Archdiocesan Shrine of San Nicolas de Tolentino Parish by July. Once confirmed, post in the group chat and update the calendar.
+> 💡 **Suggestion:** Assign the External Coordinator (once filled) to follow up with the Archdiocesan Shrine of San Nicolas de Tolentino Parish by July. Once confirmed, post in the group chat and update the calendar.
 
 ---
 
@@ -238,7 +238,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 ### 27. Master Repertoire List
 **Status:** Mentioned in Article X but not yet created
-**Action needed:** Vince (Music Director) and Gabriella (Secretary) to collaboratively build the initial list — songs the choir knows categorized as Mastered, Learning, and Retired.
+**Action needed:** Vince (Music Director) and the Secretary (once assigned) to collaboratively build the initial list — songs the choir knows categorized as Mastered, Learning, and Retired.
 
 > 💡 **Suggestion:** Start with a simple shared Google Sheet or document. Have Vince list all songs he knows the choir has sung, then have Jan (Choir Adviser) and other veterans fill in older songs. This directly solves the song conflict problem by giving everyone an objective reference.
 

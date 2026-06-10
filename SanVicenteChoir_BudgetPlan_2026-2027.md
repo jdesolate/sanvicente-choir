@@ -144,9 +144,9 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 | November 2026 | ₱400 | Uniform balance if ordered / caroling prep | If no sponsor by Nov, defer uniform to Year 2. |
 | December 2026 | ₱400 + caroling | Christmas party ~₱1,000 | Use caroling collections for celebration. |
 | January 2027 | ₱400 | Save | Post-rest period. Rebuild fund. |
-| February 2027 | ₱400 | Save | Holy Week prep begins. |
-| March 2027 | ₱400 | Save | |
-| April 2027 | ₱400 | — | Holy Week. Rest period after. |
+| February 2027 | ₱400 | Save | Lent begins (Ash Wed Feb 10). Holy Week prep begins. |
+| March 2027 | ₱400 | — | **Holy Week (Mar 21–28).** Rest period after. |
+| April 2027 | ₱400 | Save | Easter season. Post-rest. Rebuild fund. |
 | May 2027 | ₱400 + any talent fees | Anniversary ~₱1,000 | End-of-term celebration + elections. |
 
 ---
