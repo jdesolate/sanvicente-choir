@@ -144,6 +144,11 @@ create policy "profiles: insert own"
   on profiles for insert
   with check (id = auth.uid());
 
+-- Admin can insert a profile row for any user (used when creating accounts directly).
+create policy "profiles: admin insert any"
+  on profiles for insert
+  with check (auth_role() = 'admin');
+
 -- A user updates their own non-sensitive fields.
 create policy "profiles: update own"
   on profiles for update
@@ -152,6 +157,11 @@ create policy "profiles: update own"
 -- Admin can update any profile (to change role/status/approval).
 create policy "profiles: admin update any"
   on profiles for update
+  using (auth_role() = 'admin');
+
+-- Admin can delete any profile (to reject pending registrations).
+create policy "profiles: admin delete any"
+  on profiles for delete
   using (auth_role() = 'admin');
 
 -- ── custom_field_definitions ──────────────

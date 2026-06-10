@@ -115,7 +115,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 3: Admin — Member Management & Custom Fields
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Build admin tools for approving registrations, managing member roles/status, and defining custom profile fields.
 

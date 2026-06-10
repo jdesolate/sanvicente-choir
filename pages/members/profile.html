@@ -5,13 +5,520 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      /* Profile field display rows */
+      .profile-field {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 8px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(245,242,235,0.05);
+        align-items: baseline;
+      }
+      .profile-field:last-child { border-bottom: none; }
+      @media (max-width: 480px) {
+        .profile-field { grid-template-columns: 1fr; gap: 3px; }
+      }
+      .profile-label {
+        font-size: var(--text-xs);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ivory-muted);
+        padding-top: 2px;
+      }
+      .profile-value {
+        font-size: var(--text-base);
+        color: var(--ivory);
+        line-height: 1.5;
+      }
+      .profile-value.muted { color: var(--ivory-muted); font-style: italic; }
+
+      /* Section title inside the card */
+      .profile-section-title {
+        font-family: var(--font-display);
+        font-size: var(--text-xs);
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border-bottom: 1px solid var(--gold-dim);
+        padding-bottom: 8px;
+        margin: var(--space-6) 0 var(--space-3);
+      }
+      .profile-section-title:first-of-type { margin-top: 0; }
+    </style>
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 3: member profile view/edit -->
-      <p>Profile page — coming in Session 3.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Member Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">⌂</span> Dashboard
+        </a>
+        <a href="attendance.html" class="sidebar-link">
+          <span class="sidebar-icon">✓</span> My Attendance
+        </a>
+        <a href="songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♪</span> Song Library
+        </a>
+        <a href="profile.html" class="sidebar-link active">
+          <span class="sidebar-icon">◎</span> My Profile
+        </a>
+        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link">
+            <span class="sidebar-icon">☑</span> Attendance Tracker
+          </a>
+          <a href="../secretary/absences.html" class="sidebar-link">
+            <span class="sidebar-icon">✉</span> Absence Requests
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link">
+            <span class="sidebar-icon">◈</span> Members
+          </a>
+          <a href="../admin/events.html" class="sidebar-link">
+            <span class="sidebar-icon">◷</span> Events
+          </a>
+          <a href="../admin/songs.html" class="sidebar-link">
+            <span class="sidebar-icon">♫</span> Manage Songs
+          </a>
+          <a href="../admin/fields.html" class="sidebar-link">
+            <span class="sidebar-icon">≡</span> Custom Fields
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+        <button class="sidebar-btn" id="sidebar-logout">
+          <span class="sidebar-icon">←</span> Sign Out
+        </button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-6)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>My Profile</h2>
+              <p>Your member information</p>
+            </div>
+            <button class="btn btn-outline" id="edit-toggle-btn">Edit Profile</button>
+          </div>
+
+          <div id="save-success" class="alert alert-success" role="status" style="display:none;margin-bottom:var(--space-5)">
+            <span class="alert-icon">✓</span>
+            <span>Profile updated successfully.</span>
+          </div>
+          <div id="save-error" class="alert alert-error" role="alert" style="display:none;margin-bottom:var(--space-5)">
+            <span class="alert-icon">⚠</span>
+            <span id="save-error-text"></span>
+          </div>
+
+          <div style="max-width:700px">
+
+            <!-- ── View Mode ── -->
+            <div id="view-mode">
+              <div class="card">
+                <p class="profile-section-title">Account</p>
+
+                <div class="profile-field">
+                  <span class="profile-label">Email</span>
+                  <span class="profile-value" id="v-email">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Role</span>
+                  <span class="profile-value" id="v-role">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Status</span>
+                  <span class="profile-value" id="v-status">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Joined</span>
+                  <span class="profile-value" id="v-joined">—</span>
+                </div>
+
+                <p class="profile-section-title">Member Information</p>
+
+                <div class="profile-field">
+                  <span class="profile-label">Full Name</span>
+                  <span class="profile-value" id="v-name">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Voice Part</span>
+                  <span class="profile-value" id="v-voice">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Contact</span>
+                  <span class="profile-value" id="v-contact">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Birthday</span>
+                  <span class="profile-value" id="v-birthday">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">Age</span>
+                  <span class="profile-value" id="v-age">—</span>
+                </div>
+                <div class="profile-field">
+                  <span class="profile-label">School / Job</span>
+                  <span class="profile-value" id="v-school">—</span>
+                </div>
+
+                <!-- Custom fields (view) — injected by JS -->
+                <div id="v-custom-fields"></div>
+              </div>
+            </div>
+
+            <!-- ── Edit Mode ── -->
+            <div id="edit-mode" style="display:none">
+              <form id="edit-form" novalidate>
+                <div class="card" style="padding:var(--space-6)">
+                  <p class="profile-section-title">Member Information</p>
+                  <p style="font-size:var(--text-xs);color:var(--ivory-muted);margin-bottom:var(--space-5)">
+                    Email, role, and status can only be changed by an admin.
+                  </p>
+
+                  <div class="form-row form-row-2">
+                    <div class="form-group">
+                      <label for="e-name">Full Name <span class="required">*</span></label>
+                      <input type="text" id="e-name" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                      <label for="e-voice">Voice Part <span class="required">*</span></label>
+                      <select id="e-voice" required>
+                        <option value="">— select —</option>
+                        <option value="soprano">Soprano</option>
+                        <option value="alto">Alto</option>
+                        <option value="tenor">Tenor</option>
+                        <option value="bass">Bass</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-row form-row-2">
+                    <div class="form-group">
+                      <label for="e-contact">Contact Number</label>
+                      <input type="tel" id="e-contact" autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                      <label for="e-birthday">Birthday</label>
+                      <input type="date" id="e-birthday" autocomplete="bday">
+                    </div>
+                  </div>
+
+                  <div class="form-row form-row-2">
+                    <div class="form-group">
+                      <label for="e-age">Age</label>
+                      <input type="number" id="e-age" min="1" max="120">
+                    </div>
+                    <div class="form-group">
+                      <label for="e-school">School / Occupation</label>
+                      <input type="text" id="e-school">
+                    </div>
+                  </div>
+
+                  <!-- Custom fields (edit) — injected by JS -->
+                  <div id="e-custom-fields"></div>
+
+                  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:var(--space-6)">
+                    <button type="button" class="btn btn-ghost" id="edit-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-gold" id="edit-save-btn">Save Changes</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireAuth, getProfile, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const session = await requireAuth('/pages/login.html');
+      if (!session) throw new Error('redirecting');
+
+      const profile = await getProfile();
+      if (!profile) { window.location.href = '/pages/login.html'; throw new Error('no profile'); }
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // Show role-gated nav sections
+      if (profile.role === 'secretary' || profile.role === 'admin') {
+        document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (profile.role === 'admin') {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Load custom field definitions ──────────────────────────
+      const { data: fieldDefs } = await supabase
+        .from('custom_field_definitions')
+        .select('*')
+        .order('sort_order');
+
+      const customFields = profile.custom_fields || {};
+
+      // ── Helpers ────────────────────────────────────────────────
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+      const val = v => (v !== null && v !== undefined && v !== '') ? v : '—';
+
+      const badgeStatus = s => {
+        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m' };
+        return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
+      };
+      const badgeRole = r => {
+        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present' };
+        return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
+      };
+
+      // ── Populate View Mode ─────────────────────────────────────
+      document.getElementById('v-email').textContent    = session.user.email;
+      document.getElementById('v-role').innerHTML      = badgeRole(profile.role);
+      document.getElementById('v-status').innerHTML    = badgeStatus(profile.status);
+      document.getElementById('v-joined').textContent  = formatDate(profile.created_at);
+      document.getElementById('v-name').textContent    = val(profile.full_name);
+      document.getElementById('v-voice').textContent   = cap(profile.voice_part);
+      document.getElementById('v-contact').textContent = val(profile.contact_number);
+      document.getElementById('v-birthday').textContent= profile.birthday ? formatDate(profile.birthday) : '—';
+      document.getElementById('v-age').textContent     = val(profile.age);
+      document.getElementById('v-school').textContent  = val(profile.school_occupation);
+
+      // Custom fields — view
+      const viewCf = document.getElementById('v-custom-fields');
+      if (fieldDefs?.length) {
+        const section = document.createElement('p');
+        section.className = 'profile-section-title';
+        section.textContent = 'Additional Information';
+        viewCf.appendChild(section);
+
+        fieldDefs.forEach(f => {
+          const stored = customFields[f.id];
+          const row = document.createElement('div');
+          row.className = 'profile-field';
+          row.innerHTML = `
+            <span class="profile-label">${escHtml(f.field_name)}</span>
+            <span class="profile-value${!stored ? ' muted' : ''}">${stored ? escHtml(String(stored)) : '—'}</span>
+          `;
+          viewCf.appendChild(row);
+        });
+      }
+
+      // ── Populate Edit Mode ─────────────────────────────────────
+      function populateEditForm() {
+        document.getElementById('e-name').value    = profile.full_name   || '';
+        document.getElementById('e-voice').value   = profile.voice_part  || '';
+        document.getElementById('e-contact').value = profile.contact_number || '';
+        document.getElementById('e-birthday').value= profile.birthday    || '';
+        document.getElementById('e-age').value     = profile.age         ?? '';
+        document.getElementById('e-school').value  = profile.school_occupation || '';
+
+        // Custom fields — edit
+        const editCf = document.getElementById('e-custom-fields');
+        editCf.innerHTML = '';
+
+        if (fieldDefs?.length) {
+          const section = document.createElement('p');
+          section.className = 'profile-section-title';
+          section.textContent = 'Additional Information';
+          editCf.appendChild(section);
+
+          fieldDefs.forEach(f => {
+            const group = document.createElement('div');
+            group.className = 'form-group';
+            group.dataset.fieldId = f.id;
+
+            const label = document.createElement('label');
+            label.htmlFor = `ecf_${f.id}`;
+            label.innerHTML = escHtml(f.field_name) + (f.is_required ? ' <span class="required">*</span>' : '');
+
+            let input;
+            if (f.field_type === 'dropdown') {
+              input = document.createElement('select');
+              const blank = document.createElement('option');
+              blank.value = ''; blank.textContent = '— Select —';
+              input.appendChild(blank);
+              (f.field_options || []).forEach(opt => {
+                const o = document.createElement('option');
+                o.value = opt; o.textContent = opt;
+                input.appendChild(o);
+              });
+            } else {
+              input = document.createElement('input');
+              input.type = f.field_type === 'number' ? 'number'
+                         : f.field_type === 'date'   ? 'date'
+                         : 'text';
+            }
+
+            input.id   = `ecf_${f.id}`;
+            input.name = `ecf_${f.id}`;
+            if (f.is_required) input.required = true;
+            const stored = customFields[f.id];
+            if (stored !== undefined && stored !== null) input.value = stored;
+
+            group.appendChild(label);
+            group.appendChild(input);
+            editCf.appendChild(group);
+          });
+        }
+      }
+
+      // ── Toggle edit/view modes ─────────────────────────────────
+      let editing = false;
+
+      document.getElementById('edit-toggle-btn').addEventListener('click', () => {
+        editing = true;
+        populateEditForm();
+        document.getElementById('view-mode').style.display = 'none';
+        document.getElementById('edit-mode').style.display = 'block';
+        document.getElementById('edit-toggle-btn').style.display = 'none';
+        document.getElementById('save-success').style.display = 'none';
+        document.getElementById('save-error').style.display   = 'none';
+      });
+
+      document.getElementById('edit-cancel-btn').addEventListener('click', () => {
+        document.getElementById('edit-mode').style.display    = 'none';
+        document.getElementById('view-mode').style.display    = 'block';
+        document.getElementById('edit-toggle-btn').style.display = '';
+        editing = false;
+      });
+
+      // ── Save changes ────────────────────────────────────────────
+      document.getElementById('edit-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('edit-save-btn');
+        btn.disabled = true; btn.textContent = 'Saving…';
+        document.getElementById('save-error').style.display = 'none';
+
+        // Collect custom field values
+        const updatedCustomFields = { ...customFields };
+        document.querySelectorAll('#e-custom-fields [data-field-id]').forEach(group => {
+          const input = group.querySelector('input, select');
+          if (input) updatedCustomFields[group.dataset.fieldId] = input.value || null;
+        });
+
+        const updates = {
+          full_name:         document.getElementById('e-name').value.trim(),
+          voice_part:        document.getElementById('e-voice').value || null,
+          contact_number:    document.getElementById('e-contact').value.trim() || null,
+          birthday:          document.getElementById('e-birthday').value || null,
+          age:               document.getElementById('e-age').value ? parseInt(document.getElementById('e-age').value, 10) : null,
+          school_occupation: document.getElementById('e-school').value.trim() || null,
+          custom_fields:     updatedCustomFields,
+        };
+
+        const { error } = await supabase.from('profiles').update(updates).eq('id', profile.id);
+
+        btn.disabled = false; btn.textContent = 'Save Changes';
+
+        if (error) {
+          document.getElementById('save-error-text').textContent = error.message;
+          document.getElementById('save-error').style.display = 'flex';
+          return;
+        }
+
+        // Update local profile object to reflect changes
+        Object.assign(profile, updates);
+        Object.assign(customFields, updatedCustomFields);
+
+        // Refresh view mode fields
+        document.getElementById('header-name').textContent   = profile.full_name;
+        document.getElementById('v-name').textContent        = val(profile.full_name);
+        document.getElementById('v-voice').textContent       = cap(profile.voice_part);
+        document.getElementById('v-contact').textContent     = val(profile.contact_number);
+        document.getElementById('v-birthday').textContent    = profile.birthday ? formatDate(profile.birthday) : '—';
+        document.getElementById('v-age').textContent         = val(profile.age);
+        document.getElementById('v-school').textContent      = val(profile.school_occupation);
+
+        // Refresh custom fields view
+        viewCf.innerHTML = '';
+        if (fieldDefs?.length) {
+          const section = document.createElement('p');
+          section.className = 'profile-section-title';
+          section.textContent = 'Additional Information';
+          viewCf.appendChild(section);
+          fieldDefs.forEach(f => {
+            const stored = customFields[f.id];
+            const row = document.createElement('div');
+            row.className = 'profile-field';
+            row.innerHTML = `
+              <span class="profile-label">${escHtml(f.field_name)}</span>
+              <span class="profile-value${!stored ? ' muted' : ''}">${stored ? escHtml(String(stored)) : '—'}</span>
+            `;
+            viewCf.appendChild(row);
+          });
+        }
+
+        // Switch back to view mode
+        document.getElementById('edit-mode').style.display    = 'none';
+        document.getElementById('view-mode').style.display    = 'block';
+        document.getElementById('edit-toggle-btn').style.display = '';
+        document.getElementById('save-success').style.display = 'flex';
+        editing = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      hidePageLoader();
+    </script>
   </body>
 </html>

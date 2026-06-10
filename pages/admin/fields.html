@@ -5,13 +5,434 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom Fields — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      .field-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(245,242,235,0.05);
+        background: var(--charcoal);
+      }
+      .field-row:last-child { border-bottom: none; }
+      .field-row:hover { background: var(--gold-faint); }
+      .field-info { flex: 1; min-width: 0; }
+      .field-name {
+        font-size: var(--text-sm);
+        color: var(--ivory);
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+      .field-meta {
+        font-size: var(--text-xs);
+        color: var(--ivory-muted);
+      }
+      .field-reorder {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+      .field-reorder button {
+        background: none;
+        border: 1px solid rgba(245,242,235,0.12);
+        color: var(--ivory-dim);
+        font-size: 10px;
+        cursor: pointer;
+        min-width: 28px;
+        min-height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--t-fast);
+      }
+      .field-reorder button:hover:not(:disabled) { border-color: var(--gold-dim); color: var(--gold); }
+      .field-reorder button:disabled { opacity: 0.25; cursor: not-allowed; }
+      .fields-box {
+        border: 1px solid var(--gold-dim);
+        overflow: hidden;
+      }
+      /* Dropdown options textarea */
+      #options-group { display: none; }
+    </style>
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 3: admin custom field management -->
-      <p>Custom fields — coming in Session 3.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Admin Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">⌂</span> Dashboard
+        </a>
+        <a href="../members/attendance.html" class="sidebar-link">
+          <span class="sidebar-icon">✓</span> My Attendance
+        </a>
+        <a href="../members/songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♪</span> Song Library
+        </a>
+        <a href="../members/profile.html" class="sidebar-link">
+          <span class="sidebar-icon">◎</span> My Profile
+        </a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="../secretary/tracker.html" class="sidebar-link">
+          <span class="sidebar-icon">☑</span> Attendance Tracker
+        </a>
+        <a href="../secretary/absences.html" class="sidebar-link">
+          <span class="sidebar-icon">✉</span> Absence Requests
+        </a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Admin</div>
+        <a href="members.html" class="sidebar-link">
+          <span class="sidebar-icon">◈</span> Members
+        </a>
+        <a href="events.html" class="sidebar-link">
+          <span class="sidebar-icon">◷</span> Events
+        </a>
+        <a href="songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♫</span> Manage Songs
+        </a>
+        <a href="fields.html" class="sidebar-link active">
+          <span class="sidebar-icon">≡</span> Custom Fields
+        </a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout">
+          <span class="sidebar-icon">←</span> Sign Out
+        </button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>Custom Fields</h2>
+            <p>Define extra fields that appear on the registration form and member profiles</p>
+          </div>
+
+          <div id="global-success" class="alert alert-success" role="status" style="display:none;margin-bottom:var(--space-5)">
+            <span class="alert-icon">✓</span>
+            <span id="global-success-text"></span>
+          </div>
+
+          <!-- Two-column layout on wider screens -->
+          <div style="display:grid;gap:var(--space-8);grid-template-columns:1fr;max-width:960px">
+
+            <!-- ── Existing fields list ── -->
+            <section aria-labelledby="fields-heading">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4)">
+                <h3 id="fields-heading" style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em">
+                  Defined Fields
+                </h3>
+                <button class="btn btn-gold btn-sm" id="add-field-btn">+ Add Field</button>
+              </div>
+
+              <div id="fields-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+              <div id="fields-empty" class="empty-state" style="display:none">
+                <div class="empty-icon">≡</div>
+                <p>No custom fields defined yet. Add one to include it on the registration form.</p>
+              </div>
+
+              <div id="fields-list" class="fields-box" style="display:none" role="list" aria-label="Custom fields"></div>
+            </section>
+
+            <!-- ── Add/Edit Field form (shown inline when + Add Field is clicked) ── -->
+            <section id="add-field-section" style="display:none" aria-labelledby="add-field-heading">
+              <h3 id="add-field-heading" style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin-bottom:var(--space-5)">
+                Add Field
+              </h3>
+              <div class="card" style="padding:var(--space-6)">
+                <form id="add-field-form" novalidate>
+                  <div class="form-row form-row-2">
+                    <div class="form-group">
+                      <label for="af-name">Field Name <span class="required">*</span></label>
+                      <input type="text" id="af-name" placeholder="e.g. Emergency Contact" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="af-type">Field Type <span class="required">*</span></label>
+                      <select id="af-type" required>
+                        <option value="text">Text</option>
+                        <option value="number">Number</option>
+                        <option value="date">Date</option>
+                        <option value="dropdown">Dropdown</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group" id="options-group">
+                    <label for="af-options">Dropdown Options <span class="required">*</span></label>
+                    <textarea id="af-options" rows="3" placeholder="One option per line&#10;e.g.&#10;Option A&#10;Option B&#10;Option C"></textarea>
+                    <p class="form-hint">Enter each option on its own line.</p>
+                  </div>
+
+                  <div class="check-group form-group">
+                    <input type="checkbox" id="af-required">
+                    <label for="af-required">Required field</label>
+                  </div>
+
+                  <div id="add-field-error" class="alert alert-error" role="alert" style="display:none">
+                    <span class="alert-icon">⚠</span>
+                    <span id="add-field-error-text"></span>
+                  </div>
+
+                  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:var(--space-4)">
+                    <button type="button" class="btn btn-ghost btn-sm" id="add-field-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-gold btn-sm" id="add-field-submit">Add Field</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const adminProfile = await requireRole('admin');
+      if (!adminProfile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = adminProfile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Show/hide dropdown options field ───────────────────────
+      document.getElementById('af-type').addEventListener('change', e => {
+        document.getElementById('options-group').style.display =
+          e.target.value === 'dropdown' ? 'block' : 'none';
+      });
+
+      // ── Show/hide add field form ───────────────────────────────
+      document.getElementById('add-field-btn').addEventListener('click', () => {
+        document.getElementById('add-field-form').reset();
+        document.getElementById('options-group').style.display = 'none';
+        document.getElementById('add-field-error').style.display = 'none';
+        document.getElementById('add-field-section').style.display = 'block';
+        document.getElementById('af-name').focus();
+      });
+      document.getElementById('add-field-cancel').addEventListener('click', () => {
+        document.getElementById('add-field-section').style.display = 'none';
+      });
+
+      // ── Helper: show global success toast ─────────────────────
+      function showSuccess(msg) {
+        const el = document.getElementById('global-success');
+        document.getElementById('global-success-text').textContent = msg;
+        el.style.display = 'flex';
+        setTimeout(() => { el.style.display = 'none'; }, 4000);
+      }
+
+      // ── Load fields ─────────────────────────────────────────────
+      let fields = [];
+
+      async function loadFields() {
+        const loadingEl = document.getElementById('fields-loading');
+        const emptyEl   = document.getElementById('fields-empty');
+        const listEl    = document.getElementById('fields-list');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        listEl.style.display    = 'none';
+
+        const { data, error } = await supabase
+          .from('custom_field_definitions')
+          .select('*')
+          .order('sort_order');
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          fields = [];
+          return;
+        }
+
+        fields = data;
+        renderFieldsList();
+      }
+
+      function renderFieldsList() {
+        const emptyEl = document.getElementById('fields-empty');
+        const listEl  = document.getElementById('fields-list');
+
+        if (!fields.length) {
+          listEl.style.display  = 'none';
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        listEl.style.display  = 'block';
+        emptyEl.style.display = 'none';
+
+        listEl.innerHTML = fields.map((f, i) => {
+          const optionSummary = f.field_type === 'dropdown' && f.field_options?.length
+            ? ` — ${f.field_options.length} option${f.field_options.length !== 1 ? 's' : ''}`
+            : '';
+          return `
+            <div class="field-row" role="listitem">
+              <div class="field-reorder">
+                <button class="js-move-up" data-id="${f.id}" aria-label="Move ${escHtml(f.field_name)} up"
+                        ${i === 0 ? 'disabled' : ''}>▲</button>
+                <button class="js-move-down" data-id="${f.id}" aria-label="Move ${escHtml(f.field_name)} down"
+                        ${i === fields.length - 1 ? 'disabled' : ''}>▼</button>
+              </div>
+              <div class="field-info">
+                <div class="field-name">${escHtml(f.field_name)}</div>
+                <div class="field-meta">${f.field_type}${optionSummary}${f.is_required ? ' · required' : ''}</div>
+              </div>
+              <button class="btn btn-danger btn-sm js-delete" data-id="${f.id}" data-name="${escHtml(f.field_name)}">
+                Delete
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ── Event delegation for field rows ────────────────────────
+      document.getElementById('fields-list').addEventListener('click', async e => {
+        const upBtn   = e.target.closest('.js-move-up');
+        const downBtn = e.target.closest('.js-move-down');
+        const delBtn  = e.target.closest('.js-delete');
+
+        if (upBtn)   await moveField(upBtn.dataset.id, -1);
+        if (downBtn) await moveField(downBtn.dataset.id, 1);
+        if (delBtn)  await deleteField(delBtn.dataset.id, delBtn.dataset.name);
+      });
+
+      // ── Move field up/down (swap sort_order values) ─────────────
+      async function moveField(id, direction) {
+        const idx = fields.findIndex(f => f.id === id);
+        if (idx < 0) return;
+        const swapIdx = idx + direction;
+        if (swapIdx < 0 || swapIdx >= fields.length) return;
+
+        const a = fields[idx];
+        const b = fields[swapIdx];
+
+        // Swap sort_order values
+        const [errA, errB] = await Promise.all([
+          supabase.from('custom_field_definitions').update({ sort_order: b.sort_order }).eq('id', a.id).then(r => r.error),
+          supabase.from('custom_field_definitions').update({ sort_order: a.sort_order }).eq('id', b.id).then(r => r.error),
+        ]);
+
+        if (errA || errB) { alert('Failed to reorder fields.'); return; }
+        await loadFields();
+      }
+
+      // ── Delete field ────────────────────────────────────────────
+      async function deleteField(id, name) {
+        if (!confirm(`Delete field "${name}"?\n\nExisting member data for this field will be hidden but not deleted from stored profiles.`)) return;
+
+        const { error } = await supabase.from('custom_field_definitions').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        showSuccess(`Field "${name}" deleted.`);
+        await loadFields();
+      }
+
+      // ── Add Field form submit ────────────────────────────────────
+      document.getElementById('add-field-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('add-field-submit');
+        btn.disabled = true; btn.textContent = 'Saving…';
+        document.getElementById('add-field-error').style.display = 'none';
+
+        const name       = document.getElementById('af-name').value.trim();
+        const type       = document.getElementById('af-type').value;
+        const isRequired = document.getElementById('af-required').checked;
+        const optionsRaw = document.getElementById('af-options').value;
+
+        let fieldOptions = [];
+        if (type === 'dropdown') {
+          fieldOptions = optionsRaw.split('\n').map(s => s.trim()).filter(Boolean);
+          if (!fieldOptions.length) {
+            document.getElementById('add-field-error-text').textContent = 'Dropdown fields require at least one option.';
+            document.getElementById('add-field-error').style.display = 'flex';
+            btn.disabled = false; btn.textContent = 'Add Field';
+            return;
+          }
+        }
+
+        // Next sort_order is one after the current maximum
+        const nextOrder = fields.length ? Math.max(...fields.map(f => f.sort_order)) + 1 : 0;
+
+        const { error } = await supabase.from('custom_field_definitions').insert({
+          field_name:    name,
+          field_type:    type,
+          field_options: fieldOptions,
+          is_required:   isRequired,
+          sort_order:    nextOrder,
+        });
+
+        btn.disabled = false; btn.textContent = 'Add Field';
+
+        if (error) {
+          document.getElementById('add-field-error-text').textContent = error.message;
+          document.getElementById('add-field-error').style.display = 'flex';
+          return;
+        }
+
+        document.getElementById('add-field-section').style.display = 'none';
+        showSuccess(`Field "${name}" added.`);
+        await loadFields();
+      });
+
+      // ── Initial load ────────────────────────────────────────────
+      await loadFields();
+      hidePageLoader();
+    </script>
   </body>
 </html>

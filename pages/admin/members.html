@@ -5,13 +5,630 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Member Management — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 3: admin member management -->
-      <p>Member management — coming in Session 3.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Admin Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">⌂</span> Dashboard
+        </a>
+        <a href="../members/attendance.html" class="sidebar-link">
+          <span class="sidebar-icon">✓</span> My Attendance
+        </a>
+        <a href="../members/songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♪</span> Song Library
+        </a>
+        <a href="../members/profile.html" class="sidebar-link">
+          <span class="sidebar-icon">◎</span> My Profile
+        </a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="../secretary/tracker.html" class="sidebar-link">
+          <span class="sidebar-icon">☑</span> Attendance Tracker
+        </a>
+        <a href="../secretary/absences.html" class="sidebar-link">
+          <span class="sidebar-icon">✉</span> Absence Requests
+        </a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Admin</div>
+        <a href="members.html" class="sidebar-link active">
+          <span class="sidebar-icon">◈</span> Members
+        </a>
+        <a href="events.html" class="sidebar-link">
+          <span class="sidebar-icon">◷</span> Events
+        </a>
+        <a href="songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♫</span> Manage Songs
+        </a>
+        <a href="fields.html" class="sidebar-link">
+          <span class="sidebar-icon">≡</span> Custom Fields
+        </a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout">
+          <span class="sidebar-icon">←</span> Sign Out
+        </button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <!-- Page heading + Create Account button -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-8)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Member Management</h2>
+              <p>Review registrations and manage member roles</p>
+            </div>
+            <button class="btn btn-gold" id="create-account-btn">+ Create Account</button>
+          </div>
+
+          <!-- ── Section 1: Pending Registrations ── -->
+          <section style="margin-bottom:var(--space-10)" aria-labelledby="pending-heading">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:var(--space-4)">
+              <h3 id="pending-heading" style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em">
+                Pending Registrations
+              </h3>
+              <span id="pending-count" class="badge badge-pending-m" style="display:none"></span>
+            </div>
+
+            <div id="pending-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+            <div id="pending-empty" class="empty-state" style="display:none">
+              <div class="empty-icon">✓</div>
+              <p>No pending registrations.</p>
+            </div>
+
+            <div id="pending-table-wrap" class="table-wrap" style="display:none">
+              <table class="data-table" aria-label="Pending registrations">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Voice Part</th>
+                    <th>Registered</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="pending-tbody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ── Section 2: All Members ── -->
+          <section aria-labelledby="members-heading">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-4)">
+              <h3 id="members-heading" style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em">
+                All Members
+              </h3>
+              <div class="search-bar" style="margin-bottom:0;width:100%;max-width:300px">
+                <input type="search" id="member-search" placeholder="Search by name…" aria-label="Search members">
+              </div>
+            </div>
+
+            <div id="members-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+            <div id="members-empty" class="empty-state" style="display:none">
+              <div class="empty-icon">◈</div>
+              <p>No approved members yet.</p>
+            </div>
+
+            <div id="members-table-wrap" class="table-wrap" style="display:none">
+              <table class="data-table" aria-label="All members">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Voice Part</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="members-tbody"></tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Approve Modal ── -->
+    <div class="modal-overlay" id="approve-modal" role="dialog" aria-modal="true" aria-labelledby="approve-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="approve-modal-title">Approve Registration</h2>
+          <button class="modal-close" id="approve-close" aria-label="Close">✕</button>
+        </div>
+        <p id="approve-name" style="color:var(--ivory-dim);font-size:var(--text-sm);margin-bottom:var(--space-5)"></p>
+        <div class="form-group">
+          <label for="approve-status">Membership Status <span class="required">*</span></label>
+          <select id="approve-status">
+            <option value="active">Active</option>
+            <option value="associate">Associate</option>
+            <option value="honorary">Honorary</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="approve-role">Role <span class="required">*</span></label>
+          <select id="approve-role">
+            <option value="member">Member</option>
+            <option value="secretary">Secretary</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div id="approve-error" class="alert alert-error" role="alert" style="display:none">
+          <span class="alert-icon">⚠</span>
+          <span id="approve-error-text"></span>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost btn-sm" id="approve-cancel">Cancel</button>
+          <button class="btn btn-gold btn-sm" id="approve-confirm">Approve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Edit Member Modal ── -->
+    <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="edit-modal-title">Edit Member</h2>
+          <button class="modal-close" id="edit-close" aria-label="Close">✕</button>
+        </div>
+        <p id="edit-name" style="color:var(--ivory-dim);font-size:var(--text-sm);margin-bottom:var(--space-5)"></p>
+        <div class="form-group">
+          <label for="edit-role">Role <span class="required">*</span></label>
+          <select id="edit-role">
+            <option value="member">Member</option>
+            <option value="secretary">Secretary</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-status">Status <span class="required">*</span></label>
+          <select id="edit-status">
+            <option value="active">Active</option>
+            <option value="associate">Associate</option>
+            <option value="honorary">Honorary</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+        <div id="edit-error" class="alert alert-error" role="alert" style="display:none">
+          <span class="alert-icon">⚠</span>
+          <span id="edit-error-text"></span>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost btn-sm" id="edit-cancel">Cancel</button>
+          <button class="btn btn-gold btn-sm" id="edit-confirm">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Create Account Modal ── -->
+    <div class="modal-overlay" id="create-modal" role="dialog" aria-modal="true" aria-labelledby="create-modal-title">
+      <div class="modal" style="max-width:600px">
+        <div class="modal-header">
+          <h2 class="modal-title" id="create-modal-title">Create Member Account</h2>
+          <button class="modal-close" id="create-close" aria-label="Close">✕</button>
+        </div>
+        <form id="create-form" novalidate>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="c-name">Full Name <span class="required">*</span></label>
+              <input type="text" id="c-name" required autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="c-voice">Voice Part <span class="required">*</span></label>
+              <select id="c-voice" required>
+                <option value="">— select —</option>
+                <option value="soprano">Soprano</option>
+                <option value="alto">Alto</option>
+                <option value="tenor">Tenor</option>
+                <option value="bass">Bass</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="c-email">Email Address <span class="required">*</span></label>
+              <input type="email" id="c-email" required autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="c-password">Temporary Password <span class="required">*</span></label>
+              <input type="password" id="c-password" required autocomplete="new-password" minlength="6">
+              <p class="form-hint">Min. 6 characters. Share with the member.</p>
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="c-contact">Contact Number</label>
+              <input type="tel" id="c-contact" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="c-birthday">Birthday</label>
+              <input type="date" id="c-birthday">
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="c-age">Age</label>
+              <input type="number" id="c-age" min="1" max="120">
+            </div>
+            <div class="form-group">
+              <label for="c-status">Status <span class="required">*</span></label>
+              <select id="c-status">
+                <option value="active">Active</option>
+                <option value="associate">Associate</option>
+                <option value="honorary">Honorary</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-school">School / Occupation</label>
+            <input type="text" id="c-school" autocomplete="off">
+          </div>
+          <div id="create-error" class="alert alert-error" role="alert" style="display:none">
+            <span class="alert-icon">⚠</span>
+            <span id="create-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="create-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="create-submit">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, getProfile, signOut } from '../../js/auth.js';
+      import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const adminProfile = await requireRole('admin');
+      if (!adminProfile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = adminProfile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Helpers ────────────────────────────────────────────────
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      const badgeStatus = s => {
+        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m' };
+        return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
+      };
+      const badgeRole = r => {
+        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present' };
+        return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
+      };
+
+      // State for which row is being acted on
+      let targetId = null;
+
+      // ── Load pending registrations ──────────────────────────────
+      async function loadPending() {
+        const loadingEl = document.getElementById('pending-loading');
+        const emptyEl   = document.getElementById('pending-empty');
+        const tableEl   = document.getElementById('pending-table-wrap');
+        const countEl   = document.getElementById('pending-count');
+        const tbody     = document.getElementById('pending-tbody');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, full_name, voice_part, created_at')
+          .eq('status', 'pending')
+          .order('created_at');
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          countEl.style.display = 'none';
+          return;
+        }
+
+        countEl.textContent = `${data.length}`;
+        countEl.style.display = '';
+        tableEl.style.display = 'block';
+
+        tbody.innerHTML = data.map(m => `
+          <tr>
+            <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
+            <td>${cap(m.voice_part)}</td>
+            <td>${formatDate(m.created_at)}</td>
+            <td><div class="actions">
+              <button class="btn btn-gold btn-sm js-approve" data-id="${m.id}" data-name="${escHtml(m.full_name)}">Approve</button>
+              <button class="btn btn-danger btn-sm js-reject" data-id="${m.id}" data-name="${escHtml(m.full_name)}">Reject</button>
+            </div></td>
+          </tr>
+        `).join('');
+      }
+
+      // ── Load all members ────────────────────────────────────────
+      let allMembers = [];
+
+      async function loadMembers() {
+        const loadingEl = document.getElementById('members-loading');
+        const emptyEl   = document.getElementById('members-empty');
+        const tableEl   = document.getElementById('members-table-wrap');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, full_name, voice_part, role, status')
+          .neq('status', 'pending')
+          .order('full_name');
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data) { emptyEl.style.display = 'block'; return; }
+
+        allMembers = data;
+        renderMembersTable(data);
+      }
+
+      function renderMembersTable(data) {
+        const emptyEl = document.getElementById('members-empty');
+        const tableEl = document.getElementById('members-table-wrap');
+        const tbody   = document.getElementById('members-tbody');
+
+        if (!data.length) {
+          tableEl.style.display = 'none';
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        tableEl.style.display = 'block';
+        emptyEl.style.display = 'none';
+
+        tbody.innerHTML = data.map(m => `
+          <tr>
+            <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
+            <td>${cap(m.voice_part)}</td>
+            <td>${badgeRole(m.role)}</td>
+            <td>${badgeStatus(m.status)}</td>
+            <td><div class="actions">
+              <button class="btn btn-outline btn-sm js-edit"
+                      data-id="${m.id}"
+                      data-name="${escHtml(m.full_name)}"
+                      data-role="${m.role}"
+                      data-status="${m.status}">Edit</button>
+            </div></td>
+          </tr>
+        `).join('');
+      }
+
+      // Search
+      document.getElementById('member-search').addEventListener('input', e => {
+        const q = e.target.value.toLowerCase();
+        renderMembersTable(allMembers.filter(m => m.full_name.toLowerCase().includes(q)));
+      });
+
+      // ── Event delegation for table buttons ─────────────────────
+      document.getElementById('pending-tbody').addEventListener('click', e => {
+        const approveBtn = e.target.closest('.js-approve');
+        const rejectBtn  = e.target.closest('.js-reject');
+        if (approveBtn) openApproveModal(approveBtn.dataset.id, approveBtn.dataset.name);
+        if (rejectBtn)  confirmReject(rejectBtn.dataset.id, rejectBtn.dataset.name);
+      });
+
+      document.getElementById('members-tbody').addEventListener('click', e => {
+        const editBtn = e.target.closest('.js-edit');
+        if (editBtn) openEditModal(editBtn.dataset.id, editBtn.dataset.name, editBtn.dataset.role, editBtn.dataset.status);
+      });
+
+      // ── Approve Modal ──────────────────────────────────────────
+      function openApproveModal(id, name) {
+        targetId = id;
+        document.getElementById('approve-name').textContent = `Approving: ${name}`;
+        document.getElementById('approve-status').value = 'active';
+        document.getElementById('approve-role').value   = 'member';
+        document.getElementById('approve-error').style.display = 'none';
+        document.getElementById('approve-modal').classList.add('open');
+      }
+
+      function closeApproveModal() { document.getElementById('approve-modal').classList.remove('open'); }
+      document.getElementById('approve-close').addEventListener('click', closeApproveModal);
+      document.getElementById('approve-cancel').addEventListener('click', closeApproveModal);
+
+      document.getElementById('approve-confirm').addEventListener('click', async () => {
+        const btn = document.getElementById('approve-confirm');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        const { error } = await supabase.from('profiles').update({
+          status:      document.getElementById('approve-status').value,
+          role:        document.getElementById('approve-role').value,
+          approved_at: new Date().toISOString(),
+          approved_by: adminProfile.id,
+        }).eq('id', targetId);
+
+        btn.disabled = false; btn.textContent = 'Approve';
+
+        if (error) {
+          document.getElementById('approve-error-text').textContent = error.message;
+          document.getElementById('approve-error').style.display = 'flex';
+          return;
+        }
+        closeApproveModal();
+        await Promise.all([loadPending(), loadMembers()]);
+      });
+
+      // ── Reject ─────────────────────────────────────────────────
+      async function confirmReject(id, name) {
+        if (!confirm(`Delete registration for "${name}"?\n\nThis removes their profile. The action cannot be undone.`)) return;
+
+        const { error } = await supabase.from('profiles').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadPending();
+      }
+
+      // ── Edit Member Modal ──────────────────────────────────────
+      function openEditModal(id, name, role, status) {
+        targetId = id;
+        document.getElementById('edit-name').textContent      = name;
+        document.getElementById('edit-role').value            = role;
+        document.getElementById('edit-status').value          = status;
+        document.getElementById('edit-error').style.display   = 'none';
+        document.getElementById('edit-modal').classList.add('open');
+      }
+
+      function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
+      document.getElementById('edit-close').addEventListener('click', closeEditModal);
+      document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
+
+      document.getElementById('edit-confirm').addEventListener('click', async () => {
+        const btn = document.getElementById('edit-confirm');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        const { error } = await supabase.from('profiles').update({
+          role:   document.getElementById('edit-role').value,
+          status: document.getElementById('edit-status').value,
+        }).eq('id', targetId);
+
+        btn.disabled = false; btn.textContent = 'Save Changes';
+
+        if (error) {
+          document.getElementById('edit-error-text').textContent = error.message;
+          document.getElementById('edit-error').style.display = 'flex';
+          return;
+        }
+        closeEditModal();
+        await loadMembers();
+      });
+
+      // ── Create Account Modal ────────────────────────────────────
+      document.getElementById('create-account-btn').addEventListener('click', () => {
+        document.getElementById('create-form').reset();
+        document.getElementById('create-error').style.display = 'none';
+        document.getElementById('create-modal').classList.add('open');
+      });
+
+      function closeCreateModal() { document.getElementById('create-modal').classList.remove('open'); }
+      document.getElementById('create-close').addEventListener('click', closeCreateModal);
+      document.getElementById('create-cancel').addEventListener('click', closeCreateModal);
+
+      document.getElementById('create-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('create-submit');
+        btn.disabled = true; btn.textContent = 'Creating…';
+        document.getElementById('create-error').style.display = 'none';
+
+        const name     = document.getElementById('c-name').value.trim();
+        const voice    = document.getElementById('c-voice').value;
+        const email    = document.getElementById('c-email').value.trim();
+        const password = document.getElementById('c-password').value;
+        const contact  = document.getElementById('c-contact').value.trim() || null;
+        const birthday = document.getElementById('c-birthday').value || null;
+        const age      = document.getElementById('c-age').value ? parseInt(document.getElementById('c-age').value, 10) : null;
+        const status   = document.getElementById('c-status').value;
+        const school   = document.getElementById('c-school').value.trim() || null;
+
+        if (!name || !voice || !email || !password) {
+          document.getElementById('create-error-text').textContent = 'Please fill in all required fields.';
+          document.getElementById('create-error').style.display = 'flex';
+          btn.disabled = false; btn.textContent = 'Create Account';
+          return;
+        }
+
+        try {
+          // Sign up via REST API so we don't overwrite the admin's current session
+          const res  = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+            method:  'POST',
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ email, password }),
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.msg || json.error_description || 'Sign-up failed.');
+
+          const newUserId = json.id ?? json.user?.id;
+          if (!newUserId) throw new Error('No user ID returned. Check Supabase email-confirmation settings.');
+
+          const { error: profileError } = await supabase.from('profiles').insert({
+            id:                newUserId,
+            full_name:         name,
+            voice_part:        voice,
+            contact_number:    contact,
+            birthday,
+            age,
+            school_occupation: school,
+            role:              'member',
+            status,
+            approved_at:       new Date().toISOString(),
+            approved_by:       adminProfile.id,
+            custom_fields:     {},
+          });
+          if (profileError) throw profileError;
+
+          closeCreateModal();
+          await loadMembers();
+        } catch (err) {
+          document.getElementById('create-error-text').textContent = err.message || 'Failed to create account.';
+          document.getElementById('create-error').style.display = 'flex';
+        } finally {
+          btn.disabled = false; btn.textContent = 'Create Account';
+        }
+      });
+
+      // ── Initial data load ──────────────────────────────────────
+      await Promise.all([loadPending(), loadMembers()]);
+      hidePageLoader();
+    </script>
   </body>
 </html>
