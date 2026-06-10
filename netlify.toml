@@ -1,0 +1,37 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/documents"
+  to = "/pages/documents.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/pages/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/register"
+  to = "/pages/register.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/pages/members/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/attendance"
+  to = "/pages/members/attendance.html"
+  status = 200
+
+[[redirects]]
+  from = "/songs"
+  to = "/pages/members/songs.html"
+  status = 200
+
+[[redirects]]
+  from = "/profile"
+  to = "/pages/members/profile.html"
+  status = 200

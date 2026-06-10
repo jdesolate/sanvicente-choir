@@ -293,7 +293,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 8: Netlify Migration + Final QA
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Migrate from GitHub Pages to Netlify, do final link audit, remove retired files, and verify all features work on the deployed site.
 
