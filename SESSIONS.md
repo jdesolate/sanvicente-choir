@@ -29,7 +29,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 1: Repo Restructure + Supabase Schema
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Clean the repository layout and create the Supabase project with all tables and RLS policies. No visible changes to users — foundation only.
 
