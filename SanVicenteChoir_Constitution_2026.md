@@ -599,9 +599,9 @@ This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratifie
 | **Aravila Dionson** | Vice President |
 | **Jan Dacillo** | Choir Adviser |
 | **Vince Raymund Rojas** | Choir Director |
-| [VACANT — to be filled per Article IV] | Secretary |
-| [VACANT — to be filled per Article IV] | External Coordinator |
-| [VACANT — to be filled per Article IV] | Treasurer |
+| **Gezd Seloterio** | Secretary |
+| **Gabriella Amor Lopez** | External Coordinator |
+| **Mary Love Lopez** | Treasurer |
 
 ---
 

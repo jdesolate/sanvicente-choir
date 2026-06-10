@@ -15,10 +15,8 @@ These roles are listed in the Constitution but have no assigned person yet. Offi
 ---
 
 ### 1. Treasurer
-**Status:** No one assigned yet
+**Status:** ✅ Assigned — **Mary Love Lopez**
 **Why it matters:** Handles all choir funds, records income and expenses, presents financial report. With ₱400/month honorarium and potential talent fees incoming, someone needs to own this from Day 1.
-
-> 💡 **Suggestion:** Look for someone detail-oriented, trustworthy, and ideally with some experience handling money — even just a student who's handled org funds before. Avoid assigning it to the busiest person (that's usually you or Vince). Could also be combined temporarily with the Secretary role if no one steps up, but keep them separate ideally for transparency.
 
 ---
 
@@ -81,10 +79,8 @@ These roles are listed in the Constitution but have no assigned person yet. Offi
 
 ---
 
-### 10. External Coordinator (standalone or combined with Secretary)
-**Status:** Both the Secretary and External Coordinator seats are currently vacant. Decide whether to fill them separately or combine the two roles under one person.
-
-> 💡 **Suggestion:** For Year 1, combining Secretary and External Coordinator under one reliable, organized member is fine. Only split the roles if the workload becomes too heavy, which is unlikely early on.
+### 10. Secretary
+**Status:** ✅ Assigned — **Gezd Seloterio**
 
 ---
 
@@ -98,7 +94,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 **Status:** September — exact date unknown
 **Action needed:** Ask the parish coordinator or priest of the Archdiocesan Shrine of San Nicolas de Tolentino Parish for the exact fiesta date.
 
-> 💡 **Suggestion:** Assign the External Coordinator (once filled) to follow up with the Archdiocesan Shrine of San Nicolas de Tolentino Parish by July. Once confirmed, post in the group chat and update the calendar.
+> 💡 **Suggestion:** Assign Gabriella (External Coordinator) to follow up with the Archdiocesan Shrine of San Nicolas de Tolentino Parish by July. Once confirmed, post in the group chat and update the calendar.
 
 ---
 
@@ -266,7 +262,7 @@ These are events in the calendar that need exact dates confirmed with the parish
 
 | # | Item | Who Decides |
 |---|---|---|
-| 4 | Treasurer assignment | Officers vote |
+| 4 | ~~Treasurer assignment~~ ✅ Mary Love Lopez | Officers vote |
 | 5 | Section Leaders (Soprano, Alto, Tenor, Bass) | Officers + Music Director |
 | 6 | Committee Heads (Music, Membership, Logistics, Documentation) | Officers vote |
 | 7 | Confirm officer positions and titles | All core officers |

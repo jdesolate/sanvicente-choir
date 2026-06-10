@@ -103,7 +103,7 @@ term. This list serves as the baseline for Year 2 — when the choir can
 deliberately decide which roles to fill as the group grows.
 
 Positions to consider explicitly:
-- Treasurer (currently VACANT — most urgent to fill)
+- Treasurer (filled — Mary Love Lopez)
 - Soprano, Alto, Tenor, Bass Section Leaders
 - Music Committee Head
 - Membership Committee Head
