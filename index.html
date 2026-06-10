@@ -32,11 +32,11 @@
         --charcoal:        #E8E1D2;
         --surface:         #E8E1D2;
         --ivory:           #1C1714;
-        --ivory-dim:       rgba(28,23,20,0.58);
-        --gold:            #9A6B28;
-        --gold-hover:      #B07830;
-        --gold-dim:        rgba(154,107,40,0.28);
-        --gold-faint:      rgba(154,107,40,0.07);
+        --ivory-dim:       rgba(28,23,20,0.75);
+        --gold:            #7D5420; /* was #9A6B28 — darkened to 5.2:1 on light bg for WCAG AA */
+        --gold-hover:      #6A4418;
+        --gold-dim:        rgba(125,84,32,0.28);
+        --gold-faint:      rgba(125,84,32,0.07);
         --header-scrolled: rgba(242,237,227,0.97);
         --nav-overlay:     rgba(242,237,227,0.98);
       }
@@ -45,9 +45,9 @@
       html.light .hero-sub { color: rgba(245,242,235,0.72); }
       html.light .hero .btn-ghost { color: #F5F2EB; border-color: rgba(245,242,235,0.28); }
       html.light .hero .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
-      html.light .scroll-hint span { color: rgba(245,242,235,0.3); }
+      html.light .scroll-hint span { color: rgba(245,242,235,0.45); }
       html.light footer.site { background: #D8D1C2; }
-      html.light .fine { color: rgba(28,23,20,0.28); }
+      html.light .fine { color: rgba(28,23,20,0.52); }
 
       html { scroll-behavior: smooth; }
 
@@ -133,11 +133,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px; height: 32px;
+        width: 44px; height: 44px; /* was 32×32 — raised to WCAG 2.5.5 minimum */
         background: none;
         border: 1px solid var(--gold-dim);
         color: var(--ivory-dim);
-        font-size: 14px;
+        font-size: 16px;
         cursor: pointer;
         transition: all 0.22s;
         flex-shrink: 0;
@@ -150,7 +150,7 @@
         display: none;
         align-items: center;
         justify-content: center;
-        width: 36px; height: 36px;
+        width: 44px; height: 44px; /* was 36×36 — raised to WCAG minimum */
         background: none; border: none;
         color: var(--ivory); font-size: 20px;
         cursor: pointer;
@@ -279,7 +279,7 @@
         font-size: 0.62rem;
         letter-spacing: 0.28em;
         text-transform: uppercase;
-        color: rgba(245,242,235,0.3);
+        color: rgba(245,242,235,0.45); /* raised from 0.3 for readability */
         margin-bottom: 8px;
       }
       .scroll-hint-line {
@@ -586,15 +586,23 @@
       .c-btn:hover { background: rgba(201,168,106,0.12); border-color: var(--gold); }
       .c-btn.prev { left: 14px; }
       .c-btn.next { right: 14px; }
-      .c-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+      .c-dots { display: flex; justify-content: center; gap: 4px; margin-top: 16px; }
       .c-dot {
-        width: 5px; height: 5px;
+        /* Visual dot */
+        width: 8px; height: 8px;
         border-radius: 50%;
         background: rgba(245,242,235,0.15);
-        cursor: pointer; border: none; padding: 0;
+        cursor: pointer; border: none;
         transition: all 0.25s;
+        /* Transparent padding expands the tap area to ~44px without affecting layout */
+        padding: 18px;
+        box-sizing: content-box;
+        margin: -18px;
+        background-clip: content-box;
+        position: relative;
+        z-index: 2;
       }
-      .c-dot.on { background: var(--gold); transform: scale(1.5); }
+      .c-dot.on { background: var(--gold); transform: scale(1.4); background-clip: content-box; }
 
       /* ══ PERFORMANCES ══ */
       .perf-grid {
@@ -824,7 +832,7 @@
         font-family: 'Cormorant Garamond', serif;
         font-size: 0.78rem;
         font-style: italic;
-        color: rgba(245,242,235,0.22);
+        color: rgba(245,242,235,0.52); /* was 0.22 — raised to 5.1:1 for WCAG AA */
         margin-top: 18px;
       }
 
@@ -892,9 +900,36 @@
         .reveal { opacity: 1; transform: none; transition: none; }
         * { animation-duration: 0.01ms !important; animation-delay: 0.01ms !important; }
       }
+
+      /* ══ FOCUS INDICATORS (keyboard navigation) ══ */
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(201,168,106,0.30);
+      }
+      :focus:not(:focus-visible) { outline: none; box-shadow: none; }
+
+      /* ══ SKIP LINK ══ */
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        background: var(--gold);
+        color: #0A0A0A;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 12px 20px;
+        text-decoration: none;
+        z-index: 9999;
+        border-radius: 0 0 4px 0;
+        transition: top 0.15s;
+      }
+      .skip-link:focus { top: 0; }
     </style>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- ══════════ NAV ══════════ -->
     <header id="site-header">
@@ -920,6 +955,7 @@
       </div>
     </header>
 
+    <main id="main-content">
     <!-- ══════════ HERO ══════════ -->
     <section class="hero">
       <div class="hero-bg"></div>
@@ -1257,6 +1293,8 @@
         </p>
       </div>
     </section>
+
+    </main><!-- /main-content -->
 
     <!-- ══════════ FOOTER ══════════ -->
     <footer class="site">

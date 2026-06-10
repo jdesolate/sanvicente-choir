@@ -137,16 +137,17 @@
 
       nav button {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 10px;
         width: 100%;
         background: none;
         border: none;
-        padding: 10px 20px;
+        padding: 0 20px;
+        min-height: 44px; /* WCAG 2.5.5 minimum touch target */
         text-align: left;
         cursor: pointer;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 0.8rem;
+        font-size: 0.875rem;
         color: var(--ivory-dim);
         font-weight: 400;
         transition: all 0.18s;
@@ -413,7 +414,7 @@
         font-weight: 500;
       }
 
-      .doc-content em { color: rgba(245,242,235,0.45); }
+      .doc-content em { color: rgba(245,242,235,0.52); } /* raised from 0.45 — WCAG AA requires 4.5:1 */
 
       .doc-content blockquote {
         border-left: 1px solid var(--gold);
@@ -522,15 +523,45 @@
         font-style: italic;
         font-size: 0.82rem;
         letter-spacing: 0.02em;
-        color: rgba(245,242,235,0.22);
+        color: rgba(245,242,235,0.52); /* was 0.22 — raised to 5.1:1 for WCAG AA */
         border-top: 1px solid rgba(245,242,235,0.06);
         background: var(--charcoal);
       }
+
+      /* ── FOCUS INDICATORS ── */
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(201,168,106,0.30);
+      }
+      :focus:not(:focus-visible) { outline: none; box-shadow: none; }
+
+      /* ── SKIP LINK ── */
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        background: var(--gold);
+        color: #0A0A0A;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 12px 20px;
+        text-decoration: none;
+        z-index: 9999;
+        transition: top 0.15s;
+      }
+      .skip-link:focus { top: 0; }
 
       /* ── RESPONSIVE ── */
       @media (max-width: 768px) {
         .hamburger {
           display: block;
+          min-width: 44px;
+          min-height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         nav {
@@ -565,6 +596,7 @@
     </style>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
       <img src="images/SVC_Logo.png" alt="San Vicente Choir" class="header-logo">
       <div class="header-text">
