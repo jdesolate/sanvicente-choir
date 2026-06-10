@@ -52,8 +52,15 @@
         <div id="page-content" style="display:none">
 
           <div class="page-heading">
-            <h2>My Attendance</h2>
-            <p>Your attendance history and rate per event tier</p>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap">
+              <div>
+                <h2>My Attendance</h2>
+                <p>Your attendance history and rate per event tier</p>
+              </div>
+              <button class="btn btn-gold" id="advance-request-btn" style="white-space:nowrap">
+                + Request Advance Absence
+              </button>
+            </div>
           </div>
 
           <!-- ── Loading ── -->
@@ -62,13 +69,11 @@
           <!-- ── Summary cards + status badge ── -->
           <div id="att-summary" style="display:none">
 
-            <!-- Overall status -->
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--space-6)">
               <span style="font-family:var(--font-display);font-size:var(--text-sm);letter-spacing:0.1em;text-transform:uppercase;color:var(--ivory-dim)">Overall Status</span>
               <span id="status-badge" class="badge"></span>
             </div>
 
-            <!-- Per-tier rate cards -->
             <div class="stat-grid" style="margin-bottom:var(--space-8)">
               <div class="stat-card">
                 <div class="stat-num" id="rate-core">—</div>
@@ -84,7 +89,6 @@
               </div>
             </div>
 
-            <!-- Tier breakdown detail -->
             <div id="tier-detail" style="margin-bottom:var(--space-8)">
               <div class="table-wrap">
                 <table class="data-table" aria-label="Attendance summary by tier">
@@ -124,6 +128,7 @@
                     <th>Date</th>
                     <th>Type</th>
                     <th>Status</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="history-tbody"></tbody>
@@ -138,6 +143,43 @@
     <footer class="portal-footer">
       San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
     </footer>
+
+    <!-- ── Absence Request Modal ── -->
+    <div class="modal-overlay" id="excuse-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="excuse-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title" id="excuse-modal-title">Request Absence Excuse</h3>
+          <button class="modal-close" id="excuse-modal-close" aria-label="Close modal">×</button>
+        </div>
+
+        <div id="excuse-event-display" class="form-group">
+          <label>Event</label>
+          <p id="excuse-event-name" style="color:var(--ivory);font-size:var(--text-base);padding:10px 0"></p>
+        </div>
+
+        <div id="excuse-event-select-wrap" class="form-group" style="display:none">
+          <label for="excuse-event-select">Select Upcoming Event <span class="required">*</span></label>
+          <select id="excuse-event-select">
+            <option value="">— choose an event —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="excuse-reason">Reason <span class="required">*</span></label>
+          <textarea id="excuse-reason" rows="4" placeholder="Briefly explain why you will be / were absent…"></textarea>
+        </div>
+
+        <div id="excuse-alert" class="alert" role="alert" style="display:none">
+          <span class="alert-icon"></span>
+          <span id="excuse-alert-text"></span>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="excuse-cancel">Cancel</button>
+          <button class="btn btn-gold" id="excuse-submit">Submit Request</button>
+        </div>
+      </div>
+    </div>
 
     <script type="module">
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
@@ -177,34 +219,175 @@
       const STATUS_BADGE = { present: 'badge-present', absent: 'badge-absent', excused: 'badge-excused' };
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
 
+      // ── Modal state ────────────────────────────────────────────
+      let modalMode    = null;   // 'retroactive' | 'advance'
+      let modalEventId = null;
+      let upcomingEvents = [];
+
+      const modalOverlay   = document.getElementById('excuse-modal-overlay');
+      const modalEventName = document.getElementById('excuse-event-name');
+      const modalEventDisplay = document.getElementById('excuse-event-display');
+      const modalSelectWrap   = document.getElementById('excuse-event-select-wrap');
+      const modalEventSelect  = document.getElementById('excuse-event-select');
+      const modalReason    = document.getElementById('excuse-reason');
+      const modalAlert     = document.getElementById('excuse-alert');
+      const modalAlertText = document.getElementById('excuse-alert-text');
+
+      function openModal(mode, eventId = null, eventTitle = '') {
+        modalMode    = mode;
+        modalEventId = eventId;
+        modalReason.value = '';
+        modalAlert.style.display = 'none';
+        document.getElementById('excuse-submit').disabled = false;
+        document.getElementById('excuse-submit').textContent = 'Submit Request';
+
+        if (mode === 'retroactive') {
+          modalEventDisplay.style.display = 'block';
+          modalSelectWrap.style.display   = 'none';
+          modalEventName.textContent = eventTitle;
+        } else {
+          modalEventDisplay.style.display = 'none';
+          modalSelectWrap.style.display   = 'block';
+          modalEventSelect.value = '';
+          // Populate upcoming events
+          modalEventSelect.innerHTML = '<option value="">— choose an event —</option>';
+          upcomingEvents.forEach(ev => {
+            const opt = document.createElement('option');
+            opt.value = ev.id;
+            opt.textContent = `${formatDate(ev.event_date)} — ${escHtml(ev.title)} (${TYPE_LABELS[ev.event_type] || ev.event_type})`;
+            modalEventSelect.appendChild(opt);
+          });
+        }
+
+        modalOverlay.classList.add('open');
+        (mode === 'advance' ? modalEventSelect : modalReason).focus();
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('open');
+        modalMode = null;
+        modalEventId = null;
+      }
+
+      document.getElementById('excuse-modal-close').addEventListener('click', closeModal);
+      document.getElementById('excuse-cancel').addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+      // ── Submit absence request ─────────────────────────────────
+      document.getElementById('excuse-submit').addEventListener('click', async () => {
+        const reason = modalReason.value.trim();
+        if (!reason) {
+          showModalAlert('error', 'Please provide a reason for your absence.');
+          return;
+        }
+
+        let eventId = modalEventId;
+        if (modalMode === 'advance') {
+          eventId = modalEventSelect.value;
+          if (!eventId) {
+            showModalAlert('error', 'Please select an upcoming event.');
+            return;
+          }
+        }
+
+        const submitBtn = document.getElementById('excuse-submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+        modalAlert.style.display = 'none';
+
+        const { error } = await supabase.from('absence_requests').insert({
+          member_id:    profile.id,
+          event_id:     eventId,
+          request_type: modalMode === 'advance' ? 'advance' : 'retroactive',
+          reason,
+          status:       'pending',
+        });
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Request';
+
+        if (error) {
+          if (error.code === '23505') {
+            showModalAlert('error', 'You already have a pending request for this event.');
+          } else {
+            showModalAlert('error', error.message);
+          }
+          return;
+        }
+
+        closeModal();
+        await loadAttendance();
+      });
+
+      function showModalAlert(type, msg) {
+        modalAlert.className = `alert alert-${type}`;
+        modalAlert.querySelector('.alert-icon').textContent = type === 'error' ? '⚠' : '✓';
+        modalAlertText.textContent = msg;
+        modalAlert.style.display = 'flex';
+      }
+
+      // ── Advance request button ─────────────────────────────────
+      document.getElementById('advance-request-btn').addEventListener('click', () => {
+        openModal('advance');
+      });
+
       // ── Load attendance data ───────────────────────────────────
       async function loadAttendance() {
-        const { data, error } = await supabase
-          .from('attendance')
-          .select('id, status, events(id, title, event_date, event_type)')
-          .eq('member_id', profile.id);
+        document.getElementById('att-loading').style.display = 'flex';
+        document.getElementById('att-summary').style.display  = 'none';
+        document.getElementById('att-history').style.display  = 'none';
+
+        const today = new Date().toISOString().slice(0, 10);
+
+        const [attRes, arRes, upcomingRes] = await Promise.all([
+          supabase
+            .from('attendance')
+            .select('id, status, events(id, title, event_date, event_type)')
+            .eq('member_id', profile.id),
+          supabase
+            .from('absence_requests')
+            .select('id, event_id, status, request_type')
+            .eq('member_id', profile.id),
+          supabase
+            .from('events')
+            .select('id, title, event_date, event_type')
+            .gt('event_date', today)
+            .order('event_date')
+            .limit(30),
+        ]);
 
         document.getElementById('att-loading').style.display = 'none';
 
-        if (error) {
+        // Store upcoming events for the advance modal
+        upcomingEvents = upcomingRes.data || [];
+
+        if (attRes.error) {
           document.getElementById('att-history').style.display = 'block';
           document.getElementById('history-empty').style.display = 'block';
           return;
         }
 
+        // Map event_id -> absence_request (latest per event)
+        const arMap = new Map();
+        (arRes.data || []).forEach(r => {
+          const existing = arMap.get(r.event_id);
+          if (!existing || r.status === 'pending') arMap.set(r.event_id, r);
+        });
+
         // Sort descending by event_date
-        const records = (data || [])
+        const records = (attRes.data || [])
           .filter(r => r.events)
           .sort((a, b) => new Date(b.events.event_date) - new Date(a.events.event_date));
 
-        // ── Compute per-tier stats ─────────────────────────────
+        // ── Per-tier stats ─────────────────────────────────────
         const tiers = { core: { present:0, absent:0, excused:0 }, major: { present:0, absent:0, excused:0 }, special: { present:0, absent:0, excused:0 } };
         records.forEach(r => {
           const t = r.events.event_type;
           if (tiers[t] && r.status in tiers[t]) tiers[t][r.status]++;
         });
 
-        // Attendance rate = present / (present + absent); excused excluded
+        // Rate = present / (present + absent); excused excluded
         function rate(tier) {
           const t = tiers[tier];
           const denom = t.present + t.absent;
@@ -216,7 +399,7 @@
         const majorRate   = rate('major');
         const specialRate = rate('special');
 
-        // ── Update summary section ────────────────────────────
+        // ── Summary section ───────────────────────────────────
         document.getElementById('att-summary').style.display = 'block';
 
         const statusBadge = document.getElementById('status-badge');
@@ -255,7 +438,7 @@
           `;
         }).join('');
 
-        // ── History table ────────────────────────────────────
+        // ── History table ─────────────────────────────────────
         document.getElementById('att-history').style.display = 'block';
 
         if (!records.length) {
@@ -264,15 +447,49 @@
         }
 
         document.getElementById('history-table-wrap').style.display = 'block';
-        document.getElementById('history-tbody').innerHTML = records.map(r => `
-          <tr>
-            <td style="color:var(--ivory);font-weight:500">${escHtml(r.events.title)}</td>
-            <td style="white-space:nowrap">${formatDate(r.events.event_date)}</td>
-            <td><span class="badge ${TYPE_BADGE[r.events.event_type] || ''}">${TYPE_LABELS[r.events.event_type] || r.events.event_type}</span></td>
-            <td><span class="badge ${STATUS_BADGE[r.status] || ''}">${cap(r.status)}</span></td>
-          </tr>
-        `).join('');
+        document.getElementById('history-tbody').innerHTML = records.map(r => {
+          const ar = arMap.get(r.events.id);
+          let actionHtml = '';
+
+          if (r.status === 'absent') {
+            if (!ar) {
+              actionHtml = `<button class="btn btn-ghost btn-sm request-excuse-btn"
+                data-event-id="${r.events.id}"
+                data-event-title="${escHtml(r.events.title)}">
+                Request Excuse
+              </button>`;
+            } else if (ar.status === 'pending') {
+              actionHtml = `<span class="badge badge-pending" title="Your request is under review">Pending</span>`;
+            } else if (ar.status === 'rejected') {
+              actionHtml = `<span class="badge badge-rejected" style="margin-right:6px">Rejected</span>
+                <button class="btn btn-ghost btn-sm request-excuse-btn"
+                  data-event-id="${r.events.id}"
+                  data-event-title="${escHtml(r.events.title)}">
+                  Re-Request
+                </button>`;
+            } else if (ar.status === 'approved') {
+              actionHtml = `<span class="badge badge-approved">Approved</span>`;
+            }
+          }
+
+          return `
+            <tr>
+              <td style="color:var(--ivory);font-weight:500">${escHtml(r.events.title)}</td>
+              <td style="white-space:nowrap">${formatDate(r.events.event_date)}</td>
+              <td><span class="badge ${TYPE_BADGE[r.events.event_type] || ''}">${TYPE_LABELS[r.events.event_type] || r.events.event_type}</span></td>
+              <td><span class="badge ${STATUS_BADGE[r.status] || ''}">${cap(r.status)}</span></td>
+              <td>${actionHtml}</td>
+            </tr>
+          `;
+        }).join('');
       }
+
+      // ── Delegation for "Request Excuse" buttons ────────────────
+      document.getElementById('history-tbody').addEventListener('click', e => {
+        const btn = e.target.closest('.request-excuse-btn');
+        if (!btn) return;
+        openModal('retroactive', btn.dataset.eventId, btn.dataset.eventTitle);
+      });
 
       // ── Init ───────────────────────────────────────────────────
       await loadAttendance();

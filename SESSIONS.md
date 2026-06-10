@@ -185,7 +185,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 5: Absence Request System
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Build the member absence request flow and the secretary review queue. Integrate with attendance records.
 

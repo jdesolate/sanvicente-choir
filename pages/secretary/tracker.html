@@ -92,6 +92,10 @@
               <div class="stat-label">Absent</div>
             </div>
             <div class="stat-card">
+              <div class="stat-num" id="stat-excused">0</div>
+              <div class="stat-label">Excused</div>
+            </div>
+            <div class="stat-card">
               <div class="stat-num" id="stat-total">0</div>
               <div class="stat-label">Total</div>
             </div>
@@ -162,7 +166,7 @@
 
       // ── State ──────────────────────────────────────────────────
       let members    = [];                    // active/associate members
-      let attendance = new Map();             // member_id -> 'present' | 'absent'
+      let attendance = new Map();             // member_id -> 'present' | 'absent' | 'excused'
       let selectedEventId = null;
 
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
@@ -261,17 +265,22 @@
         tbody.innerHTML = members.map(m => {
           const status    = attendance.get(m.id) || 'absent';
           const isPresent = status === 'present';
+          const isExcused = status === 'excused';
+
+          // Excused members get a read-only indicator — cannot be overridden here
+          const toggleHtml = isExcused
+            ? `<span class="badge badge-excused" title="Excused via absence request — cannot be changed here">Excused</span>`
+            : `<div class="att-toggle" data-member="${m.id}">
+                <button type="button" data-val="present" class="${isPresent ? 'att-present' : ''}">Present</button>
+                <button type="button" data-val="absent"  class="${!isPresent ? 'att-absent' : ''}">Absent</button>
+               </div>`;
+
           return `
             <tr id="row-${m.id}">
               <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
               <td>${cap(m.voice_part)}</td>
               <td><span class="badge badge-${m.status}">${cap(m.status)}</span></td>
-              <td>
-                <div class="att-toggle" data-member="${m.id}">
-                  <button type="button" data-val="present" class="${isPresent ? 'att-present' : ''}">Present</button>
-                  <button type="button" data-val="absent"  class="${!isPresent ? 'att-absent' : ''}">Absent</button>
-                </div>
-              </td>
+              <td>${toggleHtml}</td>
             </tr>
           `;
         }).join('');
@@ -296,12 +305,16 @@
 
       // ── Summary bar ────────────────────────────────────────────
       function updateSummary() {
-        let present = 0;
-        attendance.forEach(v => { if (v === 'present') present++; });
+        let present = 0, excused = 0;
+        attendance.forEach(v => {
+          if (v === 'present') present++;
+          if (v === 'excused') excused++;
+        });
         const total  = members.length;
-        const absent = total - present;
+        const absent = total - present - excused;
         document.getElementById('stat-present').textContent = present;
         document.getElementById('stat-absent').textContent  = absent;
+        document.getElementById('stat-excused').textContent = excused;
         document.getElementById('stat-total').textContent   = total;
       }
 
@@ -325,13 +338,16 @@
         saveBtn.textContent = 'Saving…';
         alertEl.style.display = 'none';
 
-        const rows = members.map(m => ({
-          event_id:  selectedEventId,
-          member_id: m.id,
-          status:    attendance.get(m.id) || 'absent',
-          marked_by: profile.id,
-          marked_at: new Date().toISOString(),
-        }));
+        // Excused rows are managed by the absence request system — don't overwrite them
+        const rows = members
+          .filter(m => attendance.get(m.id) !== 'excused')
+          .map(m => ({
+            event_id:  selectedEventId,
+            member_id: m.id,
+            status:    attendance.get(m.id) || 'absent',
+            marked_by: profile.id,
+            marked_at: new Date().toISOString(),
+          }));
 
         const { error } = await supabase
           .from('attendance')
@@ -350,9 +366,10 @@
 
         alertEl.className     = 'alert alert-success';
         alertEl.querySelector('.alert-icon').textContent = '✓';
-        let present = 0;
-        attendance.forEach(v => { if (v === 'present') present++; });
-        alertText.textContent = `Attendance saved — ${present} present, ${members.length - present} absent.`;
+        let present = 0, excused = 0;
+        attendance.forEach(v => { if (v === 'present') present++; if (v === 'excused') excused++; });
+        const absent = members.length - present - excused;
+        alertText.textContent = `Attendance saved — ${present} present, ${absent} absent${excused ? `, ${excused} excused` : ''}.`;
         alertEl.style.display = 'flex';
 
         // Update hint to reflect saved state

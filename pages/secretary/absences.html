@@ -5,13 +5,511 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Absence Requests — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      .tab-bar {
+        display: flex;
+        gap: 4px;
+        border-bottom: 1px solid var(--gold-dim);
+        margin-bottom: var(--space-6);
+      }
+      .tab-btn {
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: var(--ivory-muted);
+        font-family: var(--font-display);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: var(--space-3) var(--space-5);
+        cursor: pointer;
+        min-height: var(--touch-min);
+        transition: color var(--t-fast), border-color var(--t-fast);
+        margin-bottom: -1px;
+      }
+      .tab-btn:hover { color: var(--ivory); }
+      .tab-btn.active {
+        color: var(--gold);
+        border-bottom-color: var(--gold);
+      }
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; }
+      .request-card {
+        background: var(--charcoal);
+        border: 1px solid rgba(245,242,235,0.07);
+        padding: var(--space-5);
+        margin-bottom: var(--space-4);
+      }
+      .request-card:last-child { margin-bottom: 0; }
+      .request-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+        align-items: center;
+        margin-bottom: var(--space-3);
+      }
+      .request-member {
+        font-family: var(--font-display);
+        font-size: var(--text-base);
+        font-weight: 600;
+        color: var(--ivory);
+        letter-spacing: 0.03em;
+      }
+      .request-reason {
+        font-size: var(--text-sm);
+        color: var(--ivory-dim);
+        line-height: 1.6;
+        margin-bottom: var(--space-4);
+        padding: var(--space-3) var(--space-4);
+        border-left: 2px solid var(--gold-dim);
+        background: var(--black);
+      }
+      .request-actions {
+        display: flex;
+        gap: var(--space-3);
+        flex-wrap: wrap;
+      }
+      .reviewer-note {
+        font-size: var(--text-xs);
+        color: var(--ivory-muted);
+        margin-top: var(--space-2);
+        font-style: italic;
+      }
+    </style>
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 5: secretary absence request queue -->
-      <p>Absence requests — coming in Session 5.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Secretary Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+        <a href="absences.html" class="sidebar-link active"><span class="sidebar-icon">✉</span> Absence Requests</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>Absence Requests</h2>
+            <p>Review and approve member absence excuse requests</p>
+          </div>
+
+          <!-- ── Global alert ── -->
+          <div id="page-alert" class="alert" role="alert" style="display:none;margin-bottom:var(--space-5)">
+            <span class="alert-icon"></span>
+            <span id="page-alert-text"></span>
+          </div>
+
+          <!-- ── Loading ── -->
+          <div id="requests-loading" class="loading-text">
+            <div class="spinner"></div> Loading requests…
+          </div>
+
+          <!-- ── Tabs ── -->
+          <div id="tabs-wrap" style="display:none">
+
+            <div class="tab-bar" role="tablist">
+              <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-pending"  id="tbtn-pending">
+                Pending <span id="pending-count" class="badge badge-pending" style="margin-left:6px;font-size:0.7rem;padding:2px 7px"></span>
+              </button>
+              <button class="tab-btn"          role="tab" aria-selected="false" aria-controls="tab-approved" id="tbtn-approved">Approved</button>
+              <button class="tab-btn"          role="tab" aria-selected="false" aria-controls="tab-rejected" id="tbtn-rejected">Rejected</button>
+            </div>
+
+            <!-- Pending tab -->
+            <div id="tab-pending" class="tab-panel active" role="tabpanel" aria-labelledby="tbtn-pending">
+              <div id="pending-empty" class="empty-state" style="display:none">
+                <div class="empty-icon">✉</div>
+                <p>No pending absence requests. All caught up!</p>
+              </div>
+              <div id="pending-list"></div>
+            </div>
+
+            <!-- Approved tab -->
+            <div id="tab-approved" class="tab-panel" role="tabpanel" aria-labelledby="tbtn-approved">
+              <div id="approved-empty" class="empty-state" style="display:none">
+                <div class="empty-icon">✓</div>
+                <p>No approved requests yet.</p>
+              </div>
+              <div id="approved-list"></div>
+            </div>
+
+            <!-- Rejected tab -->
+            <div id="tab-rejected" class="tab-panel" role="tabpanel" aria-labelledby="tbtn-rejected">
+              <div id="rejected-empty" class="empty-state" style="display:none">
+                <div class="empty-icon">✕</div>
+                <p>No rejected requests yet.</p>
+              </div>
+              <div id="rejected-list"></div>
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Reject Modal ── -->
+    <div class="modal-overlay" id="reject-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reject-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title" id="reject-modal-title">Reject Request</h3>
+          <button class="modal-close" id="reject-modal-close" aria-label="Close">×</button>
+        </div>
+        <p style="color:var(--ivory-dim);font-size:var(--text-sm);margin-bottom:var(--space-5)" id="reject-context"></p>
+        <div class="form-group">
+          <label for="reject-note">Rejection Note <span style="color:var(--ivory-muted)">(optional)</span></label>
+          <textarea id="reject-note" rows="3" placeholder="Briefly explain the reason for rejection…"></textarea>
+        </div>
+        <div id="reject-alert" class="alert" role="alert" style="display:none">
+          <span class="alert-icon"></span>
+          <span id="reject-alert-text"></span>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="reject-cancel">Cancel</button>
+          <button class="btn" id="reject-confirm" style="background:var(--danger);color:#fff;min-height:var(--touch-min)">Confirm Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('secretary');
+      if (!profile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Tab switching ──────────────────────────────────────────
+      const tabBtns   = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+          tabPanels.forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected','true');
+          document.getElementById(btn.getAttribute('aria-controls')).classList.add('active');
+        });
+      });
+
+      // ── Constants ──────────────────────────────────────────────
+      const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
+      const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      // ── Reject modal state ─────────────────────────────────────
+      let rejectRequestId  = null;
+      let rejectMemberName = '';
+      let rejectEventTitle = '';
+
+      const rejectOverlay = document.getElementById('reject-modal-overlay');
+      const rejectNote    = document.getElementById('reject-note');
+
+      function openRejectModal(requestId, memberName, eventTitle) {
+        rejectRequestId  = requestId;
+        rejectMemberName = memberName;
+        rejectEventTitle = eventTitle;
+        rejectNote.value = '';
+        document.getElementById('reject-context').textContent =
+          `Rejecting absence request for ${memberName} — "${eventTitle}"`;
+        document.getElementById('reject-alert').style.display = 'none';
+        document.getElementById('reject-confirm').disabled = false;
+        document.getElementById('reject-confirm').textContent = 'Confirm Reject';
+        rejectOverlay.classList.add('open');
+        rejectNote.focus();
+      }
+
+      function closeRejectModal() {
+        rejectOverlay.classList.remove('open');
+        rejectRequestId = null;
+      }
+
+      document.getElementById('reject-modal-close').addEventListener('click', closeRejectModal);
+      document.getElementById('reject-cancel').addEventListener('click', closeRejectModal);
+      rejectOverlay.addEventListener('click', e => { if (e.target === rejectOverlay) closeRejectModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRejectModal(); });
+
+      // ── Confirm reject ─────────────────────────────────────────
+      document.getElementById('reject-confirm').addEventListener('click', async () => {
+        if (!rejectRequestId) return;
+
+        const confirmBtn = document.getElementById('reject-confirm');
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Rejecting…';
+
+        const { error } = await supabase
+          .from('absence_requests')
+          .update({
+            status:        'rejected',
+            reviewer_note: rejectNote.value.trim() || null,
+            reviewed_by:   profile.id,
+            reviewed_at:   new Date().toISOString(),
+          })
+          .eq('id', rejectRequestId);
+
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm Reject';
+
+        if (error) {
+          document.getElementById('reject-alert').className   = 'alert alert-error';
+          document.getElementById('reject-alert').querySelector('.alert-icon').textContent = '⚠';
+          document.getElementById('reject-alert-text').textContent = error.message;
+          document.getElementById('reject-alert').style.display = 'flex';
+          return;
+        }
+
+        closeRejectModal();
+        showPageAlert('success', `Request rejected.`);
+        await loadRequests();
+      });
+
+      // ── Approve a request ──────────────────────────────────────
+      async function approveRequest(requestId, eventId, memberId, requestType) {
+        const btn = document.querySelector(`[data-approve="${requestId}"]`);
+        if (btn) { btn.disabled = true; btn.textContent = 'Approving…'; }
+
+        // Update absence_requests status
+        const { error: arError } = await supabase
+          .from('absence_requests')
+          .update({
+            status:      'approved',
+            reviewed_by: profile.id,
+            reviewed_at: new Date().toISOString(),
+          })
+          .eq('id', requestId);
+
+        if (arError) {
+          if (btn) { btn.disabled = false; btn.textContent = 'Approve'; }
+          showPageAlert('error', arError.message);
+          return;
+        }
+
+        // Upsert attendance row to excused
+        const { error: attError } = await supabase
+          .from('attendance')
+          .upsert({
+            event_id:  eventId,
+            member_id: memberId,
+            status:    'excused',
+            marked_by: profile.id,
+            marked_at: new Date().toISOString(),
+          }, { onConflict: 'event_id,member_id' });
+
+        if (attError) {
+          showPageAlert('error', `Request approved but attendance update failed: ${attError.message}`);
+        } else {
+          showPageAlert('success', 'Request approved. Attendance marked as Excused.');
+        }
+
+        await loadRequests();
+      }
+
+      // ── Page alert helper ──────────────────────────────────────
+      function showPageAlert(type, msg) {
+        const alertEl = document.getElementById('page-alert');
+        alertEl.className = `alert alert-${type}`;
+        alertEl.querySelector('.alert-icon').textContent = type === 'error' ? '⚠' : '✓';
+        document.getElementById('page-alert-text').textContent = msg;
+        alertEl.style.display = 'flex';
+        alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        setTimeout(() => { alertEl.style.display = 'none'; }, 5000);
+      }
+
+      // ── Build request card HTML ────────────────────────────────
+      function buildCard(req, showActions) {
+        const memberName = req.profiles?.full_name || '—';
+        const eventTitle = req.events?.title || '—';
+        const eventDate  = req.events?.event_date ? formatDate(req.events.event_date) : '—';
+        const eventType  = req.events?.event_type || '';
+        const submitted  = req.created_at ? formatDate(req.created_at.slice(0,10)) : '—';
+        const typeBadge  = TYPE_BADGE[eventType] || '';
+        const reqTypeBadge = req.request_type === 'advance'
+          ? '<span class="badge" style="background:rgba(74,171,204,0.12);color:var(--info)">Advance</span>'
+          : '<span class="badge" style="background:rgba(201,168,106,0.12);color:var(--gold)">Retroactive</span>';
+
+        let actionsHtml = '';
+        if (showActions) {
+          actionsHtml = `
+            <div class="request-actions">
+              <button class="btn btn-gold btn-sm" data-approve="${req.id}"
+                data-event-id="${req.event_id}" data-member-id="${req.member_id}" data-req-type="${req.request_type}">
+                Approve
+              </button>
+              <button class="btn btn-ghost btn-sm" data-reject="${req.id}"
+                data-member-name="${escHtml(memberName)}" data-event-title="${escHtml(eventTitle)}">
+                Reject
+              </button>
+            </div>
+          `;
+        }
+
+        let reviewedHtml = '';
+        if (req.reviewer_note) {
+          reviewedHtml = `<p class="reviewer-note">Note: ${escHtml(req.reviewer_note)}</p>`;
+        }
+
+        return `
+          <div class="request-card">
+            <div class="request-meta">
+              <span class="request-member">${escHtml(memberName)}</span>
+              ${reqTypeBadge}
+              <span class="badge ${typeBadge}">${TYPE_LABELS[eventType] || eventType}</span>
+              <span style="color:var(--ivory-muted);font-size:var(--text-xs)">Submitted ${submitted}</span>
+            </div>
+            <div style="font-size:var(--text-sm);color:var(--ivory-dim);margin-bottom:var(--space-2)">
+              <strong style="color:var(--ivory)">${escHtml(eventTitle)}</strong>
+              <span style="margin-left:8px;color:var(--ivory-muted)">${eventDate}</span>
+            </div>
+            <div class="request-reason">${escHtml(req.reason)}</div>
+            ${reviewedHtml}
+            ${actionsHtml}
+          </div>
+        `;
+      }
+
+      // ── Load and render all requests ───────────────────────────
+      async function loadRequests() {
+        document.getElementById('requests-loading').style.display = 'flex';
+        document.getElementById('tabs-wrap').style.display = 'none';
+        document.getElementById('page-alert').style.display = 'none';
+
+        const { data, error } = await supabase
+          .from('absence_requests')
+          .select(`
+            id, event_id, member_id, request_type, reason, status, reviewer_note, created_at,
+            profiles:member_id ( full_name ),
+            events:event_id ( title, event_date, event_type )
+          `)
+          .order('created_at', { ascending: false });
+
+        document.getElementById('requests-loading').style.display = 'none';
+        document.getElementById('tabs-wrap').style.display = 'block';
+
+        if (error) {
+          showPageAlert('error', error.message);
+          return;
+        }
+
+        const all = data || [];
+        const pending  = all.filter(r => r.status === 'pending');
+        const approved = all.filter(r => r.status === 'approved');
+        const rejected = all.filter(r => r.status === 'rejected');
+
+        // Pending count badge
+        const countEl = document.getElementById('pending-count');
+        countEl.textContent = pending.length || '';
+        countEl.style.display = pending.length ? 'inline' : 'none';
+
+        // Render each section
+        renderSection('pending',  pending,  'pending-list',  'pending-empty',  true);
+        renderSection('approved', approved, 'approved-list', 'approved-empty', false);
+        renderSection('rejected', rejected, 'rejected-list', 'rejected-empty', false);
+      }
+
+      function renderSection(name, items, listId, emptyId, showActions) {
+        const listEl  = document.getElementById(listId);
+        const emptyEl = document.getElementById(emptyId);
+        if (!items.length) {
+          listEl.innerHTML = '';
+          emptyEl.style.display = 'block';
+          return;
+        }
+        emptyEl.style.display = 'none';
+        listEl.innerHTML = items.map(r => buildCard(r, showActions)).join('');
+      }
+
+      // ── Event delegation for approve / reject ──────────────────
+      document.getElementById('tabs-wrap').addEventListener('click', async e => {
+        // Approve
+        const approveBtn = e.target.closest('[data-approve]');
+        if (approveBtn && !approveBtn.disabled) {
+          await approveRequest(
+            approveBtn.dataset.approve,
+            approveBtn.dataset.eventId,
+            approveBtn.dataset.memberId,
+            approveBtn.dataset.reqType
+          );
+          return;
+        }
+
+        // Reject
+        const rejectBtn = e.target.closest('[data-reject]');
+        if (rejectBtn) {
+          openRejectModal(
+            rejectBtn.dataset.reject,
+            rejectBtn.dataset.memberName,
+            rejectBtn.dataset.eventTitle
+          );
+        }
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadRequests();
+      hidePageLoader();
+    </script>
   </body>
 </html>
