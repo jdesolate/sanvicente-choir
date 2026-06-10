@@ -79,7 +79,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 2: Login, Register & Auth Guards
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Implement login and registration pages. Wire auth state into navigation. Protect member-only pages with auth guards.
 

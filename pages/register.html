@@ -5,13 +5,334 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register — San Vicente Choir</title>
     <link rel="icon" href="../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/design-system.css">
+    <style>
+      .reg-page {
+        min-height: 100vh;
+        background: var(--black);
+        padding: var(--space-8) var(--space-5);
+      }
+      .reg-card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: var(--charcoal);
+        border: 1px solid var(--gold-dim);
+        padding: 40px 36px;
+      }
+      .reg-header {
+        text-align: center;
+        margin-bottom: var(--space-8);
+      }
+      .reg-logo {
+        display: block;
+        height: 48px;
+        margin: 0 auto var(--space-4);
+      }
+      .reg-title {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ivory);
+        margin-bottom: 4px;
+      }
+      .reg-sub {
+        font-family: var(--font-text);
+        font-style: italic;
+        color: var(--ivory-dim);
+        font-size: 0.875rem;
+      }
+      .section-divider {
+        font-family: var(--font-display);
+        font-size: var(--text-xs);
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border-bottom: 1px solid var(--gold-dim);
+        padding-bottom: 8px;
+        margin: var(--space-8) 0 var(--space-5);
+      }
+      .reg-footer {
+        text-align: center;
+        margin-top: var(--space-5);
+        font-size: var(--text-sm);
+        color: var(--ivory-dim);
+      }
+      .reg-footer a { color: var(--gold); }
+    </style>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 2: registration form -->
-      <p>Register page — coming in Session 2.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="reg-page">
+      <main id="main-content">
+        <div class="reg-card">
+          <div class="reg-header">
+            <img src="../assets/images/officers/SVC_Logo.png" alt="San Vicente Choir" class="reg-logo">
+            <h1 class="reg-title">Join the Portal</h1>
+            <p class="reg-sub">San Vicente Choir — Member Registration</p>
+          </div>
+
+          <!-- Success state -->
+          <div id="success-msg" class="alert alert-success" role="status" style="display:none">
+            <span class="alert-icon">✓</span>
+            <div>
+              <strong>Registration submitted!</strong><br>
+              Your account is pending approval. An admin will review your registration shortly.
+              You may <a href="login.html">sign in</a> once your account is approved.
+            </div>
+          </div>
+
+          <!-- Error state -->
+          <div id="error-msg" class="alert alert-error" role="alert" style="display:none">
+            <span class="alert-icon">⚠</span>
+            <span id="error-text"></span>
+          </div>
+
+          <form id="register-form" novalidate>
+
+            <p class="section-divider">Account Credentials</p>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required
+                       autocomplete="email" placeholder="your@email.com">
+              </div>
+              <div class="form-group">
+                <label for="full_name">Full Name <span class="required">*</span></label>
+                <input type="text" id="full_name" name="full_name" required
+                       autocomplete="name" placeholder="First Last">
+              </div>
+            </div>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required
+                       autocomplete="new-password" minlength="8">
+                <p class="form-hint">Minimum 8 characters</p>
+              </div>
+              <div class="form-group">
+                <label for="password_confirm">Confirm Password <span class="required">*</span></label>
+                <input type="password" id="password_confirm" name="password_confirm" required
+                       autocomplete="new-password">
+              </div>
+            </div>
+
+            <p class="section-divider">Member Information</p>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label for="contact_number">Contact Number</label>
+                <input type="tel" id="contact_number" name="contact_number"
+                       autocomplete="tel" placeholder="+63 9XX XXX XXXX">
+              </div>
+              <div class="form-group">
+                <label for="voice_part">Voice Part <span class="required">*</span></label>
+                <select id="voice_part" name="voice_part" required>
+                  <option value="">— Select —</option>
+                  <option value="soprano">Soprano</option>
+                  <option value="alto">Alto</option>
+                  <option value="tenor">Tenor</option>
+                  <option value="bass">Bass</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label for="birthday">Birthday</label>
+                <input type="date" id="birthday" name="birthday" autocomplete="bday">
+              </div>
+              <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" min="1" max="120" placeholder="e.g. 22">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="school_occupation">School / Occupation</label>
+              <input type="text" id="school_occupation" name="school_occupation"
+                     placeholder="e.g. University of Cebu — Engineering student">
+            </div>
+
+            <!-- Custom fields are injected here by JS -->
+            <div id="custom-fields-section" style="display:none">
+              <p class="section-divider">Additional Information</p>
+              <div id="custom-fields"></div>
+            </div>
+
+            <div id="custom-fields-loading" class="loading-text" style="margin: 8px 0;">
+              <div class="spinner"></div> Loading form fields…
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-gold"
+                    style="width:100%;margin-top:var(--space-6)" disabled>
+              Submit Registration
+            </button>
+          </form>
+
+          <p class="reg-footer">
+            Already registered? <a href="login.html">Sign in here</a>
+          </p>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { supabase } from '../js/supabase-client.js';
+      import { getSession } from '../js/auth.js';
+      import { hidePageLoader } from '../js/utils.js';
+
+      // Already logged in → redirect; otherwise reveal the form
+      const _session = await getSession();
+      if (_session) {
+        window.location.href = 'members/dashboard.html';
+      } else {
+        hidePageLoader();
+      }
+
+      const form         = document.getElementById('register-form');
+      const submitBtn    = document.getElementById('submit-btn');
+      const errorMsg     = document.getElementById('error-msg');
+      const errorText    = document.getElementById('error-text');
+      const successMsg   = document.getElementById('success-msg');
+      const cfSection    = document.getElementById('custom-fields-section');
+      const cfContainer  = document.getElementById('custom-fields');
+      const cfLoading    = document.getElementById('custom-fields-loading');
+
+      // ── Load custom field definitions ──────────────────────
+      async function loadCustomFields() {
+        const { data: fields, error } = await supabase
+          .from('custom_field_definitions')
+          .select('*')
+          .order('sort_order');
+
+        cfLoading.style.display = 'none';
+        submitBtn.disabled = false;
+
+        if (error || !fields?.length) return;
+
+        cfSection.style.display = 'block';
+
+        fields.forEach(field => {
+          const group = document.createElement('div');
+          group.className = 'form-group';
+          group.dataset.fieldId = field.id;
+
+          const label = document.createElement('label');
+          label.htmlFor = `cf_${field.id}`;
+          label.innerHTML = field.field_name
+            + (field.is_required ? ' <span class="required">*</span>' : '');
+
+          let input;
+          if (field.field_type === 'dropdown') {
+            input = document.createElement('select');
+            const blank = document.createElement('option');
+            blank.value = '';
+            blank.textContent = '— Select —';
+            input.appendChild(blank);
+            (field.field_options || []).forEach(opt => {
+              const o = document.createElement('option');
+              o.value = opt;
+              o.textContent = opt;
+              input.appendChild(o);
+            });
+          } else {
+            input = document.createElement('input');
+            input.type = field.field_type === 'number' ? 'number'
+                       : field.field_type === 'date'   ? 'date'
+                       : 'text';
+          }
+
+          input.id = `cf_${field.id}`;
+          input.name = `cf_${field.id}`;
+          if (field.is_required) input.required = true;
+
+          group.appendChild(label);
+          group.appendChild(input);
+          cfContainer.appendChild(group);
+        });
+      }
+
+      loadCustomFields();
+
+      // ── Form submission ─────────────────────────────────────
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+
+        // Password match check
+        if (form.password.value !== form.password_confirm.value) {
+          errorText.textContent = 'Passwords do not match.';
+          errorMsg.style.display = 'flex';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+
+        const email    = form.email.value.trim();
+        const password = form.password.value;
+
+        try {
+          // 1. Create auth user
+          const { data: authData, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+          });
+          if (signUpError) throw signUpError;
+
+          const userId = authData.user?.id;
+          if (!userId) throw new Error('Account creation failed. Please try again.');
+
+          // 2. Collect custom field values
+          const customFields = {};
+          document.querySelectorAll('#custom-fields [data-field-id]').forEach(group => {
+            const fieldId = group.dataset.fieldId;
+            const input   = group.querySelector('input, select');
+            if (input?.value) customFields[fieldId] = input.value;
+          });
+
+          // 3. Insert profile row
+          const { error: profileError } = await supabase.from('profiles').insert({
+            id:                userId,
+            full_name:         form.full_name.value.trim(),
+            contact_number:    form.contact_number.value.trim() || null,
+            birthday:          form.birthday.value || null,
+            age:               form.age.value ? parseInt(form.age.value, 10) : null,
+            school_occupation: form.school_occupation.value.trim() || null,
+            voice_part:        form.voice_part.value || null,
+            role:              'member',
+            status:            'pending',
+            custom_fields:     customFields,
+          });
+          if (profileError) throw profileError;
+
+          // 4. Show success
+          form.style.display = 'none';
+          successMsg.style.display = 'flex';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        } catch (err) {
+          errorText.textContent = err.message || 'Registration failed. Please try again.';
+          errorMsg.style.display = 'flex';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Registration';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    </script>
   </body>
 </html>

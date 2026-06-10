@@ -5,13 +5,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 2: member dashboard with auth guard -->
-      <p>Member dashboard — coming in Session 2.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Member Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">
+        ☰
+      </button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="dashboard.html" class="sidebar-link active">
+          <span class="sidebar-icon">⌂</span> Dashboard
+        </a>
+        <a href="attendance.html" class="sidebar-link">
+          <span class="sidebar-icon">✓</span> My Attendance
+        </a>
+        <a href="songs.html" class="sidebar-link">
+          <span class="sidebar-icon">♪</span> Song Library
+        </a>
+        <a href="profile.html" class="sidebar-link">
+          <span class="sidebar-icon">◎</span> My Profile
+        </a>
+
+        <hr class="sidebar-divider">
+
+        <!-- Secretary-only links — shown via JS -->
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link">
+            <span class="sidebar-icon">☑</span> Attendance Tracker
+          </a>
+          <a href="../secretary/absences.html" class="sidebar-link">
+            <span class="sidebar-icon">✉</span> Absence Requests
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+
+        <!-- Admin-only links — shown via JS -->
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link">
+            <span class="sidebar-icon">◈</span> Members
+          </a>
+          <a href="../admin/events.html" class="sidebar-link">
+            <span class="sidebar-icon">◷</span> Events
+          </a>
+          <a href="../admin/songs.html" class="sidebar-link">
+            <span class="sidebar-icon">♫</span> Manage Songs
+          </a>
+          <a href="../admin/fields.html" class="sidebar-link">
+            <span class="sidebar-icon">≡</span> Custom Fields
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+
+        <button class="sidebar-btn" id="sidebar-logout">
+          <span class="sidebar-icon">←</span> Sign Out
+        </button>
+      </nav>
+
+      <!-- Sidebar backdrop (mobile) -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+
+        <!-- Dashboard content — revealed after auth + profile load -->
+        <div id="dashboard-content" style="display:none">
+
+          <div class="page-heading">
+            <h2 id="welcome-heading">Welcome</h2>
+            <p id="welcome-sub">San Vicente Choir Member Portal</p>
+          </div>
+
+          <!-- Pending approval banner -->
+          <div id="pending-banner" class="alert alert-warning" style="display:none;margin-bottom:var(--space-6)">
+            <span class="alert-icon">⏳</span>
+            <div>
+              <strong>Registration pending approval.</strong><br>
+              Your account is awaiting admin review. Some features are unavailable until your account is approved.
+            </div>
+          </div>
+
+          <!-- Quick stats -->
+          <div class="stat-grid" id="stat-grid">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-voice">—</div>
+              <div class="stat-label">Voice Part</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-status">—</div>
+              <div class="stat-label">Status</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-role">—</div>
+              <div class="stat-label">Role</div>
+            </div>
+          </div>
+
+          <!-- Quick-action cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:var(--space-6)">
+            <a href="attendance.html" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:28px;opacity:0.7">✓</div>
+              <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
+                My Attendance
+              </div>
+              <div style="font-size:var(--text-sm);color:var(--ivory-muted)">
+                View your attendance history and rate
+              </div>
+            </a>
+            <a href="songs.html" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:28px;opacity:0.7">♪</div>
+              <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
+                Song Library
+              </div>
+              <div style="font-size:var(--text-sm);color:var(--ivory-muted)">
+                Search and browse choir repertoire
+              </div>
+            </a>
+            <a href="profile.html" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:28px;opacity:0.7">◎</div>
+              <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
+                My Profile
+              </div>
+              <div style="font-size:var(--text-sm);color:var(--ivory-muted)">
+                View and edit your member profile
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireAuth, getProfile, signOut } from '../../js/auth.js';
+      import { hidePageLoader } from '../../js/utils.js';
+
+      // ── Auth guard ──────────────────────────────────────────
+      const session = await requireAuth('/pages/login.html');
+      if (!session) throw new Error('redirecting');
+
+      const profile = await getProfile();
+      if (!profile) {
+        window.location.href = '/pages/login.html';
+        throw new Error('no profile');
+      }
+
+      // ── Populate UI ─────────────────────────────────────────
+      document.getElementById('dashboard-content').style.display = 'block';
+
+      document.getElementById('header-name').textContent  = profile.full_name;
+      document.getElementById('welcome-heading').textContent = `Welcome, ${profile.full_name}`;
+
+      const voiceCap = v => v ? v.charAt(0).toUpperCase() + v.slice(1) : '—';
+      document.getElementById('stat-voice').textContent  = voiceCap(profile.voice_part);
+      document.getElementById('stat-status').textContent = voiceCap(profile.status);
+      document.getElementById('stat-role').textContent   = voiceCap(profile.role);
+
+      if (profile.status === 'pending') {
+        document.getElementById('pending-banner').style.display = 'flex';
+      }
+
+      // Show role-gated nav sections
+      if (profile.role === 'secretary' || profile.role === 'admin') {
+        document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (profile.role === 'admin') {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      hidePageLoader();
+
+      // ── Sign out ────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar toggle ───────────────────────────────
+      const sidebar   = document.getElementById('sidebar');
+      const backdrop  = document.getElementById('sidebar-backdrop');
+      const menuBtn   = document.getElementById('menu-btn');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        backdrop.classList.add('open');
+        menuBtn.setAttribute('aria-expanded', 'true');
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      menuBtn.addEventListener('click', () =>
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar()
+      );
+      backdrop.addEventListener('click', closeSidebar);
+    </script>
   </body>
 </html>

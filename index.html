@@ -947,7 +947,7 @@
             <a href="#performances">Performances</a>
             <a href="#join">Join Us</a>
             <a href="#contact">Contact</a>
-            <a class="btn-members" href="documents.html">Members</a>
+            <a class="btn-members" id="nav-portal-link" href="pages/login.html">Member Login</a>
           </nav>
           <button class="theme-btn" id="theme-btn" aria-label="Toggle theme" title="Switch to light mode">☀</button>
           <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
@@ -1442,6 +1442,17 @@
         });
       });
     })();
+    </script>
+
+    <!-- Auth-aware nav link -->
+    <script type="module">
+      import { getSession } from './js/auth.js';
+      const session = await getSession();
+      const link = document.getElementById('nav-portal-link');
+      if (session) {
+        link.textContent = 'Dashboard';
+        link.href = 'pages/members/dashboard.html';
+      }
     </script>
   </body>
 </html>

@@ -5,13 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In — San Vicente Choir</title>
     <link rel="icon" href="../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/design-system.css">
+    <style>
+      .auth-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-6);
+        background: var(--black);
+      }
+      .auth-card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--charcoal);
+        border: 1px solid var(--gold-dim);
+        padding: 40px 36px;
+      }
+      .auth-logo {
+        display: block;
+        height: 52px;
+        margin: 0 auto var(--space-4);
+      }
+      .auth-title {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ivory);
+        text-align: center;
+        margin-bottom: 4px;
+      }
+      .auth-sub {
+        font-family: var(--font-text);
+        font-style: italic;
+        color: var(--ivory-dim);
+        font-size: 0.875rem;
+        text-align: center;
+        margin-bottom: var(--space-8);
+      }
+      .auth-footer {
+        text-align: center;
+        margin-top: var(--space-5);
+        font-size: var(--text-sm);
+        color: var(--ivory-dim);
+      }
+      .auth-footer a { color: var(--gold); }
+      .auth-back {
+        display: block;
+        text-align: center;
+        margin-top: var(--space-3);
+        font-size: var(--text-sm);
+        color: var(--ivory-muted);
+        text-decoration: none;
+      }
+      .auth-back:hover { color: var(--ivory-dim); }
+    </style>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 2: login form -->
-      <p>Login page — coming in Session 2.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="auth-page">
+      <main id="main-content" class="auth-card">
+        <img src="../assets/images/officers/SVC_Logo.png" alt="San Vicente Choir" class="auth-logo">
+        <h1 class="auth-title">Sign In</h1>
+        <p class="auth-sub">San Vicente Choir Portal</p>
+
+        <div id="error-msg" class="alert alert-error" role="alert" style="display:none">
+          <span class="alert-icon">⚠</span>
+          <span id="error-text"></span>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required
+                   autocomplete="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label for="password">Password <span class="required">*</span></label>
+            <input type="password" id="password" name="password" required
+                   autocomplete="current-password">
+          </div>
+          <button type="submit" id="submit-btn" class="btn btn-gold" style="width:100%;margin-top:8px">
+            Sign In
+          </button>
+        </form>
+
+        <p class="auth-footer">
+          Not a member? <a href="register.html">Register here</a>
+        </p>
+        <a href="../index.html" class="auth-back">← Back to main site</a>
+      </main>
+    </div>
+
+    <script type="module">
+      import { signIn, getSession } from '../js/auth.js';
+      import { hidePageLoader } from '../js/utils.js';
+
+      // Already logged in → redirect; otherwise reveal the form
+      const _session = await getSession();
+      if (_session) {
+        const params = new URLSearchParams(window.location.search);
+        window.location.href = params.get('next') || 'members/dashboard.html';
+      } else {
+        hidePageLoader();
+      }
+
+      const form      = document.getElementById('login-form');
+      const errorMsg  = document.getElementById('error-msg');
+      const errorText = document.getElementById('error-text');
+      const submitBtn = document.getElementById('submit-btn');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in…';
+
+        try {
+          await signIn(form.email.value.trim(), form.password.value);
+          const params = new URLSearchParams(window.location.search);
+          window.location.href = params.get('next') || 'members/dashboard.html';
+        } catch (err) {
+          errorText.textContent = err.message || 'Sign in failed. Please check your credentials.';
+          errorMsg.style.display = 'flex';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
+      });
+    </script>
   </body>
 </html>

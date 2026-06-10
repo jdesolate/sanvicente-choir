@@ -62,6 +62,30 @@
         width: auto;
         flex-shrink: 0;
       }
+      #header-user-name {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--ivory-dim);
+        white-space: nowrap;
+        display: none;
+      }
+      @media (min-width: 560px) { #header-user-name { display: block; } }
+      .header-logout-btn {
+        font-family: 'Cinzel', serif;
+        font-size: 0.65rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ivory-dim);
+        background: none;
+        border: 1px solid var(--gold-dim);
+        padding: 5px 12px;
+        min-height: 32px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .header-logout-btn:hover { border-color: var(--gold); color: var(--gold); }
       .header-back {
         margin-left: auto;
         color: var(--ivory-dim);
@@ -604,6 +628,8 @@
         <p>Official Documents — Choir Year 2026–2027</p>
       </div>
       <a href="index.html" class="header-back">← Website</a>
+      <!-- Auth state: populated by module script below -->
+      <div id="header-user" style="display:flex;align-items:center;gap:10px;margin-left:8px;flex-shrink:0"></div>
       <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
         ☰
       </button>
@@ -2725,6 +2751,25 @@ Come ready to share one personal goal for your year in the choir (Article XIII)
           nav.classList.remove("open");
         }
       });
+    </script>
+
+    <!-- Auth state: show user name + logout if logged in -->
+    <script type="module">
+      import { getProfile, signOut } from './js/auth.js';
+      const profile = await getProfile();
+      const slot = document.getElementById('header-user');
+      if (profile) {
+        slot.innerHTML = `
+          <span id="header-user-name">${profile.full_name}</span>
+          <button class="header-logout-btn" id="doc-logout-btn">Sign Out</button>
+        `;
+        document.getElementById('doc-logout-btn').addEventListener('click', async () => {
+          try { await signOut(); } catch (_) {}
+          window.location.href = 'index.html';
+        });
+      } else {
+        slot.innerHTML = `<a href="pages/login.html" style="font-family:'Cinzel',serif;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;white-space:nowrap">Member Login</a>`;
+      }
     </script>
   </body>
 </html>

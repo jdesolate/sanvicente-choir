@@ -1213,6 +1213,39 @@ input:hover, select:hover, textarea:hover {
 
 
 /* ═══════════════════════════════════════════════════════════
+   PAGE LOADER
+   Full-screen overlay shown while auth + data are resolving.
+   Add <div id="page-loader"> as the first child of <body>.
+   Call hidePageLoader() from JS once the page is ready.
+═══════════════════════════════════════════════════════════ */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  z-index: 9000;
+  transition: opacity 0.3s ease;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.page-loader-logo {
+  height: 56px;
+  width: auto;
+  opacity: 0.9;
+}
+.page-loader .spinner {
+  width: 32px;
+  height: 32px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    PRINT STYLES
 ═══════════════════════════════════════════════════════════ */
 @media print {
