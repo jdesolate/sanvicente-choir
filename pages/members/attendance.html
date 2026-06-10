@@ -5,13 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Attendance — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 4–5: member attendance view -->
-      <p>Attendance page — coming in Session 4.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Member Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="attendance.html" class="sidebar-link active"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>My Attendance</h2>
+            <p>Your attendance history and rate per event tier</p>
+          </div>
+
+          <!-- ── Loading ── -->
+          <div id="att-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <!-- ── Summary cards + status badge ── -->
+          <div id="att-summary" style="display:none">
+
+            <!-- Overall status -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--space-6)">
+              <span style="font-family:var(--font-display);font-size:var(--text-sm);letter-spacing:0.1em;text-transform:uppercase;color:var(--ivory-dim)">Overall Status</span>
+              <span id="status-badge" class="badge"></span>
+            </div>
+
+            <!-- Per-tier rate cards -->
+            <div class="stat-grid" style="margin-bottom:var(--space-8)">
+              <div class="stat-card">
+                <div class="stat-num" id="rate-core">—</div>
+                <div class="stat-label">Core Rate</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-num" id="rate-major">—</div>
+                <div class="stat-label">Major Rate</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-num" id="rate-special">—</div>
+                <div class="stat-label">Special Rate</div>
+              </div>
+            </div>
+
+            <!-- Tier breakdown detail -->
+            <div id="tier-detail" style="margin-bottom:var(--space-8)">
+              <div class="table-wrap">
+                <table class="data-table" aria-label="Attendance summary by tier">
+                  <thead>
+                    <tr>
+                      <th>Event Tier</th>
+                      <th>Present</th>
+                      <th>Absent</th>
+                      <th>Excused</th>
+                      <th>Total Marked</th>
+                      <th>Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tier-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ── History table ── -->
+          <div id="att-history" style="display:none">
+            <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin-bottom:var(--space-4)">
+              Attendance History
+            </h3>
+
+            <div id="history-empty" class="empty-state" style="display:none">
+              <div class="empty-icon">✓</div>
+              <p>No attendance records yet. Records appear once the secretary marks events.</p>
+            </div>
+
+            <div id="history-table-wrap" class="table-wrap" style="display:none">
+              <table class="data-table" aria-label="Attendance history">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="history-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireAuth, getProfile, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const session = await requireAuth('/pages/login.html');
+      if (!session) throw new Error('redirecting');
+
+      const profile = await getProfile();
+      if (!profile) { window.location.href = '/pages/login.html'; throw new Error('no profile'); }
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Constants ──────────────────────────────────────────────
+      const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
+      const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
+      const STATUS_BADGE = { present: 'badge-present', absent: 'badge-absent', excused: 'badge-excused' };
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      // ── Load attendance data ───────────────────────────────────
+      async function loadAttendance() {
+        const { data, error } = await supabase
+          .from('attendance')
+          .select('id, status, events(id, title, event_date, event_type)')
+          .eq('member_id', profile.id);
+
+        document.getElementById('att-loading').style.display = 'none';
+
+        if (error) {
+          document.getElementById('att-history').style.display = 'block';
+          document.getElementById('history-empty').style.display = 'block';
+          return;
+        }
+
+        // Sort descending by event_date
+        const records = (data || [])
+          .filter(r => r.events)
+          .sort((a, b) => new Date(b.events.event_date) - new Date(a.events.event_date));
+
+        // ── Compute per-tier stats ─────────────────────────────
+        const tiers = { core: { present:0, absent:0, excused:0 }, major: { present:0, absent:0, excused:0 }, special: { present:0, absent:0, excused:0 } };
+        records.forEach(r => {
+          const t = r.events.event_type;
+          if (tiers[t] && r.status in tiers[t]) tiers[t][r.status]++;
+        });
+
+        // Attendance rate = present / (present + absent); excused excluded
+        function rate(tier) {
+          const t = tiers[tier];
+          const denom = t.present + t.absent;
+          if (denom === 0) return null;
+          return Math.round((t.present / denom) * 100);
+        }
+
+        const coreRate    = rate('core');
+        const majorRate   = rate('major');
+        const specialRate = rate('special');
+
+        // ── Update summary section ────────────────────────────
+        document.getElementById('att-summary').style.display = 'block';
+
+        const statusBadge = document.getElementById('status-badge');
+        if (coreRate === null) {
+          statusBadge.className   = 'badge badge-pending';
+          statusBadge.textContent = 'No Records';
+        } else if (coreRate >= 80) {
+          statusBadge.className   = 'badge badge-on-track';
+          statusBadge.textContent = 'On Track';
+        } else {
+          statusBadge.className   = 'badge badge-at-risk';
+          statusBadge.textContent = 'At Risk';
+        }
+
+        document.getElementById('rate-core').textContent    = coreRate    !== null ? `${coreRate}%`    : '—';
+        document.getElementById('rate-major').textContent   = majorRate   !== null ? `${majorRate}%`   : '—';
+        document.getElementById('rate-special').textContent = specialRate !== null ? `${specialRate}%` : '—';
+
+        // ── Tier breakdown table ──────────────────────────────
+        document.getElementById('tier-tbody').innerHTML = ['core', 'major', 'special'].map(t => {
+          const d = tiers[t];
+          const total = d.present + d.absent + d.excused;
+          const r = rate(t);
+          const rateHtml = r !== null
+            ? `<span class="${r >= 80 ? 'badge badge-on-track' : 'badge badge-at-risk'}">${r}%</span>`
+            : `<span style="color:var(--ivory-muted)">—</span>`;
+          return `
+            <tr>
+              <td><span class="badge ${TYPE_BADGE[t]}">${TYPE_LABELS[t]}</span></td>
+              <td style="color:#8FD68F">${d.present}</td>
+              <td style="color:#F08080">${d.absent}</td>
+              <td style="color:var(--warning)">${d.excused}</td>
+              <td style="color:var(--ivory-dim)">${total}</td>
+              <td>${rateHtml}</td>
+            </tr>
+          `;
+        }).join('');
+
+        // ── History table ────────────────────────────────────
+        document.getElementById('att-history').style.display = 'block';
+
+        if (!records.length) {
+          document.getElementById('history-empty').style.display = 'block';
+          return;
+        }
+
+        document.getElementById('history-table-wrap').style.display = 'block';
+        document.getElementById('history-tbody').innerHTML = records.map(r => `
+          <tr>
+            <td style="color:var(--ivory);font-weight:500">${escHtml(r.events.title)}</td>
+            <td style="white-space:nowrap">${formatDate(r.events.event_date)}</td>
+            <td><span class="badge ${TYPE_BADGE[r.events.event_type] || ''}">${TYPE_LABELS[r.events.event_type] || r.events.event_type}</span></td>
+            <td><span class="badge ${STATUS_BADGE[r.status] || ''}">${cap(r.status)}</span></td>
+          </tr>
+        `).join('');
+      }
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadAttendance();
+      hidePageLoader();
+    </script>
   </body>
 </html>

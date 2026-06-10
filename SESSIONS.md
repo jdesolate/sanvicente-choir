@@ -149,7 +149,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 4: Attendance Tracker
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Build event management for admin, attendance marking for secretary, and attendance record view for members.
 

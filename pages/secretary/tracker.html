@@ -5,13 +5,365 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Attendance Tracker — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 4: secretary attendance tracker -->
-      <p>Attendance tracker — coming in Session 4.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Secretary Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="tracker.html" class="sidebar-link active"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+        <a href="absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>Attendance Tracker</h2>
+            <p>Select an event to mark attendance for all active members</p>
+          </div>
+
+          <!-- ── Event selector ── -->
+          <div class="card" style="margin-bottom:var(--space-6)">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="event-select">Select Event <span class="required">*</span></label>
+              <select id="event-select">
+                <option value="">— choose an event —</option>
+              </select>
+              <p class="form-hint" id="event-hint" style="display:none"></p>
+            </div>
+          </div>
+
+          <!-- ── Loading / empty states ── -->
+          <div id="members-loading" class="loading-text" style="display:none">
+            <div class="spinner"></div> Loading members…
+          </div>
+
+          <div id="members-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">◈</div>
+            <p>No active or associate members found.</p>
+          </div>
+
+          <!-- ── Summary row ── -->
+          <div id="summary-bar" class="stat-grid" style="display:none">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-present">0</div>
+              <div class="stat-label">Present</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-absent">0</div>
+              <div class="stat-label">Absent</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-total">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+
+          <!-- ── Members table ── -->
+          <div id="members-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Member attendance">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Voice Part</th>
+                  <th>Status</th>
+                  <th style="min-width:200px">Attendance</th>
+                </tr>
+              </thead>
+              <tbody id="members-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- ── Save button ── -->
+          <div id="save-wrap" style="display:none;margin-top:var(--space-6);display:none">
+            <div id="save-alert" class="alert" role="alert" style="display:none">
+              <span class="alert-icon"></span>
+              <span id="save-alert-text"></span>
+            </div>
+            <div style="display:flex;justify-content:flex-end">
+              <button class="btn btn-gold" id="save-btn">Save Attendance</button>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('secretary');
+      if (!profile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── State ──────────────────────────────────────────────────
+      let members    = [];                    // active/associate members
+      let attendance = new Map();             // member_id -> 'present' | 'absent'
+      let selectedEventId = null;
+
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      // ── Load events into selector ──────────────────────────────
+      async function loadEventOptions() {
+        // Show events from 60 days ago through all future events
+        const since = new Date();
+        since.setDate(since.getDate() - 60);
+
+        const { data, error } = await supabase
+          .from('events')
+          .select('id, title, event_date, event_type')
+          .gte('event_date', since.toISOString().slice(0, 10))
+          .order('event_date', { ascending: false });
+
+        const select = document.getElementById('event-select');
+
+        if (error || !data?.length) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = '— no events available —';
+          opt.disabled = true;
+          select.appendChild(opt);
+          return;
+        }
+
+        const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
+        data.forEach(ev => {
+          const opt = document.createElement('option');
+          opt.value = ev.id;
+          opt.textContent = `${formatDate(ev.event_date)} — ${ev.title} (${TYPE_LABELS[ev.event_type] || ev.event_type})`;
+          select.appendChild(opt);
+        });
+      }
+
+      // ── Load members for selected event ───────────────────────
+      async function loadMembersForEvent(eventId) {
+        const loadingEl  = document.getElementById('members-loading');
+        const emptyEl    = document.getElementById('members-empty');
+        const tableEl    = document.getElementById('members-table-wrap');
+        const summaryEl  = document.getElementById('summary-bar');
+        const saveWrap   = document.getElementById('save-wrap');
+        const hintEl     = document.getElementById('event-hint');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+        summaryEl.style.display = 'none';
+        saveWrap.style.display  = 'none';
+        hintEl.style.display    = 'none';
+
+        // Fetch members and existing attendance in parallel
+        const [membersRes, attendanceRes] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('id, full_name, voice_part, status')
+            .in('status', ['active', 'associate'])
+            .order('full_name'),
+          supabase
+            .from('attendance')
+            .select('member_id, status')
+            .eq('event_id', eventId),
+        ]);
+
+        loadingEl.style.display = 'none';
+
+        if (membersRes.error || !membersRes.data?.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        members = membersRes.data;
+        attendance.clear();
+
+        // Pre-fill from existing records; default absent for unmarked members
+        const existingRows = attendanceRes.data || [];
+        const existingMap = new Map(existingRows.map(r => [r.member_id, r.status]));
+        members.forEach(m => attendance.set(m.id, existingMap.get(m.id) || 'absent'));
+
+        if (existingRows.length > 0) {
+          hintEl.textContent = `${existingRows.length} attendance record(s) already saved for this event. Saving again will update them.`;
+          hintEl.style.display = 'block';
+        }
+
+        renderMembersTable();
+        tableEl.style.display  = 'block';
+        summaryEl.style.display = 'grid';
+        saveWrap.style.display  = 'block';
+        updateSummary();
+      }
+
+      // ── Render members table ───────────────────────────────────
+      function renderMembersTable() {
+        const tbody = document.getElementById('members-tbody');
+        tbody.innerHTML = members.map(m => {
+          const status    = attendance.get(m.id) || 'absent';
+          const isPresent = status === 'present';
+          return `
+            <tr id="row-${m.id}">
+              <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
+              <td>${cap(m.voice_part)}</td>
+              <td><span class="badge badge-${m.status}">${cap(m.status)}</span></td>
+              <td>
+                <div class="att-toggle" data-member="${m.id}">
+                  <button type="button" data-val="present" class="${isPresent ? 'att-present' : ''}">Present</button>
+                  <button type="button" data-val="absent"  class="${!isPresent ? 'att-absent' : ''}">Absent</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // ── Toggle delegation ──────────────────────────────────────
+      document.getElementById('members-tbody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-val]');
+        if (!btn) return;
+        const toggleEl = btn.closest('[data-member]');
+        const memberId = toggleEl.dataset.member;
+        const val      = btn.dataset.val;
+        attendance.set(memberId, val);
+        applyToggleState(toggleEl, val);
+        updateSummary();
+      });
+
+      function applyToggleState(toggleEl, val) {
+        toggleEl.querySelector('[data-val="present"]').className = val === 'present' ? 'att-present' : '';
+        toggleEl.querySelector('[data-val="absent"]').className  = val === 'absent'  ? 'att-absent'  : '';
+      }
+
+      // ── Summary bar ────────────────────────────────────────────
+      function updateSummary() {
+        let present = 0;
+        attendance.forEach(v => { if (v === 'present') present++; });
+        const total  = members.length;
+        const absent = total - present;
+        document.getElementById('stat-present').textContent = present;
+        document.getElementById('stat-absent').textContent  = absent;
+        document.getElementById('stat-total').textContent   = total;
+      }
+
+      // ── Event selector change ──────────────────────────────────
+      document.getElementById('event-select').addEventListener('change', async e => {
+        const id = e.target.value;
+        if (!id) return;
+        selectedEventId = id;
+        await loadMembersForEvent(id);
+      });
+
+      // ── Save attendance ────────────────────────────────────────
+      document.getElementById('save-btn').addEventListener('click', async () => {
+        if (!selectedEventId || !members.length) return;
+
+        const saveBtn   = document.getElementById('save-btn');
+        const alertEl   = document.getElementById('save-alert');
+        const alertText = document.getElementById('save-alert-text');
+
+        saveBtn.disabled    = true;
+        saveBtn.textContent = 'Saving…';
+        alertEl.style.display = 'none';
+
+        const rows = members.map(m => ({
+          event_id:  selectedEventId,
+          member_id: m.id,
+          status:    attendance.get(m.id) || 'absent',
+          marked_by: profile.id,
+          marked_at: new Date().toISOString(),
+        }));
+
+        const { error } = await supabase
+          .from('attendance')
+          .upsert(rows, { onConflict: 'event_id,member_id' });
+
+        saveBtn.disabled    = false;
+        saveBtn.textContent = 'Save Attendance';
+
+        if (error) {
+          alertEl.className     = 'alert alert-error';
+          alertEl.querySelector('.alert-icon').textContent = '⚠';
+          alertText.textContent = error.message;
+          alertEl.style.display = 'flex';
+          return;
+        }
+
+        alertEl.className     = 'alert alert-success';
+        alertEl.querySelector('.alert-icon').textContent = '✓';
+        let present = 0;
+        attendance.forEach(v => { if (v === 'present') present++; });
+        alertText.textContent = `Attendance saved — ${present} present, ${members.length - present} absent.`;
+        alertEl.style.display = 'flex';
+
+        // Update hint to reflect saved state
+        const hintEl = document.getElementById('event-hint');
+        hintEl.textContent = `${rows.length} attendance record(s) saved for this event.`;
+        hintEl.style.display = 'block';
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadEventOptions();
+      hidePageLoader();
+    </script>
   </body>
 </html>

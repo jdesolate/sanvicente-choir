@@ -5,13 +5,311 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Management — San Vicente Choir</title>
     <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
   </head>
-  <body>
+  <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <main id="main-content">
-      <!-- Session 4: admin event management -->
-      <p>Event management — coming in Session 4.</p>
-    </main>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Admin Portal</p>
+      </div>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+        <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Admin</div>
+        <a href="members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+        <a href="events.html" class="sidebar-link active"><span class="sidebar-icon">◷</span> Events</a>
+        <a href="songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+        <a href="fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-8)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Event Management</h2>
+              <p>Create and manage choir events for attendance tracking</p>
+            </div>
+            <button class="btn btn-gold" id="add-event-btn">+ Add Event</button>
+          </div>
+
+          <div id="events-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="events-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">◷</div>
+            <p>No events yet. Add the first event to begin tracking attendance.</p>
+          </div>
+
+          <div id="events-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Events">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="events-tbody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Add / Edit Event Modal ── -->
+    <div class="modal-overlay" id="event-modal" role="dialog" aria-modal="true" aria-labelledby="event-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="event-modal-title">Add Event</h2>
+          <button class="modal-close" id="event-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="event-form" novalidate>
+          <div class="form-group">
+            <label for="ev-title">Title <span class="required">*</span></label>
+            <input type="text" id="ev-title" required autocomplete="off">
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="ev-date">Date <span class="required">*</span></label>
+              <input type="date" id="ev-date" required>
+            </div>
+            <div class="form-group">
+              <label for="ev-type">Event Type <span class="required">*</span></label>
+              <select id="ev-type" required>
+                <option value="core">Core — Weekly Mass</option>
+                <option value="major">Major — Feast / Solemnity</option>
+                <option value="special">Special — Voluntary</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ev-desc">Description</label>
+            <textarea id="ev-desc" style="min-height:80px;resize:vertical"></textarea>
+          </div>
+          <div id="event-error" class="alert alert-error" role="alert" style="display:none">
+            <span class="alert-icon">⚠</span>
+            <span id="event-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="event-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="event-submit">Save Event</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, formatDate, escHtml } from '../../js/utils.js';
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('admin');
+      if (!profile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = profile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Constants ──────────────────────────────────────────────
+      const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
+      const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
+
+      let editingId = null;
+
+      // ── Load & render events ───────────────────────────────────
+      async function loadEvents() {
+        const loadingEl = document.getElementById('events-loading');
+        const emptyEl   = document.getElementById('events-empty');
+        const tableEl   = document.getElementById('events-table-wrap');
+        const tbody     = document.getElementById('events-tbody');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+
+        const { data, error } = await supabase
+          .from('events')
+          .select('id, title, event_date, event_type, description')
+          .order('event_date', { ascending: false });
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        tableEl.style.display = 'block';
+        tbody.innerHTML = data.map(ev => `
+          <tr>
+            <td style="color:var(--ivory);font-weight:500">${escHtml(ev.title)}</td>
+            <td style="white-space:nowrap">${formatDate(ev.event_date)}</td>
+            <td><span class="badge ${TYPE_BADGE[ev.event_type] || ''}">${TYPE_LABELS[ev.event_type] || ev.event_type}</span></td>
+            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ivory-muted)">${escHtml(ev.description || '—')}</td>
+            <td><div class="actions">
+              <button class="btn btn-outline btn-sm js-edit"
+                data-id="${ev.id}"
+                data-title="${escHtml(ev.title)}"
+                data-date="${ev.event_date}"
+                data-type="${ev.event_type}"
+                data-desc="${escHtml(ev.description || '')}">Edit</button>
+              <button class="btn btn-danger btn-sm js-delete"
+                data-id="${ev.id}"
+                data-title="${escHtml(ev.title)}">Delete</button>
+            </div></td>
+          </tr>
+        `).join('');
+      }
+
+      // ── Table button delegation ────────────────────────────────
+      document.getElementById('events-tbody').addEventListener('click', e => {
+        const editBtn   = e.target.closest('.js-edit');
+        const deleteBtn = e.target.closest('.js-delete');
+        if (editBtn)   openModal(editBtn.dataset);
+        if (deleteBtn) confirmDelete(deleteBtn.dataset.id, deleteBtn.dataset.title);
+      });
+
+      // ── Modal open / close ─────────────────────────────────────
+      function openModal(data = {}) {
+        editingId = data.id || null;
+        document.getElementById('event-modal-title').textContent = editingId ? 'Edit Event' : 'Add Event';
+        document.getElementById('ev-title').value = data.title || '';
+        document.getElementById('ev-date').value  = data.date  || '';
+        document.getElementById('ev-type').value  = data.type  || 'core';
+        document.getElementById('ev-desc').value  = data.desc  || '';
+        document.getElementById('event-error').style.display = 'none';
+        document.getElementById('event-modal').classList.add('open');
+        document.getElementById('ev-title').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('event-modal').classList.remove('open');
+        editingId = null;
+      }
+
+      document.getElementById('add-event-btn').addEventListener('click', () => openModal());
+      document.getElementById('event-modal-close').addEventListener('click', closeModal);
+      document.getElementById('event-cancel').addEventListener('click', closeModal);
+
+      // Close on backdrop click
+      document.getElementById('event-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      // ── Save event (add or edit) ───────────────────────────────
+      document.getElementById('event-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('event-submit');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        document.getElementById('event-error').style.display = 'none';
+
+        const title = document.getElementById('ev-title').value.trim();
+        const date  = document.getElementById('ev-date').value;
+        const type  = document.getElementById('ev-type').value;
+        const desc  = document.getElementById('ev-desc').value.trim() || null;
+
+        if (!title || !date) {
+          document.getElementById('event-error-text').textContent = 'Title and date are required.';
+          document.getElementById('event-error').style.display = 'flex';
+          btn.disabled = false;
+          btn.textContent = 'Save Event';
+          return;
+        }
+
+        const payload = { title, event_date: date, event_type: type, description: desc };
+        let error;
+
+        if (editingId) {
+          ({ error } = await supabase.from('events').update(payload).eq('id', editingId));
+        } else {
+          ({ error } = await supabase.from('events').insert({ ...payload, created_by: profile.id }));
+        }
+
+        btn.disabled = false;
+        btn.textContent = 'Save Event';
+
+        if (error) {
+          document.getElementById('event-error-text').textContent = error.message;
+          document.getElementById('event-error').style.display = 'flex';
+          return;
+        }
+
+        closeModal();
+        await loadEvents();
+      });
+
+      // ── Delete event ───────────────────────────────────────────
+      async function confirmDelete(id, title) {
+        if (!confirm(`Delete "${title}"?\n\nAll attendance records for this event will also be deleted. This cannot be undone.`)) return;
+        const { error } = await supabase.from('events').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadEvents();
+      }
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadEvents();
+      hidePageLoader();
+    </script>
   </body>
 </html>
