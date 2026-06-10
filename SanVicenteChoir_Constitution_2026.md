@@ -562,6 +562,29 @@ Any member who believes their privacy has been violated may raise the concern wi
 
 ---
 
+## ARTICLE XV-A — TRANSITIONAL PROVISIONS (FOUNDING YEAR)
+
+**Section 1.** This Constitution is ratified on June 20, 2026, as the founding
+formalization of San Vicente Choir's governance. Because no May Anniversary
+Assembly under this Constitution has yet occurred, the standard election cycle
+in Article IV, Section 2 and Article XII, Section 1 does not apply to the
+2026–2027 founding term.
+
+**Section 2.** For the founding term only, the incoming officers are confirmed
+and sworn in at the June 20, 2026 General Assembly.
+
+**Section 3.** The regular cycle begins in 2027: officers shall thereafter be
+elected at the May Anniversary Assembly, sworn in by the last week of May, and
+the June General Assembly shall be the first assembly led by the newly sworn
+officers, as provided in Articles IV and XII.
+
+**Section 4.** Any officer position unfilled at ratification (e.g., Secretary,
+Treasurer) may be filled during the founding term either by election under
+Article IV, Section 2 or by appointment to a vacancy under Article IV, Section
+5, and shall be recorded as an amendment under Article XV.
+
+---
+
 ## ARTICLE XVI — RATIFICATION
 
 This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratified on **June 20, 2026**, at the General Assembly of San Vicente Choir, Cebu City.
@@ -576,7 +599,9 @@ This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratifie
 | **Aravila Dionson** | Vice President |
 | **Jan Dacillo** | Choir Adviser |
 | **Vince Raymund Rojas** | Choir Director |
-| **Gabriella Amor Lopez** | Secretary & External Coordinator |
+| [VACANT — to be filled per Article IV] | Secretary |
+| [VACANT — to be filled per Article IV] | External Coordinator |
+| [VACANT — to be filled per Article IV] | Treasurer |
 
 ---
 

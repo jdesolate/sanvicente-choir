@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choir Leadership Plan — Term 2026–27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b2440;
+    --ink-soft:#3c466e;
+    --paper:#fbfaf5;
+    --panel:#f3efe4;
+    --brass:#a8772a;
+    --brass-soft:#d6b878;
+    --slate:#6a7491;
+    --line:#e2dccb;
+    --max:760px;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:clamp(28px,6vw,64px) clamp(20px,5vw,40px) 80px;}
+
+  /* ---- shared bits ---- */
+  .eyebrow{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--brass);font-weight:600;margin:0 0 14px;
+  }
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;color:var(--ink);}
+  p{margin:0 0 1em;}
+  strong{font-weight:600;color:var(--ink);}
+
+  /* ---- staff divider (the signature: a 5-line stave + a brass note) ---- */
+  .stave{position:relative;height:34px;margin:38px 0;}
+  .stave i{position:absolute;left:0;right:0;height:1px;background:var(--line);}
+  .stave i:nth-child(1){top:6px;} .stave i:nth-child(2){top:13px;}
+  .stave i:nth-child(3){top:20px;} .stave i:nth-child(4){top:27px;}
+  .stave i:nth-child(5){top:34px;}
+  .stave b{position:absolute;top:13px;left:14%;width:13px;height:10px;
+    background:var(--brass);border-radius:50%;transform:rotate(-22deg);}
+  .stave b::after{content:"";position:absolute;right:-1px;top:-22px;width:1.5px;height:24px;background:var(--brass);}
+
+  /* ---- masthead ---- */
+  .masthead{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .masthead h1{font-size:clamp(34px,7vw,52px);line-height:1.04;margin:0 0 10px;letter-spacing:-.01em;}
+  .masthead h1 span{display:block;color:var(--brass);font-style:italic;font-size:.62em;font-weight:400;margin-top:6px;}
+  .dek{font-size:18px;color:var(--ink-soft);max-width:52ch;}
+
+  /* ---- north star ---- */
+  .northstar{background:var(--ink);color:var(--paper);border-radius:6px;padding:clamp(24px,5vw,40px);margin:6px 0;}
+  .northstar .eyebrow{color:var(--brass-soft);}
+  .northstar h2{color:var(--paper);font-size:clamp(22px,4.4vw,30px);line-height:1.22;margin:0 0 12px;}
+  .northstar p{color:#cdd0dd;margin:0;}
+  .northstar em{color:var(--brass-soft);font-style:normal;}
+
+  /* ---- section heads ---- */
+  .sec-head{font-size:clamp(22px,4.6vw,30px);margin:0 0 4px;}
+  .sec-note{color:var(--slate);font-size:14px;margin:0 0 22px;}
+
+  /* ---- numbered moves ---- */
+  .move{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line);}
+  .move:first-of-type{border-top:none;}
+  .move .num{font-family:"Fraunces",serif;font-size:30px;color:var(--brass);line-height:1;padding-top:2px;}
+  .move h3{font-size:18px;margin:0 0 4px;}
+  .move p{margin:0;color:var(--ink-soft);font-size:15.5px;line-height:1.55;}
+
+  /* ---- quick reference cards ---- */
+  .cards{display:grid;grid-template-columns:1fr;gap:14px;}
+  .card{background:var(--panel);border-radius:6px;padding:20px 22px;}
+  .card .label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:600;margin:0 0 10px;}
+  .card p{font-size:15px;margin:0 0 .6em;color:var(--ink-soft);}
+  .card p:last-child{margin-bottom:0;}
+  .card .term{color:var(--ink);font-weight:600;}
+
+  /* ---- three day prep ---- */
+  .day{border-left:3px solid var(--brass-soft);padding:4px 0 8px 20px;margin:0 0 26px;}
+  .day h3{font-size:19px;margin:0 0 2px;}
+  .day h3 span{color:var(--brass);font-style:italic;}
+  .day .aim{color:var(--slate);font-size:13.5px;margin:0 0 12px;}
+  .checks{list-style:none;margin:0;padding:0;}
+  .checks li{position:relative;padding:0 0 11px 30px;font-size:15.5px;color:var(--ink-soft);line-height:1.5;}
+  .checks li::before{content:"";position:absolute;left:0;top:2px;width:17px;height:17px;border:1.5px solid var(--brass);border-radius:4px;}
+
+  /* ---- closing ---- */
+  .closing{margin-top:10px;font-family:"Fraunces",serif;font-size:clamp(19px,3.6vw,23px);line-height:1.4;color:var(--ink);font-style:italic;}
+  .footnote{margin-top:30px;font-size:13px;color:var(--slate);border-top:1px solid var(--line);padding-top:16px;}
+
+  @media (min-width:620px){
+    .cards{grid-template-columns:1fr 1fr 1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .masthead{animation:none;opacity:1;transform:none;}
+  }
+  @media print{
+    body{font-size:12pt;background:#fff;}
+    .northstar{background:#fff;color:#000;border:1px solid #000;}
+    .northstar h2,.northstar p,.northstar em{color:#000;}
+    .masthead{animation:none;opacity:1;}
+    .wrap{padding:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Leadership Plan · Term 2026–27</p>
+    <h1>San Vicente Choir<span>a year of steadier voices</span></h1>
+    <p class="dek">A working plan for the new term — what we'll build, in what order, and how each of us serves. Prepared by the president for the officers and members.</p>
+  </header>
+
+  <div class="stave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+
+  <section class="northstar">
+    <p class="eyebrow">Our north star</p>
+    <h2>Better music is built on steadier people.</h2>
+    <p>We can't rehearse rich harmony with three random voices on a Saturday. So this year we fix the <em>rhythm</em> and the <em>connection</em> first — and the musical quality we're really after follows from there. We grow into something healthy, not just bigger.</p>
+  </section>
+
+  <div class="stave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+
+  <section>
+    <h2 class="sec-head">The year in six moves</h2>
+    <p class="sec-note">In order. Each one makes the next one possible.</p>
+
+    <div class="move"><div class="num">1</div><div>
+      <h3>Make June 20 count</h3>
+      <p>Open relationally, not with rules. Ask every member what they want from the choir this year — out loud and in a short anonymous form, since people won't always speak up. Introduce our structure lightly: one clear commitment ask per membership tier.</p>
+    </div></div>
+
+    <div class="move"><div class="num">2</div><div>
+      <h3>Protect a weekly rehearsal rhythm</h3>
+      <p>Same day, same time, every week — it happens whether or not the director is present. Members learn their parts at home from practice tracks per voice section, so his limited time goes only to what he alone can give: direction and instruments.</p>
+    </div></div>
+
+    <div class="move"><div class="num">3</div><div>
+      <h3>Appoint section leaders</h3>
+      <p>One reliable singer per voice section (S · A · T · B) to run sectionals and keep their section gently accountable. This shares the load our small officer team can't carry — and ownership is exactly what pulls quieter members back in.</p>
+    </div></div>
+
+    <div class="move"><div class="num">4</div><div>
+      <h3>Assign service coverage</h3>
+      <p>Stop hoping someone shows up. Pre-assign a minimum committed core for each service across sections. Now recruiting has a purpose: invite targeted to our thinnest sections, not "everyone, somehow."</p>
+    </div></div>
+
+    <div class="move"><div class="num">5</div><div>
+      <h3>Choose repertoire that scales</h3>
+      <p>Pick pieces that still sound whole with whoever shows — unison or two-part that holds together, not arrangements that collapse without full SATB. Five minutes of warm-ups every practice; record ourselves now and then so we can hear our own progress.</p>
+    </div></div>
+
+    <div class="move"><div class="num">6</div><div>
+      <h3>Rebuild connection on purpose</h3>
+      <p>Practice-only contact isn't enough. One short, partly-social gathering a month, and a standing place for input where even associate and honorary members are asked their view. Invite our former president and honorary members to be keepers of culture — their memory is an asset.</p>
+    </div></div>
+  </section>
+
+  <div class="stave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+
+  <section>
+    <h2 class="sec-head">Quick reference</h2>
+    <p class="sec-note">The decisions, settled — so no one has to wonder.</p>
+    <div class="cards">
+      <div class="card">
+        <p class="label">Membership</p>
+        <p><span class="term">Active</span> — commits every service; holds voting rights.</p>
+        <p><span class="term">Associate</span> — serves when able; no vote.</p>
+        <p><span class="term">Honorary</span> — long-serving; sings when able.</p>
+      </div>
+      <div class="card">
+        <p class="label">Looking unified</p>
+        <p>Uniforms are a later, when-funded goal — not this year's spend.</p>
+        <p>For now: a shared dress code from clothes we already own (e.g. white top, dark bottom). Unified, and free.</p>
+      </div>
+      <div class="card">
+        <p class="label">Attendance</p>
+        <p>Recorded quietly on the officer side — members keep using Messenger as before.</p>
+        <p>The tiers replace scolding: we notice who's drifting so we can reach out with care.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="stave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+
+  <section>
+    <h2 class="sec-head">Your three-day prep</h2>
+    <p class="sec-note">A finishing sprint before the June 20 kickoff.</p>
+
+    <div class="day">
+      <h3>Day 1 — <span>Decide &amp; write</span></h3>
+      <p class="aim">Lock the direction so the rest is execution.</p>
+      <ul class="checks">
+        <li>Align with reachable officers: officers set the frame, the whole choir gets voice.</li>
+        <li>Finalize the single commitment ask for each tier (active / associate / honorary).</li>
+        <li>Draft the short anonymous "what do you want this year?" form.</li>
+        <li>Choose and lock the protected weekly rehearsal slot.</li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Day 2 — <span>Build the back office</span></h3>
+      <p class="aim">Set up the systems that run quietly all year.</p>
+      <ul class="checks">
+        <li>Create the officer-only attendance log (no member login needed).</li>
+        <li>Add a "Songs &amp; Resources" page to the existing choir site.</li>
+        <li>Gather or queue practice tracks per voice section (placeholders are fine for now).</li>
+        <li>Write the June 20 agenda — relational open first, structure second.</li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Day 3 — <span>Rally the people</span></h3>
+      <p class="aim">Turn structure into a room full of willing members.</p>
+      <ul class="checks">
+        <li>Confirm officer roles and ask four section leaders to serve.</li>
+        <li>Personally message members about June 20 — a real message, not just a group-chat tag.</li>
+        <li>Prepare your opening words for the meeting.</li>
+        <li>Prepare the shared dress-code suggestion to introduce.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="stave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+
+  <p class="closing">Your authority this year doesn't come from being the oldest member or the best singer. It comes from showing up, bringing order, and serving — and those are already yours.</p>
+
+  <p class="footnote">San Vicente Choir · Officers only · Pre-assembly briefing · June 2026</p>
+
+</div>
+</body>
+</html>

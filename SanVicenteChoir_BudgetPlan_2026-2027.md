@@ -39,10 +39,10 @@
 
 ## PROPOSED SPENDING PRIORITIES
 
-### 🥇 PRIORITY 1 — Choir Uniform
-**Target: Before Christmas (ideally October–November)**
+### 🥇 PRIORITY 1 — Choir Uniform *(when funded)*
+**Status: Aspirational — proceed only when sponsorship or donations are confirmed**
 
-A uniform gives the choir identity, professionalism, and makes every member feel equally part of the group. This is the single most meaningful spend of the year.
+A uniform gives the choir identity and makes every member feel equally part of the group. It is a meaningful goal for the year — but it is not a committed expenditure. The choir will not order uniforms until the funding is in hand.
 
 | Item | Estimated Cost |
 |---|---|
@@ -55,7 +55,7 @@ A uniform gives the choir identity, professionalism, and makes every member feel
 - 🎯 Ask the priest to mention it during parish announcements
 - 🎯 Former long-serving members (Kuya Danny and others) may be willing to donate
 - 🎯 One singing engagement or talent fee could cover half the cost
-- *Target: Secure sponsor/s by September. Order shirts by October. Wear by Christmas masses.*
+- *If sponsorship is confirmed early enough, target ordering by October so the choir can wear by Christmas. If not confirmed by November, defer to Year 2 — do not buy on credit or from the operating fund.*
 
 ---
 
@@ -121,7 +121,7 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 
 | Priority | Item | Estimated Cost | Funding Source |
 |---|---|---|---|
-| 1 | Choir Uniform | ₱3,000–₱5,000 | Sponsorship / donations |
+| 1 | Choir Uniform *(when funded)* | ₱3,000–₱5,000 | Sponsorship / donations only |
 | 2 | Christmas Celebration | ₱500–₱1,500 | Caroling collections + choir funds |
 | 3 | Music Materials | ₱600–₱1,300 | Honorarium |
 | 4 | Community Assistance Reserve | ₱500–₱1,000 | Honorarium |
@@ -140,8 +140,8 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 | July 2026 | ₱400 | Music materials ~₱500 | Spend on folders + strings. May dip slightly. |
 | August 2026 | ₱400 | Community reserve +₱200 | Save. Keep spending minimal. |
 | September 2026 | ₱400 | Community reserve +₱200 | Begin uniform sponsorship outreach. |
-| October 2026 | ₱400 | Uniform deposit if sponsor secured | Order shirts if funds confirmed. |
-| November 2026 | ₱400 | Uniform balance / caroling prep | |
+| October 2026 | ₱400 | Uniform deposit **only if** sponsor confirmed | Do not order without confirmed funding. |
+| November 2026 | ₱400 | Uniform balance if ordered / caroling prep | If no sponsor by Nov, defer uniform to Year 2. |
 | December 2026 | ₱400 + caroling | Christmas party ~₱1,000 | Use caroling collections for celebration. |
 | January 2027 | ₱400 | Save | Post-rest period. Rebuild fund. |
 | February 2027 | ₱400 | Save | Holy Week prep begins. |

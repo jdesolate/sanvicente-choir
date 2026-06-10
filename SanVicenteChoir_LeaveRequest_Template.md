@@ -17,7 +17,7 @@ The Human Resources Department / Immediate Supervisor
 
 Dear Sir/Madam,
 
-We, the officers of **San Vicente Choir**, a volunteer music ministry serving the Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City and San Vicente Ferrer Parish, Duljo, Cebu City, respectfully write on behalf of our member, **_________________________**, who is currently employed at your company.
+We, the officers of **San Vicente Choir**, a volunteer music ministry serving the Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City and San Vicente Ferrer Chapel, Duljo Brgy. Hall, respectfully write on behalf of our member, **_________________________**, who is currently employed at your company.
 
 We humbly request that the above-named employee be granted a leave of absence on:
 
@@ -49,7 +49,7 @@ Date Signed: *[Date]*
 
 ---
 
-*San Vicente Choir | San Vicente Ferrer Parish, Duljo, Cebu City | Est. 1972*
+*San Vicente Choir | San Vicente Ferrer Chapel, Duljo, Cebu City | Est. 1972*
 *A volunteer music ministry in service of God and the parish community*
 
 ---

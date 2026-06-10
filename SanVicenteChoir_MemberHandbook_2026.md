@@ -444,8 +444,9 @@ Kung adunay mga alalahanon sa privacy, suginlan ang bisan unsang opisyal. Adunay
 | 🤝 Vice President & Internal Coordinator | Aravila Dionson |
 | 🎓 Choir Adviser | Jan Dacillo |
 | 🎹 Music Director & Liturgical Lead | Vince Raymund Rojas |
-| 📝 Secretary & External Coordinator | Gabriella Amor Lopez |
-| 💰 Treasurer | TBD |
+| 📝 Secretary | [VACANT — to be filled per Article IV] |
+| 🔗 External Coordinator | [VACANT — to be filled per Article IV] |
+| 💰 Treasurer | [VACANT — to be filled per Article IV] |
 | 🎵 Soprano Section Leader | TBD |
 | 🎵 Alto Section Leader | TBD |
 | 🎵 Tenor Section Leader | TBD |
