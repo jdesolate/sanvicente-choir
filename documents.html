@@ -646,33 +646,53 @@
         <button onclick="showPage('constitution', this)">
           <span class="nav-emoji">📜</span> Constitution & By-Laws
         </button>
-        <button onclick="showPage('handbook', this)">
+        <button data-min-role="member" onclick="showPage('handbook', this)">
           <span class="nav-emoji">📖</span> Member Handbook
         </button>
-        <button onclick="showPage('calendar', this)">
+        <button data-min-role="member" onclick="showPage('calendar', this)">
           <span class="nav-emoji">🗓️</span> Calendar 2026–2027
         </button>
-        <button onclick="showPage('budget', this)">
+        <button data-min-role="admin" onclick="showPage('budget', this)">
           <span class="nav-emoji">💰</span> Budget Plan
         </button>
-        <hr class="nav-divider" />
-        <div class="nav-label">Templates</div>
-        <button onclick="showPage('excuse', this)">
+        <hr class="nav-divider" data-min-role="member" />
+        <div class="nav-label" data-min-role="member">Templates</div>
+        <button data-min-role="member" onclick="showPage('excuse', this)">
           <span class="nav-emoji">🎓</span> Excuse Letter
         </button>
-        <button onclick="showPage('leave', this)">
+        <button data-min-role="member" onclick="showPage('leave', this)">
           <span class="nav-emoji">💼</span> Leave Request Letter
         </button>
-        <hr class="nav-divider" />
-        <div class="nav-label">Officers</div>
-        <button onclick="showPage('tbd', this)">
+        <hr class="nav-divider" data-min-role="admin" />
+        <div class="nav-label" data-min-role="admin">Officers</div>
+        <button data-min-role="admin" onclick="showPage('tbd', this)">
           <span class="nav-emoji">📋</span> TBD & Action Items
         </button>
         <hr class="nav-divider" />
         <div class="nav-label">This Year</div>
-        <button onclick="showPage('commitments', this)">
+        <button data-min-role="member" onclick="showPage('commitments', this)">
           <span class="nav-emoji">🌟</span> Our Commitments 2026–2027
         </button>
+        <!-- Member portal link: shown for logged-in members -->
+        <hr class="nav-divider" id="portal-nav-divider" style="display:none" />
+        <div class="nav-label" id="portal-nav-label" style="display:none">Member Portal</div>
+        <a id="absence-request-link" href="pages/members/attendance.html"
+           style="display:none;padding:0 20px;min-height:44px;align-items:center;gap:10px;color:var(--ivory-dim);text-decoration:none;font-size:0.875rem;font-weight:400;border-left:2px solid transparent;transition:all 0.18s;width:100%"
+           onmouseover="this.style.background='var(--gold-faint)';this.style.color='var(--ivory)'"
+           onmouseout="this.style.background='';this.style.color='var(--ivory-dim)'">
+          <span style="font-size:14px;opacity:0.7">📋</span> My Attendance & Requests
+        </a>
+        <!-- Login notice for unauthenticated visitors -->
+        <div id="sidebar-login-notice" style="display:none;padding:16px 20px;border-top:1px solid rgba(245,242,235,0.05);margin-top:8px">
+          <p style="font-size:0.78rem;color:var(--ivory-dim);line-height:1.6;font-weight:300;margin-bottom:10px">
+            Some documents are for members only.
+          </p>
+          <a href="pages/login.html" style="font-family:'Cinzel',serif;font-size:0.64rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold-dim);padding:7px 14px;display:inline-block;transition:all 0.2s"
+             onmouseover="this.style.background='var(--gold-faint)';this.style.borderColor='var(--gold)'"
+             onmouseout="this.style.background='';this.style.borderColor='var(--gold-dim)'">
+            Login to Access
+          </a>
+        </div>
       </nav>
 
       <main id="main-content">
@@ -691,117 +711,45 @@
 
           <div class="section-heading">📂 Official Documents</div>
           <div class="doc-grid">
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'constitution',
-                  document.querySelector('button[onclick*=constitution]'),
-                )
-              "
-            >
+            <div class="doc-card" onclick="showPage('constitution', document.querySelector('button[onclick*=constitution]'))">
               <div class="card-emoji">📜</div>
               <div class="card-title">Constitution & By-Laws</div>
-              <div class="card-desc">
-                16 Articles covering membership, officers, attendance, conduct,
-                finances, and more.
-              </div>
+              <div class="card-desc">16 Articles covering membership, officers, attendance, conduct, finances, and more.</div>
             </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'handbook',
-                  document.querySelector('button[onclick*=handbook]'),
-                )
-              "
-            >
+            <div class="doc-card" data-min-role="member" onclick="showPage('handbook', document.querySelector('button[onclick*=handbook]'))">
               <div class="card-emoji">📖</div>
               <div class="card-title">Member Handbook</div>
-              <div class="card-desc">
-                English & Bisaya guide for all members — rights,
-                responsibilities, and values.
-              </div>
+              <div class="card-desc">English & Bisaya guide for all members — rights, responsibilities, and values.</div>
             </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'calendar',
-                  document.querySelector('button[onclick*=calendar]'),
-                )
-              "
-            >
+            <div class="doc-card" data-min-role="member" onclick="showPage('calendar', document.querySelector('button[onclick*=calendar]'))">
               <div class="card-emoji">🗓️</div>
               <div class="card-title">Calendar 2026–2027</div>
-              <div class="card-desc">
-                Full year calendar of activities, masses, rehearsals, and major
-                events.
-              </div>
+              <div class="card-desc">Full year calendar of activities, masses, rehearsals, and major events.</div>
             </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'budget',
-                  document.querySelector('button[onclick*=budget]'),
-                )
-              "
-            >
-              <div class="card-emoji">💰</div>
-              <div class="card-title">Budget Plan</div>
-              <div class="card-desc">
-                Suggested spending priorities and monthly cash flow guide for
-                the choir year.
-              </div>
-            </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'excuse',
-                  document.querySelector('button[onclick*=excuse]'),
-                )
-              "
-            >
-              <div class="card-emoji">🎓</div>
-              <div class="card-title">Excuse Letter</div>
-              <div class="card-desc">
-                Template for student members needing school excuse letters for
-                choir events.
-              </div>
-            </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'leave',
-                  document.querySelector('button[onclick*=leave]'),
-                )
-              "
-            >
-              <div class="card-emoji">💼</div>
-              <div class="card-title">Leave Request Letter</div>
-              <div class="card-desc">
-                Template for working members requesting leave from their
-                employer.
-              </div>
-            </div>
-            <div
-              class="doc-card"
-              onclick="
-                showPage(
-                  'commitments',
-                  document.querySelector('button[onclick*=commitments]'),
-                )
-              "
-            >
+            <div class="doc-card" data-min-role="member" onclick="showPage('commitments', document.querySelector('button[onclick*=commitments]'))">
               <div class="card-emoji">🌟</div>
               <div class="card-title">Our Commitments 2026–2027</div>
-              <div class="card-desc">
-                What we're actually focusing on this first year — a short guide
-                for members before reading the full Constitution.
-              </div>
+              <div class="card-desc">What we're actually focusing on this first year — a short guide for members before reading the full Constitution.</div>
+            </div>
+            <div class="doc-card" data-min-role="admin" onclick="showPage('budget', document.querySelector('button[onclick*=budget]'))">
+              <div class="card-emoji">💰</div>
+              <div class="card-title">Budget Plan</div>
+              <div class="card-desc">Suggested spending priorities and monthly cash flow guide for the choir year.</div>
+            </div>
+            <div class="doc-card" data-min-role="admin" onclick="showPage('tbd', document.querySelector('button[onclick*=tbd]'))">
+              <div class="card-emoji">📋</div>
+              <div class="card-title">TBD & Action Items</div>
+              <div class="card-desc">Officers' action items and pending decisions for the current choir year.</div>
+            </div>
+            <div class="doc-card" data-min-role="member" onclick="showPage('excuse', document.querySelector('button[onclick*=excuse]'))">
+              <div class="card-emoji">🎓</div>
+              <div class="card-title">Excuse Letter</div>
+              <div class="card-desc">Template for student members needing a school excuse letter for choir events.</div>
+            </div>
+            <div class="doc-card" data-min-role="member" onclick="showPage('leave', document.querySelector('button[onclick*=leave]'))">
+              <div class="card-emoji">💼</div>
+              <div class="card-title">Leave Request Letter</div>
+              <div class="card-desc">Template for working members requesting leave from their employer for choir events.</div>
             </div>
           </div>
 
@@ -2753,11 +2701,37 @@ Come ready to share one personal goal for your year in the choir (Article XIII)
       });
     </script>
 
-    <!-- Auth state: show user name + logout if logged in -->
+    <!-- Auth state + role-based access control -->
     <script type="module">
       import { getProfile, signOut } from './js/auth.js';
+
+      const roleLevel = { member: 1, secretary: 2, admin: 3 };
+
+      function applyAccess(level) {
+        // Show/hide elements tagged with data-min-role
+        document.querySelectorAll('[data-min-role]').forEach(el => {
+          const required = roleLevel[el.dataset.minRole] ?? 1;
+          el.style.display = level >= required ? '' : 'none';
+        });
+
+        // Login notice: show only when unauthenticated
+        const notice = document.getElementById('sidebar-login-notice');
+        if (notice) notice.style.display = level === 0 ? 'block' : 'none';
+
+        // Member portal links: show for logged-in members+
+        const portalDivider = document.getElementById('portal-nav-divider');
+        const portalLabel = document.getElementById('portal-nav-label');
+        const absenceLink = document.getElementById('absence-request-link');
+        if (level >= 1) {
+          if (portalDivider) portalDivider.style.display = '';
+          if (portalLabel) portalLabel.style.display = '';
+          if (absenceLink) absenceLink.style.display = 'flex';
+        }
+      }
+
       const profile = await getProfile();
       const slot = document.getElementById('header-user');
+
       if (profile) {
         slot.innerHTML = `
           <span id="header-user-name">${profile.full_name}</span>
@@ -2767,8 +2741,10 @@ Come ready to share one personal goal for your year in the choir (Article XIII)
           try { await signOut(); } catch (_) {}
           window.location.href = 'index.html';
         });
+        applyAccess(roleLevel[profile.role] ?? 1);
       } else {
         slot.innerHTML = `<a href="pages/login.html" style="font-family:'Cinzel',serif;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;white-space:nowrap">Member Login</a>`;
+        applyAccess(0);
       }
     </script>
   </body>

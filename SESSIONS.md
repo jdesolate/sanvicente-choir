@@ -257,7 +257,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 7: Landing Page + Documents Access Control
 
-**Status:** [ ] Complete
+**Status:** [x] Complete
 
 **Goal:** Update the public landing page for better marketing, and wire role-based visibility into documents.html.
 

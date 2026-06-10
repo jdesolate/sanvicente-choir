@@ -790,6 +790,120 @@
         letter-spacing: 0.02em;
       }
 
+      /* ══ SPONSOR TIERS ══ */
+      .tier-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 40px;
+      }
+      .tier-card {
+        background: var(--surface);
+        border: 1px solid rgba(245,242,235,0.08);
+        padding: 32px 26px;
+        position: relative;
+        transition: border-color 0.25s;
+      }
+      .tier-card:hover { border-color: var(--gold-dim); }
+      .tier-featured {
+        border-color: var(--gold-dim);
+        background: var(--gold-faint);
+      }
+      .tier-badge {
+        display: inline-block;
+        font-family: 'Cinzel', serif;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        background: var(--gold);
+        color: var(--black);
+        padding: 3px 10px;
+        margin-bottom: 16px;
+      }
+      .tier-label {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.88rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--ivory-dim);
+        margin-bottom: 6px;
+      }
+      .tier-amount {
+        font-family: 'Cinzel', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--gold);
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .tier-need {
+        font-family: 'Cinzel', serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ivory);
+        margin-bottom: 14px;
+      }
+      .tier-desc {
+        font-size: 0.84rem;
+        color: var(--ivory-dim);
+        line-height: 1.72;
+        font-weight: 300;
+      }
+
+      /* ══ SPONSOR FORM ══ */
+      .sponsor-form-heading {
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ivory);
+        margin-bottom: 8px;
+      }
+      .sponsor-form { max-width: 580px; }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      .form-group label {
+        font-family: 'Cinzel', serif;
+        font-size: 0.64rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ivory-dim);
+      }
+      .form-group input,
+      .form-group textarea {
+        background: var(--charcoal);
+        border: 1px solid rgba(245,242,235,0.1);
+        color: var(--ivory);
+        padding: 12px 14px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        font-weight: 300;
+        line-height: 1.5;
+        width: 100%;
+        transition: border-color 0.2s;
+        -webkit-appearance: none;
+      }
+      .form-group input::placeholder,
+      .form-group textarea::placeholder { color: rgba(245,242,235,0.25); }
+      .form-group input:focus,
+      .form-group textarea:focus { border-color: var(--gold); outline: none; }
+      .form-group textarea { resize: vertical; }
+      @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+
       /* ══ FOOTER ══ */
       footer.site {
         background: #050505;
@@ -946,6 +1060,7 @@
             <a href="#gallery">Gallery</a>
             <a href="#performances">Performances</a>
             <a href="#join">Join Us</a>
+            <a href="#sponsor">Sponsor</a>
             <a href="#contact">Contact</a>
             <a class="btn-members" id="nav-portal-link" href="pages/login.html">Member Login</a>
           </nav>
@@ -1237,7 +1352,7 @@
           <div class="step reveal d4"><h4>Audition &amp; Welcome</h4><p>Sing one song you love — a welcome tradition, not a test — and join your section.</p></div>
         </div>
         <div class="cta-row reveal" style="justify-content:flex-start;margin-top:34px">
-          <a class="btn btn-gold" href="#contact">Message an Officer</a>
+          <a class="btn btn-gold" href="https://www.facebook.com/share/1c9an5AWnS/" target="_blank" rel="noopener">Join Us on Facebook</a>
           <a class="btn btn-outline" href="documents.html">Read Our Documents</a>
         </div>
       </div>
@@ -1257,14 +1372,83 @@
           </p>
           <div class="chips">
             <span class="chip">Uniforms</span>
-            <span class="chip">Sound Equipment</span>
+            <span class="chip">Music Materials</span>
             <span class="chip">Transportation</span>
             <span class="chip">Formation &amp; Seminars</span>
             <span class="chip">Members in Need</span>
           </div>
           <div class="cta-row">
-            <a class="btn btn-gold" href="#contact">Become a Sponsor</a>
+            <a class="btn btn-gold" href="#sponsor">Become a Sponsor</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SPONSOR ══════════ -->
+    <section class="block alt" id="sponsor">
+      <div class="wrap">
+        <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+          <div class="eyebrow">Become a Sponsor</div>
+          <h2 class="section-title">Partner With Our Ministry</h2>
+          <div class="section-rule" style="margin:0 auto 22px"></div>
+          <p class="lead-muted" style="margin:0 auto">
+            Support the choir that has served Cebu City's parish liturgy for over 54 years.
+            Every contribution goes directly to our needs — recorded transparently and
+            decided together by the officers and members.
+          </p>
+        </div>
+
+        <div class="tier-grid">
+          <div class="tier-card reveal d1">
+            <div class="tier-label">Supporter</div>
+            <div class="tier-amount">₱500</div>
+            <div class="tier-need">Uniforms</div>
+            <p class="tier-desc">Help clothe our members for mass — a small gift with a visible impact every Sunday and Saturday.</p>
+          </div>
+          <div class="tier-card tier-featured reveal d2">
+            <div class="tier-badge">Most Needed</div>
+            <div class="tier-label">Partner</div>
+            <div class="tier-amount">₱1,000</div>
+            <div class="tier-need">Music Materials</div>
+            <p class="tier-desc">Provide printed sheet music for every session — the most consistent need we have as a choir, every single week.</p>
+          </div>
+          <div class="tier-card reveal d3">
+            <div class="tier-label">Patron</div>
+            <div class="tier-amount">₱2,000+</div>
+            <div class="tier-need">Multiple Needs</div>
+            <p class="tier-desc">Cover transportation, formation seminars, music materials, and member support across the full choir year.</p>
+          </div>
+        </div>
+
+        <div class="reveal d2" style="margin-top:60px">
+          <h3 class="sponsor-form-heading">Send Us a Message</h3>
+          <p class="lead-muted" style="max-width:520px;margin-bottom:30px">
+            Fill out the form below and we'll get back to you. No obligation — just a conversation.
+          </p>
+          <form name="sponsor-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="sponsor-form" class="sponsor-form">
+            <input type="hidden" name="form-name" value="sponsor-contact" />
+            <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sponsor-name">Name</label>
+                <input type="text" id="sponsor-name" name="name" required placeholder="Your full name" />
+              </div>
+              <div class="form-group">
+                <label for="sponsor-org">Organization</label>
+                <input type="text" id="sponsor-org" name="organization" placeholder="Company or parish (optional)" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sponsor-contact-num">Contact Number</label>
+              <input type="tel" id="sponsor-contact-num" name="contact_number" required placeholder="+63 917 000 0000" />
+            </div>
+            <div class="form-group">
+              <label for="sponsor-message">Message</label>
+              <textarea id="sponsor-message" name="message" required rows="4" placeholder="Tell us how you'd like to help, or ask us anything."></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold" id="sponsor-submit">Send Message</button>
+            <p id="sponsor-success" style="display:none;color:var(--gold);margin-top:14px;font-size:0.88rem;font-family:'Cormorant Garamond',serif;font-style:italic;">Thank you — we'll be in touch soon. God bless!</p>
+          </form>
         </div>
       </div>
     </section>
@@ -1304,7 +1488,7 @@
         <a href="#story">Our Story</a>
         <a href="#performances">Performances</a>
         <a href="#join">Join Us</a>
-        <a href="#support">Support</a>
+        <a href="#sponsor">Sponsor</a>
         <a href="documents.html">Official Documents</a>
       </div>
       <div class="fine">Choir Year 2026–2027 · "Sing to the Lord a new song." — Psalm 96:1</div>
@@ -1428,6 +1612,29 @@
         frame.addEventListener('keydown', function (e) {
           if (e.key === 'ArrowLeft') go(cur - 1);
           if (e.key === 'ArrowRight') go(cur + 1);
+        });
+      }
+
+      // ── SPONSOR FORM ──
+      var sponsorForm = document.getElementById('sponsor-form');
+      if (sponsorForm) {
+        sponsorForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var btn = document.getElementById('sponsor-submit');
+          btn.textContent = 'Sending…';
+          btn.disabled = true;
+          fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(new FormData(sponsorForm)).toString()
+          }).then(function () {
+            document.getElementById('sponsor-success').style.display = 'block';
+            sponsorForm.reset();
+            btn.style.display = 'none';
+          }).catch(function () {
+            btn.textContent = 'Send Message';
+            btn.disabled = false;
+          });
         });
       }
 
