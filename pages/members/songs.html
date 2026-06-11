@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
     <style>
       .filter-toggle {
         display: flex;
@@ -66,6 +67,7 @@
         <h1>San Vicente Choir</h1>
         <p>Member Portal</p>
       </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
       <div class="portal-header-user">
         <span id="header-name">Loading…</span>
         <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
@@ -128,6 +130,12 @@
             </div>
           </div>
 
+          <!-- Season pre-filter notice -->
+          <div id="season-notice" class="season-notice" style="display:none" role="status">
+            ⛪ Showing songs for: <strong id="season-notice-label"></strong>
+            <button class="season-notice-clear" id="clear-season-filter" aria-label="Clear season filter">×</button>
+          </div>
+
           <p id="results-meta" class="results-meta" style="display:none"></p>
 
           <div id="songs-loading" class="loading-text" style="display:none">
@@ -152,7 +160,8 @@
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { supabase } from '../../js/supabase-client.js';
-      import { hidePageLoader, escHtml } from '../../js/utils.js';
+      import { hidePageLoader, escHtml, initThemeToggle, getLiturgicalSeason } from '../../js/utils.js';
+      initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
       const profile = await requireRole('member');
@@ -251,11 +260,41 @@
         filterToggle.textContent = hasAny ? `⚙ Filters (${active.lang.size + active.use.size + active.season.size})` : '⚙ Filters';
       }
 
+      // ── Pre-set season filter to current liturgical season ─────
+      // (must come after syncFilterToggle is defined above)
+      const VALID_SONG_SEASONS = new Set(['advent','christmas','lent','easter','ordinary_time']);
+      const { seasonKey: currentSeasonKey, season: currentSeasonName } = getLiturgicalSeason(new Date());
+
+      function applySeasonPreset(seasonKey, seasonName) {
+        active.season.add(seasonKey);
+        document.querySelectorAll('#season-filter .filter-chip').forEach(chip => {
+          if (chip.dataset.value === seasonKey) chip.classList.add('active');
+        });
+        syncFilterToggle();
+        document.getElementById('season-notice-label').textContent = seasonName;
+        document.getElementById('season-notice').style.display = 'flex';
+      }
+
+      function clearSeasonPreset() {
+        active.season.clear();
+        document.querySelectorAll('#season-filter .filter-chip.active').forEach(c => c.classList.remove('active'));
+        syncFilterToggle();
+        document.getElementById('season-notice').style.display = 'none';
+        loadSongs();
+      }
+
+      if (VALID_SONG_SEASONS.has(currentSeasonKey)) {
+        applySeasonPreset(currentSeasonKey, currentSeasonName);
+      }
+
+      document.getElementById('clear-season-filter').addEventListener('click', clearSeasonPreset);
+
       // ── Clear filters ──────────────────────────────────────────
       document.getElementById('clear-filters').addEventListener('click', () => {
         active.lang.clear(); active.use.clear(); active.season.clear();
         document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
         syncFilterToggle();
+        document.getElementById('season-notice').style.display = 'none';
         loadSongs();
       });
 

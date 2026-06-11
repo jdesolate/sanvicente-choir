@@ -25,7 +25,7 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 ## 3.1 Non-Goals (Deferred to v3)
 
 - Constitution & by-laws admin editor (content currently managed as a static Markdown file)
-- Full liturgical calendar view with upcoming feasts and solemnities
+- Liturgical season timeline & upcoming feasts view (see spec below)
 
 ## 4. User Roles
 
@@ -446,7 +446,51 @@ sanvicente-choir/
 
 ---
 
-## 11. Performance Constraints
+## 11. v3 Features
+
+### 11.1 Liturgical Season Timeline
+
+**Data source:** gcatholic.org Philippine calendar (e.g., `https://gcatholic.org/calendar/2026/PH-en`).
+The choir director references this page each year. The downloaded HTML is kept in `assets/references/` as a parse source.
+
+**Data preparation (offline, one-time per year):**
+- Parse the gcatholic.org HTML into a compact JSON file: `assets/data/liturgical-YYYY.json`
+- Each entry: `{ "date": "YYYY-MM-DD", "season": "ordinary_time", "week": 10, "feast": "...", "rank": "S|F|M|m|" }`
+- Rank codes: `S` = Solemnity, `F` = Feast, `M` = Memorial, `m` = Optional Memorial
+- Season values match existing song tag keys: `advent`, `christmas`, `ordinary_time`, `lent`, `easter`
+- A new JSON file must be added each year before the new liturgical year starts (first Sunday of Advent)
+
+**Dashboard display — season timeline bar:**
+- A horizontal bar spanning the liturgical year, divided into colored season segments:
+  - Advent: violet `#5B2D8E`
+  - Christmas: white/gold `#F5F2EB`
+  - Ordinary Time: green `#3A6B35`
+  - Lent: purple `#6B3A6B`
+  - Easter: gold `#C9A86A`
+- A "today" dot marker on the bar at the current date's proportional position
+- Replaces the simple `.season-badge` text badge added in Session 9
+
+**Dashboard display — upcoming feasts list:**
+- Below the timeline bar: a short list of the next 14 days' feasts/solemnities (rank `S`, `F`, or `M` only — skip empty days and optional memorials)
+- Format: date · feast name · rank badge
+- Purpose: helps the choir anticipate upcoming song needs
+
+**Upgrade to `getLiturgicalSeason()`:**
+- When the JSON data file for the current year is present, load it and look up today's entry instead of computing algorithmically
+- Fall back to the existing algorithm if the JSON file is absent (graceful degradation)
+- The JSON lookup also provides the correct lectionary week number and feast name
+
+**Song library integration:**
+- The season pre-filter (added in Session 9) continues to use `getLiturgicalSeason()` — no change needed there
+
+**Constitution & by-laws admin editor:**
+- Allow admin to edit `docs/constitution.md` and `docs/handbook.md` content directly from the admin panel
+- Changes saved back to Supabase (store as text rows) rather than static files
+- Replaces the current static Markdown file approach
+
+---
+
+## 12. Performance Constraints
 
 - All pages must load usably on slow 3G mobile data
 - Supabase JS loaded via CDN — not bundled

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
   </head>
   <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -25,6 +26,7 @@
         <h1>San Vicente Choir</h1>
         <p>Member Portal</p>
       </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
       <div class="portal-header-user">
         <span id="header-name">Loading…</span>
         <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
@@ -104,6 +106,7 @@
           <div class="page-heading">
             <h2 id="welcome-heading">Welcome</h2>
             <p id="welcome-sub">San Vicente Choir Member Portal</p>
+            <div id="season-badge-wrap" style="margin-top:var(--space-3)"></div>
           </div>
 
           <!-- Pending approval banner -->
@@ -172,7 +175,8 @@
 
     <script type="module">
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
-      import { hidePageLoader } from '../../js/utils.js';
+      import { hidePageLoader, initThemeToggle, getLiturgicalSeason, escHtml } from '../../js/utils.js';
+      initThemeToggle();
 
       // ── Auth guard ──────────────────────────────────────────
       const session = await requireAuth('/pages/login.html');
@@ -189,6 +193,11 @@
 
       document.getElementById('header-name').textContent  = profile.full_name;
       document.getElementById('welcome-heading').textContent = `Welcome, ${profile.full_name}`;
+
+      // ── Liturgical season badge ──────────────────────────────
+      const { label: seasonLabel } = getLiturgicalSeason(new Date());
+      document.getElementById('season-badge-wrap').innerHTML =
+        `<span class="season-badge">⛪ ${escHtml(seasonLabel)}</span>`;
 
       const voiceCap = v => v ? v.charAt(0).toUpperCase() + v.slice(1) : '—';
       document.getElementById('stat-voice').textContent  = voiceCap(profile.voice_part);

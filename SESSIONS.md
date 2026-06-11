@@ -334,7 +334,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 9: Dark Mode Toggle + Liturgical Season Badge
 
-**Status:** [ ] Not Started
+**Status:** [x] Complete
 
 **Goal:** Add light/dark mode toggle to all member and admin dashboard pages. Add a liturgical season badge computed client-side and shown on the member dashboard. Wire the season to auto-filter the song library.
 
