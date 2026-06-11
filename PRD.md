@@ -19,8 +19,13 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 
 - Online voting system
 - Audio file uploads for practice tracks
-- Automated email/SMS notifications
+- Automated email/SMS notifications (replaced by in-app notifications in v2)
 - Mobile app
+
+## 3.1 Non-Goals (Deferred to v3)
+
+- Constitution & by-laws admin editor (content currently managed as a static Markdown file)
+- Full liturgical calendar view with upcoming feasts and solemnities
 
 ## 4. User Roles
 
@@ -321,7 +326,127 @@ sanvicente-choir/
 └── README.md
 ```
 
-## 10. Performance Constraints
+## 10. v2 Features
+
+### 10.1 Admin Content Management (CMS)
+
+**Gallery management (admin):**
+- Add/remove gallery images via admin panel
+- Each entry: Google Drive image link + caption + display order
+- Replaces hardcoded gallery HTML — rendered dynamically from Supabase
+
+**Officer profiles management (admin):**
+- Add/edit/remove officer entries: name, role, voice part, profile photo (Google Drive link)
+- Replaces hardcoded officer section in `index.html`
+
+---
+
+### 10.2 Member Profile Picture
+
+**Registration:**
+- New optional field: profile photo (Google Drive link)
+- Displayed on member profile page and member list in admin panel
+
+---
+
+### 10.3 Constitution & Handbook Terms of Service Modal
+
+**Registration flow addition:**
+- Before the registration form renders, a modal displays the full text of the Constitution & By-Laws and Member Handbook (rendered from the existing Markdown files)
+- Member must scroll through and check an acknowledgement checkbox to proceed
+- Acknowledgement timestamp stored in `profiles` table (`tos_accepted_at`)
+
+---
+
+### 10.4 Liturgical Season Badge
+
+**Implementation:**
+- Current liturgical season computed client-side in `utils.js` using the Roman Catholic calendar algorithm (no database dependency)
+- Displayed as a badge on the member and admin dashboards (e.g., "Ordinary Time · Week 12")
+- Song library default filter pre-set to the current season on page load
+
+**Seasons covered:** Advent, Christmas, Ordinary Time (pre-Lent), Lent, Easter, Ordinary Time (post-Easter)
+
+---
+
+### 10.5 Light / Dark Mode Toggle
+
+- Toggle button available on all member and admin dashboard pages
+- Preference stored in `localStorage` — persists across sessions
+- Implemented via CSS custom properties already defined in `design-system.css`
+
+---
+
+### 10.6 Semester Awards System
+
+**Semester definition:**
+- Semester 1: June 20 – October 31
+- Semester 2: November 1 – May 31
+- Attendance data counted from June 20 (official start of attendance tracking and first General Assembly)
+
+**Award computation (admin-triggered):**
+- Admin clicks "Close Semester & Generate Awards" in the admin panel
+- System computes attendance rate for all active members over the semester window
+- Winner(s): member(s) with the highest attendance rate
+- Tie-breaking: if two or more members share the top rate, **all tied members receive the award** — no further tie-breaking
+
+**Certificate generation:**
+- Generated client-side as a PDF using `jsPDF` + `html2canvas`
+- Certificate contents: member name, award title ("Most Consistent Member"), semester period, SVC logo, attendance stats (e.g., "Attended 45 of 50 Core events — 90% rate"), signing officer name + role
+- Admin downloads the PDF; certificate record also stored in Supabase and visible to the awardee in their member dashboard
+
+**Award history:**
+- `awards` table stores: member_id, semester, attendance_rate, events_attended, events_total, generated_by, generated_at
+- Member dashboard shows an "Awards" section listing all certificates received
+
+---
+
+### 10.7 In-App Notifications
+
+**Trigger events:**
+- Award generated → notify awardee
+- Absence request approved → notify requesting member
+- Absence request rejected → notify requesting member (with reviewer note if provided)
+
+**Implementation:**
+- `notifications` table: id, member_id, type, message, is_read, created_at
+- Unread count badge on dashboard nav
+- Notifications dropdown/panel: list of unread + recent read notifications
+- Mark as read on open
+
+**Database additions for v2:**
+
+### `awards`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| member_id | uuid | FK → profiles |
+| semester | text | e.g., "2026-S1" |
+| attendance_rate | numeric | percentage |
+| events_attended | int | |
+| events_total | int | |
+| generated_by | uuid | FK → profiles |
+| generated_at | timestamptz | |
+
+### `notifications`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| member_id | uuid | FK → profiles |
+| type | text | award / absence_approved / absence_rejected |
+| message | text | |
+| is_read | boolean | default false |
+| created_at | timestamptz | |
+
+**`profiles` additions:**
+| Column | Type | Notes |
+|--------|------|-------|
+| profile_photo_url | text | nullable — Google Drive link |
+| tos_accepted_at | timestamptz | nullable — set on registration acknowledgement |
+
+---
+
+## 11. Performance Constraints
 
 - All pages must load usably on slow 3G mobile data
 - Supabase JS loaded via CDN — not bundled
