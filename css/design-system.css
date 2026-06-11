@@ -436,6 +436,32 @@ select {
 input::placeholder,
 textarea::placeholder { color: var(--ivory-muted); }
 
+/* Password show/hide wrapper */
+.password-wrapper {
+  position: relative;
+}
+.password-wrapper input {
+  padding-right: 44px;
+}
+.password-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ivory-muted);
+  padding: 0;
+  transition: color var(--t-base);
+}
+.password-toggle:hover { color: var(--gold); }
+.password-toggle svg { width: 18px; height: 18px; pointer-events: none; }
+
 input:hover, select:hover, textarea:hover {
   border-color: rgba(201,168,106,0.5);
 }

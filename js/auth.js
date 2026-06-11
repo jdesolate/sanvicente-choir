@@ -38,6 +38,16 @@ export async function requireAuth(redirectTo = '/pages/login.html') {
   return session;
 }
 
+export async function sendPasswordResetEmail(email, redirectTo) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) throw error;
+}
+
+export async function updatePassword(newPassword) {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+}
+
 // Redirects if the user doesn't have the required role or higher.
 // Role hierarchy: member < secretary < admin
 // Returns the profile if authorized.
