@@ -111,6 +111,19 @@ export function getLiturgicalSeason(date = new Date()) {
 }
 
 
+// ── Google Drive Image URL ───────────────────────────────────────────────────
+
+export function gdriveImgUrl(url) {
+  if (!url) return null;
+  // Convert share/view URLs to direct-embed URL
+  const m = url.match(/\/file\/d\/([-\w]+)/);
+  if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  const m2 = url.match(/[?&]id=([-\w]+)/);
+  if (m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
+  return url;
+}
+
+
 // ── Theme Toggle ─────────────────────────────────────────────────────────────
 
 export function initThemeToggle() {

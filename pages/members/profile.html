@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="../../css/design-system.css">
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
     <style>
-      /* Profile field display rows */
       .profile-field {
         display: grid;
         grid-template-columns: 160px 1fr;
@@ -38,8 +37,6 @@
         line-height: 1.5;
       }
       .profile-value.muted { color: var(--ivory-muted); font-style: italic; }
-
-      /* Section title inside the card */
       .profile-section-title {
         font-family: var(--font-display);
         font-size: var(--text-xs);
@@ -52,6 +49,15 @@
         margin: var(--space-6) 0 var(--space-3);
       }
       .profile-section-title:first-of-type { margin-top: 0; }
+      .member-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--gold-dim);
+        display: block;
+        margin: 0 auto var(--space-5);
+      }
     </style>
   </head>
   <body class="portal-body">
@@ -160,8 +166,9 @@
             <!-- ── View Mode ── -->
             <div id="view-mode">
               <div class="card">
-                <p class="profile-section-title">Account</p>
+                <div id="v-avatar-wrap"></div>
 
+                <p class="profile-section-title">Account</p>
                 <div class="profile-field">
                   <span class="profile-label">Email</span>
                   <span class="profile-value" id="v-email">—</span>
@@ -180,7 +187,6 @@
                 </div>
 
                 <p class="profile-section-title">Member Information</p>
-
                 <div class="profile-field">
                   <span class="profile-label">Full Name</span>
                   <span class="profile-value" id="v-name">—</span>
@@ -259,6 +265,15 @@
                     </div>
                   </div>
 
+                  <div class="form-group">
+                    <label>Profile Photo</label>
+                    <div id="e-photo-preview" style="margin-bottom:var(--space-3)"></div>
+                    <input type="file" id="e-photo" accept="image/*">
+                    <p class="form-hint">
+                      Optional — JPG, PNG, or WebP, max 5 MB. Leave empty to keep current photo.
+                    </p>
+                  </div>
+
                   <!-- Custom fields (edit) — injected by JS -->
                   <div id="e-custom-fields"></div>
 
@@ -285,7 +300,7 @@
       import { hidePageLoader, formatDate, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
 
-      // ── Auth guard ─────────────────────────────────────────────
+      // ── Auth guard ─────────────────────────────────────────────────────────────
       const session = await requireAuth('/pages/login.html');
       if (!session) throw new Error('redirecting');
 
@@ -295,7 +310,6 @@
       document.getElementById('header-name').textContent = profile.full_name;
       document.getElementById('page-content').style.display = 'block';
 
-      // Show role-gated nav sections
       if (profile.role === 'secretary' || profile.role === 'admin') {
         document.getElementById('secretary-section').style.display = 'block';
       }
@@ -303,7 +317,7 @@
         document.getElementById('admin-section').style.display = 'block';
       }
 
-      // ── Sign out ───────────────────────────────────────────────
+      // ── Sign out ───────────────────────────────────────────────────────────────
       async function handleSignOut() {
         try { await signOut(); } catch (_) {}
         window.location.href = '/index.html';
@@ -311,7 +325,7 @@
       document.getElementById('logout-btn').addEventListener('click', handleSignOut);
       document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
 
-      // ── Mobile sidebar ─────────────────────────────────────────
+      // ── Mobile sidebar ─────────────────────────────────────────────────────────
       const sidebar  = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
       const menuBtn  = document.getElementById('menu-btn');
@@ -320,7 +334,7 @@
       menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
       backdrop.addEventListener('click', closeSidebar);
 
-      // ── Load custom field definitions ──────────────────────────
+      // ── Custom field definitions ───────────────────────────────────────────────
       const { data: fieldDefs } = await supabase
         .from('custom_field_definitions')
         .select('*')
@@ -328,7 +342,7 @@
 
       const customFields = profile.custom_fields || {};
 
-      // ── Helpers ────────────────────────────────────────────────
+      // ── Helpers ────────────────────────────────────────────────────────────────
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
       const val = v => (v !== null && v !== undefined && v !== '') ? v : '—';
 
@@ -341,26 +355,33 @@
         return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
       };
 
-      // ── Populate View Mode ─────────────────────────────────────
-      document.getElementById('v-email').textContent    = session.user.email;
-      document.getElementById('v-role').innerHTML      = badgeRole(profile.role);
-      document.getElementById('v-status').innerHTML    = badgeStatus(profile.status);
-      document.getElementById('v-joined').textContent  = formatDate(profile.created_at);
-      document.getElementById('v-name').textContent    = val(profile.full_name);
-      document.getElementById('v-voice').textContent   = cap(profile.voice_part);
-      document.getElementById('v-contact').textContent = val(profile.contact_number);
-      document.getElementById('v-birthday').textContent= profile.birthday ? formatDate(profile.birthday) : '—';
-      document.getElementById('v-age').textContent     = val(profile.age);
-      document.getElementById('v-school').textContent  = val(profile.school_occupation);
+      // ── Avatar render ──────────────────────────────────────────────────────────
+      function renderAvatar(photoUrl) {
+        const wrap = document.getElementById('v-avatar-wrap');
+        wrap.innerHTML = photoUrl
+          ? `<img src="${escHtml(photoUrl)}" alt="Profile photo" class="member-avatar" onerror="this.parentElement.innerHTML=''">`
+          : '';
+      }
 
-      // Custom fields — view
+      // ── Populate View Mode ─────────────────────────────────────────────────────
+      renderAvatar(profile.profile_photo_url);
+      document.getElementById('v-email').textContent    = session.user.email;
+      document.getElementById('v-role').innerHTML       = badgeRole(profile.role);
+      document.getElementById('v-status').innerHTML     = badgeStatus(profile.status);
+      document.getElementById('v-joined').textContent   = formatDate(profile.created_at);
+      document.getElementById('v-name').textContent     = val(profile.full_name);
+      document.getElementById('v-voice').textContent    = cap(profile.voice_part);
+      document.getElementById('v-contact').textContent  = val(profile.contact_number);
+      document.getElementById('v-birthday').textContent = profile.birthday ? formatDate(profile.birthday) : '—';
+      document.getElementById('v-age').textContent      = val(profile.age);
+      document.getElementById('v-school').textContent   = val(profile.school_occupation);
+
       const viewCf = document.getElementById('v-custom-fields');
       if (fieldDefs?.length) {
-        const section = document.createElement('p');
-        section.className = 'profile-section-title';
-        section.textContent = 'Additional Information';
-        viewCf.appendChild(section);
-
+        const sec = document.createElement('p');
+        sec.className = 'profile-section-title';
+        sec.textContent = 'Additional Information';
+        viewCf.appendChild(sec);
         fieldDefs.forEach(f => {
           const stored = customFields[f.id];
           const row = document.createElement('div');
@@ -373,34 +394,49 @@
         });
       }
 
-      // ── Populate Edit Mode ─────────────────────────────────────
+      // ── Photo file preview in edit form ───────────────────────────────────────
+      document.getElementById('e-photo').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = evt => {
+          document.getElementById('e-photo-preview').innerHTML =
+            `<img src="${evt.target.result}" alt="Preview" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)">`;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // ── Populate Edit Form ─────────────────────────────────────────────────────
       function populateEditForm() {
-        document.getElementById('e-name').value    = profile.full_name   || '';
-        document.getElementById('e-voice').value   = profile.voice_part  || '';
-        document.getElementById('e-contact').value = profile.contact_number || '';
-        document.getElementById('e-birthday').value= profile.birthday    || '';
-        document.getElementById('e-age').value     = profile.age         ?? '';
+        document.getElementById('e-name').value    = profile.full_name        || '';
+        document.getElementById('e-voice').value   = profile.voice_part       || '';
+        document.getElementById('e-contact').value = profile.contact_number   || '';
+        document.getElementById('e-birthday').value= profile.birthday         || '';
+        document.getElementById('e-age').value     = profile.age              ?? '';
         document.getElementById('e-school').value  = profile.school_occupation || '';
 
-        // Custom fields — edit
+        // Show current photo preview; clear file input
+        const previewEl = document.getElementById('e-photo-preview');
+        previewEl.innerHTML = profile.profile_photo_url
+          ? `<img src="${escHtml(profile.profile_photo_url)}" alt="Current photo" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:1px solid var(--gold-dim)" onerror="this.parentElement.innerHTML=''">`
+          : `<span style="font-size:var(--text-xs);color:var(--ivory-muted)">No photo set</span>`;
+        document.getElementById('e-photo').value = '';
+
+        // Custom fields
         const editCf = document.getElementById('e-custom-fields');
         editCf.innerHTML = '';
-
         if (fieldDefs?.length) {
-          const section = document.createElement('p');
-          section.className = 'profile-section-title';
-          section.textContent = 'Additional Information';
-          editCf.appendChild(section);
-
+          const sec = document.createElement('p');
+          sec.className = 'profile-section-title';
+          sec.textContent = 'Additional Information';
+          editCf.appendChild(sec);
           fieldDefs.forEach(f => {
             const group = document.createElement('div');
             group.className = 'form-group';
             group.dataset.fieldId = f.id;
-
             const label = document.createElement('label');
             label.htmlFor = `ecf_${f.id}`;
             label.innerHTML = escHtml(f.field_name) + (f.is_required ? ' <span class="required">*</span>' : '');
-
             let input;
             if (f.field_type === 'dropdown') {
               input = document.createElement('select');
@@ -414,52 +450,71 @@
               });
             } else {
               input = document.createElement('input');
-              input.type = f.field_type === 'number' ? 'number'
-                         : f.field_type === 'date'   ? 'date'
-                         : 'text';
+              input.type = f.field_type === 'number' ? 'number' : f.field_type === 'date' ? 'date' : 'text';
             }
-
-            input.id   = `ecf_${f.id}`;
-            input.name = `ecf_${f.id}`;
+            input.id = `ecf_${f.id}`; input.name = `ecf_${f.id}`;
             if (f.is_required) input.required = true;
             const stored = customFields[f.id];
             if (stored !== undefined && stored !== null) input.value = stored;
-
-            group.appendChild(label);
-            group.appendChild(input);
+            group.appendChild(label); group.appendChild(input);
             editCf.appendChild(group);
           });
         }
       }
 
-      // ── Toggle edit/view modes ─────────────────────────────────
-      let editing = false;
-
+      // ── Toggle edit/view ───────────────────────────────────────────────────────
       document.getElementById('edit-toggle-btn').addEventListener('click', () => {
-        editing = true;
         populateEditForm();
-        document.getElementById('view-mode').style.display = 'none';
-        document.getElementById('edit-mode').style.display = 'block';
-        document.getElementById('edit-toggle-btn').style.display = 'none';
-        document.getElementById('save-success').style.display = 'none';
-        document.getElementById('save-error').style.display   = 'none';
+        document.getElementById('view-mode').style.display        = 'none';
+        document.getElementById('edit-mode').style.display        = 'block';
+        document.getElementById('edit-toggle-btn').style.display  = 'none';
+        document.getElementById('save-success').style.display     = 'none';
+        document.getElementById('save-error').style.display       = 'none';
       });
 
       document.getElementById('edit-cancel-btn').addEventListener('click', () => {
-        document.getElementById('edit-mode').style.display    = 'none';
-        document.getElementById('view-mode').style.display    = 'block';
-        document.getElementById('edit-toggle-btn').style.display = '';
-        editing = false;
+        document.getElementById('edit-mode').style.display        = 'none';
+        document.getElementById('view-mode').style.display        = 'block';
+        document.getElementById('edit-toggle-btn').style.display  = '';
       });
 
-      // ── Save changes ────────────────────────────────────────────
+      // ── Save changes ────────────────────────────────────────────────────────────
       document.getElementById('edit-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('edit-save-btn');
         btn.disabled = true; btn.textContent = 'Saving…';
         document.getElementById('save-error').style.display = 'none';
 
-        // Collect custom field values
+        // Photo upload
+        let profile_photo_url = profile.profile_photo_url;
+        const photoFile = document.getElementById('e-photo').files[0];
+        if (photoFile) {
+          if (photoFile.size > 5 * 1024 * 1024) {
+            document.getElementById('save-error-text').textContent = 'Photo must be under 5 MB.';
+            document.getElementById('save-error').style.display = 'flex';
+            btn.disabled = false; btn.textContent = 'Save Changes';
+            return;
+          }
+          btn.textContent = 'Uploading photo…';
+          const ext = (photoFile.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+          const uploadPath = `${profile.id}/avatar.${ext}`;
+          const { error: uploadError } = await supabase.storage
+            .from('avatars')
+            .upload(uploadPath, photoFile, { upsert: true });
+          if (uploadError) {
+            document.getElementById('save-error-text').textContent = `Photo upload failed: ${uploadError.message}`;
+            document.getElementById('save-error').style.display = 'flex';
+            btn.disabled = false; btn.textContent = 'Save Changes';
+            return;
+          }
+          const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(uploadPath);
+          profile_photo_url = publicUrl;
+          btn.textContent = 'Saving…';
+        }
+
+        // Collect custom fields
         const updatedCustomFields = { ...customFields };
         document.querySelectorAll('#e-custom-fields [data-field-id]').forEach(group => {
           const input = group.querySelector('input, select');
@@ -473,11 +528,11 @@
           birthday:          document.getElementById('e-birthday').value || null,
           age:               document.getElementById('e-age').value ? parseInt(document.getElementById('e-age').value, 10) : null,
           school_occupation: document.getElementById('e-school').value.trim() || null,
+          profile_photo_url,
           custom_fields:     updatedCustomFields,
         };
 
         const { error } = await supabase.from('profiles').update(updates).eq('id', profile.id);
-
         btn.disabled = false; btn.textContent = 'Save Changes';
 
         if (error) {
@@ -486,26 +541,25 @@
           return;
         }
 
-        // Update local profile object to reflect changes
         Object.assign(profile, updates);
         Object.assign(customFields, updatedCustomFields);
 
-        // Refresh view mode fields
-        document.getElementById('header-name').textContent   = profile.full_name;
-        document.getElementById('v-name').textContent        = val(profile.full_name);
-        document.getElementById('v-voice').textContent       = cap(profile.voice_part);
-        document.getElementById('v-contact').textContent     = val(profile.contact_number);
-        document.getElementById('v-birthday').textContent    = profile.birthday ? formatDate(profile.birthday) : '—';
-        document.getElementById('v-age').textContent         = val(profile.age);
-        document.getElementById('v-school').textContent      = val(profile.school_occupation);
+        // Refresh view mode
+        renderAvatar(profile.profile_photo_url);
+        document.getElementById('header-name').textContent    = profile.full_name;
+        document.getElementById('v-name').textContent         = val(profile.full_name);
+        document.getElementById('v-voice').textContent        = cap(profile.voice_part);
+        document.getElementById('v-contact').textContent      = val(profile.contact_number);
+        document.getElementById('v-birthday').textContent     = profile.birthday ? formatDate(profile.birthday) : '—';
+        document.getElementById('v-age').textContent          = val(profile.age);
+        document.getElementById('v-school').textContent       = val(profile.school_occupation);
 
-        // Refresh custom fields view
         viewCf.innerHTML = '';
         if (fieldDefs?.length) {
-          const section = document.createElement('p');
-          section.className = 'profile-section-title';
-          section.textContent = 'Additional Information';
-          viewCf.appendChild(section);
+          const sec = document.createElement('p');
+          sec.className = 'profile-section-title';
+          sec.textContent = 'Additional Information';
+          viewCf.appendChild(sec);
           fieldDefs.forEach(f => {
             const stored = customFields[f.id];
             const row = document.createElement('div');
@@ -518,12 +572,10 @@
           });
         }
 
-        // Switch back to view mode
-        document.getElementById('edit-mode').style.display    = 'none';
-        document.getElementById('view-mode').style.display    = 'block';
+        document.getElementById('edit-mode').style.display       = 'none';
+        document.getElementById('view-mode').style.display       = 'block';
         document.getElementById('edit-toggle-btn').style.display = '';
-        document.getElementById('save-success').style.display = 'flex';
-        editing = false;
+        document.getElementById('save-success').style.display    = 'flex';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 

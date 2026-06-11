@@ -368,16 +368,26 @@ sanvicente-choir/
 ### 10.2 Member Profile Picture
 
 **Registration:**
-- New optional field: profile photo (Google Drive link)
+- New optional field: profile photo — uploaded as a file (JPG, PNG, or WebP, max 5 MB)
+- Stored in Supabase Storage bucket `avatars` under `{userId}/avatar.{ext}`; public URL saved to `profiles.profile_photo_url`
 - Displayed on member profile page and member list in admin panel
+
+**Storage:**
+- Supabase Storage bucket: `avatars` (public read)
+- RLS: authenticated users can upload/update/delete only within their own `{userId}/` folder
+- Free tier limit: 1 GB — sufficient for hundreds of members at typical photo sizes
 
 ---
 
 ### 10.3 Constitution & Handbook Terms of Service Modal
 
 **Registration flow addition:**
-- Before the registration form renders, a modal displays the full text of the Constitution & By-Laws and Member Handbook (rendered from the existing Markdown files)
-- Member must scroll through and check an acknowledgement checkbox to proceed
+- Before the registration form renders, a full-screen modal with two tabs is shown:
+  - Tab 1 — **Member Handbook** (active by default)
+  - Tab 2 — **Constitution & By-Laws**
+  - Both documents fetched and rendered via `marked.js` from `/docs/handbook.md` and `/docs/constitution.md`
+- One shared acknowledgement checkbox at the bottom: "I have read and agree to both documents"
+- "Proceed to Register" button is disabled until the checkbox is checked
 - Acknowledgement timestamp stored in `profiles` table (`tos_accepted_at`)
 
 ---

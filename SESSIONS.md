@@ -368,7 +368,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 10: Registration ToS Modal + Member Profile Picture
 
-**Status:** [ ] Not Started
+**Status:** [x] Complete
 
 **Goal:** Add a Terms of Service modal showing the Constitution and Member Handbook before registration. Add profile picture field to registration and member profile pages.
 

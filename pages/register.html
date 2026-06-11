@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
       .reg-page {
         min-height: 100vh;
@@ -64,10 +65,167 @@
         color: var(--ivory-dim);
       }
       .reg-footer a { color: var(--gold); }
+
+      /* ── ToS Modal ── */
+      #tos-modal .modal {
+        max-width: 720px;
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .tos-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--gold-dim);
+        padding: 0 var(--space-5);
+        flex-shrink: 0;
+      }
+      .tos-tab {
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: var(--space-3) var(--space-5);
+        font-family: var(--font-display);
+        font-size: var(--text-xs);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ivory-muted);
+        cursor: pointer;
+        margin-bottom: -1px;
+        transition: color 0.15s, border-color 0.15s;
+        min-height: 44px;
+      }
+      .tos-tab:hover { color: var(--ivory); }
+      .tos-tab[aria-selected="true"] {
+        color: var(--gold);
+        border-bottom-color: var(--gold);
+      }
+      .tos-panel {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--space-6);
+        -webkit-overflow-scrolling: touch;
+        font-size: var(--text-sm);
+        line-height: 1.75;
+        color: var(--ivory-dim);
+      }
+      .tos-panel h1 {
+        font-family: var(--font-display);
+        font-size: var(--text-xl);
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: var(--ivory);
+        margin: var(--space-6) 0 var(--space-2);
+      }
+      .tos-panel h1:first-child { margin-top: 0; }
+      .tos-panel h2 {
+        font-family: var(--font-display);
+        font-size: var(--text-base);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--gold);
+        margin: var(--space-5) 0 var(--space-2);
+      }
+      .tos-panel h3 {
+        font-family: var(--font-display);
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--ivory);
+        margin: var(--space-4) 0 var(--space-2);
+      }
+      .tos-panel p  { margin: var(--space-2) 0; }
+      .tos-panel ul, .tos-panel ol {
+        margin: var(--space-2) 0 var(--space-2) var(--space-6);
+      }
+      .tos-panel li { margin-bottom: 4px; }
+      .tos-check-row {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-3);
+        padding: var(--space-4) var(--space-6);
+        border-top: 1px solid rgba(245,242,235,0.1);
+        flex-shrink: 0;
+      }
+      .tos-check-row input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: var(--gold);
+      }
+      .tos-check-row label {
+        font-size: var(--text-sm);
+        color: var(--ivory-dim);
+        line-height: 1.5;
+        cursor: pointer;
+      }
+      .tos-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: var(--space-4) var(--space-6);
+        border-top: 1px solid rgba(245,242,235,0.1);
+        flex-shrink: 0;
+      }
     </style>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- ── ToS Modal — shown before registration form ── -->
+    <div class="modal-overlay" id="tos-modal" role="dialog" aria-modal="true" aria-labelledby="tos-title">
+      <div class="modal">
+        <div class="modal-header" style="flex-shrink:0">
+          <div>
+            <h2 class="modal-title" id="tos-title">Before You Register</h2>
+            <p style="font-size:var(--text-xs);color:var(--ivory-muted);margin-top:3px">
+              Please read both documents before proceeding
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab nav -->
+        <div class="tos-tabs" role="tablist" aria-label="Documents">
+          <button class="tos-tab" role="tab" id="tab-btn-handbook"
+                  aria-selected="true" aria-controls="tos-handbook">
+            Member Handbook
+          </button>
+          <button class="tos-tab" role="tab" id="tab-btn-constitution"
+                  aria-selected="false" aria-controls="tos-constitution">
+            Constitution &amp; By-Laws
+          </button>
+        </div>
+
+        <!-- Tab panels -->
+        <div class="tos-panel" id="tos-handbook"
+             role="tabpanel" aria-labelledby="tab-btn-handbook">
+          <div class="loading-text" style="padding:var(--space-8) 0">
+            <div class="spinner"></div> Loading…
+          </div>
+        </div>
+        <div class="tos-panel" id="tos-constitution"
+             role="tabpanel" aria-labelledby="tab-btn-constitution" hidden>
+          <div class="loading-text" style="padding:var(--space-8) 0">
+            <div class="spinner"></div> Loading…
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="tos-check-row">
+          <input type="checkbox" id="tos-checkbox">
+          <label for="tos-checkbox">
+            I have read and agree to the San Vicente Choir Constitution &amp; By-Laws
+            and Member Handbook.
+          </label>
+        </div>
+        <div class="tos-actions">
+          <button class="btn btn-gold" id="tos-proceed" disabled>
+            Proceed to Register
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div id="page-loader" class="page-loader" aria-hidden="true">
       <img src="../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
@@ -177,6 +335,13 @@
                      placeholder="e.g. University of Cebu — Engineering student">
             </div>
 
+            <div class="form-group">
+              <label for="profile_photo">Profile Photo</label>
+              <div id="reg-photo-preview" style="margin-bottom:var(--space-3)"></div>
+              <input type="file" id="profile_photo" name="profile_photo" accept="image/*">
+              <p class="form-hint">Optional — JPG, PNG, or WebP, max 5 MB</p>
+            </div>
+
             <!-- Custom fields are injected here by JS -->
             <div id="custom-fields-section" style="display:none">
               <p class="section-divider">Additional Information</p>
@@ -202,7 +367,10 @@
 
     <script type="module">
       import { supabase } from '../js/supabase-client.js';
+      import { getSession } from '../js/auth.js';
+      import { hidePageLoader } from '../js/utils.js';
 
+      // ── Password toggle ────────────────────────────────────────
       document.querySelectorAll('.password-toggle').forEach(btn => {
         btn.addEventListener('click', () => {
           const input = document.getElementById(btn.dataset.target);
@@ -214,27 +382,75 @@
             : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
         });
       });
-      import { getSession } from '../js/auth.js';
-      import { hidePageLoader } from '../js/utils.js';
 
-      // Already logged in → redirect; otherwise reveal the form
+      // ── Photo file preview ─────────────────────────────────────
+      document.getElementById('profile_photo').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = evt => {
+          document.getElementById('reg-photo-preview').innerHTML =
+            `<img src="${evt.target.result}" alt="Preview" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dim)">`;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // ── Auth check — already logged in → redirect ───────────────
       const _session = await getSession();
       if (_session) {
         window.location.href = 'members/dashboard.html';
       } else {
         hidePageLoader();
+        showTosModal();
       }
 
-      const form         = document.getElementById('register-form');
-      const submitBtn    = document.getElementById('submit-btn');
-      const errorMsg     = document.getElementById('error-msg');
-      const errorText    = document.getElementById('error-text');
-      const successMsg   = document.getElementById('success-msg');
-      const cfSection    = document.getElementById('custom-fields-section');
-      const cfContainer  = document.getElementById('custom-fields');
-      const cfLoading    = document.getElementById('custom-fields-loading');
+      // ── ToS Modal ──────────────────────────────────────────────
+      async function showTosModal() {
+        document.getElementById('tos-modal').classList.add('open');
 
-      // ── Load custom field definitions ──────────────────────
+        const [hResult, cResult] = await Promise.allSettled([
+          fetch('/docs/handbook.md').then(r => r.text()),
+          fetch('/docs/constitution.md').then(r => r.text()),
+        ]);
+
+        const fallback = '<p style="color:var(--ivory-muted);font-style:italic">Unable to load. You may review this document in the Documents section after registration.</p>';
+
+        document.getElementById('tos-handbook').innerHTML =
+          hResult.status === 'fulfilled' ? marked.parse(hResult.value) : fallback;
+        document.getElementById('tos-constitution').innerHTML =
+          cResult.status === 'fulfilled' ? marked.parse(cResult.value) : fallback;
+      }
+
+      // Tab switching
+      document.querySelectorAll('.tos-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tos-tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+          document.querySelectorAll('.tos-panel').forEach(p => { p.hidden = true; });
+          btn.setAttribute('aria-selected', 'true');
+          document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+        });
+      });
+
+      document.getElementById('tos-checkbox').addEventListener('change', e => {
+        document.getElementById('tos-proceed').disabled = !e.target.checked;
+      });
+
+      document.getElementById('tos-proceed').addEventListener('click', () => {
+        document.getElementById('tos-modal').classList.remove('open');
+        document.getElementById('email').focus();
+      });
+
+      // ── Form setup ─────────────────────────────────────────────
+      const form        = document.getElementById('register-form');
+      const submitBtn   = document.getElementById('submit-btn');
+      const errorMsg    = document.getElementById('error-msg');
+      const errorText   = document.getElementById('error-text');
+      const successMsg  = document.getElementById('success-msg');
+      const cfSection   = document.getElementById('custom-fields-section');
+      const cfContainer = document.getElementById('custom-fields');
+      const cfLoading   = document.getElementById('custom-fields-loading');
+
+      // ── Load custom field definitions ──────────────────────────
       async function loadCustomFields() {
         const { data: fields, error } = await supabase
           .from('custom_field_definitions')
@@ -290,14 +506,20 @@
 
       loadCustomFields();
 
-      // ── Form submission ─────────────────────────────────────
+      // ── Form submission ─────────────────────────────────────────
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         errorMsg.style.display = 'none';
 
-        // Password match check
         if (form.password.value !== form.password_confirm.value) {
           errorText.textContent = 'Passwords do not match.';
+          errorMsg.style.display = 'flex';
+          return;
+        }
+
+        const photoFile = document.getElementById('profile_photo').files[0];
+        if (photoFile && photoFile.size > 5 * 1024 * 1024) {
+          errorText.textContent = 'Profile photo must be under 5 MB.';
           errorMsg.style.display = 'flex';
           return;
         }
@@ -305,21 +527,35 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting…';
 
-        const email    = form.email.value.trim();
-        const password = form.password.value;
-
         try {
           // 1. Create auth user
           const { data: authData, error: signUpError } = await supabase.auth.signUp({
-            email,
-            password,
+            email:    form.email.value.trim(),
+            password: form.password.value,
           });
           if (signUpError) throw signUpError;
 
           const userId = authData.user?.id;
           if (!userId) throw new Error('Account creation failed. Please try again.');
 
-          // 2. Collect custom field values
+          // 2. Upload profile photo (non-fatal if it fails)
+          let profile_photo_url = null;
+          if (photoFile) {
+            submitBtn.textContent = 'Uploading photo…';
+            const ext = (photoFile.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+            const { error: uploadError } = await supabase.storage
+              .from('avatars')
+              .upload(`${userId}/avatar.${ext}`, photoFile, { upsert: true });
+            if (!uploadError) {
+              const { data: { publicUrl } } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(`${userId}/avatar.${ext}`);
+              profile_photo_url = publicUrl;
+            }
+            submitBtn.textContent = 'Submitting…';
+          }
+
+          // 3. Collect custom field values
           const customFields = {};
           document.querySelectorAll('#custom-fields [data-field-id]').forEach(group => {
             const fieldId = group.dataset.fieldId;
@@ -327,7 +563,7 @@
             if (input?.value) customFields[fieldId] = input.value;
           });
 
-          // 3. Insert profile row
+          // 4. Insert profile row
           const { error: profileError } = await supabase.from('profiles').insert({
             id:                userId,
             full_name:         form.full_name.value.trim(),
@@ -336,13 +572,15 @@
             age:               form.age.value ? parseInt(form.age.value, 10) : null,
             school_occupation: form.school_occupation.value.trim() || null,
             voice_part:        form.voice_part.value || null,
+            profile_photo_url,
             role:              'member',
             status:            'pending',
             custom_fields:     customFields,
+            tos_accepted_at:   new Date().toISOString(),
           });
           if (profileError) throw profileError;
 
-          // 4. Show success
+          // 5. Show success
           form.style.display = 'none';
           successMsg.style.display = 'flex';
           window.scrollTo({ top: 0, behavior: 'smooth' });
