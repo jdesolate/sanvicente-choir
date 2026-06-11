@@ -53,6 +53,8 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 | Submit Absence Request | | ✓ | ✓ | ✓ |
 | Approve Absence Request | | | ✓ | ✓ |
 | Member Approval & Roles | | | | ✓ |
+| View Member Full Profile | | | | ✓ |
+| Attendance Summary (leaderboard) | | | ✓ | ✓ |
 | Event Management | | | | ✓ |
 | Song Management | | | | ✓ |
 | Custom Field Management | | | | ✓ |
@@ -85,6 +87,12 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 
 **Admin fallback:** Admin can create accounts directly for members unable to self-register.
 
+**Admin — View Member Profile:**
+- Each row in the All Members table has a **View** button
+- Opens a read-only modal fetching the full `profiles` record
+- Displays: voice part, role, status, contact number, birthday, age, school/occupation, joined date, approved date, and any custom fields
+- Fields with no data show a muted `—` placeholder
+
 ---
 
 ### 6.2 Attendance Tracker
@@ -103,6 +111,14 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 - Per-event view: all members with present/absent/excused status
 - Per-member view: full attendance history + rate per tier
 - At-risk flags: members below configurable threshold (default 80%)
+
+**Attendance Summary (admin/secretary — `pages/admin/attendance-summary.html`):**
+- Aggregate view across all events; not tied to a single event
+- Top stat cards: Events Tracked, Active Members, Choir Avg Rate, Perfect Attendance count
+- Leaderboard table ranked by attendance rate (default), with Present / Excused / Absent counts and an inline color-coded progress bar (green ≥80%, gold 50–79%, red <50%)
+- All columns are sortable (click header to toggle asc/desc)
+- Filters: Voice Part, Event Type (core/major/special — recalculates rate to that tier only), and name search
+- Data source: `attendance` table joined with `events` and `profiles`; no new schema required
 
 **Member's Own View:**
 - Own attendance history table
@@ -169,7 +185,12 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 
 ### 6.6 Documents Access Control
 
-Documents hub (`documents.html`) updated to show/hide content based on auth state:
+Documents hub (`documents.html`) updated to show/hide content based on auth state.
+
+**Portal navigation (sidebar "Member Portal" section):**
+- **All logged-in members:** Dashboard link + My Attendance link
+- **Admin only:** additional Admin Portal link (→ `pages/admin/members.html`)
+- Unauthenticated visitors see a "Login to Access" prompt instead
 
 | Document | Access |
 |----------|--------|
@@ -195,6 +216,8 @@ Documents hub (`documents.html`) updated to show/hide content based on auth stat
 | Markdown rendering | marked.js (CDN) |
 | Fonts | Google Fonts: Cinzel, Cormorant Garamond, Inter |
 | Shared CSS | `css/design-system.css` — design tokens, WCAG-compliant base styles, and reusable portal components (buttons, forms, badges, tables, sidebar layout, modals). Every page under `pages/` must import this file. |
+
+**Sidebar role-gating rule:** All member pages (`dashboard`, `attendance`, `songs`, `profile`) must include hidden `#secretary-section` and `#admin-section` nav divs that are revealed via JS after the profile is loaded. Admin pages must include both sections statically (always visible, since the page is already role-guarded). This ensures the correct nav is visible on every page without requiring a return to dashboard.
 | Hosting | Netlify (migrated from GitHub Pages) |
 
 ---
@@ -314,6 +337,7 @@ sanvicente-choir/
 │   │   └── absences.html
 │   └── admin/                # Admin-only pages
 │       ├── members.html
+│       ├── attendance-summary.html
 │       ├── events.html
 │       ├── songs.html
 │       └── fields.html

@@ -672,14 +672,26 @@
         <button data-min-role="member" onclick="showPage('commitments', this)">
           <span class="nav-emoji">🌟</span> Our Commitments 2026–2027
         </button>
-        <!-- Member portal link: shown for logged-in members -->
+        <!-- Member portal links: shown for logged-in members -->
         <hr class="nav-divider" id="portal-nav-divider" style="display:none" />
         <div class="nav-label" id="portal-nav-label" style="display:none">Member Portal</div>
+        <a id="portal-dashboard-link" href="pages/members/dashboard.html"
+           style="display:none;padding:0 20px;min-height:44px;align-items:center;gap:10px;color:var(--ivory-dim);text-decoration:none;font-size:0.875rem;font-weight:400;border-left:2px solid transparent;transition:all 0.18s;width:100%"
+           onmouseover="this.style.background='var(--gold-faint)';this.style.color='var(--ivory)'"
+           onmouseout="this.style.background='';this.style.color='var(--ivory-dim)'">
+          <span style="font-size:14px;opacity:0.7">⌂</span> Dashboard
+        </a>
         <a id="absence-request-link" href="pages/members/attendance.html"
            style="display:none;padding:0 20px;min-height:44px;align-items:center;gap:10px;color:var(--ivory-dim);text-decoration:none;font-size:0.875rem;font-weight:400;border-left:2px solid transparent;transition:all 0.18s;width:100%"
            onmouseover="this.style.background='var(--gold-faint)';this.style.color='var(--ivory)'"
            onmouseout="this.style.background='';this.style.color='var(--ivory-dim)'">
-          <span style="font-size:14px;opacity:0.7">📋</span> My Attendance & Requests
+          <span style="font-size:14px;opacity:0.7">✓</span> My Attendance
+        </a>
+        <a id="admin-portal-link" href="pages/admin/members.html"
+           style="display:none;padding:0 20px;min-height:44px;align-items:center;gap:10px;color:var(--ivory-dim);text-decoration:none;font-size:0.875rem;font-weight:400;border-left:2px solid transparent;transition:all 0.18s;width:100%"
+           onmouseover="this.style.background='var(--gold-faint)';this.style.color='var(--ivory)'"
+           onmouseout="this.style.background='';this.style.color='var(--ivory-dim)'">
+          <span style="font-size:14px;opacity:0.7">◈</span> Admin Portal
         </a>
         <!-- Login notice for unauthenticated visitors -->
         <div id="sidebar-login-notice" style="display:none;padding:16px 20px;border-top:1px solid rgba(245,242,235,0.05);margin-top:8px">
@@ -2718,13 +2730,19 @@ Come ready to share one personal goal for your year in the choir (Article XIII)
         if (notice) notice.style.display = level === 0 ? 'block' : 'none';
 
         // Member portal links: show for logged-in members+
-        const portalDivider = document.getElementById('portal-nav-divider');
-        const portalLabel = document.getElementById('portal-nav-label');
-        const absenceLink = document.getElementById('absence-request-link');
+        const portalDivider    = document.getElementById('portal-nav-divider');
+        const portalLabel      = document.getElementById('portal-nav-label');
+        const dashboardLink    = document.getElementById('portal-dashboard-link');
+        const absenceLink      = document.getElementById('absence-request-link');
+        const adminPortalLink  = document.getElementById('admin-portal-link');
         if (level >= 1) {
-          if (portalDivider) portalDivider.style.display = '';
-          if (portalLabel) portalLabel.style.display = '';
-          if (absenceLink) absenceLink.style.display = 'flex';
+          if (portalDivider)   portalDivider.style.display = '';
+          if (portalLabel)     portalLabel.style.display = '';
+          if (dashboardLink)   dashboardLink.style.display = 'flex';
+          if (absenceLink)     absenceLink.style.display = 'flex';
+        }
+        if (level >= 3) {
+          if (adminPortalLink) adminPortalLink.style.display = 'flex';
         }
       }
 

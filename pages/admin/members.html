@@ -67,6 +67,9 @@
         <a href="members.html" class="sidebar-link active">
           <span class="sidebar-icon">◈</span> Members
         </a>
+        <a href="attendance-summary.html" class="sidebar-link">
+          <span class="sidebar-icon">◉</span> Attendance Summary
+        </a>
         <a href="events.html" class="sidebar-link">
           <span class="sidebar-icon">◷</span> Events
         </a>
@@ -169,6 +172,21 @@
     <footer class="portal-footer">
       San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
     </footer>
+
+    <!-- ── View Profile Modal ── -->
+    <div class="modal-overlay" id="view-modal" role="dialog" aria-modal="true" aria-labelledby="view-modal-title">
+      <div class="modal" style="max-width:560px">
+        <div class="modal-header">
+          <h2 class="modal-title" id="view-modal-title">Member Profile</h2>
+          <button class="modal-close" id="view-close" aria-label="Close">✕</button>
+        </div>
+        <div id="view-loading" class="loading-text" style="padding:var(--space-6) 0"><div class="spinner"></div> Loading…</div>
+        <div id="view-body" style="display:none"></div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost btn-sm" id="view-done">Close</button>
+        </div>
+      </div>
+    </div>
 
     <!-- ── Approve Modal ── -->
     <div class="modal-overlay" id="approve-modal" role="dialog" aria-modal="true" aria-labelledby="approve-modal-title">
@@ -451,6 +469,8 @@
             <td>${badgeRole(m.role)}</td>
             <td>${badgeStatus(m.status)}</td>
             <td><div class="actions">
+              <button class="btn btn-outline btn-sm js-view"
+                      data-id="${m.id}">View</button>
               <button class="btn btn-outline btn-sm js-edit"
                       data-id="${m.id}"
                       data-name="${escHtml(m.full_name)}"
@@ -476,9 +496,76 @@
       });
 
       document.getElementById('members-tbody').addEventListener('click', e => {
+        const viewBtn = e.target.closest('.js-view');
         const editBtn = e.target.closest('.js-edit');
+        if (viewBtn) openViewModal(viewBtn.dataset.id);
         if (editBtn) openEditModal(editBtn.dataset.id, editBtn.dataset.name, editBtn.dataset.role, editBtn.dataset.status);
       });
+
+      // ── View Profile Modal ─────────────────────────────────────
+      function closeViewModal() { document.getElementById('view-modal').classList.remove('open'); }
+      document.getElementById('view-close').addEventListener('click', closeViewModal);
+      document.getElementById('view-done').addEventListener('click', closeViewModal);
+
+      async function openViewModal(id) {
+        const loadingEl = document.getElementById('view-loading');
+        const bodyEl    = document.getElementById('view-body');
+        loadingEl.style.display = 'flex';
+        bodyEl.style.display    = 'none';
+        bodyEl.innerHTML        = '';
+        document.getElementById('view-modal').classList.add('open');
+
+        const { data: m, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        loadingEl.style.display = 'none';
+
+        if (error || !m) {
+          bodyEl.innerHTML = `<p style="color:var(--ivory-muted);font-style:italic">Failed to load profile.</p>`;
+          bodyEl.style.display = 'block';
+          return;
+        }
+
+        document.getElementById('view-modal-title').textContent = m.full_name;
+
+        const row = (label, val) => `
+          <div class="profile-field">
+            <span class="profile-label">${label}</span>
+            <span class="profile-value${val ? '' : ' muted'}">${val || '—'}</span>
+          </div>`;
+
+        const customFieldRows = m.custom_fields && Object.keys(m.custom_fields).length
+          ? Object.entries(m.custom_fields).map(([k, v]) => row(k, v)).join('')
+          : '';
+
+        bodyEl.innerHTML = `
+          <style>
+            .profile-field{display:grid;grid-template-columns:140px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid rgba(245,242,235,0.06);align-items:baseline}
+            .profile-field:last-child{border-bottom:none}
+            .profile-label{font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory-muted)}
+            .profile-value{font-size:var(--text-sm);color:var(--ivory)}
+            .profile-value.muted{color:var(--ivory-muted);font-style:italic}
+            .profile-section{font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:6px;margin:var(--space-5) 0 var(--space-2)}
+            @media(max-width:480px){.profile-field{grid-template-columns:1fr;gap:3px}}
+          </style>
+          <div class="profile-section">Basic Information</div>
+          ${row('Voice Part', cap(m.voice_part))}
+          ${row('Role', cap(m.role))}
+          ${row('Status', cap(m.status))}
+          ${row('Contact No.', m.contact_number)}
+          ${row('Birthday', m.birthday ? formatDate(m.birthday) : null)}
+          ${row('Age', m.age)}
+          ${row('School / Occupation', m.school_occupation)}
+          <div class="profile-section">Account</div>
+          ${row('Joined', formatDate(m.created_at))}
+          ${row('Approved', m.approved_at ? formatDate(m.approved_at) : null)}
+          ${customFieldRows ? `<div class="profile-section">Custom Fields</div>${customFieldRows}` : ''}
+        `;
+        bodyEl.style.display = 'block';
+      }
 
       // ── Approve Modal ──────────────────────────────────────────
       function openApproveModal(id, name) {

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Summary — San Vicente Choir</title>
+    <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .rate-bar-wrap { display:flex; align-items:center; gap:10px; min-width:140px; }
+      .rate-bar-track {
+        flex:1; height:6px; border-radius:3px;
+        background:rgba(245,242,235,0.08);
+        overflow:hidden;
+      }
+      .rate-bar-fill {
+        height:100%; border-radius:3px;
+        background:var(--gold);
+        transition:width .3s ease;
+      }
+      .rate-bar-fill.good   { background: #6abf69; }
+      .rate-bar-fill.mid    { background: var(--gold); }
+      .rate-bar-fill.low    { background: #e07070; }
+      .rate-pct { font-size:var(--text-xs); font-weight:600; color:var(--ivory); min-width:36px; text-align:right; }
+      .rank-num { font-family:var(--font-display); font-size:var(--text-sm); color:var(--ivory-muted); font-weight:600; }
+      .filter-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:var(--space-6); }
+      .filter-row select { padding:6px 12px; font-size:var(--text-sm); }
+      .sort-btn { cursor:pointer; user-select:none; }
+      .sort-btn:hover { color:var(--gold); }
+      .sort-arrow { font-size:.7em; margin-left:3px; opacity:.5; }
+      .sort-arrow.active { opacity:1; color:var(--gold); }
+    </style>
+  </head>
+  <body class="portal-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Admin Portal</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div class="portal-header-user">
+        <span id="header-name">Loading…</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      </div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Secretary</div>
+        <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+        <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-label">Admin</div>
+        <a href="members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+        <a href="attendance-summary.html" class="sidebar-link active"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+        <a href="events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+        <a href="songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+        <a href="fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+        <hr class="sidebar-divider">
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading" style="margin-bottom:var(--space-6)">
+            <h2>Attendance Summary</h2>
+            <p>Aggregate attendance rates across all events, ranked by consistency</p>
+          </div>
+
+          <!-- ── Top stats ── -->
+          <div id="stats-bar" class="stat-grid" style="display:none;margin-bottom:var(--space-8)">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-events">—</div>
+              <div class="stat-label">Events Tracked</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-members">—</div>
+              <div class="stat-label">Active Members</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-avg">—</div>
+              <div class="stat-label">Choir Avg Rate</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-perfect">—</div>
+              <div class="stat-label">Perfect Attendance</div>
+            </div>
+          </div>
+
+          <!-- ── Loading / empty ── -->
+          <div id="summary-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+          <div id="summary-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">◉</div>
+            <p>No attendance records found. Start marking events in the Attendance Tracker.</p>
+          </div>
+
+          <!-- ── Filters ── -->
+          <div id="filter-row" class="filter-row" style="display:none">
+            <div class="form-group" style="margin-bottom:0;flex:0 0 auto">
+              <label for="filter-voice" style="font-size:var(--text-xs)">Voice Part</label>
+              <select id="filter-voice">
+                <option value="">All Parts</option>
+                <option value="soprano">Soprano</option>
+                <option value="alto">Alto</option>
+                <option value="tenor">Tenor</option>
+                <option value="bass">Bass</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;flex:0 0 auto">
+              <label for="filter-type" style="font-size:var(--text-xs)">Event Type</label>
+              <select id="filter-type">
+                <option value="">All Types</option>
+                <option value="core">Core</option>
+                <option value="major">Major</option>
+                <option value="special">Special</option>
+              </select>
+            </div>
+            <div class="search-bar" style="margin-bottom:0;flex:1;min-width:180px;max-width:280px;align-self:flex-end">
+              <input type="search" id="filter-search" placeholder="Search by name…" aria-label="Search members">
+            </div>
+          </div>
+
+          <!-- ── Leaderboard table ── -->
+          <div id="summary-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Attendance leaderboard">
+              <thead>
+                <tr>
+                  <th style="width:44px">#</th>
+                  <th class="sort-btn" data-col="name">Name <span class="sort-arrow" data-arrow="name">↕</span></th>
+                  <th>Voice Part</th>
+                  <th class="sort-btn" data-col="present">Present <span class="sort-arrow" data-arrow="present">↕</span></th>
+                  <th class="sort-btn" data-col="excused">Excused <span class="sort-arrow" data-arrow="excused">↕</span></th>
+                  <th class="sort-btn" data-col="absent">Absent <span class="sort-arrow" data-arrow="absent">↕</span></th>
+                  <th class="sort-btn" data-col="total">Total <span class="sort-arrow" data-arrow="total">↕</span></th>
+                  <th class="sort-btn" data-col="rate" style="min-width:180px">Rate <span class="sort-arrow active" data-arrow="rate">↓</span></th>
+                </tr>
+              </thead>
+              <tbody id="summary-tbody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      initThemeToggle();
+
+      const adminProfile = await requireRole('admin');
+      if (!adminProfile) throw new Error('redirecting');
+
+      document.getElementById('header-name').textContent = adminProfile.full_name;
+      document.getElementById('page-content').style.display = 'block';
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      // ── State ──────────────────────────────────────────────────
+      let rows = [];          // computed per-member summary rows
+      let sortCol = 'rate';
+      let sortAsc = false;
+      let filterVoice = '';
+      let filterType  = '';
+      let filterSearch = '';
+
+      // ── Fetch & compute ────────────────────────────────────────
+      async function loadData() {
+        const loadingEl  = document.getElementById('summary-loading');
+        const emptyEl    = document.getElementById('summary-empty');
+        const tableEl    = document.getElementById('summary-table-wrap');
+        const statsEl    = document.getElementById('stats-bar');
+        const filterEl   = document.getElementById('filter-row');
+
+        // Fetch all attendance records joined with events and profiles
+        const [attRes, profilesRes] = await Promise.all([
+          supabase
+            .from('attendance')
+            .select('member_id, status, event_id, events(event_type)')
+            .order('event_id'),
+          supabase
+            .from('profiles')
+            .select('id, full_name, voice_part, status')
+            .in('status', ['active', 'associate'])
+            .order('full_name'),
+        ]);
+
+        loadingEl.style.display = 'none';
+
+        if (attRes.error || !attRes.data?.length || profilesRes.error || !profilesRes.data?.length) {
+          emptyEl.style.display = 'block';
+          hidePageLoader();
+          return;
+        }
+
+        const profiles = profilesRes.data;
+        const allRecords = attRes.data;
+
+        // Count distinct events overall and per type
+        const eventIds = new Set(allRecords.map(r => r.event_id));
+        const eventTypeMap = {};
+        allRecords.forEach(r => {
+          if (!eventTypeMap[r.event_id]) eventTypeMap[r.event_id] = r.events?.event_type || 'unknown';
+        });
+
+        // Build per-member stats, keyed by member_id
+        const statsMap = {};
+        profiles.forEach(p => {
+          statsMap[p.id] = { ...p, present: 0, absent: 0, excused: 0, byType: { core:{p:0,a:0,e:0}, major:{p:0,a:0,e:0}, special:{p:0,a:0,e:0} } };
+        });
+
+        allRecords.forEach(r => {
+          if (!statsMap[r.member_id]) return;
+          const s = statsMap[r.member_id];
+          const type = eventTypeMap[r.event_id] || 'special';
+          if (r.status === 'present')      { s.present++; if (s.byType[type]) s.byType[type].p++; }
+          else if (r.status === 'excused') { s.excused++; if (s.byType[type]) s.byType[type].e++; }
+          else                             { s.absent++;  if (s.byType[type]) s.byType[type].a++; }
+        });
+
+        rows = Object.values(statsMap).map(s => {
+          const total = s.present + s.absent + s.excused;
+          const rate  = total > 0 ? (s.present / total) * 100 : 0;
+          return { ...s, total, rate };
+        });
+
+        // Global stats
+        const totalEvents = eventIds.size;
+        const perfectCount = rows.filter(r => r.total > 0 && r.present === r.total).length;
+        const avgRate = rows.filter(r => r.total > 0).reduce((sum, r) => sum + r.rate, 0) /
+                        (rows.filter(r => r.total > 0).length || 1);
+
+        document.getElementById('stat-events').textContent  = totalEvents;
+        document.getElementById('stat-members').textContent = profiles.length;
+        document.getElementById('stat-avg').textContent     = avgRate.toFixed(1) + '%';
+        document.getElementById('stat-perfect').textContent = perfectCount;
+
+        statsEl.style.display  = 'grid';
+        filterEl.style.display = 'flex';
+        tableEl.style.display  = 'block';
+
+        renderTable();
+        hidePageLoader();
+      }
+
+      // ── Render ─────────────────────────────────────────────────
+      function renderTable() {
+        let data = [...rows];
+
+        // Apply filters
+        if (filterVoice)  data = data.filter(r => r.voice_part === filterVoice);
+        if (filterSearch) data = data.filter(r => r.full_name.toLowerCase().includes(filterSearch));
+
+        // Sort
+        data.sort((a, b) => {
+          let av = a[sortCol], bv = b[sortCol];
+          if (typeof av === 'string') return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+          return sortAsc ? av - bv : bv - av;
+        });
+
+        const tbody = document.getElementById('summary-tbody');
+
+        if (!data.length) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--ivory-muted);padding:var(--space-8)">No members match the current filters.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = data.map((m, i) => {
+          const pct   = m.rate.toFixed(1);
+          const cls   = m.rate >= 80 ? 'good' : m.rate >= 50 ? 'mid' : 'low';
+          const total = filterType
+            ? (() => {
+                const b = m.byType[filterType] || {p:0,a:0,e:0};
+                const t = b.p + b.a + b.e;
+                const r = t > 0 ? ((b.p / t) * 100).toFixed(1) : '0.0';
+                return { present: b.p, absent: b.a, excused: b.e, total: t, pct: r,
+                         cls: r >= 80 ? 'good' : r >= 50 ? 'mid' : 'low' };
+              })()
+            : { present: m.present, absent: m.absent, excused: m.excused, total: m.total, pct, cls };
+
+          return `
+            <tr>
+              <td class="rank-num">${i + 1}</td>
+              <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
+              <td>${cap(m.voice_part)}</td>
+              <td><span class="badge badge-present">${total.present}</span></td>
+              <td><span class="badge badge-excused">${total.excused}</span></td>
+              <td><span class="badge badge-absent">${total.absent}</span></td>
+              <td style="color:var(--ivory-muted);font-size:var(--text-sm)">${total.total}</td>
+              <td>
+                <div class="rate-bar-wrap">
+                  <div class="rate-bar-track">
+                    <div class="rate-bar-fill ${total.cls}" style="width:${total.pct}%"></div>
+                  </div>
+                  <span class="rate-pct">${total.pct}%</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // ── Sort on header click ────────────────────────────────────
+      document.querySelector('.data-table thead').addEventListener('click', e => {
+        const btn = e.target.closest('[data-col]');
+        if (!btn) return;
+        const col = btn.dataset.col;
+        if (sortCol === col) { sortAsc = !sortAsc; }
+        else { sortCol = col; sortAsc = col === 'name'; }
+
+        // Update arrow indicators
+        document.querySelectorAll('[data-arrow]').forEach(el => {
+          el.classList.remove('active');
+          el.textContent = '↕';
+        });
+        const arrow = document.querySelector(`[data-arrow="${col}"]`);
+        if (arrow) { arrow.classList.add('active'); arrow.textContent = sortAsc ? '↑' : '↓'; }
+
+        renderTable();
+      });
+
+      // ── Filters ────────────────────────────────────────────────
+      document.getElementById('filter-voice').addEventListener('change', e => {
+        filterVoice = e.target.value; renderTable();
+      });
+      document.getElementById('filter-type').addEventListener('change', e => {
+        filterType = e.target.value; renderTable();
+      });
+      document.getElementById('filter-search').addEventListener('input', e => {
+        filterSearch = e.target.value.trim().toLowerCase(); renderTable();
+      });
+
+      // ── Load ───────────────────────────────────────────────────
+      await loadData();
+    </script>
+  </body>
+</html>

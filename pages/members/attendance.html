@@ -45,6 +45,21 @@
         <a href="profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
         <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
         <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
         <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
       </nav>
 
@@ -199,6 +214,13 @@
 
       document.getElementById('header-name').textContent = profile.full_name;
       document.getElementById('page-content').style.display = 'block';
+
+      if (profile.role === 'secretary' || profile.role === 'admin') {
+        document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (profile.role === 'admin') {
+        document.getElementById('admin-section').style.display = 'block';
+      }
 
       // ── Sign out ───────────────────────────────────────────────
       async function handleSignOut() {
