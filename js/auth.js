@@ -36,8 +36,9 @@ export async function requireAuth(redirectTo = '/pages/login.html') {
     return null;
   }
   // Block inactive members even if their session is still valid
+  // super_admin is a service account — exempt from status checks
   const profile = await getProfile();
-  if (profile?.status === 'inactive') {
+  if (profile?.status === 'inactive' && profile?.role !== 'super_admin') {
     await supabase.auth.signOut();
     window.location.href = '/pages/login.html?inactive=1';
     return null;
@@ -64,7 +65,7 @@ export async function requireRole(role, redirectTo = '/index.html') {
     window.location.href = '/pages/login.html';
     return null;
   }
-  if (profile.status === 'inactive') {
+  if (profile.status === 'inactive' && profile.role !== 'super_admin') {
     await supabase.auth.signOut();
     window.location.href = '/pages/login.html?inactive=1';
     return null;

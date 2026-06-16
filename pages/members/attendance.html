@@ -222,6 +222,13 @@
         document.getElementById('admin-section').style.display = 'block';
       }
 
+      // super_admin is a service account — hide personal attendance UI
+      const isSvcAdmin = profile.role === 'super_admin';
+      if (isSvcAdmin) {
+        document.querySelector('.page-heading').style.display = 'none';
+        document.getElementById('att-loading').style.display  = 'none';
+      }
+
       // ── Sign out ───────────────────────────────────────────────
       async function handleSignOut() {
         try { await signOut(); } catch (_) {}
@@ -518,7 +525,7 @@
       });
 
       // ── Init ───────────────────────────────────────────────────
-      await loadAttendance();
+      if (!isSvcAdmin) await loadAttendance();
       hidePageLoader();
     </script>
   </body>
