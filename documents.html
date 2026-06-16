@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}else{document.documentElement.className='dark';}</script>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,6 +31,40 @@
         --text-muted:     rgba(245,242,235,0.55);
         --border:         rgba(201,168,106,0.25);
         --nav-width:      260px;
+        /* Surface-tone borders & text tints */
+        --ivory-05:   rgba(245,242,235,0.05);
+        --ivory-06:   rgba(245,242,235,0.06);
+        --ivory-07:   rgba(245,242,235,0.07);
+        --ivory-08:   rgba(245,242,235,0.08);
+        --ivory-10:   rgba(245,242,235,0.10);
+        --ivory-52:   rgba(245,242,235,0.52);
+        --ivory-58:   rgba(245,242,235,0.58);
+      }
+
+      /* ── Light Mode ── */
+      html.light {
+        --black:      #F2EDE3;
+        --charcoal:   #E8E1D2;
+        --ivory:      #1C1714;
+        --ivory-dim:  rgba(28,23,20,0.75);
+        --gold:       #7D5420;
+        --gold-hover: #6A4418;
+        --gold-dim:   rgba(125,84,32,0.28);
+        --gold-faint: rgba(125,84,32,0.07);
+        --primary:        #7D5420;
+        --primary-light:  #6A4418;
+        --bg:             #F2EDE3;
+        --surface:        #E8E1D2;
+        --text:           #1C1714;
+        --text-muted:     rgba(28,23,20,0.75);
+        --border:         rgba(125,84,32,0.28);
+        --ivory-05:   rgba(28,23,20,0.05);
+        --ivory-06:   rgba(28,23,20,0.06);
+        --ivory-07:   rgba(28,23,20,0.07);
+        --ivory-08:   rgba(28,23,20,0.08);
+        --ivory-10:   rgba(28,23,20,0.10);
+        --ivory-52:   rgba(28,23,20,0.52);
+        --ivory-58:   rgba(28,23,20,0.58);
       }
 
       body {
@@ -200,7 +235,7 @@
 
       .nav-divider {
         border: none;
-        border-top: 1px solid rgba(245,242,235,0.05);
+        border-top: 1px solid var(--ivory-05);
         margin: 8px 16px;
       }
 
@@ -268,7 +303,7 @@
 
       .doc-card {
         background: var(--charcoal);
-        border: 1px solid rgba(245,242,235,0.07);
+        border: 1px solid var(--ivory-07);
         padding: 20px;
         cursor: pointer;
         transition: all 0.22s;
@@ -308,7 +343,7 @@
 
       .officer-card {
         background: var(--charcoal);
-        border: 1px solid rgba(245,242,235,0.07);
+        border: 1px solid var(--ivory-07);
         padding: 16px;
         text-align: center;
       }
@@ -367,7 +402,7 @@
         color: var(--ivory);
         margin: 32px 0 14px;
         padding-bottom: 10px;
-        border-bottom: 1px solid rgba(245,242,235,0.08);
+        border-bottom: 1px solid var(--ivory-08);
         opacity: 0.85;
       }
 
@@ -398,7 +433,7 @@
         color: var(--ivory);
         margin: 36px 0 14px;
         padding-bottom: 8px;
-        border-bottom: 1px solid rgba(245,242,235,0.08);
+        border-bottom: 1px solid var(--ivory-08);
       }
 
       .doc-content h3 {
@@ -438,23 +473,23 @@
         font-weight: 500;
       }
 
-      .doc-content em { color: rgba(245,242,235,0.52); } /* raised from 0.45 — WCAG AA requires 4.5:1 */
+      .doc-content em { color: var(--ivory-52); } /* raised from 0.45 — WCAG AA requires 4.5:1 */
 
       .doc-content blockquote {
         border-left: 1px solid var(--gold);
-        background: rgba(201,168,106,0.05);
+        background: var(--gold-faint);
         padding: 14px 20px;
         margin: 16px 0;
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-size: 1rem;
-        color: rgba(245,242,235,0.58);
+        color: var(--ivory-58);
         line-height: 1.75;
       }
 
       .doc-content hr {
         border: none;
-        border-top: 1px solid rgba(245,242,235,0.07);
+        border-top: 1px solid var(--ivory-07);
         margin: 28px 0;
       }
 
@@ -480,7 +515,7 @@
 
       .doc-content td {
         padding: 9px 14px;
-        border-bottom: 1px solid rgba(245,242,235,0.05);
+        border-bottom: 1px solid var(--ivory-05);
         vertical-align: top;
         line-height: 1.65;
         color: var(--ivory-dim);
@@ -488,7 +523,7 @@
       }
 
       .doc-content tr:nth-child(even) td {
-        background: rgba(255,255,255,0.01);
+        background: var(--ivory-05);
       }
       .doc-content tr:hover td {
         background: var(--gold-faint);
@@ -508,7 +543,7 @@
         align-items: center;
         gap: 10px;
         padding: 10px 0 20px 0;
-        border-bottom: 1px solid rgba(245,242,235,0.07);
+        border-bottom: 1px solid var(--ivory-07);
         margin-bottom: 24px;
         flex-wrap: wrap;
       }
@@ -519,7 +554,7 @@
       }
       .lang-btn {
         background: var(--charcoal);
-        border: 1px solid rgba(245,242,235,0.1);
+        border: 1px solid var(--ivory-10);
         color: var(--ivory-dim);
         padding: 6px 18px;
         font-size: 0.76rem;
@@ -547,8 +582,8 @@
         font-style: italic;
         font-size: 0.82rem;
         letter-spacing: 0.02em;
-        color: rgba(245,242,235,0.52); /* was 0.22 — raised to 5.1:1 for WCAG AA */
-        border-top: 1px solid rgba(245,242,235,0.06);
+        color: var(--ivory-52);
+        border-top: 1px solid var(--ivory-06);
         background: var(--charcoal);
       }
 
@@ -629,6 +664,12 @@
       <a href="index.html" class="header-back">← Website</a>
       <!-- Auth state: populated by module script below -->
       <div id="header-user" style="display:flex;align-items:center;gap:10px;margin-left:8px;flex-shrink:0"></div>
+      <button id="theme-toggle" aria-label="Switch to light mode"
+        style="background:none;border:1px solid var(--gold-dim);color:var(--ivory-dim);font-size:15px;cursor:pointer;padding:0 10px;min-width:44px;min-height:36px;transition:border-color 0.2s,color 0.2s;flex-shrink:0"
+        onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+        onmouseout="this.style.borderColor='var(--gold-dim)';this.style.color='var(--ivory-dim)'">
+        ☾
+      </button>
       <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
         ☰
       </button>
@@ -694,7 +735,7 @@
           <span style="font-size:14px;opacity:0.7">◈</span> Admin Portal
         </a>
         <!-- Login notice for unauthenticated visitors -->
-        <div id="sidebar-login-notice" style="display:none;padding:16px 20px;border-top:1px solid rgba(245,242,235,0.05);margin-top:8px">
+        <div id="sidebar-login-notice" style="display:none;padding:16px 20px;border-top:1px solid var(--ivory-05);margin-top:8px">
           <p style="font-size:0.78rem;color:var(--ivory-dim);line-height:1.6;font-weight:300;margin-bottom:10px">
             Some documents are for members only.
           </p>
@@ -2754,6 +2795,20 @@ Come ready to share one personal goal for your year in the choir (Article XIII) 
         if (!nav.contains(e.target) && !ham.contains(e.target)) {
           nav.classList.remove("open");
         }
+      });
+
+      // Theme toggle
+      const themeBtn = document.getElementById('theme-toggle');
+      function applyTheme(mode) {
+        document.documentElement.className = mode;
+        localStorage.setItem('svc-theme', mode);
+        themeBtn.textContent = mode === 'light' ? '☽' : '☾';
+        themeBtn.setAttribute('aria-label', mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+      }
+      // Set initial icon
+      applyTheme(document.documentElement.className === 'light' ? 'light' : 'dark');
+      themeBtn.addEventListener('click', () => {
+        applyTheme(document.documentElement.className === 'light' ? 'dark' : 'light');
       });
     </script>
 
