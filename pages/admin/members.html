@@ -182,7 +182,11 @@
         </div>
         <div id="view-loading" class="loading-text" style="padding:var(--space-6) 0"><div class="spinner"></div> Loading…</div>
         <div id="view-body" style="display:none"></div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="justify-content:space-between">
+          <button class="btn btn-sm" id="view-delete"
+                  style="background:rgba(180,40,40,0.15);color:#e07070;border:1px solid rgba(180,40,40,0.35)">
+            Delete Member
+          </button>
           <button class="btn btn-ghost btn-sm" id="view-done">Close</button>
         </div>
       </div>
@@ -246,6 +250,7 @@
             <option value="associate">Associate</option>
             <option value="honorary">Honorary</option>
             <option value="pending">Pending</option>
+            <option value="inactive">Inactive</option>
           </select>
         </div>
         <div id="edit-error" class="alert alert-error" role="alert" style="display:none">
@@ -296,19 +301,15 @@
           </div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label for="c-contact">Contact Number</label>
-              <input type="tel" id="c-contact" autocomplete="off">
+              <label for="c-contact">Contact Number <span class="required">*</span></label>
+              <input type="tel" id="c-contact" required autocomplete="off" placeholder="+63 9XX XXX XXXX">
             </div>
             <div class="form-group">
-              <label for="c-birthday">Birthday</label>
-              <input type="date" id="c-birthday">
+              <label for="c-birthday">Birthday <span class="required">*</span></label>
+              <input type="date" id="c-birthday" required>
             </div>
           </div>
           <div class="form-row form-row-2">
-            <div class="form-group">
-              <label for="c-age">Age</label>
-              <input type="number" id="c-age" min="1" max="120">
-            </div>
             <div class="form-group">
               <label for="c-status">Status <span class="required">*</span></label>
               <select id="c-status">
@@ -317,11 +318,14 @@
                 <option value="honorary">Honorary</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="c-school">School / Occupation</label>
+              <input type="text" id="c-school" autocomplete="off">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="c-school">School / Occupation</label>
-            <input type="text" id="c-school" autocomplete="off">
-          </div>
+          <p class="form-hint" style="margin-bottom:var(--space-4)">
+            Age is auto-calculated from birthday. The member can update their profile photo and other details after signing in.
+          </p>
           <div id="create-error" class="alert alert-error" role="alert" style="display:none">
             <span class="alert-icon">⚠</span>
             <span id="create-error-text"></span>
@@ -345,6 +349,11 @@
       if (!adminProfile) throw new Error('redirecting');
 
       document.getElementById('header-name').textContent = adminProfile.full_name;
+
+      // Delete button only visible to super_admin
+      if (adminProfile.role !== 'super_admin') {
+        document.getElementById('view-delete').style.display = 'none';
+      }
       document.getElementById('page-content').style.display = 'block';
 
       // ── Sign out ───────────────────────────────────────────────
@@ -364,15 +373,32 @@
       menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
       backdrop.addEventListener('click', closeSidebar);
 
+      // ── Custom field definitions (loaded once) ─────────────────
+      const { data: fieldDefs } = await supabase
+        .from('custom_field_definitions')
+        .select('*')
+        .order('sort_order');
+      const fieldDefMap = Object.fromEntries((fieldDefs || []).map(f => [f.id, f]));
+
       // ── Helpers ────────────────────────────────────────────────
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
 
+      function calcYearsFrom(dateStr) {
+        if (!dateStr) return null;
+        const start = new Date(dateStr);
+        const today = new Date();
+        let years = today.getFullYear() - start.getFullYear();
+        const m = today.getMonth() - start.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < start.getDate())) years--;
+        return years >= 0 ? years : null;
+      }
+
       const badgeStatus = s => {
-        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m' };
+        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m', inactive:'badge-inactive' };
         return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
       };
       const badgeRole = r => {
-        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present' };
+        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present', super_admin:'badge-super-admin' };
         return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
       };
 
@@ -436,7 +462,7 @@
 
         const { data, error } = await supabase
           .from('profiles')
-          .select('id, full_name, voice_part, role, status, profile_photo_url')
+          .select('id, full_name, email, voice_part, role, status, profile_photo_url')
           .neq('status', 'pending')
           .order('full_name');
 
@@ -468,6 +494,7 @@
               <div style="display:flex;align-items:center;gap:8px">
                 ${m.profile_photo_url ? `<img src="${escHtml(gdriveImgUrl(m.profile_photo_url))}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--gold-dim);flex-shrink:0" onerror="this.style.display='none'">` : ''}
                 <span style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</span>
+                ${m.email ? `<span style="display:block;font-size:var(--text-xs);color:var(--ivory-muted);margin-top:1px">${escHtml(m.email)}</span>` : ''}
               </div>
             </td>
             <td>${cap(m.voice_part)}</td>
@@ -508,11 +535,33 @@
       });
 
       // ── View Profile Modal ─────────────────────────────────────
+      let viewModalMemberId   = null;
+      let viewModalMemberName = null;
+
       function closeViewModal() { document.getElementById('view-modal').classList.remove('open'); }
       document.getElementById('view-close').addEventListener('click', closeViewModal);
       document.getElementById('view-done').addEventListener('click', closeViewModal);
 
+      document.getElementById('view-delete').addEventListener('click', async () => {
+        if (!viewModalMemberId) return;
+        if (!confirm(`Permanently delete "${viewModalMemberName}"?\n\nThis removes their account and all data. This cannot be undone.`)) return;
+
+        const btn = document.getElementById('view-delete');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+
+        const { error } = await supabase.rpc('delete_member', { member_id: viewModalMemberId });
+
+        btn.disabled = false; btn.textContent = 'Delete Member';
+
+        if (error) { alert(`Delete failed: ${error.message}`); return; }
+
+        closeViewModal();
+        await Promise.all([loadPending(), loadMembers()]);
+      });
+
       async function openViewModal(id) {
+        viewModalMemberId   = id;
+        viewModalMemberName = null;
         const loadingEl = document.getElementById('view-loading');
         const bodyEl    = document.getElementById('view-body');
         loadingEl.style.display = 'flex';
@@ -534,6 +583,7 @@
           return;
         }
 
+        viewModalMemberName = m.full_name;
         document.getElementById('view-modal-title').textContent = m.full_name;
 
         const row = (label, val) => `
@@ -543,7 +593,16 @@
           </div>`;
 
         const customFieldRows = m.custom_fields && Object.keys(m.custom_fields).length
-          ? Object.entries(m.custom_fields).map(([k, v]) => row(k, v)).join('')
+          ? Object.entries(m.custom_fields).map(([k, v]) => {
+              const def   = fieldDefMap[k];
+              const label = def ? def.field_name : k;
+              let display = v || '—';
+              if (def?.field_type === 'date' && v) {
+                const years = calcYearsFrom(v);
+                display = `${formatDate(v)}${years !== null ? ` <span style="color:var(--ivory-muted);font-size:var(--text-xs)">(${years} yr${years !== 1 ? 's' : ''} of service)</span>` : ''}`;
+              }
+              return row(label, display);
+            }).join('')
           : '';
 
         bodyEl.innerHTML = `
@@ -563,9 +622,10 @@
           ${row('Status', cap(m.status))}
           ${row('Contact No.', m.contact_number)}
           ${row('Birthday', m.birthday ? formatDate(m.birthday) : null)}
-          ${row('Age', m.age)}
+          ${row('Age', m.birthday ? calcYearsFrom(m.birthday) : null)}
           ${row('School / Occupation', m.school_occupation)}
           <div class="profile-section">Account</div>
+          ${row('Email', m.email)}
           ${row('Joined', formatDate(m.created_at))}
           ${row('Approved', m.approved_at ? formatDate(m.approved_at) : null)}
           ${customFieldRows ? `<div class="profile-section">Custom Fields</div>${customFieldRows}` : ''}
@@ -673,13 +733,12 @@
         const voice    = document.getElementById('c-voice').value;
         const email    = document.getElementById('c-email').value.trim();
         const password = document.getElementById('c-password').value;
-        const contact  = document.getElementById('c-contact').value.trim() || null;
-        const birthday = document.getElementById('c-birthday').value || null;
-        const age      = document.getElementById('c-age').value ? parseInt(document.getElementById('c-age').value, 10) : null;
+        const contact  = document.getElementById('c-contact').value.trim();
+        const birthday = document.getElementById('c-birthday').value;
         const status   = document.getElementById('c-status').value;
         const school   = document.getElementById('c-school').value.trim() || null;
 
-        if (!name || !voice || !email || !password) {
+        if (!name || !voice || !email || !password || !contact || !birthday) {
           document.getElementById('create-error-text').textContent = 'Please fill in all required fields.';
           document.getElementById('create-error').style.display = 'flex';
           btn.disabled = false; btn.textContent = 'Create Account';
@@ -702,10 +761,10 @@
           const { error: profileError } = await supabase.from('profiles').insert({
             id:                newUserId,
             full_name:         name,
+            email:             email,
             voice_part:        voice,
             contact_number:    contact,
             birthday,
-            age,
             school_occupation: school,
             role:              'member',
             status,

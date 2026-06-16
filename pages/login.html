@@ -80,6 +80,10 @@
         <h1 class="auth-title">Sign In</h1>
         <p class="auth-sub">San Vicente Choir Portal</p>
 
+        <div id="inactive-msg" class="alert alert-error" role="alert" style="display:none">
+          <span class="alert-icon">⚠</span>
+          Your account has been deactivated. Please contact an officer if you think this is a mistake.
+        </div>
         <div id="error-msg" class="alert alert-error" role="alert" style="display:none">
           <span class="alert-icon">⚠</span>
           <span id="error-text"></span>
@@ -136,16 +140,18 @@
       });
       import { hidePageLoader } from '../js/utils.js';
 
-      // Show success banner if redirected back after a password reset
-      if (new URLSearchParams(window.location.search).get('reset') === '1') {
+      const _params = new URLSearchParams(window.location.search);
+      if (_params.get('reset') === '1') {
         document.getElementById('success-msg').style.display = 'flex';
+      }
+      if (_params.get('inactive') === '1') {
+        document.getElementById('inactive-msg').style.display = 'flex';
       }
 
       // Already logged in → redirect; otherwise reveal the form
       const _session = await getSession();
       if (_session) {
-        const params = new URLSearchParams(window.location.search);
-        window.location.href = params.get('next') || 'members/dashboard.html';
+        window.location.href = _params.get('next') || 'members/dashboard.html';
       } else {
         hidePageLoader();
       }

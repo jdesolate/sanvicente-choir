@@ -580,10 +580,12 @@ input:hover, select:hover, textarea:hover {
 .badge-rejected { background: rgba(217,83,79,0.15); color: #F08080; }
 
 /* Member status */
-.badge-active    { background: rgba(92,184,92,0.15); color: #8FD68F; }
-.badge-pending-m { background: rgba(74,171,204,0.15); color: var(--info); }
-.badge-associate { background: rgba(224,160,48,0.15); color: var(--warning); }
-.badge-honorary  { background: rgba(201,168,106,0.15); color: var(--gold); }
+.badge-active      { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+.badge-pending-m   { background: rgba(74,171,204,0.15); color: var(--info); }
+.badge-associate   { background: rgba(224,160,48,0.15); color: var(--warning); }
+.badge-honorary    { background: rgba(201,168,106,0.15);color: var(--gold); }
+.badge-inactive    { background: rgba(120,120,120,0.15);color: #888; }
+.badge-super-admin { background: rgba(160,100,220,0.18);color: #c084fc; }
 
 /* Attendance rate */
 .badge-on-track { background: rgba(92,184,92,0.15); color: #8FD68F; }

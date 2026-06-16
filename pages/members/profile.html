@@ -256,8 +256,8 @@
 
                   <div class="form-row form-row-2">
                     <div class="form-group">
-                      <label for="e-age">Age</label>
-                      <input type="number" id="e-age" min="1" max="120">
+                      <label>Age</label>
+                      <p id="e-age-display" style="padding:10px 0;color:var(--ivory-muted);font-size:var(--text-sm)">—</p>
                     </div>
                     <div class="form-group">
                       <label for="e-school">School / Occupation</label>
@@ -310,10 +310,10 @@
       document.getElementById('header-name').textContent = profile.full_name;
       document.getElementById('page-content').style.display = 'block';
 
-      if (profile.role === 'secretary' || profile.role === 'admin') {
+      if (['secretary', 'admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('secretary-section').style.display = 'block';
       }
-      if (profile.role === 'admin') {
+      if (['admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('admin-section').style.display = 'block';
       }
 
@@ -346,12 +346,22 @@
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
       const val = v => (v !== null && v !== undefined && v !== '') ? v : '—';
 
+      function calcAge(birthday) {
+        if (!birthday) return '—';
+        const today = new Date();
+        const dob   = new Date(birthday);
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+        return age >= 0 ? String(age) : '—';
+      }
+
       const badgeStatus = s => {
-        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m' };
+        const cls = { active:'badge-active', associate:'badge-associate', honorary:'badge-honorary', pending:'badge-pending-m', inactive:'badge-inactive' };
         return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
       };
       const badgeRole = r => {
-        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present' };
+        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present', super_admin:'badge-super-admin' };
         return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
       };
 
@@ -373,7 +383,7 @@
       document.getElementById('v-voice').textContent    = cap(profile.voice_part);
       document.getElementById('v-contact').textContent  = val(profile.contact_number);
       document.getElementById('v-birthday').textContent = profile.birthday ? formatDate(profile.birthday) : '—';
-      document.getElementById('v-age').textContent      = val(profile.age);
+      document.getElementById('v-age').textContent      = calcAge(profile.birthday);
       document.getElementById('v-school').textContent   = val(profile.school_occupation);
 
       const viewCf = document.getElementById('v-custom-fields');
@@ -412,7 +422,7 @@
         document.getElementById('e-voice').value   = profile.voice_part       || '';
         document.getElementById('e-contact').value = profile.contact_number   || '';
         document.getElementById('e-birthday').value= profile.birthday         || '';
-        document.getElementById('e-age').value     = profile.age              ?? '';
+        document.getElementById('e-age-display').textContent = calcAge(profile.birthday);
         document.getElementById('e-school').value  = profile.school_occupation || '';
 
         // Show current photo preview; clear file input
@@ -461,6 +471,11 @@
           });
         }
       }
+
+      // ── Birthday → age auto-update ────────────────────────────────────────────
+      document.getElementById('e-birthday').addEventListener('input', e => {
+        document.getElementById('e-age-display').textContent = calcAge(e.target.value);
+      });
 
       // ── Toggle edit/view ───────────────────────────────────────────────────────
       document.getElementById('edit-toggle-btn').addEventListener('click', () => {
@@ -526,7 +541,6 @@
           voice_part:        document.getElementById('e-voice').value || null,
           contact_number:    document.getElementById('e-contact').value.trim() || null,
           birthday:          document.getElementById('e-birthday').value || null,
-          age:               document.getElementById('e-age').value ? parseInt(document.getElementById('e-age').value, 10) : null,
           school_occupation: document.getElementById('e-school').value.trim() || null,
           profile_photo_url,
           custom_fields:     updatedCustomFields,
@@ -551,7 +565,7 @@
         document.getElementById('v-voice').textContent        = cap(profile.voice_part);
         document.getElementById('v-contact').textContent      = val(profile.contact_number);
         document.getElementById('v-birthday').textContent     = profile.birthday ? formatDate(profile.birthday) : '—';
-        document.getElementById('v-age').textContent          = val(profile.age);
+        document.getElementById('v-age').textContent          = calcAge(profile.birthday);
         document.getElementById('v-school').textContent       = val(profile.school_occupation);
 
         viewCf.innerHTML = '';

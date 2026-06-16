@@ -17,15 +17,15 @@ create extension if not exists "uuid-ossp";
 create table if not exists profiles (
   id                uuid        primary key references auth.users on delete cascade,
   full_name         text        not null,
-  contact_number    text,
-  birthday          date,
-  age               int,
+  email             text,
+  contact_number    text        not null,
+  birthday          date        not null,
   school_occupation text,
   voice_part        text        check (voice_part in ('soprano','alto','tenor','bass')),
   role              text        not null default 'member'
-                                check (role in ('member','secretary','admin')),
+                                check (role in ('member','secretary','admin','super_admin')),
   status            text        not null default 'pending'
-                                check (status in ('pending','active','associate','honorary')),
+                                check (status in ('pending','active','associate','honorary','inactive')),
   custom_fields     jsonb       not null default '{}',
   created_at        timestamptz not null default now(),
   approved_at       timestamptz,
@@ -134,35 +134,35 @@ create policy "profiles: read own"
   on profiles for select
   using (id = auth.uid());
 
--- Secretary and admin read all rows.
+-- Secretary, admin, and super_admin read all rows.
 create policy "profiles: secretary/admin read all"
   on profiles for select
-  using (auth_role() in ('secretary','admin'));
+  using (auth_role() in ('secretary','admin','super_admin'));
 
 -- A user inserts their own profile row (triggered at sign-up).
 create policy "profiles: insert own"
   on profiles for insert
   with check (id = auth.uid());
 
--- Admin can insert a profile row for any user (used when creating accounts directly).
+-- Admin/super_admin can insert a profile row for any user.
 create policy "profiles: admin insert any"
   on profiles for insert
-  with check (auth_role() = 'admin');
+  with check (auth_role() in ('admin','super_admin'));
 
 -- A user updates their own non-sensitive fields.
 create policy "profiles: update own"
   on profiles for update
   using (id = auth.uid());
 
--- Admin can update any profile (to change role/status/approval).
+-- Admin/super_admin can update any profile (role/status/approval).
 create policy "profiles: admin update any"
   on profiles for update
-  using (auth_role() = 'admin');
+  using (auth_role() in ('admin','super_admin'));
 
--- Admin can delete any profile (to reject pending registrations).
+-- Admin/super_admin can delete any profile.
 create policy "profiles: admin delete any"
   on profiles for delete
-  using (auth_role() = 'admin');
+  using (auth_role() in ('admin','super_admin'));
 
 -- ── custom_field_definitions ──────────────
 
@@ -171,11 +171,11 @@ create policy "custom_fields: authenticated read"
   on custom_field_definitions for select
   using (auth.uid() is not null);
 
--- Only admin can write.
+-- Only admin/super_admin can write.
 create policy "custom_fields: admin write"
   on custom_field_definitions for all
-  using (auth_role() = 'admin')
-  with check (auth_role() = 'admin');
+  using (auth_role() in ('admin','super_admin'))
+  with check (auth_role() in ('admin','super_admin'));
 
 -- ── events ────────────────────────────────
 
@@ -184,29 +184,29 @@ create policy "events: authenticated read"
   on events for select
   using (auth.uid() is not null);
 
--- Only admin can create, update, or delete events.
+-- Only admin/super_admin can create, update, or delete events.
 create policy "events: admin write"
   on events for all
-  using (auth_role() = 'admin')
-  with check (auth_role() = 'admin');
+  using (auth_role() in ('admin','super_admin'))
+  with check (auth_role() in ('admin','super_admin'));
 
 -- ── attendance ────────────────────────────
 
--- Secretary and admin read all attendance rows.
+-- Secretary, admin, and super_admin read all attendance rows.
 create policy "attendance: secretary/admin read all"
   on attendance for select
-  using (auth_role() in ('secretary','admin'));
+  using (auth_role() in ('secretary','admin','super_admin'));
 
 -- A member reads only their own attendance rows.
 create policy "attendance: member read own"
   on attendance for select
   using (member_id = auth.uid());
 
--- Secretary and admin can insert/update attendance.
+-- Secretary, admin, and super_admin can insert/update attendance.
 create policy "attendance: secretary/admin write"
   on attendance for all
-  using (auth_role() in ('secretary','admin'))
-  with check (auth_role() in ('secretary','admin'));
+  using (auth_role() in ('secretary','admin','super_admin'))
+  with check (auth_role() in ('secretary','admin','super_admin'));
 
 -- ── absence_requests ──────────────────────
 
@@ -220,16 +220,16 @@ create policy "absence_requests: member read own"
   on absence_requests for select
   using (member_id = auth.uid());
 
--- Secretary and admin read all requests.
+-- Secretary, admin, and super_admin read all requests.
 create policy "absence_requests: secretary/admin read all"
   on absence_requests for select
-  using (auth_role() in ('secretary','admin'));
+  using (auth_role() in ('secretary','admin','super_admin'));
 
--- Secretary and admin update requests (approve/reject).
+-- Secretary, admin, and super_admin update requests (approve/reject).
 create policy "absence_requests: secretary/admin update"
   on absence_requests for update
-  using (auth_role() in ('secretary','admin'))
-  with check (auth_role() in ('secretary','admin'));
+  using (auth_role() in ('secretary','admin','super_admin'))
+  with check (auth_role() in ('secretary','admin','super_admin'));
 
 -- ── songs ─────────────────────────────────
 
@@ -238,8 +238,8 @@ create policy "songs: authenticated read"
   on songs for select
   using (auth.uid() is not null);
 
--- Only admin can write songs.
+-- Only admin/super_admin can write songs.
 create policy "songs: admin write"
   on songs for all
-  using (auth_role() = 'admin')
-  with check (auth_role() = 'admin');
+  using (auth_role() in ('admin','super_admin'))
+  with check (auth_role() in ('admin','super_admin'));

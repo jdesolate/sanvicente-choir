@@ -215,10 +215,10 @@
       document.getElementById('header-name').textContent = profile.full_name;
       document.getElementById('page-content').style.display = 'block';
 
-      if (profile.role === 'secretary' || profile.role === 'admin') {
+      if (['secretary', 'admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('secretary-section').style.display = 'block';
       }
-      if (profile.role === 'admin') {
+      if (['admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('admin-section').style.display = 'block';
       }
 

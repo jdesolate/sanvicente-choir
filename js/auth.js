@@ -35,6 +35,13 @@ export async function requireAuth(redirectTo = '/pages/login.html') {
     window.location.href = redirectTo;
     return null;
   }
+  // Block inactive members even if their session is still valid
+  const profile = await getProfile();
+  if (profile?.status === 'inactive') {
+    await supabase.auth.signOut();
+    window.location.href = '/pages/login.html?inactive=1';
+    return null;
+  }
   return session;
 }
 
@@ -57,7 +64,12 @@ export async function requireRole(role, redirectTo = '/index.html') {
     window.location.href = '/pages/login.html';
     return null;
   }
-  const hierarchy = { member: 1, secretary: 2, admin: 3 };
+  if (profile.status === 'inactive') {
+    await supabase.auth.signOut();
+    window.location.href = '/pages/login.html?inactive=1';
+    return null;
+  }
+  const hierarchy = { member: 1, secretary: 2, admin: 3, super_admin: 4 };
   const required = hierarchy[role] ?? 1;
   const actual   = hierarchy[profile.role] ?? 0;
   if (actual < required) {

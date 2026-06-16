@@ -302,8 +302,8 @@
 
             <div class="form-row form-row-2">
               <div class="form-group">
-                <label for="contact_number">Contact Number</label>
-                <input type="tel" id="contact_number" name="contact_number"
+                <label for="contact_number">Contact Number <span class="required">*</span></label>
+                <input type="tel" id="contact_number" name="contact_number" required
                        autocomplete="tel" placeholder="+63 9XX XXX XXXX">
               </div>
               <div class="form-group">
@@ -320,19 +320,14 @@
 
             <div class="form-row form-row-2">
               <div class="form-group">
-                <label for="birthday">Birthday</label>
-                <input type="date" id="birthday" name="birthday" autocomplete="bday">
+                <label for="birthday">Birthday <span class="required">*</span></label>
+                <input type="date" id="birthday" name="birthday" required autocomplete="bday">
               </div>
               <div class="form-group">
-                <label for="age">Age</label>
-                <input type="number" id="age" name="age" min="1" max="120" placeholder="e.g. 22">
+                <label for="school_occupation">School / Occupation</label>
+                <input type="text" id="school_occupation" name="school_occupation"
+                       placeholder="e.g. University of Cebu — Engineering student">
               </div>
-            </div>
-
-            <div class="form-group">
-              <label for="school_occupation">School / Occupation</label>
-              <input type="text" id="school_occupation" name="school_occupation"
-                     placeholder="e.g. University of Cebu — Engineering student">
             </div>
 
             <div class="form-group">
@@ -567,9 +562,9 @@
           const { error: profileError } = await supabase.from('profiles').insert({
             id:                userId,
             full_name:         form.full_name.value.trim(),
-            contact_number:    form.contact_number.value.trim() || null,
-            birthday:          form.birthday.value || null,
-            age:               form.age.value ? parseInt(form.age.value, 10) : null,
+            email:             form.email.value.trim(),
+            contact_number:    form.contact_number.value.trim(),
+            birthday:          form.birthday.value,
             school_occupation: form.school_occupation.value.trim() || null,
             voice_part:        form.voice_part.value || null,
             profile_photo_url,

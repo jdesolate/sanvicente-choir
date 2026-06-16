@@ -404,6 +404,52 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS tos_accepted_at timestamptz;
 
 ---
 
+## Session 10.5: Registration Hardening + Member Lifecycle
+
+**Status:** [x] Complete
+
+**Goal:** Tighten registration field requirements, remove redundant Age input (auto-calculate from birthday), introduce `super_admin` role for the President account, add soft-removal via `inactive` status, and add permanent member deletion restricted to super_admin.
+
+**Changes made:**
+
+*Registration (`pages/register.html`):*
+- Contact Number and Birthday made required
+- Age field removed — calculated from birthday wherever displayed
+- School / Occupation moved next to Birthday in the layout
+- `email` saved to `profiles` row at sign-up
+
+*Profile page (`pages/members/profile.html`):*
+- Age field in edit mode replaced with a read-only auto-calculated display
+- Birthday input live-updates the age display
+
+*Admin members page (`pages/admin/members.html`):*
+- Create Account modal aligned with registration: Contact Number and Birthday required, Age removed
+- Email shown under member name in the members table and in the View Profile modal
+- Custom field labels in View modal now show field name instead of UUID
+- Date-type custom fields show a years-of-service counter (e.g. "10 yrs of service")
+- Age in View modal calculated from birthday
+- **Delete Member** button added to View modal (super_admin only) — hard deletes auth user + cascades all data
+- Edit Member status dropdown includes `inactive`
+
+*Auth (`js/auth.js`):*
+- `super_admin` added to role hierarchy (rank 4, above `admin`)
+- `requireAuth` and `requireRole` both check for `inactive` status — signs out the user and redirects to `/pages/login.html?inactive=1`
+
+*Login page (`pages/login.html`):*
+- Shows a "Your account has been deactivated" banner when redirected with `?inactive=1`
+
+*Design system (`css/design-system.css`):*
+- `.badge-inactive` — muted grey
+- `.badge-super-admin` — soft purple
+
+**Database migrations (run in Supabase SQL Editor):**
+- `supabase/migration_contact_birthday_required.sql` — makes contact_number and birthday NOT NULL, drops age column
+- `supabase/migration_super_admin.sql` — adds super_admin to role constraint, grants it to admin@svc.com, updates all RLS policies, creates `delete_member` RPC
+- `supabase/migration_inactive_status.sql` — adds inactive to status constraint
+- `supabase/migration_profile_email.sql` — adds email column to profiles, backfills from auth.users
+
+---
+
 ## Session 11: Admin CMS — Gallery & Officer Profiles
 
 **Status:** [ ] Not Started

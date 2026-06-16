@@ -35,29 +35,33 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 | `member` | Approved choir member |
 | `secretary` | Member with attendance management access |
 | `admin` | Full access — officers / webmaster |
+| `super_admin` | President account only — all admin access plus permanent member deletion |
+
+**Role hierarchy:** `member` < `secretary` < `admin` < `super_admin`
 
 ## 5. Access Control Matrix
 
-| Feature | public | member | secretary | admin |
-|---------|:------:|:------:|:---------:|:-----:|
-| Landing page | ✓ | ✓ | ✓ | ✓ |
-| Constitution | ✓ | ✓ | ✓ | ✓ |
-| Member Handbook | | ✓ | ✓ | ✓ |
-| Calendar | | ✓ | ✓ | ✓ |
-| Commitments | | ✓ | ✓ | ✓ |
-| Budget Plan | | | | ✓ |
-| TBD Summary | | | | ✓ |
-| Song Library | | ✓ | ✓ | ✓ |
-| Own Attendance Record | | ✓ | ✓ | ✓ |
-| Full Attendance Tracker | | | ✓ | ✓ |
-| Submit Absence Request | | ✓ | ✓ | ✓ |
-| Approve Absence Request | | | ✓ | ✓ |
-| Member Approval & Roles | | | | ✓ |
-| View Member Full Profile | | | | ✓ |
-| Attendance Summary (leaderboard) | | | ✓ | ✓ |
-| Event Management | | | | ✓ |
-| Song Management | | | | ✓ |
-| Custom Field Management | | | | ✓ |
+| Feature | public | member | secretary | admin | super_admin |
+|---------|:------:|:------:|:---------:|:-----:|:-----------:|
+| Landing page | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Constitution | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Member Handbook | | ✓ | ✓ | ✓ | ✓ |
+| Calendar | | ✓ | ✓ | ✓ | ✓ |
+| Commitments | | ✓ | ✓ | ✓ | ✓ |
+| Budget Plan | | | | ✓ | ✓ |
+| TBD Summary | | | | ✓ | ✓ |
+| Song Library | | ✓ | ✓ | ✓ | ✓ |
+| Own Attendance Record | | ✓ | ✓ | ✓ | ✓ |
+| Full Attendance Tracker | | | ✓ | ✓ | ✓ |
+| Submit Absence Request | | ✓ | ✓ | ✓ | ✓ |
+| Approve Absence Request | | | ✓ | ✓ | ✓ |
+| Member Approval & Roles | | | | ✓ | ✓ |
+| View Member Full Profile | | | | ✓ | ✓ |
+| Attendance Summary (leaderboard) | | | ✓ | ✓ | ✓ |
+| Event Management | | | | ✓ | ✓ |
+| Song Management | | | | ✓ | ✓ |
+| Custom Field Management | | | | ✓ | ✓ |
+| Permanently Delete Member | | | | | ✓ |
 
 ## 6. Features
 
@@ -71,27 +75,49 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 5. On approval, member gains access to member-only content
 
 **Registration Form Fields (core):**
-- Full name
-- Email address
-- Password
-- Contact number
-- Birthday
-- Age
-- School / Occupation
-- Voice part (Soprano / Alto / Tenor / Bass)
+- Full name *(required)*
+- Email address *(required)*
+- Password *(required)*
+- Contact number *(required)*
+- Birthday *(required)*
+- School / Occupation *(optional)*
+- Voice part *(required)*
+- Profile photo *(optional)*
+
+> **Age is not collected.** It is auto-calculated from birthday wherever displayed.
 
 **Custom Fields:**
 - Admin defines additional fields (text, number, date, dropdown) via admin panel
 - Stored as JSONB in `profiles.custom_fields`
 - New registrants see all active custom fields in the form
+- Date-type custom fields (e.g. "Date of Joining Choir") display a years-of-service counter in the admin view modal
 
-**Admin fallback:** Admin can create accounts directly for members unable to self-register.
+**Admin fallback:** Admin can create accounts directly for members unable to self-register (Contact Number and Birthday required; same field rules as self-registration).
+
+**Member statuses:**
+
+| Status | Description |
+|--------|-------------|
+| `pending` | Awaiting admin approval after self-registration |
+| `active` | Full choir member |
+| `associate` | Participating but not full member |
+| `honorary` | Honorary membership |
+| `inactive` | Soft-removed — data retained, portal access blocked; reversible |
 
 **Admin — View Member Profile:**
 - Each row in the All Members table has a **View** button
 - Opens a read-only modal fetching the full `profiles` record
-- Displays: voice part, role, status, contact number, birthday, age, school/occupation, joined date, approved date, and any custom fields
+- Displays: email, voice part, role, status, contact number, birthday, age (calculated), school/occupation, joined date, approved date, and any custom fields
 - Fields with no data show a muted `—` placeholder
+
+**Admin — Delete Member (super_admin only):**
+- **Hard delete:** Permanently removes the auth account and all associated data (profile, attendance, absence requests). Cascades automatically. Use for dummy or test accounts.
+- **Soft remove:** Set status to `inactive`. All data is retained; the member is immediately signed out and cannot log back in. Reversible by setting status back to active.
+
+**profiles table — email column:**
+- `email` is stored in the `profiles` table at registration time (copied from auth input)
+- Backfilled for existing members via migration
+- Shown in the admin member list (under name) and in the View Profile modal
 
 ---
 
