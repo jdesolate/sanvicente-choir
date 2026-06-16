@@ -72,8 +72,9 @@ A member who has signed the Membership Form, committed to the attendance expecta
 A member who, due to personal circumstances (pregnancy, board review, work schedule, health, family), cannot fulfill weekly attendance but wishes to remain part of the Choir community. Associate Members:
 - Are not subject to attendance penalties
 - Remain in the group chat
-- May participate in masses when available and willing
 - Do not hold voting rights while on Associate status
+- May sing at **Core Masses** (Saturday and Sunday regular masses) anytime when available and willing
+- To participate in a **Major or Special Event**, an Associate Member must have attended at least **five (5) practice sessions** for that event
 - May return to Active status at any time by notifying an officer
 
 **(c) Honorary Member**
@@ -83,7 +84,7 @@ A member who has served the Choir for a significant number of years and whose ci
 New members must complete the following steps in order:
 
 1. **Express interest** to any officer — in person, through the group chat, or through any available digital platform the Choir maintains
-2. **Fill out the Registration Form** — providing basic personal information before proceeding further
+2. **Fill out the Registration Form** — providing complete personal information before proceeding further. **All fields are mandatory.** Incomplete forms will not be accepted until all information is provided.
 3. **Receive and read the Member Handbook and this Constitution** — the applicant must be given time to read and understand both documents fully before signing anything
 4. **Sign the Membership Form** — acknowledging they have read, understood, and agreed to the Constitution and Handbook. For minors, a parent or guardian must co-sign.
 5. **Audition** — the applicant sings at least one (1) song of their choice before available choir members and officers. The purpose of the audition is:
@@ -199,11 +200,12 @@ Violation of this Code of Conduct by an officer may result in a formal review by
 | **Major** | Christmas, Holy Week, Patron Saint Feast, other significant parish liturgies | Required of all Active Members unless excused |
 | **Special** | Competitions, concerts, gigs, seminars | Voluntary; announced in advance |
 
-**Section 2. Weekly Attendance Poll.**
-- A poll for the coming Saturday and Sunday masses shall be posted in the group chat every **Thursday before 9PM**.
-- All Active Members are expected to respond to the poll.
-- No response by Friday 12NN = counted as absent for planning purposes.
-- Responding "No" is not a penalty — it is responsible communication.
+**Section 2. Weekly Attendance Submission.**
+- Members must submit their attendance for the coming Saturday and Sunday masses via the **official Google Form**, submitted **before each service**.
+- All Active Members are expected to complete the form before every service they intend to attend or miss.
+- No submission before the service = counted as absent for planning purposes.
+- Submitting "not attending" is not a penalty — it is responsible communication.
+- The **Secretary** is responsible for checking attendance submissions in the portal before every service and reporting to the officers.
 
 **Section 3. Absence Classification.**
 
@@ -238,6 +240,7 @@ No status change shall happen without the member being informed directly and per
 
 **Section 2. Regular Rehearsal Schedule.**
 - At minimum, **one (1) official rehearsal per month** shall be held throughout the year
+- **Weekday rehearsals** are also held as needed; specific days and times are to be determined (TBD) each semester based on member availability
 - The schedule for each semester shall be set by the officers through a **member availability poll** posted in the group chat at least **2 weeks before the semester begins**
 - During months leading up to **Major Events** (Christmas season, Holy Week, competitions), rehearsals shall increase to **one to two (1–2) sessions per week** depending on group availability
 
@@ -394,29 +397,28 @@ At the end of each term, the outgoing Treasurer shall present a full financial r
 Beyond liturgical service, San Vicente Choir is committed to the growth, wellness, and community impact of its members. The Choir shall organize regular activities that strengthen fellowship, develop individual skills, and serve the wider community.
 
 **Section 2. Saturday Community Program.**
-On Saturdays when no major parish event is scheduled, the Choir is encouraged to organize a **Saturday Group Activity** to strengthen fellowship, develop skills, and increase participation at the Saturday 7PM mass. The timing is flexible based on what the group decides:
-
-- **Before mass (3:00 PM – 5:00 PM)** — recreational activities, seminars, community outreach, or fellowship
-- **After mass (8:00 PM onwards)** — optional practice session, casual bonding, or group discussion
-
-Activities shall rotate based on member interest and officer planning, and may include but are not limited to:
+The Choir holds a **weekly Saturday gathering from 3:00 PM to 5:00 PM**, before the Saturday 7PM mass. This is a standing schedule for practice, recreational activities, content creation, and bonding. Activities shall rotate based on member interest and officer planning, and may include but are not limited to:
 
 | Type | Examples |
 |---|---|
 | 🏃 **Recreational / Wellness** | Jogging, exercise, badminton, pickleball, sports |
-| 🎵 **Practice Session** | Group rehearsal, sectional practice, or music review after mass |
+| 🎵 **Practice / Rehearsal** | Group rehearsal, sectional practice, or music review |
+| 🎬 **Content Creation** | Photo shoots, video content, social media materials |
 | 📚 **Seminar / Workshop** | Vocal training, music ministry workshops, faith formation, invited speakers |
 | 🤝 **Community Service** | Teaching young children to sing, parish outreach, volunteer service |
-| 🎉 **Fellowship / Fun** | Casual bonding, celebrations, team-building |
+| 🎉 **Bonding / Fellowship** | Casual bonding, celebrations, team-building |
 
-- Saturday activities are **optional but encouraged** — not subject to attendance penalties
-- Schedule and timing must be announced at least **3 days in advance**
+- Saturday gatherings are **optional but encouraged** — not subject to attendance penalties
+- Schedule and activity type must be announced at least **3 days in advance**
 - Officers plan the activity rotation each semester through a group poll
 
-**Section 3. Community Outreach.**
+**Section 3. Member Recognition and Awards.**
+The Choir shall establish a recognition program to acknowledge outstanding members who consistently serve with excellence, dedication, and good character. Details of the program — including criteria, frequency, and award types — shall be determined by the officers in a future meeting. The program may include certificates, tokens, or public acknowledgment at assemblies.
+
+**Section 4. Community Outreach.**
 The Choir is encouraged to share its gifts beyond the parish — including but not limited to teaching young children how to sing, supporting other community events, and participating in music ministry seminars. These activities reflect the Choir's mission to grow and serve.
 
-**Section 4. Digital Presence and Website.**
+**Section 5. Digital Presence and Website.**
 The Choir recognizes the value of a digital presence for growth, outreach, and accessibility. The Choir may maintain:
 - An **official social media account** for documentation, announcements, and community engagement
 - An **official website** for membership information, choir history, event updates, and sponsorship inquiries
