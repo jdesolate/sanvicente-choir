@@ -103,8 +103,9 @@ sanvicente-choir/
 │   │   ├── tracker.html
 │   │   └── absences.html
 │   ├── officer/                  # (Session 11)
-│   │   └── songs.html
-│   ├── treasurer/                # (Session 15)
+│   │   ├── songs.html
+│   │   └── events.html
+│   ├── treasurer/                # (Session 11 stubs — full feature Session 15)
 │   │   ├── fines.html
 │   │   └── ledger.html
 │   └── admin/
@@ -398,8 +399,8 @@ Initializes and exports the Supabase client.
 
 | Session | Title | Status |
 |---|---|---|
-| 11 | Role System Overhaul + UI Bug Fixes | ⏳ Next |
-| 12 | Song Enhancements (practicing flag, service assignments) | ⏳ Planned |
+| 11 | Role System Overhaul + UI Bug Fixes | ✅ Done |
+| 12 | Song Enhancements (practicing flag, service assignments) | ⏳ Next |
 | 13 | Attendance Split (practice vs. service rates) | ⏳ Planned |
 | 14 | Liturgical Calendar (timeline bar + upcoming feasts) | ⏳ Planned |
 | 15 | Treasurer Features (fines ledger + income/expense ledger) | ⏳ Planned |

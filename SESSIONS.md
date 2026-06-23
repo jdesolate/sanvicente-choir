@@ -101,7 +101,7 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ## Session 11: Role System Overhaul + UI Bug Fixes
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Add `officer` and `treasurer` roles to the system. Extend secretary and officer access. Fix all known UI bugs. Replace the Sign Out button in the navbar with an initials avatar.
 

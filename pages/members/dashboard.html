@@ -68,6 +68,33 @@
           <hr class="sidebar-divider">
         </div>
 
+        <!-- Officer-only links — shown via JS -->
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link">
+            <span class="sidebar-icon">♫</span> Song Management
+          </a>
+          <a href="../secretary/absences.html" class="sidebar-link">
+            <span class="sidebar-icon">✉</span> Absence Requests
+          </a>
+          <a href="../officer/events.html" class="sidebar-link">
+            <span class="sidebar-icon">◷</span> Event Management
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+
+        <!-- Treasurer-only links — shown via JS -->
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link">
+            <span class="sidebar-icon">◈</span> Fines Ledger
+          </a>
+          <a href="../treasurer/ledger.html" class="sidebar-link">
+            <span class="sidebar-icon">≡</span> Income / Expense
+          </a>
+          <hr class="sidebar-divider">
+        </div>
+
         <!-- Admin-only links — shown via JS -->
         <div id="admin-section" style="display:none">
           <div class="sidebar-section-label">Admin</div>
@@ -211,6 +238,12 @@
       // Show role-gated nav sections
       if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (['officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
       }
       if (['admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('admin-section').style.display = 'block';

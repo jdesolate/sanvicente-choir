@@ -585,7 +585,7 @@ input:hover, select:hover, textarea:hover {
 .badge-associate   { background: rgba(224,160,48,0.15); color: var(--warning); }
 .badge-honorary    { background: rgba(201,168,106,0.15);color: var(--gold); }
 .badge-inactive    { background: rgba(120,120,120,0.15);color: #888; }
-.badge-super-admin { background: rgba(160,100,220,0.18);color: #c084fc; }
+.badge-super-admin { background: rgba(160,100,220,0.18);color: #c084fc; white-space: nowrap; }
 
 /* Attendance rate */
 .badge-on-track { background: rgba(92,184,92,0.15); color: #8FD68F; }
