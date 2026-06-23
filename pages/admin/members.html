@@ -27,10 +27,7 @@
         <p>Admin Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
-      <div class="portal-header-user">
-        <span id="header-name">Loading…</span>
-        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
-      </div>
+      <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
 
@@ -340,15 +337,16 @@
 
     <script type="module">
       import { requireRole, getProfile, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
       import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../js/supabase-client.js';
-      import { hidePageLoader, formatDate, escHtml, initThemeToggle, gdriveImgUrl } from '../../js/utils.js';
+      import { hidePageLoader, formatDate, escHtml, initThemeToggle, gdriveImgUrl, formatRole } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
       const adminProfile = await requireRole('admin');
       if (!adminProfile) throw new Error('redirecting');
 
-      document.getElementById('header-name').textContent = adminProfile.full_name;
+      initPortalHeader(adminProfile, handleSignOut);
 
       // Delete button only visible to super_admin
       if (adminProfile.role !== 'super_admin') {
@@ -361,7 +359,6 @@
         try { await signOut(); } catch (_) {}
         window.location.href = '/index.html';
       }
-      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
       document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
 
       // ── Mobile sidebar ─────────────────────────────────────────
@@ -398,8 +395,8 @@
         return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
       };
       const badgeRole = r => {
-        const cls = { admin:'badge-honorary', secretary:'badge-approved', member:'badge-present', super_admin:'badge-super-admin' };
-        return `<span class="badge ${cls[r] || ''}">${cap(r)}</span>`;
+        const cls = { member:'badge-present', secretary:'badge-approved', officer:'badge-approved', treasurer:'badge-honorary', admin:'badge-honorary', super_admin:'badge-super-admin' };
+        return `<span class="badge ${cls[r] || ''}">${formatRole(r)}</span>`;
       };
 
       // State for which row is being acted on

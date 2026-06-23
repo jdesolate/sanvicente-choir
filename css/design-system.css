@@ -753,6 +753,17 @@ input:hover, select:hover, textarea:hover {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+@media (max-width: 480px) {
+  .portal-header-wordmark h1 { font-size: 0; }
+  .portal-header-wordmark h1::before {
+    content: "SVC";
+    font-size: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--ivory);
+  }
+}
 .portal-header-wordmark p {
   font-family: var(--font-text);
   font-size: 0.8125rem;
@@ -766,19 +777,87 @@ input:hover, select:hover, textarea:hover {
 
 /* User info in header */
 .portal-header-user {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-left: auto;
   flex-shrink: 0;
 }
-.portal-header-user span {
+
+/* Avatar circle */
+.nav-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--charcoal);
+  border: 1.5px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color var(--t-base);
+  user-select: none;
+}
+.nav-avatar:hover { border-color: var(--gold); }
+.nav-avatar-initials {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  line-height: 1;
+}
+.nav-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Avatar dropdown */
+.nav-avatar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--charcoal);
+  border: 1px solid var(--gold-dim);
+  min-width: 160px;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity var(--t-base), transform var(--t-base);
+}
+.nav-avatar-dropdown.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.nav-avatar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--ivory-dim);
-  display: none;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--t-base), color var(--t-base);
+  text-align: left;
+  white-space: nowrap;
 }
-@media (min-width: 640px) {
-  .portal-header-user span { display: block; }
+.nav-avatar-item:hover {
+  background: var(--gold-faint);
+  color: var(--ivory);
+}
+.nav-avatar-item + .nav-avatar-item {
+  border-top: 1px solid var(--ivory-05);
 }
 
 /* Back link */
@@ -1064,6 +1143,7 @@ input:hover, select:hover, textarea:hover {
 ═══════════════════════════════════════════════════════════ */
 .search-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: var(--space-5);
 }

@@ -144,6 +144,11 @@
         text-transform: uppercase;
         color: var(--ivory);
       }
+      .header-title-short { display: none; }
+      @media (max-width: 480px) {
+        .header-title-full  { display: none; }
+        .header-title-short { display: inline; }
+      }
 
       .header-text p {
         font-family: 'Cormorant Garamond', serif;
@@ -657,22 +662,21 @@
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-      <img src="assets/images/officers/SVC_Logo.png" alt="San Vicente Choir" class="header-logo">
-      <div class="header-text">
-        <h1>San Vicente Choir</h1>
-      </div>
-      <a href="index.html" class="header-back">← Website</a>
+      <a href="index.html" style="display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0" aria-label="Back to website">
+        <img src="assets/images/officers/SVC_Logo.png" alt="San Vicente Choir" class="header-logo">
+        <div class="header-text">
+          <h1><span class="header-title-full">San Vicente Choir</span><span class="header-title-short">SVC</span></h1>
+        </div>
+      </a>
       <!-- Auth state: populated by module script below -->
-      <div id="header-user" style="display:flex;align-items:center;gap:10px;margin-left:8px;flex-shrink:0"></div>
+      <div id="header-user" style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0"></div>
       <button id="theme-toggle" aria-label="Switch to light mode"
         style="background:none;border:1px solid var(--gold-dim);color:var(--ivory-dim);font-size:15px;cursor:pointer;padding:0 10px;min-width:44px;min-height:36px;transition:border-color 0.2s,color 0.2s;flex-shrink:0"
         onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
         onmouseout="this.style.borderColor='var(--gold-dim)';this.style.color='var(--ivory-dim)'">
         ☾
       </button>
-      <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
-        ☰
-      </button>
+      <button class="hamburger" onclick="toggleNav()" aria-label="Open navigation menu">☰</button>
     </header>
 
     <div class="layout">
@@ -734,6 +738,15 @@
            onmouseout="this.style.background='';this.style.color='var(--ivory-dim)'">
           <span style="font-size:14px;opacity:0.7">◈</span> Admin Portal
         </a>
+        <!-- Sign out for logged-in members -->
+        <div id="sidebar-signout-area" style="display:none;padding:8px 20px 16px;border-top:1px solid var(--ivory-05);margin-top:8px">
+          <button id="doc-logout-btn"
+            style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;padding:0;min-height:44px;text-align:left;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--ivory-dim);transition:color 0.18s"
+            onmouseover="this.style.color='var(--ivory)'"
+            onmouseout="this.style.color='var(--ivory-dim)'">
+            <span style="font-size:14px;opacity:0.7">←</span> Sign Out
+          </button>
+        </div>
         <!-- Login notice for unauthenticated visitors -->
         <div id="sidebar-login-notice" style="display:none;padding:16px 20px;border-top:1px solid var(--ivory-05);margin-top:8px">
           <p style="font-size:0.78rem;color:var(--ivory-dim);line-height:1.6;font-weight:300;margin-bottom:10px">
@@ -2850,10 +2863,9 @@ Come ready to share one personal goal for your year in the choir (Article XIII) 
       const slot = document.getElementById('header-user');
 
       if (profile) {
-        slot.innerHTML = `
-          <span id="header-user-name">${profile.full_name}</span>
-          <button class="header-logout-btn" id="doc-logout-btn">Sign Out</button>
-        `;
+        slot.innerHTML = `<span id="header-user-name">${profile.full_name}</span>`;
+        const signoutArea = document.getElementById('sidebar-signout-area');
+        if (signoutArea) signoutArea.style.display = '';
         document.getElementById('doc-logout-btn').addEventListener('click', async () => {
           try { await signOut(); } catch (_) {}
           window.location.href = 'index.html';

@@ -1,3 +1,8 @@
+export function formatRole(role) {
+  if (!role) return '—';
+  return role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
 export function formatDate(dateStr) {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('en-PH', {

@@ -29,6 +29,9 @@
       }
       .filter-toggle:hover { border-color: var(--gold); color: var(--ivory); }
       .filter-toggle.has-active { border-color: var(--gold); color: var(--gold); background: var(--gold-faint); }
+      @media (max-width: 640px) {
+        .filter-toggle { flex-basis: 100%; justify-content: center; }
+      }
 
       .filter-panel { display: none; }
       .filter-panel.open { display: block; }
@@ -68,10 +71,7 @@
         <p>Member Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
-      <div class="portal-header-user">
-        <span id="header-name">Loading…</span>
-        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
-      </div>
+      <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
 
@@ -174,6 +174,7 @@
 
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, escHtml, initThemeToggle, getLiturgicalSeason } from '../../js/utils.js';
       initThemeToggle();
@@ -182,10 +183,10 @@
       const profile = await requireRole('member');
       if (!profile) throw new Error('redirecting');
 
-      document.getElementById('header-name').textContent = profile.full_name;
+      initPortalHeader(profile, handleSignOut);
       document.getElementById('page-content').style.display = 'block';
 
-      if (['secretary', 'admin', 'super_admin'].includes(profile.role)) {
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
         document.getElementById('secretary-section').style.display = 'block';
       }
       if (['admin', 'super_admin'].includes(profile.role)) {
@@ -197,7 +198,6 @@
         try { await signOut(); } catch (_) {}
         window.location.href = '/index.html';
       }
-      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
       document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
 
       // ── Mobile sidebar ─────────────────────────────────────────

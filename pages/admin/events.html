@@ -27,10 +27,7 @@
         <p>Admin Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
-      <div class="portal-header-user">
-        <span id="header-name">Loading…</span>
-        <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
-      </div>
+      <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
 
@@ -147,6 +144,7 @@
 
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, formatDate, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
@@ -155,7 +153,7 @@
       const profile = await requireRole('admin');
       if (!profile) throw new Error('redirecting');
 
-      document.getElementById('header-name').textContent = profile.full_name;
+      initPortalHeader(profile, handleSignOut);
       document.getElementById('page-content').style.display = 'block';
 
       // ── Sign out ───────────────────────────────────────────────
@@ -163,7 +161,6 @@
         try { await signOut(); } catch (_) {}
         window.location.href = '/index.html';
       }
-      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
       document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
 
       // ── Mobile sidebar ─────────────────────────────────────────
