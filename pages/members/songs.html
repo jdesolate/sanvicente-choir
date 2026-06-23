@@ -53,6 +53,32 @@
       }
 
       .song-list { display: flex; flex-direction: column; gap: 8px; }
+      .weekend-section {
+        margin-bottom: var(--space-8);
+        padding: var(--space-5);
+        border: 1px solid var(--gold-dim);
+        background: var(--charcoal);
+      }
+      .weekend-section-heading {
+        font-family: var(--font-display);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin: 0 0 var(--space-4);
+      }
+      .weekend-event-title {
+        color: var(--ivory);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        margin-bottom: var(--space-2);
+      }
+      .weekend-song-list {
+        margin: 0; padding-left: var(--space-5); list-style: disc;
+        color: var(--ivory-dim); font-size: var(--text-sm);
+      }
+      .weekend-song-list li { padding: 2px 0; }
     </style>
   </head>
   <body class="portal-body">
@@ -128,11 +154,19 @@
             <p>Search and browse the choir's repertoire</p>
           </div>
 
+          <!-- Songs for this Weekend -->
+          <section id="weekend-section" class="weekend-section" style="display:none" aria-label="Songs for this weekend">
+            <h3 class="weekend-section-heading">♪ Songs for this Weekend</h3>
+            <div id="weekend-content"></div>
+          </section>
+
           <!-- Search + filter toggle -->
           <div class="search-bar" style="align-items:stretch">
             <input type="search" id="search-input" placeholder="Search by title or lyrics…"
               aria-label="Search songs" autocomplete="off">
             <button class="btn btn-gold" id="search-btn">Search</button>
+            <button class="filter-toggle" id="practicing-btn"
+              aria-pressed="false">● Practicing Now</button>
             <button class="filter-toggle" id="filter-toggle"
               aria-expanded="false" aria-controls="filter-panel">⚙ Filters</button>
           </div>
@@ -262,7 +296,7 @@
       }
 
       // ── Active filter state ────────────────────────────────────
-      const active = { lang: new Set(), use: new Set(), season: new Set() };
+      const active = { lang: new Set(), use: new Set(), season: new Set(), practicingOnly: false };
 
       // ── Build filter chips ─────────────────────────────────────
       function buildChips(containerId, options, filterSet) {
@@ -301,6 +335,15 @@
         filterToggle.textContent = hasAny ? `⚙ Filters (${active.lang.size + active.use.size + active.season.size})` : '⚙ Filters';
       }
 
+      // ── Practicing Now chip ────────────────────────────────────
+      const practicingBtn = document.getElementById('practicing-btn');
+      practicingBtn.addEventListener('click', () => {
+        active.practicingOnly = !active.practicingOnly;
+        practicingBtn.classList.toggle('has-active', active.practicingOnly);
+        practicingBtn.setAttribute('aria-pressed', String(active.practicingOnly));
+        loadSongs();
+      });
+
       // ── Pre-set season filter to current liturgical season ─────
       // (must come after syncFilterToggle is defined above)
       const VALID_SONG_SEASONS = new Set(['advent','christmas','lent','easter','ordinary_time']);
@@ -333,7 +376,10 @@
       // ── Clear filters ──────────────────────────────────────────
       document.getElementById('clear-filters').addEventListener('click', () => {
         active.lang.clear(); active.use.clear(); active.season.clear();
+        active.practicingOnly = false;
         document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
+        practicingBtn.classList.remove('has-active');
+        practicingBtn.setAttribute('aria-pressed', 'false');
         syncFilterToggle();
         document.getElementById('season-notice').style.display = 'none';
         loadSongs();
@@ -360,14 +406,15 @@
 
         let query = supabase
           .from('songs')
-          .select('id, title, language_tags, liturgical_use_tags, season_tags, lyrics, gdrive_url, youtube_url');
+          .select('id, title, language_tags, liturgical_use_tags, season_tags, lyrics, gdrive_url, youtube_url, is_currently_practicing');
 
         if (term) {
           query = query.or(`title.ilike.%${term}%,lyrics.ilike.%${term}%`);
         }
-        if (active.lang.size)   query = query.contains('language_tags', [...active.lang]);
-        if (active.use.size)    query = query.contains('liturgical_use_tags', [...active.use]);
-        if (active.season.size) query = query.contains('season_tags', [...active.season]);
+        if (active.practicingOnly)  query = query.eq('is_currently_practicing', true);
+        if (active.lang.size)       query = query.contains('language_tags', [...active.lang]);
+        if (active.use.size)        query = query.contains('liturgical_use_tags', [...active.use]);
+        if (active.season.size)     query = query.contains('season_tags', [...active.season]);
 
         const { data, error } = await query
           .order('created_at', { ascending: false })
@@ -396,6 +443,8 @@
           ...(s.liturgical_use_tags || []).map(v => labelFor(v, USE_OPTIONS)),
           ...(s.season_tags || []).map(v => labelFor(v, SEASON_OPTIONS)),
         ];
+        const practicingBadge = s.is_currently_practicing
+          ? `<span class="badge badge-active" style="font-size:10px;margin-left:6px">● Practicing</span>` : '';
         const tagHtml = allTags.map(t => `<span class="song-tag">${escHtml(t)}</span>`).join('');
 
         const links = [
@@ -411,7 +460,7 @@
               aria-expanded="false" aria-controls="body-${s.id}"
               data-song-id="${s.id}">
               <div>
-                <div class="song-card-title">${escHtml(s.title)}</div>
+                <div class="song-card-title">${escHtml(s.title)}${practicingBadge}</div>
                 ${tagHtml ? `<div class="song-card-tags">${tagHtml}</div>` : ''}
               </div>
               <span class="song-card-chevron" aria-hidden="true">▼</span>
@@ -441,8 +490,63 @@
         header.click();
       });
 
+      // ── Songs for this Weekend ─────────────────────────────────
+      async function loadWeekendSongs() {
+        const today    = new Date().toISOString().split('T')[0];
+        const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        const { data: events } = await supabase
+          .from('events')
+          .select('id, title, event_date')
+          .gte('event_date', today)
+          .lte('event_date', nextWeek)
+          .order('event_date', { ascending: true });
+
+        const sectionEl = document.getElementById('weekend-section');
+        const contentEl = document.getElementById('weekend-content');
+        sectionEl.style.display = 'block';
+
+        if (!events?.length) {
+          contentEl.innerHTML = `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0">No songs assigned yet for this weekend.</p>`;
+          return;
+        }
+
+        const { data: assignments } = await supabase
+          .from('song_assignments')
+          .select('event_id, songs(id, title)')
+          .in('event_id', events.map(e => e.id));
+
+        const byEvent = {};
+        (assignments || []).forEach(a => {
+          if (!byEvent[a.event_id]) byEvent[a.event_id] = [];
+          if (a.songs) byEvent[a.event_id].push(a.songs);
+        });
+
+        const hasAny = events.some(ev => (byEvent[ev.id] || []).length > 0);
+        if (!hasAny) {
+          contentEl.innerHTML = `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0">No songs assigned yet for this weekend.</p>`;
+          return;
+        }
+
+        contentEl.innerHTML = events.map(ev => {
+          const songs = byEvent[ev.id] || [];
+          if (!songs.length) return '';
+          const dayLabel = new Date(ev.event_date + 'T00:00:00').toLocaleDateString('en-PH', {
+            weekday: 'long', month: 'long', day: 'numeric',
+          });
+          return `
+            <div style="margin-bottom:var(--space-5)">
+              <div class="weekend-event-title">${escHtml(ev.title)} — ${dayLabel}</div>
+              <ul class="weekend-song-list">
+                ${songs.map(s => `<li>${escHtml(s.title)}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+        }).filter(Boolean).join('');
+      }
+
       // ── Init ───────────────────────────────────────────────────
-      await loadSongs();
+      await Promise.all([loadWeekendSongs(), loadSongs()]);
       hidePageLoader();
     </script>
   </body>

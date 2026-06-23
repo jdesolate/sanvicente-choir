@@ -163,11 +163,13 @@ ALTER TABLE events ADD COLUMN IF NOT EXISTS event_category text
 - [ ] Song library filter buttons wrap on mobile
 - [ ] Documents page burger nav replaced by logo-as-link
 
+**Note:** The `event_category` SQL above is a prerequisite for Session 12's and Session 13's `event_category = 'service'` filters to take effect. Run it before starting Session 13.
+
 ---
 
 ## Session 12: Song Enhancements
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Add "Practicing Now" flag to songs, build song assignment to service events, and add "Songs for this Weekend" view on the member song library.
 
@@ -191,36 +193,46 @@ CREATE TABLE IF NOT EXISTS song_assignments (
   UNIQUE(song_id, event_id)
 );
 ALTER TABLE song_assignments ENABLE ROW LEVEL SECURITY;
--- All authenticated: read; officer/admin: insert/update/delete
+CREATE POLICY "song_assignments_select" ON song_assignments FOR SELECT TO authenticated USING (true);
+CREATE POLICY "song_assignments_insert" ON song_assignments FOR INSERT TO authenticated
+  WITH CHECK ((SELECT role FROM profiles WHERE id = auth.uid()) IN ('officer','admin','super_admin'));
+CREATE POLICY "song_assignments_delete" ON song_assignments FOR DELETE TO authenticated
+  USING ((SELECT role FROM profiles WHERE id = auth.uid()) IN ('officer','admin','super_admin'));
 ```
 
 *`pages/officer/songs.html` (new page):*
 - Auth guard: officer+
-- Song list with search and filters (same as member view)
-- Each song row: Edit button (opens edit modal), toggle `is_currently_practicing` (on/off switch), Assign to Event button
-- "Assign to Event" opens a modal: dropdown of upcoming service events; select and save → inserts into `song_assignments`
-- View current assignments per song (list of assigned events with remove button)
-- Add Song / Edit Song / Delete Song (same forms as existing admin songs page)
+- Song table: Title + tags, Practicing toggle, Actions (Assign / Edit / Delete)
+- Practicing toggle: inline button per row; optimistic UI update on click
+- "Assign" opens a modal showing current assignments (with remove button) and a dropdown of all upcoming events (next 60 days) not yet assigned to that song
+- Add Song / Edit Song / Delete Song modal (same form fields as before)
 
 *`pages/admin/songs.html` (update):*
-- Add same `is_currently_practicing` toggle and song assignment UI
+- Full rewrite matching officer page — same Practicing toggle and Assign modal, auth guard stays `requireRole('admin')`
 
 *`pages/members/songs.html` (update):*
-- Add "Practicing Now" filter chip — filters to `is_currently_practicing = true`
+- Add "Practicing Now" filter chip next to the Filters button — filters to `is_currently_practicing = true`; cleared by "Clear Filters"
+- Songs marked practicing show a small "● Practicing" badge on the card title
 - Add "Songs for this Weekend" section at top of page:
-  - Queries `song_assignments` joined with `events` where `event_date >= today` and `event_date <= today + 7 days` and `event_category = 'service'`
-  - Groups by event (Saturday / Sunday) with event title, date, and assigned songs listed
-  - If no upcoming assignments: show a muted "No songs assigned yet for this weekend"
-  - Section disappears automatically once event dates pass (query handles this)
+  - Queries events where `event_date >= today AND event_date <= today + 7 days`
+  - Then queries `song_assignments` for those event IDs, groups songs by event
+  - Shows event title + date with bulleted song list per event
+  - If no assignments found: shows muted "No songs assigned yet for this weekend"
+  - Section auto-clears as event dates pass (query-driven)
 
-*Sidebar:*
-- Add "Songs for this Weekend" quick link to member dashboard
+*`pages/members/dashboard.html` (update):*
+- Added "Songs for this Weekend" quick-action card linking to `songs.html`
+
+**Implementation note — `event_category` filter:**
+The assignment modal and member weekend section currently query **all upcoming events** without filtering by `event_category`. This is intentional: Session 11's SQL adding `event_category` to `events` may not have been run yet, and Session 13 hasn't built the UI to mark events as practice vs. service. Once Session 11 SQL is applied and Session 13 is complete, restore the filter:
+- Assignment modal: add `.eq('event_category', 'service')` to the events query in `refreshAssignModal()`
+- Member weekend section: add `.eq('event_category', 'service')` to the events query in `loadWeekendSongs()`
 
 **Acceptance criteria:**
-- [ ] Officer toggles `is_currently_practicing` on a song; member sees it under "Practicing Now" filter
-- [ ] Officer assigns a song to a Sunday service event; it appears in "Songs for this Weekend" on member song library
-- [ ] After the event date passes, the song no longer appears in the weekend section
-- [ ] Member cannot access `pages/officer/songs.html`
+- [x] Officer toggles `is_currently_practicing` on a song; member sees it under "Practicing Now" filter
+- [x] Officer assigns a song to a Sunday service event; it appears in "Songs for this Weekend" on member song library
+- [x] After the event date passes, the song no longer appears in the weekend section
+- [x] Member cannot access `pages/officer/songs.html`
 
 ---
 

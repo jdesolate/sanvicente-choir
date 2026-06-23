@@ -10,6 +10,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .song-modal { max-width: 680px; }
+      .check-cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0 12px;
+      }
+      .check-cols .check-group { min-height: 36px; }
+      .practice-btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: none; border: 1px solid var(--gold-dim);
+        color: var(--ivory-dim); padding: 3px 10px;
+        font-size: 11px; font-family: var(--font-ui);
+        cursor: pointer; transition: all var(--t-fast);
+        white-space: nowrap; line-height: 1;
+      }
+      .practice-btn:hover { border-color: var(--gold-dim); color: var(--ivory); }
+      .practice-btn.active { background: var(--gold-faint); border-color: var(--gold); color: var(--gold); }
+      .practice-btn.saving { opacity: 0.4; pointer-events: none; }
+      .assign-modal { max-width: 500px; }
+      .assignment-item {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; padding: var(--space-2) 0;
+        border-bottom: 1px solid var(--gold-dim);
+      }
+      .assignment-item:last-child { border-bottom: none; }
+    </style>
   </head>
   <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -60,15 +87,32 @@
       <main class="portal-main" id="main-content">
         <div id="page-content" style="display:none">
 
-          <div class="page-heading">
-            <h2>Song Management</h2>
-            <p>Add and manage the choir song library</p>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-8)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Song Management</h2>
+              <p>Manage repertoire, practicing status, and event assignments</p>
+            </div>
+            <button class="btn btn-gold" id="add-song-btn">+ Add Song</button>
           </div>
 
-          <div class="empty-state">
-            <div class="empty-icon">♫</div>
-            <p>Song management for officers is coming in Session 12.</p>
-            <a href="../members/songs.html" class="btn btn-ghost btn-sm" style="margin-top:var(--space-4)">View Song Library</a>
+          <div id="songs-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="songs-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">♪</div>
+            <p>No songs yet. Add the first song to begin building the library.</p>
+          </div>
+
+          <div id="songs-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Songs">
+              <thead>
+                <tr>
+                  <th>Title &amp; Tags</th>
+                  <th>Practicing</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="songs-tbody"></tbody>
+            </table>
           </div>
 
         </div>
@@ -79,10 +123,77 @@
       San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
     </footer>
 
+    <!-- ── Add / Edit Song Modal ── -->
+    <div class="modal-overlay" id="song-modal" role="dialog" aria-modal="true" aria-labelledby="song-modal-title">
+      <div class="modal song-modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="song-modal-title">Add Song</h2>
+          <button class="modal-close" id="song-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="song-form" novalidate>
+          <div class="form-group">
+            <label for="song-title">Title <span class="required">*</span></label>
+            <input type="text" id="song-title" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="song-lyrics">Lyrics <span class="required">*</span></label>
+            <textarea id="song-lyrics" required
+              style="min-height:200px;font-family:var(--font-text);font-size:0.95rem;line-height:1.9"
+              placeholder="Paste the full song lyrics here…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Language Tags</label>
+            <div class="check-list check-cols" id="lang-checks"></div>
+          </div>
+          <div class="form-group">
+            <label>Liturgical Use Tags</label>
+            <div class="check-list check-cols" id="use-checks"></div>
+          </div>
+          <div class="form-group">
+            <label>Season Tags</label>
+            <div class="check-list check-cols" id="season-checks"></div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="song-gdrive">Google Drive PDF URL</label>
+              <input type="url" id="song-gdrive" autocomplete="off" placeholder="https://drive.google.com/…">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="song-youtube">YouTube URL</label>
+              <input type="url" id="song-youtube" autocomplete="off" placeholder="https://youtu.be/…">
+            </div>
+          </div>
+          <div id="song-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="song-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="song-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="song-submit">Save Song</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Assign to Event Modal ── -->
+    <div class="modal-overlay" id="assign-modal" role="dialog" aria-modal="true" aria-labelledby="assign-modal-title">
+      <div class="modal assign-modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="assign-modal-title">Event Assignments</h2>
+          <button class="modal-close" id="assign-modal-close" aria-label="Close">✕</button>
+        </div>
+        <div id="assign-modal-body" style="padding:0 var(--space-1)"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost btn-sm" id="assign-close-btn">Close</button>
+        </div>
+      </div>
+    </div>
+
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
-      import { hidePageLoader, initThemeToggle } from '../../js/utils.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
@@ -103,11 +214,416 @@
       const sidebar  = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
       const menuBtn  = document.getElementById('menu-btn');
-      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
-      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      const openSidebar  = () => { sidebar.classList.add('open'); backdrop.classList.add('open'); menuBtn.setAttribute('aria-expanded', 'true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); };
       menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
       backdrop.addEventListener('click', closeSidebar);
 
+      // ── Tag definitions ────────────────────────────────────────
+      const LANG_OPTIONS = [
+        { value: 'bisaya',   label: 'Bisaya' },
+        { value: 'filipino', label: 'Filipino' },
+        { value: 'english',  label: 'English' },
+        { value: 'latin',    label: 'Latin' },
+      ];
+      const USE_OPTIONS = [
+        { value: 'entrance',           label: 'Entrance' },
+        { value: 'offertory',          label: 'Offertory' },
+        { value: 'communion',          label: 'Communion' },
+        { value: 'recessional',        label: 'Recessional' },
+        { value: 'responsorial_psalm', label: 'Responsorial Psalm' },
+        { value: 'gloria',             label: 'Gloria' },
+        { value: 'sanctus',            label: 'Sanctus' },
+        { value: 'agnus_dei',          label: 'Agnus Dei' },
+        { value: 'other',              label: 'Other' },
+      ];
+      const SEASON_OPTIONS = [
+        { value: 'advent',             label: 'Advent' },
+        { value: 'christmas',          label: 'Christmas' },
+        { value: 'lent',               label: 'Lent' },
+        { value: 'easter',             label: 'Easter' },
+        { value: 'ordinary_time',      label: 'Ordinary Time' },
+        { value: 'marian',             label: 'Marian' },
+        { value: 'patron_saint_feast', label: 'Patron Saint Feast' },
+        { value: 'other',              label: 'Other' },
+      ];
+
+      // ── Build tag checkbox lists ───────────────────────────────
+      function buildChecks(containerId, options) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = options.map(o => `
+          <label class="check-group" style="min-height:36px">
+            <input type="checkbox" name="${containerId}" value="${o.value}">
+            <span style="font-size:var(--text-sm)">${escHtml(o.label)}</span>
+          </label>
+        `).join('');
+      }
+      buildChecks('lang-checks', LANG_OPTIONS);
+      buildChecks('use-checks', USE_OPTIONS);
+      buildChecks('season-checks', SEASON_OPTIONS);
+
+      function getChecked(containerId) {
+        return [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
+      }
+      function setChecked(containerId, values = []) {
+        document.querySelectorAll(`#${containerId} input`).forEach(i => {
+          i.checked = values.includes(i.value);
+        });
+      }
+      function labelsFor(values, options) {
+        return (values || []).map(v => options.find(o => o.value === v)?.label || v);
+      }
+      function tagPill(label) {
+        return `<span class="song-tag">${escHtml(label)}</span>`;
+      }
+      function fmtDate(d) {
+        if (!d) return '';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      // ── Load & render song list ────────────────────────────────
+      async function loadSongs() {
+        const loadingEl = document.getElementById('songs-loading');
+        const emptyEl   = document.getElementById('songs-empty');
+        const tableEl   = document.getElementById('songs-table-wrap');
+        const tbody     = document.getElementById('songs-tbody');
+
+        loadingEl.style.display = 'flex';
+        emptyEl.style.display   = 'none';
+        tableEl.style.display   = 'none';
+
+        const { data, error } = await supabase
+          .from('songs')
+          .select('id, title, language_tags, liturgical_use_tags, season_tags, gdrive_url, youtube_url, is_currently_practicing')
+          .order('title', { ascending: true });
+
+        loadingEl.style.display = 'none';
+
+        if (error || !data?.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        tableEl.style.display = 'block';
+        tbody.innerHTML = data.map(s => {
+          const allTags = [
+            ...labelsFor(s.language_tags, LANG_OPTIONS),
+            ...labelsFor(s.liturgical_use_tags, USE_OPTIONS),
+            ...labelsFor(s.season_tags, SEASON_OPTIONS),
+          ];
+          const tagHtml = allTags.map(tagPill).join(' ');
+          const practicing = !!s.is_currently_practicing;
+
+          return `
+            <tr>
+              <td style="min-width:180px">
+                <div style="color:var(--ivory);font-weight:500">${escHtml(s.title)}</div>
+                ${tagHtml ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px">${tagHtml}</div>` : ''}
+              </td>
+              <td>
+                <button class="practice-btn ${practicing ? 'active' : ''}"
+                  data-id="${s.id}" data-practicing="${practicing ? '1' : '0'}"
+                  aria-label="${practicing ? 'Currently practicing — click to turn off' : 'Not practicing — click to mark as practicing'}">
+                  ${practicing ? '● Practicing' : '— Off'}
+                </button>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-outline btn-sm js-assign"
+                    data-id="${s.id}" data-title="${escHtml(s.title)}">Assign</button>
+                  <button class="btn btn-outline btn-sm js-edit"
+                    data-id="${s.id}">Edit</button>
+                  <button class="btn btn-danger btn-sm js-delete"
+                    data-id="${s.id}" data-title="${escHtml(s.title)}">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // ── Table button delegation ────────────────────────────────
+      document.getElementById('songs-tbody').addEventListener('click', async e => {
+        const practiceBtn = e.target.closest('.practice-btn');
+        if (practiceBtn) { await togglePracticing(practiceBtn); return; }
+
+        const assignBtn = e.target.closest('.js-assign');
+        if (assignBtn) { await openAssignModal(assignBtn.dataset.id, assignBtn.dataset.title); return; }
+
+        const editBtn = e.target.closest('.js-edit');
+        if (editBtn) { await openEditModal(editBtn.dataset.id); return; }
+
+        const deleteBtn = e.target.closest('.js-delete');
+        if (deleteBtn) { await confirmDelete(deleteBtn.dataset.id, deleteBtn.dataset.title); return; }
+      });
+
+      // ── Practice toggle ────────────────────────────────────────
+      async function togglePracticing(btn) {
+        const id = btn.dataset.id;
+        const current = btn.dataset.practicing === '1';
+        const next = !current;
+
+        btn.classList.add('saving');
+        const { error } = await supabase
+          .from('songs')
+          .update({ is_currently_practicing: next })
+          .eq('id', id);
+
+        if (error) {
+          alert(`Failed to update: ${error.message}`);
+          btn.classList.remove('saving');
+          return;
+        }
+
+        btn.dataset.practicing = next ? '1' : '0';
+        btn.classList.remove('saving');
+        btn.classList.toggle('active', next);
+        btn.textContent = next ? '● Practicing' : '— Off';
+        btn.setAttribute('aria-label', next
+          ? 'Currently practicing — click to turn off'
+          : 'Not practicing — click to mark as practicing');
+      }
+
+      // ── Assign to Event modal ──────────────────────────────────
+      let assigningSongId = null;
+
+      async function openAssignModal(songId, songTitle) {
+        assigningSongId = songId;
+        document.getElementById('assign-modal-title').textContent = `Assignments — ${songTitle}`;
+        document.getElementById('assign-modal').classList.add('open');
+        await refreshAssignModal(songId);
+      }
+
+      function closeAssignModal() {
+        document.getElementById('assign-modal').classList.remove('open');
+        assigningSongId = null;
+      }
+
+      document.getElementById('assign-modal-close').addEventListener('click', closeAssignModal);
+      document.getElementById('assign-close-btn').addEventListener('click', closeAssignModal);
+      document.getElementById('assign-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeAssignModal();
+      });
+
+      async function refreshAssignModal(songId) {
+        const body = document.getElementById('assign-modal-body');
+        body.innerHTML = '<div class="loading-text" style="padding:var(--space-4)"><div class="spinner"></div> Loading…</div>';
+
+        const today  = new Date().toISOString().split('T')[0];
+        const future = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        const [assignRes, eventsRes] = await Promise.all([
+          supabase
+            .from('song_assignments')
+            .select('id, event_id, events(id, title, event_date)')
+            .eq('song_id', songId),
+          supabase
+            .from('events')
+            .select('id, title, event_date')
+            .gte('event_date', today)
+            .lte('event_date', future)
+            .order('event_date', { ascending: true }),
+        ]);
+
+        const assignments = (assignRes.data || []).sort((a, b) =>
+          (a.events?.event_date || '').localeCompare(b.events?.event_date || '')
+        );
+        const assignedIds = new Set(assignments.map(a => a.event_id));
+        const availableEvents = (eventsRes.data || []).filter(ev => !assignedIds.has(ev.id));
+
+        let html = '';
+
+        // Current assignments section
+        html += `<p class="form-section-label" style="margin-bottom:var(--space-3)">Current Assignments</p>`;
+        if (!assignments.length) {
+          html += `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0 0 var(--space-6)">No events assigned yet.</p>`;
+        } else {
+          html += `<div style="margin-bottom:var(--space-6)">`;
+          html += assignments.map(a => {
+            const ev = a.events;
+            return `
+              <div class="assignment-item">
+                <div>
+                  <div style="color:var(--ivory);font-size:var(--text-sm)">${escHtml(ev?.title || 'Unknown event')}</div>
+                  <div style="color:var(--ivory-muted);font-size:11px">${fmtDate(ev?.event_date)}</div>
+                </div>
+                <button class="btn btn-danger btn-sm js-remove-assign"
+                  data-assign-id="${a.id}" style="flex-shrink:0">Remove</button>
+              </div>
+            `;
+          }).join('');
+          html += `</div>`;
+        }
+
+        // Add assignment section
+        html += `<p class="form-section-label" style="margin-bottom:var(--space-3)">Assign to Event</p>`;
+        if (!availableEvents.length) {
+          html += `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0">No unassigned upcoming service events in the next 60 days.</p>`;
+        } else {
+          html += `
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+              <div style="flex:1;min-width:180px">
+                <select id="event-select" aria-label="Select event">
+                  <option value="">Select event…</option>
+                  ${availableEvents.map(ev =>
+                    `<option value="${ev.id}">${escHtml(ev.title)} — ${fmtDate(ev.event_date)}</option>`
+                  ).join('')}
+                </select>
+              </div>
+              <button class="btn btn-gold btn-sm" id="do-assign-btn" style="flex-shrink:0">Assign</button>
+            </div>
+            <div id="assign-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-3)">
+              <span class="alert-icon">⚠</span>
+              <span id="assign-error-text"></span>
+            </div>
+          `;
+        }
+
+        body.innerHTML = html;
+
+        // Remove assignment handlers
+        body.querySelectorAll('.js-remove-assign').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = '…';
+            const { error } = await supabase
+              .from('song_assignments')
+              .delete()
+              .eq('id', btn.dataset.assignId);
+            if (error) { alert(`Failed to remove: ${error.message}`); return; }
+            await refreshAssignModal(songId);
+          });
+        });
+
+        // Assign button handler
+        const doAssignBtn = body.querySelector('#do-assign-btn');
+        if (doAssignBtn) {
+          doAssignBtn.addEventListener('click', async () => {
+            const eventId = body.querySelector('#event-select')?.value;
+            const errEl   = body.querySelector('#assign-error');
+            const errTxt  = body.querySelector('#assign-error-text');
+            if (!eventId) {
+              errTxt.textContent = 'Please select an event.';
+              errEl.style.display = 'flex';
+              return;
+            }
+            errEl.style.display = 'none';
+            doAssignBtn.disabled = true;
+            doAssignBtn.textContent = '…';
+            const { error } = await supabase.from('song_assignments').insert({
+              song_id:     songId,
+              event_id:    eventId,
+              assigned_by: profile.id,
+            });
+            if (error) {
+              errTxt.textContent = error.message;
+              errEl.style.display = 'flex';
+              doAssignBtn.disabled = false;
+              doAssignBtn.textContent = 'Assign';
+              return;
+            }
+            await refreshAssignModal(songId);
+          });
+        }
+      }
+
+      // ── Add / Edit song modal ──────────────────────────────────
+      let editingId = null;
+
+      async function openEditModal(id) {
+        const { data, error } = await supabase.from('songs').select('*').eq('id', id).single();
+        if (error || !data) { alert('Failed to load song.'); return; }
+        openModal(data);
+      }
+
+      function openModal(song = null) {
+        editingId = song?.id || null;
+        document.getElementById('song-modal-title').textContent = editingId ? 'Edit Song' : 'Add Song';
+        document.getElementById('song-title').value   = song?.title       || '';
+        document.getElementById('song-lyrics').value  = song?.lyrics      || '';
+        document.getElementById('song-gdrive').value  = song?.gdrive_url  || '';
+        document.getElementById('song-youtube').value = song?.youtube_url || '';
+        setChecked('lang-checks',   song?.language_tags || []);
+        setChecked('use-checks',    song?.liturgical_use_tags || []);
+        setChecked('season-checks', song?.season_tags || []);
+        document.getElementById('song-error').style.display = 'none';
+        document.getElementById('song-modal').classList.add('open');
+        document.getElementById('song-title').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('song-modal').classList.remove('open');
+        editingId = null;
+      }
+
+      document.getElementById('add-song-btn').addEventListener('click', () => openModal());
+      document.getElementById('song-modal-close').addEventListener('click', closeModal);
+      document.getElementById('song-cancel').addEventListener('click', closeModal);
+      document.getElementById('song-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      // ── Save song ──────────────────────────────────────────────
+      document.getElementById('song-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('song-submit');
+        btn.disabled    = true;
+        btn.textContent = 'Saving…';
+        document.getElementById('song-error').style.display = 'none';
+
+        const title  = document.getElementById('song-title').value.trim();
+        const lyrics = document.getElementById('song-lyrics').value.trim();
+        const gdrive = document.getElementById('song-gdrive').value.trim() || null;
+        const yt     = document.getElementById('song-youtube').value.trim() || null;
+
+        if (!title || !lyrics) {
+          document.getElementById('song-error-text').textContent = 'Title and lyrics are required.';
+          document.getElementById('song-error').style.display = 'flex';
+          btn.disabled    = false;
+          btn.textContent = 'Save Song';
+          return;
+        }
+
+        const payload = {
+          title,
+          lyrics,
+          language_tags:       getChecked('lang-checks'),
+          liturgical_use_tags: getChecked('use-checks'),
+          season_tags:         getChecked('season-checks'),
+          gdrive_url:  gdrive,
+          youtube_url: yt,
+        };
+
+        let error;
+        if (editingId) {
+          ({ error } = await supabase.from('songs').update(payload).eq('id', editingId));
+        } else {
+          ({ error } = await supabase.from('songs').insert({ ...payload, created_by: profile.id }));
+        }
+
+        btn.disabled    = false;
+        btn.textContent = 'Save Song';
+
+        if (error) {
+          document.getElementById('song-error-text').textContent = error.message;
+          document.getElementById('song-error').style.display = 'flex';
+          return;
+        }
+
+        closeModal();
+        await loadSongs();
+      });
+
+      // ── Delete song ────────────────────────────────────────────
+      async function confirmDelete(id, title) {
+        if (!confirm(`Delete "${title}"?\n\nThis cannot be undone.`)) return;
+        const { error } = await supabase.from('songs').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadSongs();
+      }
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadSongs();
       hidePageLoader();
     </script>
   </body>

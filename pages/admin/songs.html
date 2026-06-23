@@ -18,6 +18,24 @@
         gap: 0 12px;
       }
       .check-cols .check-group { min-height: 36px; }
+      .practice-btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: none; border: 1px solid var(--gold-dim);
+        color: var(--ivory-dim); padding: 3px 10px;
+        font-size: 11px; font-family: var(--font-ui);
+        cursor: pointer; transition: all var(--t-fast);
+        white-space: nowrap; line-height: 1;
+      }
+      .practice-btn:hover { border-color: var(--gold-dim); color: var(--ivory); }
+      .practice-btn.active { background: var(--gold-faint); border-color: var(--gold); color: var(--gold); }
+      .practice-btn.saving { opacity: 0.4; pointer-events: none; }
+      .assign-modal { max-width: 500px; }
+      .assignment-item {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; padding: var(--space-2) 0;
+        border-bottom: 1px solid var(--gold-dim);
+      }
+      .assignment-item:last-child { border-bottom: none; }
     </style>
   </head>
   <body class="portal-body">
@@ -74,7 +92,7 @@
           <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-8)">
             <div class="page-heading" style="margin-bottom:0">
               <h2>Song Management</h2>
-              <p>Add and manage the choir song library</p>
+              <p>Manage repertoire, practicing status, and event assignments</p>
             </div>
             <button class="btn btn-gold" id="add-song-btn">+ Add Song</button>
           </div>
@@ -90,11 +108,8 @@
             <table class="data-table" aria-label="Songs">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Language</th>
-                  <th>Liturgical Use</th>
-                  <th>Season</th>
-                  <th>Links</th>
+                  <th>Title &amp; Tags</th>
+                  <th>Practicing</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -159,6 +174,20 @@
             <button type="submit" class="btn btn-gold btn-sm" id="song-submit">Save Song</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- ── Assign to Event Modal ── -->
+    <div class="modal-overlay" id="assign-modal" role="dialog" aria-modal="true" aria-labelledby="assign-modal-title">
+      <div class="modal assign-modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="assign-modal-title">Event Assignments</h2>
+          <button class="modal-close" id="assign-modal-close" aria-label="Close">✕</button>
+        </div>
+        <div id="assign-modal-body" style="padding:0 var(--space-1)"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost btn-sm" id="assign-close-btn">Close</button>
+        </div>
       </div>
     </div>
 
@@ -231,29 +260,27 @@
           </label>
         `).join('');
       }
-
       buildChecks('lang-checks', LANG_OPTIONS);
       buildChecks('use-checks', USE_OPTIONS);
       buildChecks('season-checks', SEASON_OPTIONS);
 
-      // ── Checkbox helpers ───────────────────────────────────────
       function getChecked(containerId) {
         return [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
       }
-
       function setChecked(containerId, values = []) {
         document.querySelectorAll(`#${containerId} input`).forEach(i => {
           i.checked = values.includes(i.value);
         });
       }
-
-      // ── Label lookup ───────────────────────────────────────────
       function labelsFor(values, options) {
         return (values || []).map(v => options.find(o => o.value === v)?.label || v);
       }
-
       function tagPill(label) {
         return `<span class="song-tag">${escHtml(label)}</span>`;
+      }
+      function fmtDate(d) {
+        if (!d) return '';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
       }
 
       // ── Load & render song list ────────────────────────────────
@@ -269,7 +296,7 @@
 
         const { data, error } = await supabase
           .from('songs')
-          .select('id, title, language_tags, liturgical_use_tags, season_tags, gdrive_url, youtube_url')
+          .select('id, title, language_tags, liturgical_use_tags, season_tags, gdrive_url, youtube_url, is_currently_practicing')
           .order('title', { ascending: true });
 
         loadingEl.style.display = 'none';
@@ -281,26 +308,35 @@
 
         tableEl.style.display = 'block';
         tbody.innerHTML = data.map(s => {
-          const langPills   = labelsFor(s.language_tags, LANG_OPTIONS).map(tagPill).join(' ');
-          const usePills    = labelsFor(s.liturgical_use_tags, USE_OPTIONS).map(tagPill).join(' ');
-          const seasonPills = labelsFor(s.season_tags, SEASON_OPTIONS).map(tagPill).join(' ');
-          const links = [
-            s.gdrive_url  ? '<span class="badge badge-pending" title="Google Drive PDF">PDF</span>' : '',
-            s.youtube_url ? '<span class="badge badge-associate" title="YouTube">YT</span>' : '',
-          ].filter(Boolean).join(' ') || '—';
+          const allTags = [
+            ...labelsFor(s.language_tags, LANG_OPTIONS),
+            ...labelsFor(s.liturgical_use_tags, USE_OPTIONS),
+            ...labelsFor(s.season_tags, SEASON_OPTIONS),
+          ];
+          const tagHtml = allTags.map(tagPill).join(' ');
+          const practicing = !!s.is_currently_practicing;
 
           return `
             <tr>
-              <td style="color:var(--ivory);font-weight:500;min-width:160px">${escHtml(s.title)}</td>
-              <td style="min-width:110px">${langPills || '—'}</td>
-              <td style="min-width:150px">${usePills || '—'}</td>
-              <td style="min-width:140px">${seasonPills || '—'}</td>
-              <td style="white-space:nowrap">${links}</td>
+              <td style="min-width:180px">
+                <div style="color:var(--ivory);font-weight:500">${escHtml(s.title)}</div>
+                ${tagHtml ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px">${tagHtml}</div>` : ''}
+              </td>
+              <td>
+                <button class="practice-btn ${practicing ? 'active' : ''}"
+                  data-id="${s.id}" data-practicing="${practicing ? '1' : '0'}"
+                  aria-label="${practicing ? 'Currently practicing — click to turn off' : 'Not practicing — click to mark as practicing'}">
+                  ${practicing ? '● Practicing' : '— Off'}
+                </button>
+              </td>
               <td>
                 <div class="actions">
-                  <button class="btn btn-outline btn-sm js-edit" data-id="${s.id}">Edit</button>
-                  <button class="btn btn-danger btn-sm js-delete" data-id="${s.id}"
-                    data-title="${escHtml(s.title)}">Delete</button>
+                  <button class="btn btn-outline btn-sm js-assign"
+                    data-id="${s.id}" data-title="${escHtml(s.title)}">Assign</button>
+                  <button class="btn btn-outline btn-sm js-edit"
+                    data-id="${s.id}">Edit</button>
+                  <button class="btn btn-danger btn-sm js-delete"
+                    data-id="${s.id}" data-title="${escHtml(s.title)}">Delete</button>
                 </div>
               </td>
             </tr>
@@ -310,20 +346,189 @@
 
       // ── Table button delegation ────────────────────────────────
       document.getElementById('songs-tbody').addEventListener('click', async e => {
-        const editBtn   = e.target.closest('.js-edit');
+        const practiceBtn = e.target.closest('.practice-btn');
+        if (practiceBtn) { await togglePracticing(practiceBtn); return; }
+
+        const assignBtn = e.target.closest('.js-assign');
+        if (assignBtn) { await openAssignModal(assignBtn.dataset.id, assignBtn.dataset.title); return; }
+
+        const editBtn = e.target.closest('.js-edit');
+        if (editBtn) { await openEditModal(editBtn.dataset.id); return; }
+
         const deleteBtn = e.target.closest('.js-delete');
-        if (editBtn)   await openEditModal(editBtn.dataset.id);
-        if (deleteBtn) await confirmDelete(deleteBtn.dataset.id, deleteBtn.dataset.title);
+        if (deleteBtn) { await confirmDelete(deleteBtn.dataset.id, deleteBtn.dataset.title); return; }
       });
+
+      // ── Practice toggle ────────────────────────────────────────
+      async function togglePracticing(btn) {
+        const id = btn.dataset.id;
+        const current = btn.dataset.practicing === '1';
+        const next = !current;
+
+        btn.classList.add('saving');
+        const { error } = await supabase
+          .from('songs')
+          .update({ is_currently_practicing: next })
+          .eq('id', id);
+
+        if (error) {
+          alert(`Failed to update: ${error.message}`);
+          btn.classList.remove('saving');
+          return;
+        }
+
+        btn.dataset.practicing = next ? '1' : '0';
+        btn.classList.remove('saving');
+        btn.classList.toggle('active', next);
+        btn.textContent = next ? '● Practicing' : '— Off';
+        btn.setAttribute('aria-label', next
+          ? 'Currently practicing — click to turn off'
+          : 'Not practicing — click to mark as practicing');
+      }
+
+      // ── Assign to Event modal ──────────────────────────────────
+      async function openAssignModal(songId, songTitle) {
+        document.getElementById('assign-modal-title').textContent = `Assignments — ${songTitle}`;
+        document.getElementById('assign-modal').classList.add('open');
+        await refreshAssignModal(songId);
+      }
+
+      function closeAssignModal() {
+        document.getElementById('assign-modal').classList.remove('open');
+      }
+
+      document.getElementById('assign-modal-close').addEventListener('click', closeAssignModal);
+      document.getElementById('assign-close-btn').addEventListener('click', closeAssignModal);
+      document.getElementById('assign-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeAssignModal();
+      });
+
+      async function refreshAssignModal(songId) {
+        const body = document.getElementById('assign-modal-body');
+        body.innerHTML = '<div class="loading-text" style="padding:var(--space-4)"><div class="spinner"></div> Loading…</div>';
+
+        const today  = new Date().toISOString().split('T')[0];
+        const future = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        const [assignRes, eventsRes] = await Promise.all([
+          supabase
+            .from('song_assignments')
+            .select('id, event_id, events(id, title, event_date)')
+            .eq('song_id', songId),
+          supabase
+            .from('events')
+            .select('id, title, event_date')
+            .gte('event_date', today)
+            .lte('event_date', future)
+            .order('event_date', { ascending: true }),
+        ]);
+
+        const assignments = (assignRes.data || []).sort((a, b) =>
+          (a.events?.event_date || '').localeCompare(b.events?.event_date || '')
+        );
+        const assignedIds = new Set(assignments.map(a => a.event_id));
+        const availableEvents = (eventsRes.data || []).filter(ev => !assignedIds.has(ev.id));
+
+        let html = '';
+
+        html += `<p class="form-section-label" style="margin-bottom:var(--space-3)">Current Assignments</p>`;
+        if (!assignments.length) {
+          html += `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0 0 var(--space-6)">No events assigned yet.</p>`;
+        } else {
+          html += `<div style="margin-bottom:var(--space-6)">`;
+          html += assignments.map(a => {
+            const ev = a.events;
+            return `
+              <div class="assignment-item">
+                <div>
+                  <div style="color:var(--ivory);font-size:var(--text-sm)">${escHtml(ev?.title || 'Unknown event')}</div>
+                  <div style="color:var(--ivory-muted);font-size:11px">${fmtDate(ev?.event_date)}</div>
+                </div>
+                <button class="btn btn-danger btn-sm js-remove-assign"
+                  data-assign-id="${a.id}" style="flex-shrink:0">Remove</button>
+              </div>
+            `;
+          }).join('');
+          html += `</div>`;
+        }
+
+        html += `<p class="form-section-label" style="margin-bottom:var(--space-3)">Assign to Event</p>`;
+        if (!availableEvents.length) {
+          html += `<p style="color:var(--ivory-muted);font-size:var(--text-sm);margin:0">No unassigned upcoming service events in the next 60 days.</p>`;
+        } else {
+          html += `
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+              <div style="flex:1;min-width:180px">
+                <select id="event-select" aria-label="Select event">
+                  <option value="">Select event…</option>
+                  ${availableEvents.map(ev =>
+                    `<option value="${ev.id}">${escHtml(ev.title)} — ${fmtDate(ev.event_date)}</option>`
+                  ).join('')}
+                </select>
+              </div>
+              <button class="btn btn-gold btn-sm" id="do-assign-btn" style="flex-shrink:0">Assign</button>
+            </div>
+            <div id="assign-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-3)">
+              <span class="alert-icon">⚠</span>
+              <span id="assign-error-text"></span>
+            </div>
+          `;
+        }
+
+        body.innerHTML = html;
+
+        body.querySelectorAll('.js-remove-assign').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = '…';
+            const { error } = await supabase
+              .from('song_assignments')
+              .delete()
+              .eq('id', btn.dataset.assignId);
+            if (error) { alert(`Failed to remove: ${error.message}`); return; }
+            await refreshAssignModal(songId);
+          });
+        });
+
+        const doAssignBtn = body.querySelector('#do-assign-btn');
+        if (doAssignBtn) {
+          doAssignBtn.addEventListener('click', async () => {
+            const eventId = body.querySelector('#event-select')?.value;
+            const errEl   = body.querySelector('#assign-error');
+            const errTxt  = body.querySelector('#assign-error-text');
+            if (!eventId) {
+              errTxt.textContent = 'Please select an event.';
+              errEl.style.display = 'flex';
+              return;
+            }
+            errEl.style.display = 'none';
+            doAssignBtn.disabled = true;
+            doAssignBtn.textContent = '…';
+            const { error } = await supabase.from('song_assignments').insert({
+              song_id:     songId,
+              event_id:    eventId,
+              assigned_by: profile.id,
+            });
+            if (error) {
+              errTxt.textContent = error.message;
+              errEl.style.display = 'flex';
+              doAssignBtn.disabled = false;
+              doAssignBtn.textContent = 'Assign';
+              return;
+            }
+            await refreshAssignModal(songId);
+          });
+        }
+      }
+
+      // ── Add / Edit song modal ──────────────────────────────────
+      let editingId = null;
 
       async function openEditModal(id) {
         const { data, error } = await supabase.from('songs').select('*').eq('id', id).single();
         if (error || !data) { alert('Failed to load song.'); return; }
         openModal(data);
       }
-
-      // ── Modal open / close ─────────────────────────────────────
-      let editingId = null;
 
       function openModal(song = null) {
         editingId = song?.id || null;
