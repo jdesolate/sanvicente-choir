@@ -25,55 +25,9 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 ---
 
----
-
 ## Session 1: Repo Restructure + Supabase Schema
 
 **Status:** [x] Complete
-
-**Goal:** Clean the repository layout and create the Supabase project with all tables and RLS policies. No visible changes to users — foundation only.
-
-**Context to provide Claude:**
-- "We are restructuring the repo and setting up Supabase. Read PRD.md Section 9 for the target structure and Section 8 for the schema."
-
-**Tasks:**
-
-*Repo restructure:*
-- Create `assets/images/gallery/` and move gallery images (1.jpg–8.jpg, easter_vigil_2025.jpg, novena_birhen.jpg)
-- Create `assets/images/officers/` and move officer images (president-pp.jpg, vicepresident-pp.jpg, SVC_Logo.png)
-- Create `docs/` and move + rename MD files:
-  - `SanVicenteChoir_Constitution_2026.md` → `docs/constitution.md`
-  - `SanVicenteChoir_MemberHandbook_2026.md` → `docs/handbook.md`
-  - `SanVicenteChoir_Calendar_2026-2027.md` → `docs/calendar.md`
-  - `SanVicenteChoir_BudgetPlan_2026-2027.md` → `docs/budget.md`
-  - `Commitments_2026-27.md` → `docs/commitments.md`
-  - `SanVicenteChoir_TBD_Summary.md` → `docs/tbd-summary.md`
-- Delete `CHANGES_PROPOSED.md`
-- Move `leadership-plan-2026-27.html` → `pages/admin/leadership-plan.html`
-- Create `js/supabase-client.js` (stub — just the import and init)
-- Create `js/auth.js` (stub — empty functions)
-- Create `js/utils.js` (stub — empty)
-- Create all empty HTML stubs under `pages/`
-- Update all `src` / `href` / `fetch` paths in `index.html` and `documents.html` to match new locations
-- Create `supabase/schema.sql` with the full schema from PRD.md Section 8
-
-*Supabase (manual steps in dashboard, instruct Claude to write the SQL):*
-- Create Supabase project at supabase.com
-- Run `supabase/schema.sql` in the SQL Editor
-- Enable Row Level Security on all tables
-- Apply RLS policies (Claude writes these as SQL in schema.sql):
-  - `profiles`: user reads own row; secretary/admin read all; admin updates any
-  - `events`: authenticated users read all; admin writes
-  - `attendance`: secretary/admin read/write all; member reads own rows
-  - `absence_requests`: member inserts + reads own; secretary/admin reads + updates all
-  - `songs`: authenticated users read all; admin writes
-- Copy Supabase project URL + anon key into `js/supabase-client.js`
-
-**Acceptance criteria:**
-- [ ] No broken image or document links in index.html and documents.html
-- [ ] All pages still render correctly after path changes
-- [ ] schema.sql covers all 6 tables with correct columns and types
-- [ ] CHANGES_PROPOSED.md is deleted from repo
 
 ---
 
@@ -81,69 +35,11 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 **Status:** [x] Complete
 
-**Goal:** Implement login and registration pages. Wire auth state into navigation. Protect member-only pages with auth guards.
-
-**Context to provide Claude:**
-- "Session 1 is done. Supabase is set up. Now build auth: login.html, register.html, auth.js, and add nav login state to index.html and documents.html."
-
-**Tasks:**
-- `js/supabase-client.js` — initialize Supabase client with project URL and anon key
-- `js/auth.js` — implement:
-  - `signIn(email, password)`
-  - `signOut()`
-  - `getSession()` — returns current session or null
-  - `getProfile()` — fetches profile row for current user
-  - `requireAuth(redirectTo)` — redirects to login if not authenticated
-  - `requireRole(role, redirectTo)` — redirects if user lacks required role
-- `pages/login.html` — email + password form; link to register; error display
-- `pages/register.html`:
-  - Core fields: full name, email, password, contact number, birthday, age, school/occupation, voice part
-  - Dynamic custom fields: fetch `custom_field_definitions` from Supabase and render dynamically
-  - On submit: create Supabase auth user + insert profile row (`status: pending`, `role: member`)
-  - Success message: "Your registration is pending approval."
-- `pages/members/dashboard.html` — stub page with auth guard (redirects to login if not authenticated)
-- Update `index.html` nav — add "Member Login" link (or "Dashboard" if logged in)
-- Update `documents.html` nav — show user name + logout button if logged in
-
-**Acceptance criteria:**
-- [ ] Register form submits; profile row appears in Supabase with status: pending
-- [ ] Login works; session persists on page refresh (localStorage)
-- [ ] Logout clears session and redirects to index.html
-- [ ] Visiting pages/members/dashboard.html while logged out redirects to login
-
 ---
 
 ## Session 3: Admin — Member Management & Custom Fields
 
 **Status:** [x] Complete
-
-**Goal:** Build admin tools for approving registrations, managing member roles/status, and defining custom profile fields.
-
-**Context to provide Claude:**
-- "Sessions 1–2 are done. Auth is working. Now build pages/admin/members.html and pages/admin/fields.html. Also build pages/members/profile.html."
-
-**Tasks:**
-- `pages/admin/members.html`:
-  - Section 1 — Pending Registrations: table of members with `status: pending`; Approve button (opens modal to set status + confirm role); Reject button (deletes auth user + profile)
-  - Section 2 — All Members: searchable table with name, voice part, role, status; Edit button to change role or status; View Profile link
-  - "Create Account" button: form to create a member account directly (bypasses self-register)
-  - Auth guard: redirect to index.html if not admin
-- `pages/admin/fields.html`:
-  - List all `custom_field_definitions` with name, type, required flag, sort order
-  - Add Field form: field name, type (text/number/date/dropdown), dropdown options (if dropdown), required checkbox
-  - Reorder fields (up/down buttons)
-  - Delete field (with warning: "Existing member data for this field will be hidden but not deleted")
-  - Auth guard: admin only
-- `pages/members/profile.html`:
-  - Displays logged-in member's profile (all core fields + custom fields)
-  - Edit mode: allows member to update their own non-sensitive fields
-  - Auth guard: member+
-
-**Acceptance criteria:**
-- [ ] Admin approves a pending member; their status updates in Supabase
-- [ ] Admin promotes a member to secretary; they gain secretary-level access
-- [ ] Admin creates a custom field; it appears on register.html and profile.html
-- [ ] Non-admin visiting admin pages is redirected
 
 ---
 
@@ -151,71 +47,11 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 **Status:** [x] Complete
 
-**Goal:** Build event management for admin, attendance marking for secretary, and attendance record view for members.
-
-**Context to provide Claude:**
-- "Sessions 1–3 done. Now build the attendance system: pages/admin/events.html, pages/secretary/tracker.html, and pages/members/attendance.html."
-
-**Tasks:**
-- `pages/admin/events.html`:
-  - List all events (title, date, type, actions)
-  - Add Event form: title, date, event type (core/major/special), description
-  - Edit / Delete event
-  - Auth guard: admin only
-- `pages/secretary/tracker.html`:
-  - Event selector: shows recent + upcoming events from Supabase
-  - On event select: load all active + associate members
-  - Toggle each member: Present / Absent (visual toggle, not a dropdown)
-  - Save button: upserts attendance rows for that event
-  - Shows a summary row: X present / Y absent / Z total
-  - Auth guard: secretary+
-- `pages/members/attendance.html`:
-  - Attendance history table: event name, date, type, status (Present / Absent / Excused)
-  - Attendance rate per tier: Core X/Y (Z%), Major X/Y (Z%), Special X/Y (Z%)
-  - Status badge: On Track (≥80% Core) / At Risk (<80% Core)
-  - Auth guard: member+
-
-**Acceptance criteria:**
-- [ ] Admin creates an event; it appears in secretary's event selector
-- [ ] Secretary marks attendance; rows appear in `attendance` table in Supabase
-- [ ] Member's attendance page shows correct history and per-tier rates
-- [ ] At-risk status shows correctly for members below 80%
-
 ---
 
 ## Session 5: Absence Request System
 
 **Status:** [x] Complete
-
-**Goal:** Build the member absence request flow and the secretary review queue. Integrate with attendance records.
-
-**Context to provide Claude:**
-- "Session 4 is done. Attendance marking works. Now build the absence request system on top of it."
-
-**Tasks:**
-- Update `pages/members/attendance.html`:
-  - Add "Request Excuse" button next to each Absent row
-  - Add "Request Advance Absence" button for upcoming events (show upcoming events list)
-  - Clicking either opens a form: event (pre-filled if from Absent row), reason textarea, submit button
-  - On submit: insert row into `absence_requests` (status: pending)
-  - Show "Pending" badge on rows that have a pending request
-- `pages/secretary/absences.html`:
-  - Pending queue: member name, event, event date, request type (advance/retroactive), reason, submitted date
-  - Approve button: updates `absence_requests.status` to approved; updates `attendance.status` to excused (insert row if advance request)
-  - Reject button: updates status to rejected; optional note
-  - Separate tabs or sections: Pending / Approved / Rejected history
-  - Auth guard: secretary+
-- Update `pages/members/attendance.html`:
-  - Excused absences shown with "Excused" badge instead of "Absent"
-  - Excused absences excluded from rate calculation
-- Update `pages/secretary/tracker.html`:
-  - Excused members shown with a distinct indicator (not counted as unexcused absent)
-
-**Acceptance criteria:**
-- [ ] Member submits advance request; row appears in absence_requests (pending)
-- [ ] Secretary approves; attendance record shows Excused
-- [ ] Excused absences do not reduce the member's attendance rate
-- [ ] Secretary can see and filter the full request history
 
 ---
 
@@ -223,71 +59,11 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 **Status:** [x] Complete
 
-**Goal:** Build the member-facing song library and admin song management. Can be developed in parallel with Sessions 4–5.
-
-**Context to provide Claude:**
-- "Sessions 1–2 are done (auth works). Now build the song library: pages/members/songs.html and pages/admin/songs.html."
-
-**Tasks:**
-- `pages/admin/songs.html`:
-  - Song list with title, language tags, liturgical use, actions (Edit / Delete)
-  - Add Song form: title, lyrics (textarea), language tags (checkbox: Bisaya/Filipino/English/Latin), liturgical use tags (checkbox multi-select), season tags (checkbox multi-select), GDrive URL, YouTube URL
-  - Edit Song: same form pre-populated
-  - Auth guard: admin only
-- `pages/members/songs.html`:
-  - Search bar: searches song title and lyrics (uses Supabase `ilike` — fetches only matching results)
-  - Filter panel: Language (checkboxes), Liturgical Use (checkboxes), Season (checkboxes)
-  - Song list: title + tag chips; click to expand
-  - Expanded view: full lyrics, GDrive PDF button (if available), YouTube button (if available)
-  - Default state: show 20 most recently added songs; user searches/filters to find more
-  - Auth guard: member+
-
-**Supabase queries to use:**
-- Search: `songs.select('*').ilike('title', '%query%').or('lyrics.ilike.%query%')`
-- Filter by tag: `songs.select('*').contains('language_tags', ['bisaya'])`
-
-**Acceptance criteria:**
-- [ ] Admin adds a song with all metadata; it appears in member song library
-- [ ] Search for a word found in lyrics returns that song
-- [ ] Filter by "Bisaya" shows only Bisaya-tagged songs
-- [ ] GDrive and YouTube links open in new tab
-- [ ] Page loads quickly — only matching songs fetched, not the full library
-
 ---
 
 ## Session 7: Landing Page + Documents Access Control
 
 **Status:** [x] Complete
-
-**Goal:** Update the public landing page for better marketing, and wire role-based visibility into documents.html.
-
-**Context to provide Claude:**
-- "Sessions 1–2 are done (auth works). Now update index.html for sponsor marketing, and update documents.html to show/hide content based on auth role."
-
-**Tasks:**
-- `index.html` — Join Us section:
-  - Replace individual officer Facebook links with one clear CTA: "Join Our Community on Facebook" → links to choir Facebook page
-  - Keep officer Facebook links only in the Contact/Officers section
-- `index.html` — Add Sponsor section (before footer or after Support section):
-  - Section heading: "Partner With Our Ministry"
-  - Three sponsorship tiers displayed as cards: Supporter ₱500 (uniforms), Partner ₱1,000 (sound equipment), Patron ₱2,000+ (multiple needs)
-  - Contact form with `data-netlify="true"`: fields — Name, Organization, Contact Number, Message, Submit
-  - Style consistent with existing design system (dark luxury palette)
-- `documents.html` — role-based sidebar:
-  - On page load: check Supabase session and fetch profile role
-  - Hide/show sidebar items and document sections based on role (use PRD Section 5 access matrix)
-  - Unauthenticated: show Constitution only; all other items hidden with "Login to access" message
-  - Member: show Constitution + Handbook + Calendar + Commitments
-  - Admin: show all including Budget and TBD Summary
-  - Remove Excuse Letter and Leave Request Letter from sidebar entirely (add HTML comment: retired, replaced by absence request system)
-  - Add link to absence request system for logged-in members
-
-**Acceptance criteria:**
-- [ ] Sponsor form submits and appears in Netlify Forms dashboard
-- [ ] Join CTA links to Facebook page
-- [ ] Unauthenticated user visiting documents.html sees Constitution only
-- [ ] Member sees correct subset of documents
-- [ ] Admin sees all documents
 
 ---
 
@@ -295,74 +71,11 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 **Status:** [x] Complete
 
-**Goal:** Migrate from GitHub Pages to Netlify, do final link audit, remove retired files, and verify all features work on the deployed site.
-
-**Context to provide Claude:**
-- "All previous sessions are done. Now migrate to Netlify and do final QA. Check the acceptance criteria for all previous sessions."
-
-**Tasks:**
-- Create `netlify.toml` in repo root:
-  ```toml
-  [[redirects]]
-    from = "/documents"
-    to = "/pages/documents.html"
-    status = 200
-  ```
-  (Add any other clean URL redirects desired)
-- Connect repo to Netlify (done in Netlify UI — no code change; instruct user)
-- Set publish directory to `.` (root) in Netlify settings
-- Add Netlify form notification: go to Netlify dashboard → Forms → set email for sponsor form
-- Test all pages in Netlify preview URL before going live
-- Remove retired MD files from repo:
-  - `SanVicenteChoir_ExcuseLetter_Template.md`
-  - `SanVicenteChoir_LeaveRequest_Template.md`
-- Run full link audit: check every internal `href` and `src` for 404s
-- Mobile check: test all new pages at 375px width
-- Slow network check: use browser DevTools → throttle to Slow 3G → verify pages load usably
-
-**Acceptance criteria:**
-- [ ] Site live on Netlify URL (*.netlify.app or custom domain)
-- [ ] Sponsor form submission received in Netlify dashboard + email
-- [ ] No 404s on any internal link or image
-- [ ] Login, register, dashboard, attendance, songs all work on deployed site
-- [ ] Letter template MD files removed from repo
-- [ ] All new pages are usable on Slow 3G simulation
-
----
-
 ---
 
 ## Session 9: Dark Mode Toggle + Liturgical Season Badge
 
 **Status:** [x] Complete
-
-**Goal:** Add light/dark mode toggle to all member and admin dashboard pages. Add a liturgical season badge computed client-side and shown on the member dashboard. Wire the season to auto-filter the song library.
-
-**Context to provide Claude:**
-- "Sessions 1–8 are done. Now build Session 9: dark mode toggle and liturgical season badge. Read PRD.md Section 10.4 and 10.5."
-
-**Tasks:**
-- `css/design-system.css`:
-  - Add light mode CSS variable overrides under a `[data-theme="light"]` attribute selector (current defaults are dark)
-  - Toggle button component styles
-- `js/utils.js`:
-  - `getLiturgicalSeason(date)` — returns current Roman Catholic liturgical season and week number based on the given date
-  - `initThemeToggle()` — reads `localStorage` for saved theme, applies `data-theme` to `<html>`, wires toggle button
-- All pages under `pages/members/` and `pages/admin/`:
-  - Add theme toggle button to portal header (sun/moon icon)
-  - Call `initThemeToggle()` on page load
-- `pages/members/dashboard.html`:
-  - Add liturgical season badge (e.g., "Ordinary Time · Week 12") using `getLiturgicalSeason(new Date())`
-- `pages/members/songs.html`:
-  - On page load, call `getLiturgicalSeason()` and pre-set the season filter to the current season
-  - Show a chip: "Showing songs for: Ordinary Time" with an "×" to clear the filter
-
-**Acceptance criteria:**
-- [ ] Toggle switches between dark and light mode on all dashboard pages
-- [ ] Theme persists on page refresh (localStorage)
-- [ ] Season badge on dashboard shows correct current season
-- [ ] Song library defaults to current season filter on load
-- [ ] Filter can be cleared manually
 
 ---
 
@@ -370,97 +83,368 @@ Every HTML page created under `pages/` must import the shared design system as t
 
 **Status:** [x] Complete
 
-**Goal:** Add a Terms of Service modal showing the Constitution and Member Handbook before registration. Add profile picture field to registration and member profile pages.
-
-**Context to provide Claude:**
-- "Sessions 1–8 are done. Now build Session 10: ToS modal and profile picture. Read PRD.md Section 10.2 and 10.3."
-
-**Tasks:**
-- `pages/register.html`:
-  - On page load, before showing the registration form: render a full-screen modal
-  - Modal content: render `docs/constitution.md` and `docs/handbook.md` using `marked.js` (fetch both files, render sequentially with a divider)
-  - Modal footer: checkbox "I have read and agree to the Constitution & By-Laws and Member Handbook" + "Proceed to Register" button (disabled until checkbox checked)
-  - On proceed: close modal, show registration form
-  - Add optional field: **Profile Photo URL** (Google Drive direct link) — shown after voice part field
-  - On submit: store `tos_accepted_at: new Date().toISOString()` and `profile_photo_url` in profiles row
-- `pages/members/profile.html`:
-  - Display profile photo (if set) as a circular avatar at top of profile
-  - Allow member to update `profile_photo_url` in edit mode
-- `pages/admin/members.html`:
-  - Show small profile photo thumbnail in member list table (if available)
-
-**Database changes (run in Supabase SQL editor):**
-```sql
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS profile_photo_url text;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS tos_accepted_at timestamptz;
-```
-
-**Acceptance criteria:**
-- [ ] Visiting register.html shows the ToS modal first; form is hidden
-- [ ] Proceed button disabled until checkbox checked
-- [ ] Registration with a photo URL shows the photo on profile.html
-- [ ] `tos_accepted_at` is set in the profiles row on successful registration
-- [ ] Admin member list shows thumbnails for members with photos
-
 ---
 
 ## Session 10.5: Registration Hardening + Member Lifecycle
 
 **Status:** [x] Complete
 
-**Goal:** Tighten registration field requirements, remove redundant Age input (auto-calculate from birthday), introduce `super_admin` role for the President account, add soft-removal via `inactive` status, and add permanent member deletion restricted to super_admin.
-
 **Changes made:**
-
-*Registration (`pages/register.html`):*
-- Contact Number and Birthday made required
-- Age field removed — calculated from birthday wherever displayed
-- School / Occupation moved next to Birthday in the layout
-- `email` saved to `profiles` row at sign-up
-
-*Profile page (`pages/members/profile.html`):*
-- Age field in edit mode replaced with a read-only auto-calculated display
-- Birthday input live-updates the age display
-
-*Admin members page (`pages/admin/members.html`):*
-- Create Account modal aligned with registration: Contact Number and Birthday required, Age removed
-- Email shown under member name in the members table and in the View Profile modal
-- Custom field labels in View modal now show field name instead of UUID
-- Date-type custom fields show a years-of-service counter (e.g. "10 yrs of service")
-- Age in View modal calculated from birthday
-- **Delete Member** button added to View modal (super_admin only) — hard deletes auth user + cascades all data
-- Edit Member status dropdown includes `inactive`
-
-*Auth (`js/auth.js`):*
-- `super_admin` added to role hierarchy (rank 4, above `admin`)
-- `requireAuth` and `requireRole` both check for `inactive` status — signs out the user and redirects to `/pages/login.html?inactive=1`
-
-*Login page (`pages/login.html`):*
-- Shows a "Your account has been deactivated" banner when redirected with `?inactive=1`
-
-*Design system (`css/design-system.css`):*
-- `.badge-inactive` — muted grey
-- `.badge-super-admin` — soft purple
-
-**Database migrations (run in Supabase SQL Editor):**
-- `supabase/migration_contact_birthday_required.sql` — makes contact_number and birthday NOT NULL, drops age column
-- `supabase/migration_super_admin.sql` — adds super_admin to role constraint, grants it to admin@svc.com, updates all RLS policies, creates `delete_member` RPC
-- `supabase/migration_inactive_status.sql` — adds inactive to status constraint
-- `supabase/migration_profile_email.sql` — adds email column to profiles, backfills from auth.users
+- Contact Number and Birthday made required; Age field removed (calculated from birthday)
+- `super_admin` role added to hierarchy and RLS policies
+- `inactive` status added — soft-remove with reversibility
+- Hard delete (super_admin only) via `delete_member` RPC
+- `email` column added to `profiles` table and backfilled
+- Inactive users are signed out and redirected to `login.html?inactive=1`
 
 ---
 
-## Session 11: Admin CMS — Gallery & Officer Profiles
+## Session 11: Role System Overhaul + UI Bug Fixes
+
+**Status:** [ ] Not Started
+
+**Goal:** Add `officer` and `treasurer` roles to the system. Extend secretary and officer access. Fix all known UI bugs. Replace the Sign Out button in the navbar with an initials avatar.
+
+**Context to provide Claude:**
+- "Sessions 1–10.5 are done. Now build Session 11: role system overhaul and UI fixes. Read PRD.md Sections 4, 5, 6.7, and 8."
+
+**Tasks:**
+
+*Database (run in Supabase SQL editor):*
+```sql
+-- Add new roles to profiles check constraint
+ALTER TABLE profiles DROP CONSTRAINT IF EXISTS profiles_role_check;
+ALTER TABLE profiles ADD CONSTRAINT profiles_role_check
+  CHECK (role IN ('member','secretary','officer','treasurer','admin','super_admin'));
+
+-- Add event_category to events table
+ALTER TABLE events ADD COLUMN IF NOT EXISTS event_category text
+  CHECK (event_category IN ('practice','service')) NOT NULL DEFAULT 'service';
+```
+
+*RLS policy updates:*
+- `events` insert/update: extend to secretary and officer (currently admin only)
+- `absence_requests` update: extend to officer (currently secretary/admin only)
+- `songs` insert/update/delete: extend to officer (currently admin only)
+- New `song_assignments` table: officer/admin write; all authenticated read
+
+*`js/auth.js`:*
+- Add `officer` and `treasurer` to role hierarchy
+- `requireRole('officer')` — passes for officer, admin, super_admin
+- `requireRole('treasurer')` — passes for treasurer, admin, super_admin
+- Secretary and officer are parallel — neither satisfies the other's `requireRole` check; both satisfy `admin`
+
+*Sidebar navigation updates (all portal pages):*
+- Add hidden `#officer-section` and `#treasurer-section` nav divs to all member pages
+- Reveal the correct sections after profile loads based on role
+- Officer sidebar: Song Management link + Absence Requests link + Event Management link
+- Treasurer sidebar: Fines Ledger link + Income/Expense Ledger link
+
+*Top navbar — initials avatar (all portal pages):*
+- Replace "Sign Out" button in `.portal-header` with a circular avatar
+- Avatar shows profile photo if `profile_photo_url` is set; otherwise shows initials (first letter of first name + first letter of last name), gold text on charcoal background
+- Clicking avatar opens a small dropdown: "My Profile" → `/pages/members/profile.html` and "Sign Out"
+- Remove the standalone Sign Out button; keep Sign Out in sidebar as well
+
+*UI bug fixes:*
+1. `.badge-super-admin` — add `white-space: nowrap` or reduce font size so text fits the badge
+2. Song library filter panel — change `display: flex` to `flex-wrap: wrap` so filter buttons wrap on narrow screens
+3. Registration page — increase font size / line height for the ToS modal document text on mobile (min `font-size: 15px`, `line-height: 1.7`)
+4. Documents page — remove the burger nav from the header; make the SVC logo and "San Vicente Choir" text a link back to `index.html` (styled same as the existing `← Website` button)
+
+**Acceptance criteria:**
+- [ ] `officer` and `treasurer` roles appear in the role dropdown on admin member edit
+- [ ] Officer can access song management page; member cannot
+- [ ] Treasurer can access fines and ledger pages (stubs OK at this stage); secretary cannot
+- [ ] Secretary can create events; plain member cannot
+- [ ] Initials avatar appears in top navbar on all portal pages
+- [ ] Clicking avatar shows dropdown with My Profile + Sign Out
+- [ ] `super_admin` badge no longer overflows
+- [ ] Song library filter buttons wrap on mobile
+- [ ] Documents page burger nav replaced by logo-as-link
+
+---
+
+## Session 12: Song Enhancements
+
+**Status:** [ ] Not Started
+
+**Goal:** Add "Practicing Now" flag to songs, build song assignment to service events, and add "Songs for this Weekend" view on the member song library.
+
+**Context to provide Claude:**
+- "Session 11 is done. Now build Session 12: song enhancements. Read PRD.md Sections 6.3 and 8."
+
+**Tasks:**
+
+*Database (run in Supabase SQL editor):*
+```sql
+-- Add is_currently_practicing to songs
+ALTER TABLE songs ADD COLUMN IF NOT EXISTS is_currently_practicing boolean DEFAULT false;
+
+-- Create song_assignments table
+CREATE TABLE IF NOT EXISTS song_assignments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  song_id uuid REFERENCES songs(id) ON DELETE CASCADE,
+  event_id uuid REFERENCES events(id) ON DELETE CASCADE,
+  assigned_by uuid REFERENCES profiles(id),
+  assigned_at timestamptz DEFAULT now(),
+  UNIQUE(song_id, event_id)
+);
+ALTER TABLE song_assignments ENABLE ROW LEVEL SECURITY;
+-- All authenticated: read; officer/admin: insert/update/delete
+```
+
+*`pages/officer/songs.html` (new page):*
+- Auth guard: officer+
+- Song list with search and filters (same as member view)
+- Each song row: Edit button (opens edit modal), toggle `is_currently_practicing` (on/off switch), Assign to Event button
+- "Assign to Event" opens a modal: dropdown of upcoming service events; select and save → inserts into `song_assignments`
+- View current assignments per song (list of assigned events with remove button)
+- Add Song / Edit Song / Delete Song (same forms as existing admin songs page)
+
+*`pages/admin/songs.html` (update):*
+- Add same `is_currently_practicing` toggle and song assignment UI
+
+*`pages/members/songs.html` (update):*
+- Add "Practicing Now" filter chip — filters to `is_currently_practicing = true`
+- Add "Songs for this Weekend" section at top of page:
+  - Queries `song_assignments` joined with `events` where `event_date >= today` and `event_date <= today + 7 days` and `event_category = 'service'`
+  - Groups by event (Saturday / Sunday) with event title, date, and assigned songs listed
+  - If no upcoming assignments: show a muted "No songs assigned yet for this weekend"
+  - Section disappears automatically once event dates pass (query handles this)
+
+*Sidebar:*
+- Add "Songs for this Weekend" quick link to member dashboard
+
+**Acceptance criteria:**
+- [ ] Officer toggles `is_currently_practicing` on a song; member sees it under "Practicing Now" filter
+- [ ] Officer assigns a song to a Sunday service event; it appears in "Songs for this Weekend" on member song library
+- [ ] After the event date passes, the song no longer appears in the weekend section
+- [ ] Member cannot access `pages/officer/songs.html`
+
+---
+
+## Session 13: Attendance Split (Practice vs. Service)
+
+**Status:** [ ] Not Started
+
+**Goal:** Surface the `event_category` column in the UI — event management, attendance tracker, member attendance page, and attendance summary.
+
+**Context to provide Claude:**
+- "Session 11 is done (event_category column exists). Now build Session 13: attendance split. Read PRD.md Section 6.2."
+
+**Tasks:**
+
+*`pages/admin/events.html` and `pages/secretary/tracker.html` (update — officer can also create events):*
+- Add "Event Category" field to Add/Edit Event form: radio or select — Practice / Service (default: Service)
+- Event list table: show category as a badge (Practice in blue, Service in gold)
+- Attendance tracker event selector: show category badge next to event name
+
+*`pages/members/attendance.html` (update):*
+- Split attendance display into two sections:
+  1. **Service Attendance** — rate calculation + On Track / At Risk badge (unchanged logic, now filtered to `event_category = 'service'`)
+  2. **Practice Attendance** — informational only; show "X of Y practices attended" with no threshold badge
+- History table: add a "Category" column (Practice / Service)
+- Filter: allow member to filter history by category
+
+*`pages/admin/attendance-summary.html` (update):*
+- Add "Category" filter dropdown: All / Practice / Service
+- When filtered to a category, the rate column recalculates for only that category's events
+- On Track / At Risk colors still based on service rate only
+
+**Acceptance criteria:**
+- [ ] Admin creates a "Practice" event; it appears in tracker with Practice badge
+- [ ] Member's attendance page shows separate service rate (with badge) and practice count (no badge)
+- [ ] Attendance summary filter by "Service" recalculates correctly
+- [ ] Practice attendance never triggers At Risk badge
+
+---
+
+## Session 14: Liturgical Calendar
+
+**Status:** [ ] Not Started
+
+**Goal:** Parse the Philippine gcatholic.org calendar into a JSON file and display a liturgical timeline bar + upcoming feasts list on the member dashboard.
+
+**Context to provide Claude:**
+- "Sessions 1–11 are done. Now build Session 14: liturgical calendar. Read PRD.md Section 6.5."
+
+**Tasks:**
+
+*Data preparation (offline — done by Merv manually):*
+- Download gcatholic.org PH calendar HTML for the current liturgical year
+- Parse into `assets/data/liturgical-2026.json`
+- Format: `[{ "date": "YYYY-MM-DD", "season": "ordinary_time", "week": 10, "feast": "...", "rank": "S|F|M|m|" }]`
+- Rank codes: S = Solemnity, F = Feast, M = Memorial, m = Optional Memorial, empty = ordinary day
+
+*`js/utils.js` (update):*
+- Update `getLiturgicalSeason(date)` to first try loading `assets/data/liturgical-YYYY.json` for the current year
+- If JSON is present and has a matching date entry: use its season, week, and feast data
+- If JSON is absent or date not found: fall back to existing algorithm (graceful degradation)
+
+*`pages/members/dashboard.html` (update):*
+- Replace the simple season text badge with a full liturgical timeline bar:
+  - Horizontal bar spanning the liturgical year (Advent start to next Advent eve)
+  - Colored season segments (see PRD Section 6.5 for colors)
+  - "Today" dot marker at proportional position
+- Below the bar: upcoming feasts list (next 14 days, ranks S/F/M only)
+  - Format: date · feast name · rank badge (Solemnity / Feast / Memorial)
+  - If no feasts in next 14 days: show "No major feasts in the next 14 days"
+
+*Visible to:* All authenticated users (member, secretary, officer, treasurer, admin, super_admin)
+
+**Acceptance criteria:**
+- [ ] Timeline bar renders on dashboard with correct season colors
+- [ ] "Today" dot is positioned correctly on the bar
+- [ ] Upcoming feasts list shows correct entries for the next 14 days
+- [ ] Optional memorials (rank `m`) and empty days are excluded from the list
+- [ ] If JSON file is removed, the season badge falls back gracefully to the algorithm
+
+---
+
+## Session 15: Treasurer Features
+
+**Status:** [ ] Not Started
+
+**Goal:** Build the treasurer portal with fines ledger and income/expense ledger.
+
+**Context to provide Claude:**
+- "Session 11 is done (treasurer role exists). Now build Session 15: treasurer features. Read PRD.md Sections 6.4 and 8."
+
+**Tasks:**
+
+*Database (run in Supabase SQL editor):*
+```sql
+CREATE TABLE IF NOT EXISTS fines (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  member_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  event_id uuid REFERENCES events(id) ON DELETE CASCADE,
+  amount numeric NOT NULL DEFAULT 20,
+  status text NOT NULL DEFAULT 'unpaid' CHECK (status IN ('unpaid','paid','waived')),
+  notes text,
+  recorded_by uuid REFERENCES profiles(id),
+  paid_at timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE fines ENABLE ROW LEVEL SECURITY;
+-- Member reads own; treasurer/admin reads all, inserts, updates
+
+CREATE TABLE IF NOT EXISTS ledger (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  type text NOT NULL CHECK (type IN ('income','expense')),
+  amount numeric NOT NULL,
+  category text NOT NULL,
+  description text,
+  date date NOT NULL,
+  recorded_by uuid REFERENCES profiles(id),
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE ledger ENABLE ROW LEVEL SECURITY;
+-- Treasurer/admin reads all, inserts; admin can delete
+```
+
+*`pages/treasurer/fines.html` (new page):*
+- Auth guard: treasurer+
+- "Add Fine" button: opens modal — select member (dropdown of active members), select event (dropdown), amount (default 20, editable), notes (optional)
+- Outstanding fines table: member name, event, event date, amount, status badge, actions
+- "Mark Paid" button → sets status to `paid`, records `paid_at`
+- "Waive" button → sets status to `waived`, records `paid_at`
+- Filter: All / Unpaid / Paid / Waived
+- Total outstanding amount shown as a stat card
+- On fine added: create notification for member (`fine_added`)
+- On fine paid/waived: create notification for member (`fine_resolved`)
+
+*`pages/treasurer/ledger.html` (new page):*
+- Auth guard: treasurer+
+- "Add Entry" button: type (income/expense), amount, category, description, date
+- Transaction list: date, type badge (Income/Expense), category, description, amount
+- Running balance stat card (total income − total expenses)
+- Filter by type (income / expense) and date range
+
+*`pages/members/attendance.html` (update):*
+- Add "My Fines" section at bottom: list of fines (event, amount, status); visible to member for their own record
+
+*Sidebar:*
+- Treasurer sidebar: Fines Ledger link + Income/Expense Ledger link (add to all portal pages)
+
+**Acceptance criteria:**
+- [ ] Treasurer adds a fine; it appears in fines table
+- [ ] Member sees their own fine in "My Fines" section on attendance page
+- [ ] Member receives notification when fine is added
+- [ ] Treasurer marks fine paid; member receives notification
+- [ ] Ledger running balance updates correctly on each entry
+- [ ] Secretary cannot access fines or ledger pages
+
+---
+
+## Session 16: In-App Notifications
+
+**Status:** [ ] Not Started
+
+**Goal:** Build the notification system with a bell icon and unread badge on all portal pages.
+
+**Context to provide Claude:**
+- "Session 15 is done. Now build Session 16: in-app notifications. Read PRD.md Section 6.6."
+
+**Tasks:**
+
+*Database (run in Supabase SQL editor):*
+```sql
+CREATE TABLE IF NOT EXISTS notifications (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  member_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  type text NOT NULL CHECK (type IN (
+    'absence_approved','absence_rejected',
+    'fine_added','fine_resolved',
+    'songs_assigned','award'
+  )),
+  message text NOT NULL,
+  is_read boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+-- Member reads/updates own; secretary/officer/treasurer/admin insert
+```
+
+*`js/notifications.js` (new module):*
+- `getUnreadCount(memberId)` — count of unread notifications
+- `getNotifications(memberId, limit = 20)` — latest N notifications
+- `markAllRead(memberId)` — sets is_read = true for all
+- `createNotification(memberId, type, message)` — inserts row
+
+*All portal pages (update):*
+- Add notification bell icon to `.portal-header` (next to avatar)
+- Unread count badge on bell (hidden when 0)
+- Click opens dropdown panel: list with type icon, message, timestamp
+- Mark all read on panel open; badge clears
+
+*Trigger points (update existing pages):*
+- `pages/secretary/absences.html`: on approve → `createNotification(memberId, 'absence_approved', ...)`; on reject → `createNotification(memberId, 'absence_rejected', ...)`
+- `pages/officer/songs.html` + `pages/admin/songs.html`: on saving song assignments → `createNotification` for all active members (`songs_assigned`, "Songs for this weekend have been updated")
+- `pages/treasurer/fines.html`: on add fine → `createNotification(memberId, 'fine_added', ...)`; on mark paid/waive → `createNotification(memberId, 'fine_resolved', ...)`
+
+**Acceptance criteria:**
+- [ ] Bell icon appears on all portal pages
+- [ ] Unread count badge shows correct number
+- [ ] Absence approval triggers notification; member sees it on next page load
+- [ ] Song assignment triggers notification to all active members
+- [ ] Fine added/resolved triggers notification to that member
+- [ ] Opening notification panel clears the badge
+
+---
+
+## Session 17: Admin CMS — Gallery & Officer Profiles
 
 **Status:** [ ] Not Started
 
 **Goal:** Make gallery images and officer profiles manageable from the admin panel, replacing hardcoded HTML in index.html.
 
 **Context to provide Claude:**
-- "Sessions 1–8 are done. Now build Session 11: admin CMS for gallery and officer profiles. Read PRD.md Section 10.1."
+- "Sessions 1–11 are done. Now build Session 17: admin CMS. Read PRD.md Section 6.8."
 
 **Tasks:**
-- Supabase — create two new tables (run in SQL editor):
+
+*Database (run in Supabase SQL editor):*
 ```sql
 CREATE TABLE gallery_images (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -484,84 +468,41 @@ ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE officer_profiles ENABLE ROW LEVEL SECURITY;
 -- Public read, admin write for both tables
 ```
-- `pages/admin/cms.html`:
-  - Tab 1 — Gallery: list current images (thumbnail + caption + sort order); Add image form (GDrive URL, caption, sort order); Edit / Delete
-  - Tab 2 — Officer Profiles: list officers (photo, name, role, voice part, sort order); Add / Edit / Delete
-  - Auth guard: admin only
-- `index.html`:
-  - Gallery section: replace hardcoded `<img>` tags — fetch `gallery_images` from Supabase on page load and render dynamically
-  - Officers section: replace hardcoded officer cards — fetch `officer_profiles` from Supabase and render dynamically
-  - Unauthenticated visitors still see the gallery and officers (public read RLS)
-- Add "Content Management" link to admin sidebar
+
+*`pages/admin/cms.html` (new page):*
+- Tab 1 — Gallery: list images (thumbnail + caption + order); Add / Edit / Delete
+- Tab 2 — Officers: list officers (photo, name, role, voice part, order); Add / Edit / Delete
+- Auth guard: admin only
+
+*`index.html` (update):*
+- Gallery section: fetch `gallery_images` from Supabase on load; render dynamically
+- Officers section: fetch `officer_profiles` from Supabase on load; render dynamically
+- Public RLS ensures unauthenticated visitors still see both sections
 
 **Acceptance criteria:**
-- [ ] Admin adds a gallery image via CMS; it appears on the landing page without a code deploy
-- [ ] Admin reorders gallery images; new order reflected on landing page
-- [ ] Admin updates an officer profile photo; new photo appears on landing page
-- [ ] Landing page gallery and officers section render correctly for unauthenticated visitors
+- [ ] Admin adds a gallery image; it appears on the landing page without a code deploy
+- [ ] Admin updates an officer profile; landing page reflects the change
+- [ ] Unauthenticated visitors still see gallery and officers
 
 ---
 
-## Session 12: In-App Notifications
+## Session 18: Semester Awards + Certificate Generation
 
 **Status:** [ ] Not Started
 
-**Goal:** Build the notifications system. Trigger notifications for award certificates and absence request outcomes.
+**Goal:** Build the semester awards system — compute top attendance member(s), generate a PDF certificate, store the award, and notify the winner(s).
 
 **Context to provide Claude:**
-- "Sessions 1–8 are done. Now build Session 12: in-app notifications. Read PRD.md Section 10.7."
+- "Session 16 (notifications) is done. Now build Session 18: semester awards. Read PRD.md Section 6.9."
 
 **Tasks:**
-- Supabase — create notifications table (run in SQL editor):
-```sql
-CREATE TABLE notifications (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  member_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-  type text NOT NULL, -- award / absence_approved / absence_rejected
-  message text NOT NULL,
-  is_read boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
-ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
--- Member reads own; secretary/admin insert; member updates own (mark read)
-```
-- `js/notifications.js` (new shared module):
-  - `getUnreadCount(memberId)` — returns count of unread notifications
-  - `getNotifications(memberId)` — returns recent notifications (latest 20)
-  - `markAllRead(memberId)` — sets is_read = true for all
-  - `createNotification(memberId, type, message)` — inserts a new row (called server-side or by secretary/admin action)
-- All pages under `pages/members/` and `pages/admin/`:
-  - Add notification bell icon with unread count badge to portal header
-  - Click opens a dropdown panel: list of notifications with message, type icon, timestamp
-  - Mark all as read on panel open
-- `pages/secretary/absences.html`:
-  - On approve: call `createNotification(memberId, 'absence_approved', message)`
-  - On reject: call `createNotification(memberId, 'absence_rejected', message)`
 
-**Acceptance criteria:**
-- [ ] Secretary approves an absence; member sees a notification badge on next page load
-- [ ] Member opens notifications panel; badge clears
-- [ ] Rejection notification includes the reviewer note (if provided)
-- [ ] Notification panel shows correct type icon per notification type
-
----
-
-## Session 13: Semester Awards + Certificate Generation
-
-**Status:** [ ] Not Started
-
-**Goal:** Build the semester awards system — auto-compute top member(s) by attendance, generate a PDF certificate with stats, store the award, and notify the winner(s).
-
-**Context to provide Claude:**
-- "Sessions 1–8 and Session 12 (notifications) are done. Now build Session 13: semester awards. Read PRD.md Section 10.6."
-
-**Tasks:**
-- Supabase — create awards table (run in SQL editor):
+*Database (run in Supabase SQL editor):*
 ```sql
 CREATE TABLE awards (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   member_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-  semester text NOT NULL, -- e.g. "2026-S1"
+  semester text NOT NULL,
   attendance_rate numeric NOT NULL,
   events_attended int NOT NULL,
   events_total int NOT NULL,
@@ -571,56 +512,60 @@ CREATE TABLE awards (
 ALTER TABLE awards ENABLE ROW LEVEL SECURITY;
 -- Member reads own; admin reads/writes all
 ```
-- `js/awards.js` (new module):
-  - `getSemesters()` — returns list of semester periods based on June 20 anchor:
-    - S1: June 20 – October 31
-    - S2: November 1 – May 31
-  - `computeAwardWinners(semester)` — queries attendance table for the semester window, computes rate per active member, returns all members tied at the top rate
-  - `generateCertificatePDF(member, award)` — uses `jsPDF` + `html2canvas` to render and download a certificate PDF with: member name, award title, semester, SVC logo, attendance stats, signing officer name
-- `pages/admin/awards.html` (new page):
-  - Semester selector dropdown
-  - "Preview Winners" button: shows computed winner(s) with their stats
-  - "Generate & Save Awards" button: inserts rows into `awards` table + triggers certificate download for each winner + creates notifications
-  - Past awards table: all previous semester awards with winner names and stats
-  - Auth guard: admin only
-- `pages/members/dashboard.html`:
-  - Add "Awards" section: list of certificates received (semester, rate, date)
-  - Each row has a "Download Certificate" button (regenerates PDF from stored data)
-- Add "Awards" link to admin sidebar
+
+*`js/awards.js` (new module):*
+- `getSemesterWindow(semester)` — returns date range (S1: June 20 – Oct 31; S2: Nov 1 – May 31)
+- `computeAwardWinners(semester)` — queries **service** attendance for the semester window; computes rate per active member; returns all members tied at the top rate
+- `generateCertificatePDF(member, award)` — `jsPDF` + `html2canvas` certificate
+
+*`pages/admin/awards.html` (new page):*
+- Semester selector dropdown
+- "Preview Winners" button — shows computed winner(s) with their stats
+- "Generate & Save Awards" button — inserts rows into `awards`, downloads PDFs, creates notifications
+- Past awards table
+- Auth guard: admin only
+
+*`pages/members/dashboard.html` (update):*
+- Add "Awards" section: list certificates received (semester, rate, date) with "Download Certificate" button
 
 **Certificate contents:**
 - SVC Logo (top center)
-- "Certificate of Recognition" heading
-- "This certifies that [Full Name] has been awarded Most Consistent Member"
-- Semester period (e.g., "First Semester 2026–2027")
-- Stats line: "Attended [X] of [Y] events with a [Z]% attendance rate"
-- Signing line: officer name + role (pulled from current admin's profile)
-- SVC name + date at bottom
+- "Certificate of Recognition"
+- "Most Consistent Member" award title
+- Semester period
+- Attendance stats (X of Y events, Z%)
+- Signing officer name + role
+- SVC name + date
 
 **Acceptance criteria:**
-- [ ] Admin selects a semester and previews computed winners with correct stats
-- [ ] Generating awards saves rows to `awards` table
-- [ ] PDF certificate downloads with correct member name and stats
-- [ ] Winner sees the award in their member dashboard
-- [ ] Winner receives an in-app notification
-- [ ] If two members tie, both receive the award and certificate
+- [ ] Admin previews semester winners with correct stats (service events only)
+- [ ] Generating awards saves rows and downloads PDFs
+- [ ] Winner sees award in dashboard
+- [ ] Winner receives in-app notification
+- [ ] Tied members all receive the award
 
 ---
 
 ## Session Order Summary
 
-| # | Session | Depends On |
-|---|---------|-----------|
-| 1 | Repo Restructure + Supabase Schema | — |
-| 2 | Login, Register & Auth Guards | 1 |
-| 3 | Admin — Member Management | 2 |
-| 4 | Attendance Tracker | 3 |
-| 5 | Absence Request System | 4 |
-| 6 | Song Library | 2 (can run parallel with 4–5) |
-| 7 | Landing Page + Documents Access | 2 (can run parallel with 4–6) |
-| 8 | Netlify Migration + Final QA | All |
-| 9 | Dark Mode Toggle + Liturgical Season Badge | 8 |
-| 10 | Registration ToS Modal + Member Profile Picture | 8 |
-| 11 | Admin CMS — Gallery & Officer Profiles | 8 |
-| 12 | In-App Notifications | 8 |
-| 13 | Semester Awards + Certificate Generation | 12 |
+| # | Session | Depends On | Status |
+|---|---------|-----------|--------|
+| 1 | Repo Restructure + Supabase Schema | — | ✅ Complete |
+| 2 | Login, Register & Auth Guards | 1 | ✅ Complete |
+| 3 | Admin — Member Management | 2 | ✅ Complete |
+| 4 | Attendance Tracker | 3 | ✅ Complete |
+| 5 | Absence Request System | 4 | ✅ Complete |
+| 6 | Song Library | 2 | ✅ Complete |
+| 7 | Landing Page + Documents Access | 2 | ✅ Complete |
+| 8 | Netlify Migration + Final QA | All | ✅ Complete |
+| 9 | Dark Mode Toggle + Liturgical Season Badge | 8 | ✅ Complete |
+| 10 | Registration ToS Modal + Profile Picture | 8 | ✅ Complete |
+| 10.5 | Registration Hardening + Member Lifecycle | 10 | ✅ Complete |
+| 11 | Role System Overhaul + UI Bug Fixes | 10.5 | ⏳ Next |
+| 12 | Song Enhancements | 11 | ⏳ Planned |
+| 13 | Attendance Split (Practice vs. Service) | 11 | ⏳ Planned |
+| 14 | Liturgical Calendar | 11 | ⏳ Planned |
+| 15 | Treasurer Features | 11 | ⏳ Planned |
+| 16 | In-App Notifications | 15 | ⏳ Planned |
+| 17 | Admin CMS — Gallery & Officer Profiles | 11 | ⏳ Planned |
+| 18 | Semester Awards + Certificate Generation | 16 | ⏳ Planned |

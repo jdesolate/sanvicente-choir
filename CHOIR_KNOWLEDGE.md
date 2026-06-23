@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for the SVC choir portal project.
 > Upload this to your Claude project so any conversation starts with full context.
-> Last updated: 2026-06-16
+> Last updated: 2026-06-23
 
 ---
 
@@ -24,7 +24,18 @@
 | Secretary | Gezd Seloterio | https://www.facebook.com/gezd.seloterio |
 | Treasurer | Mary Love Lopez | https://www.facebook.com/lopez.marylove |
 
-**The user (MJ) is the President and the developer of this portal.** He manages all code, design decisions, and feature planning. He communicates casually; treat him as a senior developer who knows the codebase well.
+**The user (MJ) is the President and the sole developer of this portal.** He manages all code, design decisions, and feature planning. He communicates casually; treat him as a senior developer who knows the codebase well.
+
+**Role-to-person mapping (intended — not yet applied in DB):**
+
+| Person | Portal Role |
+|---|---|
+| MJ (Merv) | `super_admin` |
+| VP (Aravila) | `admin` |
+| Secretary (Gezd) | `secretary` |
+| Music Director & Liturgical Lead (Vince) | `officer` |
+| Treasurer (Mary Love) | `treasurer` |
+| Other officers | `officer` (as needed) |
 
 ---
 
@@ -59,12 +70,14 @@ A full-featured choir management web portal built on top of a static public webs
 ```
 sanvicente-choir/
 ├── assets/
+│   ├── data/                     # Liturgical calendar JSON (one file per year)
+│   │   └── liturgical-2026.json  # (Session 14)
 │   └── images/
-│       ├── gallery/          # Gallery and performance images
-│       └── officers/         # Officer profile photos and SVC_Logo.png
+│       ├── gallery/
+│       └── officers/
 ├── css/
-│   └── design-system.css     # Shared design tokens + component classes
-├── docs/                     # Official choir documents (Markdown)
+│   └── design-system.css
+├── docs/
 │   ├── constitution.md
 │   ├── handbook.md
 │   ├── calendar.md
@@ -72,9 +85,10 @@ sanvicente-choir/
 │   ├── commitments.md
 │   └── tbd-summary.md
 ├── js/
-│   ├── supabase-client.js    # Supabase initialization
-│   ├── auth.js               # Auth utilities and role guards
-│   └── utils.js              # Shared helpers (dates, liturgical season, theme toggle)
+│   ├── supabase-client.js
+│   ├── auth.js
+│   ├── utils.js
+│   └── notifications.js          # (Session 16)
 ├── pages/
 │   ├── login.html
 │   ├── register.html
@@ -88,34 +102,45 @@ sanvicente-choir/
 │   ├── secretary/
 │   │   ├── tracker.html
 │   │   └── absences.html
+│   ├── officer/                  # (Session 11)
+│   │   └── songs.html
+│   ├── treasurer/                # (Session 15)
+│   │   ├── fines.html
+│   │   └── ledger.html
 │   └── admin/
 │       ├── members.html
 │       ├── attendance-summary.html
 │       ├── events.html
 │       ├── songs.html
 │       ├── fields.html
-│       └── leadership-plan.html
+│       ├── awards.html           # (Session 18)
+│       └── cms.html              # (Session 17)
 ├── supabase/
 │   └── schema.sql
-├── index.html                # Public landing page
-├── documents.html            # Documents hub (role-gated)
+├── index.html
+├── documents.html
 ├── netlify.toml
-├── PRD.md                    # Full product requirements
-└── SESSIONS.md               # Build session log
+├── PRD.md
+├── SESSIONS.md
+└── README.md
 ```
 
 ---
 
 ## 4. User Roles & Access Control
 
-**Role hierarchy (lowest → highest):** `member` < `secretary` < `admin` < `super_admin`
+**Role hierarchy:** `member` < `secretary` = `officer` = `treasurer` < `admin` < `super_admin`
+
+Secretary, officer, and treasurer are **parallel roles** — each has distinct access, all sit at the same tier below admin.
 
 | Role | Description |
 |---|---|
 | `member` | Approved choir member |
-| `secretary` | Member + attendance management access |
-| `admin` | Full access — officers / webmaster |
-| `super_admin` | President account only — all admin + permanent member deletion |
+| `secretary` | Attendance ops + event management + absence request management |
+| `officer` | Song management + event management + absence request management (music committee / liturgical lead) |
+| `treasurer` | Fines ledger + income/expense ledger |
+| `admin` | Full access — VP / webmaster |
+| `super_admin` | President (MJ) — all admin + permanent member deletion |
 
 **Member statuses:** `pending` → `active` / `associate` / `honorary` / `inactive`
 
@@ -125,41 +150,45 @@ sanvicente-choir/
 - `honorary`: honorary membership
 - `inactive`: soft-removed — data retained, portal access blocked, reversible
 
-**Auth guard rule:** `requireAuth()` and `requireRole()` both check for `inactive` status and redirect to `login.html?inactive=1` if triggered.
+**Auth guard rule:** `requireAuth()` and `requireRole()` both check for `inactive` status and redirect to `login.html?inactive=1` if triggered. `super_admin` is exempt from status checks.
 
-**Sidebar role-gating rule:** Member pages include hidden `#secretary-section` and `#admin-section` nav divs revealed by JS after profile load. Admin pages always show both sections statically.
+**Sidebar role-gating rule:** Member pages include hidden `#secretary-section`, `#officer-section`, `#treasurer-section`, and `#admin-section` nav divs revealed by JS after profile load. Admin pages always show all sections statically.
 
 ---
 
 ## 5. Access Control Matrix
 
-| Feature | public | member | secretary | admin | super_admin |
-|---|:---:|:---:|:---:|:---:|:---:|
-| Landing page | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Constitution & By-Laws | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Member Handbook | | ✓ | ✓ | ✓ | ✓ |
-| Calendar 2026–2027 | | ✓ | ✓ | ✓ | ✓ |
-| Commitments 2026–2027 | | ✓ | ✓ | ✓ | ✓ |
-| Budget Plan | | | | ✓ | ✓ |
-| TBD Summary | | | | ✓ | ✓ |
-| Dashboard | | ✓ | ✓ | ✓ | ✓ |
-| Song Library (search + filter) | | ✓ | ✓ | ✓ | ✓ |
-| My Attendance (own record) | | ✓ | ✓ | ✓ | ✓ |
-| Submit Absence Request | | ✓ | ✓ | ✓ | ✓ |
-| My Profile (read-only) | | ✓ | ✓ | ✓ | ✓ |
-| Attendance Tracker (live marking) | | | ✓ | ✓ | ✓ |
-| Approve/Reject Absence Request | | | ✓ | ✓ | ✓ |
-| Attendance Summary (leaderboard) | | | ✓ | ✓ | ✓ |
-| Member Management (list/approve/edit) | | | | ✓ | ✓ |
-| View Full Member Profile | | | | ✓ | ✓ |
-| Event Management | | | | ✓ | ✓ |
-| Song Management (add/edit/delete) | | | | ✓ | ✓ |
-| Custom Field Management | | | | ✓ | ✓ |
-| Permanently Delete Member | | | | | ✓ |
+| Feature | public | member | secretary | officer | treasurer | admin | super_admin |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Landing page | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Constitution | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Member Handbook | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Calendar & Commitments | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Budget Plan | | | | | | ✓ | ✓ |
+| TBD Summary | | | | | | ✓ | ✓ |
+| Dashboard | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Song Library (search + filter) | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| My Attendance (own record) | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Submit Absence Request | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| My Profile | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Liturgical Calendar | | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Attendance Tracker (live marking) | | | ✓ | | | ✓ | ✓ |
+| Approve/Reject Absence Request | | | ✓ | ✓ | | ✓ | ✓ |
+| Attendance Summary (leaderboard) | | | ✓ | ✓ | | ✓ | ✓ |
+| Event Create/Edit | | | ✓ | ✓ | | ✓ | ✓ |
+| Song Management (add/edit/delete) | | | | ✓ | | ✓ | ✓ |
+| Song Assignments | | | | ✓ | | ✓ | ✓ |
+| Toggle is_currently_practicing | | | | ✓ | | ✓ | ✓ |
+| Fines Ledger | | | | | ✓ | ✓ | ✓ |
+| Income/Expense Ledger | | | | | ✓ | ✓ | ✓ |
+| Member Management | | | | | | ✓ | ✓ |
+| Event Delete | | | | | | ✓ | ✓ |
+| Custom Field Management | | | | | | ✓ | ✓ |
+| Permanently Delete Member | | | | | | | ✓ |
 
 ---
 
-## 6. Current Features (Live as of 2026-06-16)
+## 6. Current Features (Live as of 2026-06-23)
 
 ### Public Pages
 - **Landing page** (`index.html`) — choir story, gallery, officers, Join Us CTA → Facebook, Sponsor section with Netlify contact form (3 tiers: Supporter ₱500, Partner ₱1,000, Patron ₱2,000+)
@@ -167,33 +196,32 @@ sanvicente-choir/
 - **Login / Register / Forgot Password / Reset Password**
 
 ### Registration Flow
-1. Visitor opens `pages/register.html`
-2. Full-screen ToS modal shows Constitution + Member Handbook (via `marked.js`) — must check acknowledgement box before proceeding
-3. Registration form: full name, email, password, contact number (required), birthday (required), school/occupation (optional), voice part (required), profile photo URL (optional, Google Drive link), plus any admin-defined custom fields
-4. Age is **never collected** — always auto-calculated from birthday
-5. Account created in Supabase Auth; profile row inserted with `status: pending`, `role: member`, `tos_accepted_at` timestamp
-6. Admin approves → member gains full access
+1. Full-screen ToS modal — Constitution + Member Handbook — acknowledgement required
+2. Registration form: full name, email, password, contact number (required), birthday (required), school/occupation (optional), voice part (required), profile photo URL (optional), custom fields
+3. Age never collected — always auto-calculated from birthday
+4. Account created with `status: pending`, `role: member`, `tos_accepted_at` timestamp
+5. Admin approves → member gains full access
 
 ### Member Portal
-- **Dashboard** — welcome greeting, liturgical season badge (e.g., "Ordinary Time · Week 12"), quick stat cards (voice part, status, role), pending approval banner if applicable, light/dark mode toggle
-- **My Attendance** — own attendance history table, per-tier rates (Core / Major / Special), On Track (≥80%) / At Risk (<80%) status badge, ability to submit advance or retroactive absence requests
-- **Song Library** — full-text search (title + lyrics), filter by language / liturgical use / season, auto pre-filters to current liturgical season on load, expandable song cards with full lyrics + Google Drive PDF link + YouTube link
-- **My Profile** — read-only display of all profile fields (name, email, voice part, role, status, contact, birthday/age, school/occupation, joined date, approved date, custom fields); profile photo shown as circular avatar if set
+- **Dashboard** — welcome greeting, liturgical season badge ("Ordinary Time · Week 12"), quick stat cards, light/dark mode toggle
+- **My Attendance** — own history table, per-tier rates (Core / Major / Special), On Track / At Risk badge, submit absence requests
+- **Song Library** — full-text search, filter by language / liturgical use / season, auto pre-filters to current season on load, expandable song cards
+- **My Profile** — read-only display of all profile fields; profile photo as circular avatar if set
 
 ### Secretary Portal (inherits all member features)
-- **Attendance Tracker** (`pages/secretary/tracker.html`) — select event from dropdown → live table of all active + associate members → mark each Present / Absent / Excused → real-time summary counts → save to database; editable after save
-- **Absence Requests** (`pages/secretary/absences.html`) — Pending tab (approve / reject with optional note) + History tab (approved/rejected log)
-- **Attendance Summary** (read access, same leaderboard as admin)
+- **Attendance Tracker** — select event → mark each member Present / Absent / Excused → save
+- **Absence Requests** — Pending queue (approve / reject) + History tab
+- **Attendance Summary** — leaderboard with filters
 
 ### Admin Portal (inherits all member + secretary features)
-- **Member Management** (`pages/admin/members.html`) — pending registrations queue (approve/reject), all members table (search, view, edit role/status, soft-remove), Create Account button for members who can't self-register, View Profile modal (full read-only record), Delete Member (super_admin only — hard delete)
-- **Event Management** (`pages/admin/events.html`) — add/edit/delete events (title, date, type: Core/Major/Special, description)
-- **Song Management** (`pages/admin/songs.html`) — add/edit/delete songs with all metadata (title, lyrics, language tags, liturgical use tags, season tags, PDF link, YouTube link)
-- **Custom Field Management** (`pages/admin/fields.html`) — add/edit/delete/reorder fields (types: text, number, date, dropdown); date-type fields show years-of-service counter in admin view
-- **Attendance Summary** (`pages/admin/attendance-summary.html`) — aggregate leaderboard ranked by attendance rate, sortable columns, color-coded progress bars (green ≥80%, gold 50–79%, red <50%), filters by voice part / event type / name search, top stat cards
+- **Member Management** — pending registrations queue, all members table, Create Account, View Profile modal, Delete Member (super_admin only)
+- **Event Management** — add/edit/delete events (title, date, type: Core/Major/Special, description)
+- **Song Management** — add/edit/delete songs with all metadata
+- **Custom Field Management** — add/edit/delete/reorder fields
+- **Attendance Summary** — aggregate leaderboard
 
-### Super Admin (inherits everything above)
-- Permanent (hard) deletion of member accounts — removes auth user + all associated data (profile, attendance, absence requests)
+### Super Admin
+- Hard delete member accounts (cascades all data)
 
 ---
 
@@ -206,10 +234,10 @@ sanvicente-choir/
 | full_name | text | |
 | email | text | copied from auth at registration |
 | contact_number | text | NOT NULL |
-| birthday | date | NOT NULL; age is always calculated, never stored |
+| birthday | date | NOT NULL; age always calculated, never stored |
 | school_occupation | text | |
 | voice_part | text | soprano / alto / tenor / bass |
-| role | text | member / secretary / admin / super_admin |
+| role | text | member / secretary / officer / treasurer / admin / super_admin |
 | status | text | pending / active / associate / honorary / inactive |
 | profile_photo_url | text | nullable — Google Drive link |
 | custom_fields | jsonb | admin-defined extra fields |
@@ -218,17 +246,6 @@ sanvicente-choir/
 | approved_at | timestamptz | |
 | approved_by | uuid | FK → profiles |
 
-### `custom_field_definitions`
-| Column | Type | Notes |
-|---|---|---|
-| id | uuid | |
-| field_name | text | |
-| field_type | text | text / number / date / dropdown |
-| field_options | jsonb | options array for dropdown type |
-| is_required | boolean | |
-| sort_order | int | |
-| created_at | timestamptz | |
-
 ### `events`
 | Column | Type | Notes |
 |---|---|---|
@@ -236,6 +253,7 @@ sanvicente-choir/
 | title | text | |
 | event_date | date | |
 | event_type | text | core / major / special |
+| event_category | text | practice / service *(added Session 11)* |
 | description | text | |
 | created_by | uuid | FK → profiles |
 | created_at | timestamptz | |
@@ -271,13 +289,81 @@ sanvicente-choir/
 | title | text | |
 | lyrics | text | |
 | language_tags | text[] | bisaya / filipino / english / latin |
-| liturgical_use_tags | text[] | entrance / offertory / communion / recessional / responsorial_psalm / gloria / sanctus / agnus_dei / other |
+| liturgical_use_tags | text[] | entrance / offertory / communion / etc. |
 | season_tags | text[] | advent / christmas / lent / easter / ordinary_time / marian / patron_saint_feast / other |
+| is_currently_practicing | boolean | default false *(added Session 12)* |
 | gdrive_url | text | nullable |
 | youtube_url | text | nullable |
 | created_by | uuid | FK → profiles |
 | created_at | timestamptz | |
 | updated_at | timestamptz | |
+
+### `song_assignments` *(Session 12)*
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| song_id | uuid | FK → songs (cascade) |
+| event_id | uuid | FK → events (cascade) |
+| assigned_by | uuid | FK → profiles |
+| assigned_at | timestamptz | |
+
+### `fines` *(Session 15)*
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| member_id | uuid | FK → profiles (cascade) |
+| event_id | uuid | FK → events (cascade) |
+| amount | numeric | default 20 |
+| status | text | unpaid / paid / waived |
+| notes | text | optional |
+| recorded_by | uuid | FK → profiles |
+| paid_at | timestamptz | |
+| created_at | timestamptz | |
+
+### `ledger` *(Session 15)*
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| type | text | income / expense |
+| amount | numeric | |
+| category | text | |
+| description | text | |
+| date | date | |
+| recorded_by | uuid | FK → profiles |
+| created_at | timestamptz | |
+
+### `notifications` *(Session 16)*
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| member_id | uuid | FK → profiles (cascade) |
+| type | text | absence_approved / absence_rejected / fine_added / fine_resolved / songs_assigned / award |
+| message | text | |
+| is_read | boolean | default false |
+| created_at | timestamptz | |
+
+### `awards` *(Session 18)*
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| member_id | uuid | FK → profiles |
+| semester | text | e.g. "2026-S1" |
+| attendance_rate | numeric | |
+| events_attended | int | |
+| events_total | int | |
+| generated_by | uuid | FK → profiles |
+| generated_at | timestamptz | |
+
+### `custom_field_definitions`
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | |
+| field_name | text | |
+| field_type | text | text / number / date / dropdown |
+| field_options | jsonb | options array for dropdown |
+| is_required | boolean | |
+| sort_order | int | |
+| created_at | timestamptz | |
 
 ---
 
@@ -291,66 +377,56 @@ Initializes and exports the Supabase client.
 - `signOut()`
 - `getSession()` — returns current session or null
 - `getProfile()` — fetches profile row for current user
-- `requireAuth(redirectTo)` — redirects to login if not authenticated; also checks for `inactive` status
-- `requireRole(role, redirectTo)` — redirects if user lacks required role (hierarchy: member < secretary < admin < super_admin)
+- `requireAuth(redirectTo)` — redirects to login if not authenticated; checks `inactive` status
+- `requireRole(role, redirectTo)` — hierarchy: member < secretary = officer = treasurer < admin < super_admin
 
 ### `js/utils.js`
-- `getLiturgicalSeason(date)` — returns current Roman Catholic liturgical season + week number (client-side algorithm, no DB dependency)
+- `getLiturgicalSeason(date)` — returns current liturgical season + week number; uses `assets/data/liturgical-YYYY.json` when present, falls back to algorithm
 - `initThemeToggle()` — reads `localStorage`, applies `data-theme` to `<html>`, wires toggle button
 - Date formatting helpers
 - Google Drive image URL converter
 
----
-
-## 9. Upcoming Features (Not Yet Built)
-
-### v2 — Next Priority Sessions
-
-**Session 11: Admin CMS — Gallery & Officer Profiles**
-- New Supabase tables: `gallery_images`, `officer_profiles`
-- New page: `pages/admin/cms.html` with tabs for Gallery and Officer Profiles management
-- `index.html` gallery + officers section rendered dynamically from Supabase instead of hardcoded HTML
-- Public read / admin write RLS
-
-**Session 12: In-App Notifications**
-- New Supabase table: `notifications` (member_id, type, message, is_read)
-- Notification bell with unread count badge on all portal pages
-- Triggered by: absence approved, absence rejected, award generated
-- New module: `js/notifications.js`
-
-**Session 13: Semester Awards + Certificate Generation**
-- New Supabase table: `awards` (member_id, semester, attendance_rate, events_attended, events_total)
-- Semester definition: S1 = June 20 – Oct 31; S2 = Nov 1 – May 31
-- Admin triggers "Close Semester & Generate Awards" — computes top attendance rate, all tied members win
-- PDF certificate generated client-side using `jsPDF` + `html2canvas`
-- Awards visible in member dashboard with "Download Certificate" button
-- Depends on Session 12 (notifications) being complete first
-
-### v3 — Future
-
-**Session 14: Liturgical Season Timeline**
-- Parse gcatholic.org Philippine calendar HTML into `assets/data/liturgical-YYYY.json` (one-time per year)
-- Dashboard: horizontal timeline bar with colored season segments + "today" dot marker
-- Upcoming feasts list (next 14 days, Solemnities/Feasts/Memorials only)
-- Upgrade `getLiturgicalSeason()` to use JSON data when available, fall back to algorithm
-
-**Session 15: Constitution & Handbook Admin Editor**
-- Allow admin to edit `docs/constitution.md` and `docs/handbook.md` from within the admin panel
-- Store content in Supabase (text rows) instead of static files
-
-### Permanently Deferred (decided — do not re-raise)
-- Online voting system
-- Audio file uploads for practice tracks
-- Automated email/SMS notifications (replaced by in-app notifications in v2)
-- Mobile app
+### `js/notifications.js` *(Session 16)*
+- `getUnreadCount(memberId)`
+- `getNotifications(memberId, limit)`
+- `markAllRead(memberId)`
+- `createNotification(memberId, type, message)`
 
 ---
 
-## 10. Liturgical Season Logic
+## 9. Upcoming Features (Planned Sessions)
 
-The `getLiturgicalSeason(date)` function in `utils.js` computes the Roman Catholic liturgical season client-side using a calendar algorithm. Seasons returned:
+| Session | Title | Status |
+|---|---|---|
+| 11 | Role System Overhaul + UI Bug Fixes | ⏳ Next |
+| 12 | Song Enhancements (practicing flag, service assignments) | ⏳ Planned |
+| 13 | Attendance Split (practice vs. service rates) | ⏳ Planned |
+| 14 | Liturgical Calendar (timeline bar + upcoming feasts) | ⏳ Planned |
+| 15 | Treasurer Features (fines ledger + income/expense ledger) | ⏳ Planned |
+| 16 | In-App Notifications | ⏳ Planned |
+| 17 | Admin CMS — Gallery & Officer Profiles | ⏳ Planned |
+| 18 | Semester Awards + Certificate Generation | ⏳ Planned |
 
-| Season | Color (for future UI use) |
+---
+
+## 10. Attendance System Rules
+
+- **Event categories:** practice (informational rate, no threshold) / service (mandatory, On Track ≥80% / At Risk <80%)
+- **Event types:** core / major / special — independent of category; both columns exist on every event
+- **Statuses:** present / absent / excused
+- **Excused absences** do not reduce attendance rate
+- **At-risk threshold:** <80% service attendance rate (not practice)
+- **Practice rate:** informational only — shown as raw count, no badge
+- **Attendance tracking excludes `super_admin`** service account
+- **Semester anchor:** tracking begins June 20 (first General Assembly)
+
+---
+
+## 11. Liturgical Season Logic
+
+Seasons and display colors:
+
+| Season | Color |
 |---|---|
 | Advent | violet `#5B2D8E` |
 | Christmas | white/gold `#F5F2EB` |
@@ -358,25 +434,22 @@ The `getLiturgicalSeason(date)` function in `utils.js` computes the Roman Cathol
 | Lent | purple `#6B3A6B` |
 | Easter | gold `#C9A86A` |
 
-Song library auto-filters to the current season on load. The badge on the member dashboard shows "Season · Week N".
+Song library auto-filters to the current season on load. Dashboard shows timeline bar + upcoming feasts (Session 14).
 
 ---
 
-## 11. Attendance System Rules
+## 12. Treasurer / Financial Rules
 
-- **Event types:**
-  - Core — weekly masses (counts toward primary rate)
-  - Major — feasts and solemnities
-  - Special — voluntary events
-- **Statuses:** present / absent / excused
-- **Excused absences** do not reduce attendance rate
-- **At-risk threshold:** <80% Core attendance rate
-- **Attendance tracking excludes `super_admin`** service account
-- **Semester anchor:** tracking begins June 20 (first General Assembly)
+- **Commitment fines:** ₱20 default per missed commitment; manually logged by treasurer
+- **Commitment declarations:** collected via Google Forms (Thursday before service weekend) — not in the portal
+- **Fine statuses:** unpaid / paid / waived
+- **No online payment** — treasurer marks paid/waived manually
+- **Ledger:** income / expense transactions with category and running balance
+- Semesters: S1 = June 20 – Oct 31; S2 = Nov 1 – May 31
 
 ---
 
-## 12. Performance Constraints
+## 13. Performance Constraints
 
 - All pages must load usably on slow 3G mobile data
 - Supabase JS loaded via CDN — not bundled
@@ -387,13 +460,16 @@ Song library auto-filters to the current season on load. The badge on the member
 
 ---
 
-## 13. Key Decisions & Conventions (Do Not Re-Litigate)
+## 14. Key Decisions & Conventions (Do Not Re-Litigate)
 
 - Age is never collected or stored — always calculated from birthday
-- `super_admin` role is reserved for the President account only
+- `super_admin` role is reserved for the President (MJ) only
 - `inactive` status is the soft-remove path; hard delete is super_admin only
-- The secretary (Gezd Seloterio) handles all attendance marking and absence approvals
+- Secretary and officer are **parallel roles** — neither satisfies the other's role check
+- Commitment fines are manually entered by treasurer — Google Forms workflow is kept; in-portal commitment form is deferred
 - Netlify Forms handles the sponsor contact form — no backend needed
-- `email` is stored in `profiles` table (not just in `auth.users`) for admin query convenience
-- ToS acknowledgement (`tos_accepted_at`) is stored in profiles at registration time
-- Constitution and Handbook are currently static Markdown files — editing via admin panel is deferred to v3
+- `email` is stored in `profiles` table (not just `auth.users`) for admin query convenience
+- `tos_accepted_at` is stored in profiles at registration time
+- Constitution and Handbook are currently static Markdown files — admin editor deferred indefinitely
+- Initials avatar (gold on charcoal) is the fallback when no profile photo is set
+- Sign Out is accessible via the avatar dropdown AND the sidebar — not the top navbar as a standalone button
