@@ -84,6 +84,7 @@
                   <th>Title</th>
                   <th>Date</th>
                   <th>Type</th>
+                  <th>Category</th>
                   <th>Description</th>
                   <th>Actions</th>
                 </tr>
@@ -125,6 +126,13 @@
                 <option value="special">Special — Voluntary</option>
               </select>
             </div>
+          </div>
+          <div class="form-group">
+            <label for="ev-category">Event Category <span class="required">*</span></label>
+            <select id="ev-category" required>
+              <option value="service">Service — Mass / Feast</option>
+              <option value="practice">Practice — Rehearsal</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="ev-desc">Description</label>
@@ -175,6 +183,8 @@
       // ── Constants ──────────────────────────────────────────────
       const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
       const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
+      const CAT_LABELS  = { service: 'Service', practice: 'Practice' };
+      const CAT_BADGE   = { service: 'badge-honorary', practice: 'badge-pending' };
 
       let editingId = null;
 
@@ -191,7 +201,7 @@
 
         const { data, error } = await supabase
           .from('events')
-          .select('id, title, event_date, event_type, description')
+          .select('id, title, event_date, event_type, event_category, description')
           .order('event_date', { ascending: false });
 
         loadingEl.style.display = 'none';
@@ -207,6 +217,7 @@
             <td style="color:var(--ivory);font-weight:500">${escHtml(ev.title)}</td>
             <td style="white-space:nowrap">${formatDate(ev.event_date)}</td>
             <td><span class="badge ${TYPE_BADGE[ev.event_type] || ''}">${TYPE_LABELS[ev.event_type] || ev.event_type}</span></td>
+            <td><span class="badge ${CAT_BADGE[ev.event_category] || 'badge-honorary'}">${CAT_LABELS[ev.event_category] || 'Service'}</span></td>
             <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ivory-muted)">${escHtml(ev.description || '—')}</td>
             <td><div class="actions">
               <button class="btn btn-outline btn-sm js-edit"
@@ -214,6 +225,7 @@
                 data-title="${escHtml(ev.title)}"
                 data-date="${ev.event_date}"
                 data-type="${ev.event_type}"
+                data-category="${ev.event_category || 'service'}"
                 data-desc="${escHtml(ev.description || '')}">Edit</button>
               <button class="btn btn-danger btn-sm js-delete"
                 data-id="${ev.id}"
@@ -235,10 +247,11 @@
       function openModal(data = {}) {
         editingId = data.id || null;
         document.getElementById('event-modal-title').textContent = editingId ? 'Edit Event' : 'Add Event';
-        document.getElementById('ev-title').value = data.title || '';
-        document.getElementById('ev-date').value  = data.date  || '';
-        document.getElementById('ev-type').value  = data.type  || 'core';
-        document.getElementById('ev-desc').value  = data.desc  || '';
+        document.getElementById('ev-title').value    = data.title    || '';
+        document.getElementById('ev-date').value     = data.date     || '';
+        document.getElementById('ev-type').value     = data.type     || 'core';
+        document.getElementById('ev-category').value = data.category || 'service';
+        document.getElementById('ev-desc').value     = data.desc     || '';
         document.getElementById('event-error').style.display = 'none';
         document.getElementById('event-modal').classList.add('open');
         document.getElementById('ev-title').focus();
@@ -266,10 +279,11 @@
         btn.textContent = 'Saving…';
         document.getElementById('event-error').style.display = 'none';
 
-        const title = document.getElementById('ev-title').value.trim();
-        const date  = document.getElementById('ev-date').value;
-        const type  = document.getElementById('ev-type').value;
-        const desc  = document.getElementById('ev-desc').value.trim() || null;
+        const title    = document.getElementById('ev-title').value.trim();
+        const date     = document.getElementById('ev-date').value;
+        const type     = document.getElementById('ev-type').value;
+        const category = document.getElementById('ev-category').value;
+        const desc     = document.getElementById('ev-desc').value.trim() || null;
 
         if (!title || !date) {
           document.getElementById('event-error-text').textContent = 'Title and date are required.';
@@ -279,7 +293,7 @@
           return;
         }
 
-        const payload = { title, event_date: date, event_type: type, description: desc };
+        const payload = { title, event_date: date, event_type: type, event_category: category, description: desc };
         let error;
 
         if (editingId) {

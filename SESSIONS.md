@@ -238,7 +238,7 @@ The assignment modal and member weekend section currently query **all upcoming e
 
 ## Session 13: Attendance Split (Practice vs. Service)
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Surface the `event_category` column in the UI — event management, attendance tracker, member attendance page, and attendance summary.
 
@@ -265,10 +265,10 @@ The assignment modal and member weekend section currently query **all upcoming e
 - On Track / At Risk colors still based on service rate only
 
 **Acceptance criteria:**
-- [ ] Admin creates a "Practice" event; it appears in tracker with Practice badge
-- [ ] Member's attendance page shows separate service rate (with badge) and practice count (no badge)
-- [ ] Attendance summary filter by "Service" recalculates correctly
-- [ ] Practice attendance never triggers At Risk badge
+- [x] Admin creates a "Practice" event; it appears in tracker with Practice badge
+- [x] Member's attendance page shows separate service rate (with badge) and practice count (no badge)
+- [x] Attendance summary filter by "Service" recalculates correctly
+- [x] Practice attendance never triggers At Risk badge
 
 ---
 
@@ -575,7 +575,7 @@ ALTER TABLE awards ENABLE ROW LEVEL SECURITY;
 | 10.5 | Registration Hardening + Member Lifecycle | 10 | ✅ Complete |
 | 11 | Role System Overhaul + UI Bug Fixes | 10.5 | ⏳ Next |
 | 12 | Song Enhancements | 11 | ⏳ Planned |
-| 13 | Attendance Split (Practice vs. Service) | 11 | ⏳ Planned |
+| 13 | Attendance Split (Practice vs. Service) | 11 | ✅ Complete |
 | 14 | Liturgical Calendar | 11 | ⏳ Planned |
 | 15 | Treasurer Features | 11 | ⏳ Planned |
 | 16 | In-App Notifications | 15 | ⏳ Planned |

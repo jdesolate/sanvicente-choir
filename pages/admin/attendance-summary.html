@@ -121,6 +121,14 @@
           <!-- ── Filters ── -->
           <div id="filter-row" class="filter-row" style="display:none">
             <div class="form-group" style="margin-bottom:0;flex:0 0 auto">
+              <label for="filter-category" style="font-size:var(--text-xs)">Category</label>
+              <select id="filter-category">
+                <option value="">All Categories</option>
+                <option value="service">Service</option>
+                <option value="practice">Practice</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;flex:0 0 auto">
               <label for="filter-voice" style="font-size:var(--text-xs)">Voice Part</label>
               <select id="filter-voice">
                 <option value="">All Parts</option>
@@ -206,9 +214,10 @@
       let rows = [];          // computed per-member summary rows
       let sortCol = 'rate';
       let sortAsc = false;
-      let filterVoice = '';
-      let filterType  = '';
-      let filterSearch = '';
+      let filterVoice    = '';
+      let filterType     = '';
+      let filterCategory = '';
+      let filterSearch   = '';
 
       // ── Fetch & compute ────────────────────────────────────────
       async function loadData() {
@@ -222,7 +231,7 @@
         const [attRes, profilesRes] = await Promise.all([
           supabase
             .from('attendance')
-            .select('member_id, status, event_id, events(event_type)')
+            .select('member_id, status, event_id, events(event_type, event_category)')
             .order('event_id'),
           supabase
             .from('profiles')
@@ -249,25 +258,50 @@
           if (!eventTypeMap[r.event_id]) eventTypeMap[r.event_id] = r.events?.event_type || 'unknown';
         });
 
+        // Build event category map
+        const eventCatMap = {};
+        allRecords.forEach(r => {
+          if (!eventCatMap[r.event_id]) eventCatMap[r.event_id] = r.events?.event_category || 'service';
+        });
+
         // Build per-member stats, keyed by member_id
         const statsMap = {};
         profiles.forEach(p => {
-          statsMap[p.id] = { ...p, present: 0, absent: 0, excused: 0, byType: { core:{p:0,a:0,e:0}, major:{p:0,a:0,e:0}, special:{p:0,a:0,e:0} } };
+          statsMap[p.id] = {
+            ...p, present: 0, absent: 0, excused: 0,
+            byType: { core:{p:0,a:0,e:0}, major:{p:0,a:0,e:0}, special:{p:0,a:0,e:0} },
+            byCategory: { service:{p:0,a:0,e:0}, practice:{p:0,a:0,e:0} },
+          };
         });
 
         allRecords.forEach(r => {
           if (!statsMap[r.member_id]) return;
-          const s = statsMap[r.member_id];
+          const s    = statsMap[r.member_id];
           const type = eventTypeMap[r.event_id] || 'special';
-          if (r.status === 'present')      { s.present++; if (s.byType[type]) s.byType[type].p++; }
-          else if (r.status === 'excused') { s.excused++; if (s.byType[type]) s.byType[type].e++; }
-          else                             { s.absent++;  if (s.byType[type]) s.byType[type].a++; }
+          const cat  = eventCatMap[r.event_id] || 'service';
+          if (r.status === 'present') {
+            s.present++;
+            if (s.byType[type])     s.byType[type].p++;
+            if (s.byCategory[cat])  s.byCategory[cat].p++;
+          } else if (r.status === 'excused') {
+            s.excused++;
+            if (s.byType[type])     s.byType[type].e++;
+            if (s.byCategory[cat])  s.byCategory[cat].e++;
+          } else {
+            s.absent++;
+            if (s.byType[type])     s.byType[type].a++;
+            if (s.byCategory[cat])  s.byCategory[cat].a++;
+          }
         });
 
         rows = Object.values(statsMap).map(s => {
           const total = s.present + s.absent + s.excused;
           const rate  = total > 0 ? (s.present / total) * 100 : 0;
-          return { ...s, total, rate };
+          // Service rate is used for bar coloring regardless of active filter
+          const sc          = s.byCategory.service;
+          const svcDenom    = sc.p + sc.a;
+          const serviceRate = svcDenom > 0 ? (sc.p / svcDenom) * 100 : 0;
+          return { ...s, total, rate, serviceRate };
         });
 
         // Global stats
@@ -312,33 +346,39 @@
         }
 
         tbody.innerHTML = data.map((m, i) => {
-          const pct   = m.rate.toFixed(1);
-          const cls   = m.rate >= 80 ? 'good' : m.rate >= 50 ? 'mid' : 'low';
-          const total = filterType
-            ? (() => {
-                const b = m.byType[filterType] || {p:0,a:0,e:0};
-                const t = b.p + b.a + b.e;
-                const r = t > 0 ? ((b.p / t) * 100).toFixed(1) : '0.0';
-                return { present: b.p, absent: b.a, excused: b.e, total: t, pct: r,
-                         cls: r >= 80 ? 'good' : r >= 50 ? 'mid' : 'low' };
-              })()
-            : { present: m.present, absent: m.absent, excused: m.excused, total: m.total, pct, cls };
+          // Bar color always based on service rate
+          const colorCls = m.serviceRate >= 80 ? 'good' : m.serviceRate >= 50 ? 'mid' : 'low';
+
+          let display;
+          if (filterCategory) {
+            const b = m.byCategory[filterCategory] || {p:0,a:0,e:0};
+            const t = b.p + b.a + b.e;
+            const r = t > 0 ? ((b.p / t) * 100).toFixed(1) : '0.0';
+            display = { present: b.p, absent: b.a, excused: b.e, total: t, pct: r };
+          } else if (filterType) {
+            const b = m.byType[filterType] || {p:0,a:0,e:0};
+            const t = b.p + b.a + b.e;
+            const r = t > 0 ? ((b.p / t) * 100).toFixed(1) : '0.0';
+            display = { present: b.p, absent: b.a, excused: b.e, total: t, pct: r };
+          } else {
+            display = { present: m.present, absent: m.absent, excused: m.excused, total: m.total, pct: m.rate.toFixed(1) };
+          }
 
           return `
             <tr>
               <td class="rank-num">${i + 1}</td>
               <td style="color:var(--ivory);font-weight:500">${escHtml(m.full_name)}</td>
               <td>${cap(m.voice_part)}</td>
-              <td><span class="badge badge-present">${total.present}</span></td>
-              <td><span class="badge badge-excused">${total.excused}</span></td>
-              <td><span class="badge badge-absent">${total.absent}</span></td>
-              <td style="color:var(--ivory-muted);font-size:var(--text-sm)">${total.total}</td>
+              <td><span class="badge badge-present">${display.present}</span></td>
+              <td><span class="badge badge-excused">${display.excused}</span></td>
+              <td><span class="badge badge-absent">${display.absent}</span></td>
+              <td style="color:var(--ivory-muted);font-size:var(--text-sm)">${display.total}</td>
               <td>
                 <div class="rate-bar-wrap">
                   <div class="rate-bar-track">
-                    <div class="rate-bar-fill ${total.cls}" style="width:${total.pct}%"></div>
+                    <div class="rate-bar-fill ${colorCls}" style="width:${display.pct}%"></div>
                   </div>
-                  <span class="rate-pct">${total.pct}%</span>
+                  <span class="rate-pct">${display.pct}%</span>
                 </div>
               </td>
             </tr>
@@ -366,6 +406,9 @@
       });
 
       // ── Filters ────────────────────────────────────────────────
+      document.getElementById('filter-category').addEventListener('change', e => {
+        filterCategory = e.target.value; renderTable();
+      });
       document.getElementById('filter-voice').addEventListener('change', e => {
         filterVoice = e.target.value; renderTable();
       });

@@ -498,6 +498,7 @@
         const { data: events } = await supabase
           .from('events')
           .select('id, title, event_date')
+          .eq('event_category', 'service')
           .gte('event_date', today)
           .lte('event_date', nextWeek)
           .order('event_date', { ascending: true });

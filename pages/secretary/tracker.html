@@ -180,7 +180,7 @@
 
         const { data, error } = await supabase
           .from('events')
-          .select('id, title, event_date, event_type')
+          .select('id, title, event_date, event_type, event_category')
           .gte('event_date', since.toISOString().slice(0, 10))
           .order('event_date', { ascending: false });
 
@@ -196,10 +196,12 @@
         }
 
         const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
+        const CAT_LABELS  = { service: 'Service', practice: 'Practice' };
         data.forEach(ev => {
           const opt = document.createElement('option');
+          const catLabel = CAT_LABELS[ev.event_category] || 'Service';
           opt.value = ev.id;
-          opt.textContent = `${formatDate(ev.event_date)} — ${ev.title} (${TYPE_LABELS[ev.event_type] || ev.event_type})`;
+          opt.textContent = `[${catLabel}] ${formatDate(ev.event_date)} — ${ev.title} (${TYPE_LABELS[ev.event_type] || ev.event_type})`;
           select.appendChild(opt);
         });
       }

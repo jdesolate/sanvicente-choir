@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
+    <style>
+      .hist-cat-btn { transition: background .15s, color .15s; }
+      .hist-cat-btn.active-filter { background: var(--gold); color: var(--bg-base); border-color: var(--gold); }
+    </style>
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
   </head>
   <body class="portal-body">
@@ -97,51 +101,57 @@
           <!-- ── Summary cards + status badge ── -->
           <div id="att-summary" style="display:none">
 
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--space-6)">
-              <span style="font-family:var(--font-display);font-size:var(--text-sm);letter-spacing:0.1em;text-transform:uppercase;color:var(--ivory-dim)">Overall Status</span>
-              <span id="status-badge" class="badge"></span>
+            <!-- Service Attendance -->
+            <div style="margin-bottom:var(--space-8)">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--space-4)">
+                <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin:0">Service Attendance</h3>
+                <span id="status-badge" class="badge"></span>
+              </div>
+              <div class="stat-grid" style="margin-bottom:var(--space-6)">
+                <div class="stat-card">
+                  <div class="stat-num" id="rate-service">—</div>
+                  <div class="stat-label">Service Rate</div>
+                </div>
+              </div>
+              <div id="tier-detail">
+                <div class="table-wrap">
+                  <table class="data-table" aria-label="Service attendance by event tier">
+                    <thead>
+                      <tr>
+                        <th>Event Tier</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Excused</th>
+                        <th>Total Marked</th>
+                        <th>Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tier-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
-            <div class="stat-grid" style="margin-bottom:var(--space-8)">
-              <div class="stat-card">
-                <div class="stat-num" id="rate-core">—</div>
-                <div class="stat-label">Core Rate</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-num" id="rate-major">—</div>
-                <div class="stat-label">Major Rate</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-num" id="rate-special">—</div>
-                <div class="stat-label">Special Rate</div>
-              </div>
-            </div>
-
-            <div id="tier-detail" style="margin-bottom:var(--space-8)">
-              <div class="table-wrap">
-                <table class="data-table" aria-label="Attendance summary by tier">
-                  <thead>
-                    <tr>
-                      <th>Event Tier</th>
-                      <th>Present</th>
-                      <th>Absent</th>
-                      <th>Excused</th>
-                      <th>Total Marked</th>
-                      <th>Rate</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tier-tbody"></tbody>
-                </table>
-              </div>
+            <!-- Practice Attendance -->
+            <div style="margin-bottom:var(--space-8)">
+              <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin-bottom:var(--space-3)">Practice Attendance</h3>
+              <p id="practice-summary" style="color:var(--ivory-muted);font-size:var(--text-base)">—</p>
             </div>
 
           </div>
 
           <!-- ── History table ── -->
           <div id="att-history" style="display:none">
-            <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin-bottom:var(--space-4)">
-              Attendance History
-            </h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+              <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin:0">
+                Attendance History
+              </h3>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button class="btn btn-sm hist-cat-btn active-filter" data-cat="">All</button>
+                <button class="btn btn-sm hist-cat-btn" data-cat="service">Service</button>
+                <button class="btn btn-sm hist-cat-btn" data-cat="practice">Practice</button>
+              </div>
+            </div>
 
             <div id="history-empty" class="empty-state" style="display:none">
               <div class="empty-icon">✓</div>
@@ -154,6 +164,7 @@
                   <tr>
                     <th>Event</th>
                     <th>Date</th>
+                    <th>Category</th>
                     <th>Type</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -263,10 +274,17 @@
       backdrop.addEventListener('click', closeSidebar);
 
       // ── Constants ──────────────────────────────────────────────
-      const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
-      const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
-      const STATUS_BADGE = { present: 'badge-present', absent: 'badge-absent', excused: 'badge-excused' };
+      const TYPE_LABELS   = { core: 'Core', major: 'Major', special: 'Special' };
+      const TYPE_BADGE    = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
+      const STATUS_BADGE  = { present: 'badge-present', absent: 'badge-absent', excused: 'badge-excused' };
+      const CAT_LABELS    = { service: 'Service', practice: 'Practice' };
+      const CAT_BADGE     = { service: 'badge-honorary', practice: 'badge-pending' };
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+      // ── History filter state ───────────────────────────────────
+      let historyFilter = '';
+      let cachedRecords = [];
+      let cachedArMap   = new Map();
 
       // ── Modal state ────────────────────────────────────────────
       let modalMode    = null;   // 'retroactive' | 'advance'
@@ -392,7 +410,7 @@
         const [attRes, arRes, upcomingRes] = await Promise.all([
           supabase
             .from('attendance')
-            .select('id, status, events(id, title, event_date, event_type)')
+            .select('id, status, events(id, title, event_date, event_type, event_category)')
             .eq('member_id', profile.id),
           supabase
             .from('absence_requests')
@@ -429,33 +447,36 @@
           .filter(r => r.events)
           .sort((a, b) => new Date(b.events.event_date) - new Date(a.events.event_date));
 
-        // ── Per-tier stats ─────────────────────────────────────
+        // ── Split by category ─────────────────────────────────
+        const serviceRecords  = records.filter(r => (r.events.event_category || 'service') === 'service');
+        const practiceRecords = records.filter(r => r.events.event_category === 'practice');
+
+        // ── Service tier stats ────────────────────────────────
         const tiers = { core: { present:0, absent:0, excused:0 }, major: { present:0, absent:0, excused:0 }, special: { present:0, absent:0, excused:0 } };
-        records.forEach(r => {
+        serviceRecords.forEach(r => {
           const t = r.events.event_type;
           if (tiers[t] && r.status in tiers[t]) tiers[t][r.status]++;
         });
 
-        // Rate = present / (present + absent); excused excluded
-        function rate(tier) {
+        function tierRate(tier) {
           const t = tiers[tier];
           const denom = t.present + t.absent;
-          if (denom === 0) return null;
-          return Math.round((t.present / denom) * 100);
+          return denom === 0 ? null : Math.round((t.present / denom) * 100);
         }
 
-        const coreRate    = rate('core');
-        const majorRate   = rate('major');
-        const specialRate = rate('special');
+        const svcPresent = serviceRecords.filter(r => r.status === 'present').length;
+        const svcAbsent  = serviceRecords.filter(r => r.status === 'absent').length;
+        const svcDenom   = svcPresent + svcAbsent;
+        const serviceRate = svcDenom > 0 ? Math.round((svcPresent / svcDenom) * 100) : null;
 
         // ── Summary section ───────────────────────────────────
         document.getElementById('att-summary').style.display = 'block';
 
         const statusBadge = document.getElementById('status-badge');
-        if (coreRate === null) {
+        if (serviceRate === null) {
           statusBadge.className   = 'badge badge-pending';
           statusBadge.textContent = 'No Records';
-        } else if (coreRate >= 80) {
+        } else if (serviceRate >= 80) {
           statusBadge.className   = 'badge badge-on-track';
           statusBadge.textContent = 'On Track';
         } else {
@@ -463,15 +484,13 @@
           statusBadge.textContent = 'At Risk';
         }
 
-        document.getElementById('rate-core').textContent    = coreRate    !== null ? `${coreRate}%`    : '—';
-        document.getElementById('rate-major').textContent   = majorRate   !== null ? `${majorRate}%`   : '—';
-        document.getElementById('rate-special').textContent = specialRate !== null ? `${specialRate}%` : '—';
+        document.getElementById('rate-service').textContent = serviceRate !== null ? `${serviceRate}%` : '—';
 
-        // ── Tier breakdown table ──────────────────────────────
+        // ── Service tier breakdown table ──────────────────────
         document.getElementById('tier-tbody').innerHTML = ['core', 'major', 'special'].map(t => {
           const d = tiers[t];
           const total = d.present + d.absent + d.excused;
-          const r = rate(t);
+          const r = tierRate(t);
           const rateHtml = r !== null
             ? `<span class="${r >= 80 ? 'badge badge-on-track' : 'badge badge-at-risk'}">${r}%</span>`
             : `<span style="color:var(--ivory-muted)">—</span>`;
@@ -487,17 +506,40 @@
           `;
         }).join('');
 
+        // ── Practice summary ──────────────────────────────────
+        const practicePresent = practiceRecords.filter(r => r.status === 'present').length;
+        const practiceTotal   = practiceRecords.length;
+        document.getElementById('practice-summary').textContent = practiceTotal > 0
+          ? `${practicePresent} of ${practiceTotal} practices attended`
+          : 'No practice records yet.';
+
         // ── History table ─────────────────────────────────────
         document.getElementById('att-history').style.display = 'block';
+        cachedRecords = records;
+        cachedArMap   = arMap;
+        renderHistory();
+      }
 
-        if (!records.length) {
-          document.getElementById('history-empty').style.display = 'block';
+      function renderHistory() {
+        const filtered = historyFilter
+          ? cachedRecords.filter(r => (r.events.event_category || 'service') === historyFilter)
+          : cachedRecords;
+
+        const emptyEl = document.getElementById('history-empty');
+        const wrapEl  = document.getElementById('history-table-wrap');
+
+        if (!filtered.length) {
+          emptyEl.style.display = 'block';
+          wrapEl.style.display  = 'none';
           return;
         }
 
-        document.getElementById('history-table-wrap').style.display = 'block';
-        document.getElementById('history-tbody').innerHTML = records.map(r => {
-          const ar = arMap.get(r.events.id);
+        emptyEl.style.display = 'none';
+        wrapEl.style.display  = 'block';
+
+        document.getElementById('history-tbody').innerHTML = filtered.map(r => {
+          const ar  = cachedArMap.get(r.events.id);
+          const cat = r.events.event_category || 'service';
           let actionHtml = '';
 
           if (r.status === 'absent') {
@@ -525,6 +567,7 @@
             <tr>
               <td style="color:var(--ivory);font-weight:500">${escHtml(r.events.title)}</td>
               <td style="white-space:nowrap">${formatDate(r.events.event_date)}</td>
+              <td><span class="badge ${CAT_BADGE[cat] || 'badge-honorary'}">${CAT_LABELS[cat] || 'Service'}</span></td>
               <td><span class="badge ${TYPE_BADGE[r.events.event_type] || ''}">${TYPE_LABELS[r.events.event_type] || r.events.event_type}</span></td>
               <td><span class="badge ${STATUS_BADGE[r.status] || ''}">${cap(r.status)}</span></td>
               <td>${actionHtml}</td>
@@ -533,11 +576,17 @@
         }).join('');
       }
 
-      // ── Delegation for "Request Excuse" buttons ────────────────
-      document.getElementById('history-tbody').addEventListener('click', e => {
-        const btn = e.target.closest('.request-excuse-btn');
-        if (!btn) return;
-        openModal('retroactive', btn.dataset.eventId, btn.dataset.eventTitle);
+      // ── Category filter buttons ────────────────────────────────
+      document.getElementById('att-history').addEventListener('click', e => {
+        const filterBtn = e.target.closest('.hist-cat-btn');
+        if (filterBtn) {
+          historyFilter = filterBtn.dataset.cat;
+          document.querySelectorAll('.hist-cat-btn').forEach(b => b.classList.remove('active-filter'));
+          filterBtn.classList.add('active-filter');
+          renderHistory();
+        }
+        const excuseBtn = e.target.closest('.request-excuse-btn');
+        if (excuseBtn) openModal('retroactive', excuseBtn.dataset.eventId, excuseBtn.dataset.eventTitle);
       });
 
       // ── Init ───────────────────────────────────────────────────
