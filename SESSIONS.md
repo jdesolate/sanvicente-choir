@@ -316,7 +316,7 @@ The assignment modal and member weekend section currently query **all upcoming e
 
 ## Session 15: Treasurer Features
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Build the treasurer portal with fines ledger and income/expense ledger.
 
