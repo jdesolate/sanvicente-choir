@@ -49,14 +49,44 @@
         margin: var(--space-6) 0 var(--space-3);
       }
       .profile-section-title:first-of-type { margin-top: 0; }
+      .member-avatar-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-5) 0 var(--space-6);
+      }
       .member-avatar {
-        width: 80px;
-        height: 80px;
+        width: 130px;
+        height: 130px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid var(--gold-dim);
+        border: 3px solid var(--gold);
+        box-shadow: 0 0 0 5px var(--gold-dim);
         display: block;
-        margin: 0 auto var(--space-5);
+      }
+      .member-avatar-name {
+        font-family: var(--font-display);
+        font-size: var(--text-lg);
+        font-weight: 600;
+        color: var(--text-primary);
+        text-align: center;
+        margin: 0;
+      }
+      .member-avatar-initials {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: var(--gold-dim);
+        border: 3px solid var(--gold);
+        box-shadow: 0 0 0 5px var(--gold-dim);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--gold);
       }
     </style>
   </head>
@@ -395,15 +425,22 @@
       };
 
       // ── Avatar render ──────────────────────────────────────────────────────────
-      function renderAvatar(photoUrl) {
+      function renderAvatar(photoUrl, name, roleHtml) {
         const wrap = document.getElementById('v-avatar-wrap');
-        wrap.innerHTML = photoUrl
-          ? `<img src="${escHtml(photoUrl)}" alt="Profile photo" class="member-avatar" onerror="this.parentElement.innerHTML=''">`
-          : '';
+        const initials = (name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const avatarEl = photoUrl
+          ? `<img src="${escHtml(photoUrl)}" alt="Profile photo" class="member-avatar" onerror="this.outerHTML='<div class=\\'member-avatar-initials\\'>${initials}</div>'">`
+          : `<div class="member-avatar-initials">${initials}</div>`;
+        wrap.innerHTML = `
+          <div class="member-avatar-wrap">
+            ${avatarEl}
+            <p class="member-avatar-name">${escHtml(name || '')}</p>
+            ${roleHtml}
+          </div>`;
       }
 
       // ── Populate View Mode ─────────────────────────────────────────────────────
-      renderAvatar(profile.profile_photo_url);
+      renderAvatar(profile.profile_photo_url, profile.full_name, badgeRole(profile.role));
       document.getElementById('v-email').textContent    = session.user.email;
       document.getElementById('v-role').innerHTML       = badgeRole(profile.role);
       document.getElementById('v-status').innerHTML     = badgeStatus(profile.status);

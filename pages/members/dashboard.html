@@ -131,9 +131,12 @@
         <!-- Dashboard content — revealed after auth + profile load -->
         <div id="dashboard-content" style="display:none">
 
-          <div class="page-heading">
-            <h2 id="welcome-heading">Welcome</h2>
-            <p id="welcome-sub">San Vicente Choir Member Portal</p>
+          <div class="page-heading" style="display:flex;align-items:center;gap:var(--space-4)">
+            <div id="dash-avatar-wrap"></div>
+            <div>
+              <h2 id="welcome-heading">Welcome</h2>
+              <p id="welcome-sub">San Vicente Choir Member Portal</p>
+            </div>
           </div>
 
           <!-- Pending approval banner -->
@@ -255,6 +258,28 @@
       // ── Populate UI ─────────────────────────────────────────
       document.getElementById('dashboard-content').style.display = 'block';
       document.getElementById('welcome-heading').textContent = `Welcome, ${profile.full_name}`;
+
+      // ── Dashboard avatar ─────────────────────────────────────────
+      (function renderDashAvatar(photoUrl, name) {
+        const wrap = document.getElementById('dash-avatar-wrap');
+        const initials = (name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        if (photoUrl) {
+          const img = document.createElement('img');
+          img.src = photoUrl;
+          img.alt = name;
+          img.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 0 3px var(--gold-dim);flex-shrink:0';
+          img.onerror = () => { img.replaceWith(fallback()); };
+          wrap.appendChild(img);
+        } else {
+          wrap.appendChild(fallback());
+        }
+        function fallback() {
+          const d = document.createElement('div');
+          d.textContent = initials;
+          d.style.cssText = 'width:64px;height:64px;border-radius:50%;background:var(--gold-dim);border:2px solid var(--gold);box-shadow:0 0 0 3px var(--gold-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--gold);flex-shrink:0';
+          return d;
+        }
+      })(profile.profile_photo_url, profile.full_name);
 
       // ── Liturgical calendar ──────────────────────────────────
       const today = new Date();
