@@ -99,6 +99,7 @@
         <p>Secretary Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
@@ -241,6 +242,7 @@
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell, createNotification } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, formatDate, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
@@ -250,6 +252,7 @@
       if (!profile) throw new Error('redirecting');
 
       initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
       document.getElementById('page-content').style.display = 'block';
 
       // Show role-gated nav sections
@@ -302,14 +305,16 @@
 
       // ── Reject modal state ─────────────────────────────────────
       let rejectRequestId  = null;
+      let rejectMemberId   = null;
       let rejectMemberName = '';
       let rejectEventTitle = '';
 
       const rejectOverlay = document.getElementById('reject-modal-overlay');
       const rejectNote    = document.getElementById('reject-note');
 
-      function openRejectModal(requestId, memberName, eventTitle) {
+      function openRejectModal(requestId, memberId, memberName, eventTitle) {
         rejectRequestId  = requestId;
+        rejectMemberId   = memberId;
         rejectMemberName = memberName;
         rejectEventTitle = eventTitle;
         rejectNote.value = '';
@@ -361,13 +366,21 @@
           return;
         }
 
+        const note             = rejectNote.value.trim();
+        const rejectedMemberId = rejectMemberId;
+        const rejectedEvent    = rejectEventTitle;
         closeRejectModal();
         showPageAlert('success', `Request rejected.`);
+        const baseMsg = rejectedEvent
+          ? `Your absence request for "${rejectedEvent}" was not approved.`
+          : 'Your absence request was not approved.';
+        createNotification(rejectedMemberId, 'absence_rejected',
+          note ? `${baseMsg} Reviewer note: "${note}"` : baseMsg);
         await loadRequests();
       });
 
       // ── Approve a request ──────────────────────────────────────
-      async function approveRequest(requestId, eventId, memberId, requestType) {
+      async function approveRequest(requestId, eventId, memberId, requestType, eventTitle = '') {
         const btn = document.querySelector(`[data-approve="${requestId}"]`);
         if (btn) { btn.disabled = true; btn.textContent = 'Approving…'; }
 
@@ -404,6 +417,10 @@
           showPageAlert('success', 'Request approved. Attendance marked as Excused.');
         }
 
+        createNotification(memberId, 'absence_approved',
+          eventTitle
+            ? `Your absence request for "${eventTitle}" has been approved. Attendance marked as Excused.`
+            : 'Your absence request has been approved. Attendance marked as Excused.');
         await loadRequests();
       }
 
@@ -435,11 +452,12 @@
           actionsHtml = `
             <div class="request-actions">
               <button class="btn btn-gold btn-sm" data-approve="${req.id}"
-                data-event-id="${req.event_id}" data-member-id="${req.member_id}" data-req-type="${req.request_type}">
+                data-event-id="${req.event_id}" data-member-id="${req.member_id}" data-req-type="${req.request_type}"
+                data-event-title="${escHtml(eventTitle)}">
                 Approve
               </button>
               <button class="btn btn-ghost btn-sm" data-reject="${req.id}"
-                data-member-name="${escHtml(memberName)}" data-event-title="${escHtml(eventTitle)}">
+                data-member-id="${req.member_id}" data-member-name="${escHtml(memberName)}" data-event-title="${escHtml(eventTitle)}">
                 Reject
               </button>
             </div>
@@ -530,7 +548,8 @@
             approveBtn.dataset.approve,
             approveBtn.dataset.eventId,
             approveBtn.dataset.memberId,
-            approveBtn.dataset.reqType
+            approveBtn.dataset.reqType,
+            approveBtn.dataset.eventTitle
           );
           return;
         }
@@ -540,6 +559,7 @@
         if (rejectBtn) {
           openRejectModal(
             rejectBtn.dataset.reject,
+            rejectBtn.dataset.memberId,
             rejectBtn.dataset.memberName,
             rejectBtn.dataset.eventTitle
           );

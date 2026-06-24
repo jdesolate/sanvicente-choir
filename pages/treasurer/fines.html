@@ -32,6 +32,7 @@
         <p>Treasurer Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
@@ -198,6 +199,7 @@
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell, createNotification } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
@@ -211,6 +213,7 @@
       }
 
       initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
       document.getElementById('page-content').style.display = 'block';
 
       // Show role-gated nav sections
@@ -365,11 +368,20 @@
       });
 
       async function updateFineStatus(id, newStatus) {
+        const fine = allFines.find(f => f.id === id);
         const { error } = await supabase
           .from('fines')
           .update({ status: newStatus, paid_at: new Date().toISOString() })
           .eq('id', id);
         if (error) { alert(`Failed to update fine: ${error.message}`); return; }
+        if (fine?.member_id) {
+          const label     = newStatus === 'paid' ? 'marked as paid' : 'waived';
+          const evtTitle  = fine.event?.title     || '';
+          const evtDate   = fine.event?.event_date ? ` (${fmtDate(fine.event.event_date)})` : '';
+          const evtClause = evtTitle ? ` for "${evtTitle}${evtDate}"` : '';
+          createNotification(fine.member_id, 'fine_resolved',
+            `Your commitment fine of ₱${Number(fine.amount).toFixed(2)}${evtClause} has been ${label}.`);
+        }
         await loadFines();
       }
 
@@ -497,6 +509,10 @@
           return;
         }
 
+        const eventSel = document.getElementById('fine-event');
+        const eventLabel = eventSel.options[eventSel.selectedIndex]?.text || '';
+        createNotification(memberId, 'fine_added',
+          `A commitment fine of ₱${Number(amount).toFixed(2)} has been added for ${eventLabel}.`);
         closeFineModal();
         await loadFines();
       });

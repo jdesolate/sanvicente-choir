@@ -31,6 +31,7 @@
         <p>Member Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
@@ -223,6 +224,7 @@
     <script type="module">
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, formatDate, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
@@ -235,6 +237,7 @@
       if (!profile) { window.location.href = '/pages/login.html'; throw new Error('no profile'); }
 
       initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
       document.getElementById('page-content').style.display = 'block';
 
       if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {

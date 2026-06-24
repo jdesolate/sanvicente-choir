@@ -54,6 +54,7 @@
         <p>Admin Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
@@ -211,6 +212,7 @@
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell, createNotifications } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
       import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
@@ -220,6 +222,7 @@
       if (!profile) throw new Error('redirecting');
 
       initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
       document.getElementById('page-content').style.display = 'block';
 
       // Show role-gated nav sections
@@ -548,6 +551,13 @@
               doAssignBtn.textContent = 'Assign';
               return;
             }
+            // Notify all active members about updated song assignments
+            supabase.from('profiles').select('id').in('status', ['active', 'associate']).then(({ data: members }) => {
+              if (members?.length) {
+                createNotifications(members.map(m => m.id), 'songs_assigned',
+                  'Songs for this weekend have been updated.');
+              }
+            });
             await refreshAssignModal(songId);
           });
         }

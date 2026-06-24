@@ -27,6 +27,7 @@
         <p>Admin Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
     </header>
@@ -343,6 +344,7 @@
     <script type="module">
       import { requireRole, getProfile, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell } from '../../js/notifications.js';
       import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../js/supabase-client.js';
       import { hidePageLoader, formatDate, escHtml, initThemeToggle, gdriveImgUrl, formatRole } from '../../js/utils.js';
       initThemeToggle();
@@ -352,6 +354,7 @@
       if (!adminProfile) throw new Error('redirecting');
 
       initPortalHeader(adminProfile, handleSignOut);
+      initNotificationBell(adminProfile.id);
 
       // Show role-gated nav sections
       if (['secretary', 'officer', 'admin', 'super_admin'].includes(adminProfile.role)) {

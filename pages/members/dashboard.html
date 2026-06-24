@@ -27,6 +27,7 @@
         <p>Member Portal</p>
       </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
       <div class="portal-header-user" id="portal-header-user"></div>
       <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">
         ☰
@@ -238,6 +239,7 @@
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
       import { hidePageLoader, initThemeToggle, getLiturgicalSeason, loadLiturgicalData, escHtml, formatRole } from '../../js/utils.js';
       import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell } from '../../js/notifications.js';
       initThemeToggle();
 
       // ── Auth guard ──────────────────────────────────────────
@@ -466,6 +468,7 @@
         window.location.href = '/index.html';
       }
       initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
       document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
 
       // ── Mobile sidebar toggle ───────────────────────────────

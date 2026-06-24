@@ -391,7 +391,7 @@ ALTER TABLE ledger ENABLE ROW LEVEL SECURITY;
 
 ## Session 16: In-App Notifications
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Build the notification system with a bell icon and unread badge on all portal pages.
 
@@ -790,8 +790,8 @@ document.addEventListener('keydown', e => {
 | 12 | Song Enhancements | 11 | ✅ Complete |
 | 13 | Attendance Split (Practice vs. Service) | 11 | ✅ Complete |
 | 14 | Liturgical Calendar | 11 | ✅ Complete |
-| 15 | Treasurer Features | 11 | ⏳ Planned |
-| 16 | In-App Notifications | 15 | ⏳ Planned |
+| 15 | Treasurer Features | 11 | ✅ Complete |
+| 16 | In-App Notifications | 15 | ✅ Complete |
 | 17 | Admin CMS — Gallery & Officer Profiles | 11 | ⏳ Planned |
 | 18 | Semester Awards + Certificate Generation | 16 | ⏳ Planned |
 | 19 | Dashboard Polish | 14 | ⏳ Planned |
