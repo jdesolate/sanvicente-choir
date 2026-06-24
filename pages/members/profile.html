@@ -321,6 +321,12 @@
                   </div>
 
                   <div class="form-group">
+                    <label for="e-joined-choir">Joined Choir Date</label>
+                    <input type="date" id="e-joined-choir">
+                    <p class="form-hint">The date you first joined the choir. Used to calculate your attendance rate accurately.</p>
+                  </div>
+
+                  <div class="form-group">
                     <label>Profile Photo</label>
                     <div id="e-photo-preview" style="margin-bottom:var(--space-3)"></div>
                     <input type="file" id="e-photo" accept="image/*">
@@ -448,7 +454,7 @@
       document.getElementById('v-email').textContent    = session.user.email;
       document.getElementById('v-role').innerHTML       = badgeRole(profile.role);
       document.getElementById('v-status').innerHTML     = badgeStatus(profile.status);
-      document.getElementById('v-joined').textContent   = formatDate(profile.created_at);
+      document.getElementById('v-joined').textContent   = profile.joined_choir_date ? formatDate(profile.joined_choir_date) : formatDate(profile.created_at);
       document.getElementById('v-name').textContent     = val(profile.full_name);
       document.getElementById('v-voice').textContent    = cap(profile.voice_part);
       document.getElementById('v-contact').textContent  = val(profile.contact_number);
@@ -493,7 +499,8 @@
         document.getElementById('e-contact').value = profile.contact_number   || '';
         document.getElementById('e-birthday').value= profile.birthday         || '';
         document.getElementById('e-age-display').textContent = calcAge(profile.birthday);
-        document.getElementById('e-school').value  = profile.school_occupation || '';
+        document.getElementById('e-school').value        = profile.school_occupation  || '';
+        document.getElementById('e-joined-choir').value  = profile.joined_choir_date  || '';
 
         // Show current photo preview; clear file input
         const previewEl = document.getElementById('e-photo-preview');
@@ -612,6 +619,7 @@
           contact_number:    document.getElementById('e-contact').value.trim() || null,
           birthday:          document.getElementById('e-birthday').value || null,
           school_occupation: document.getElementById('e-school').value.trim() || null,
+          joined_choir_date: document.getElementById('e-joined-choir').value || null,
           profile_photo_url,
           custom_fields:     updatedCustomFields,
         };
@@ -636,6 +644,7 @@
         document.getElementById('v-birthday').textContent     = profile.birthday ? formatDate(profile.birthday) : '—';
         document.getElementById('v-age').textContent          = calcAge(profile.birthday);
         document.getElementById('v-school').textContent       = val(profile.school_occupation);
+        document.getElementById('v-joined').textContent       = profile.joined_choir_date ? formatDate(profile.joined_choir_date) : formatDate(profile.created_at);
 
         viewCf.innerHTML = '';
         if (fieldDefs?.length) {

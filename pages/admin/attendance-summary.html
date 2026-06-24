@@ -266,17 +266,20 @@
         const statsEl    = document.getElementById('stats-bar');
         const filterEl   = document.getElementById('filter-row');
 
-        // Fetch all attendance records joined with events and profiles
-        const [attRes, profilesRes] = await Promise.all([
+        // Fetch all attendance records joined with events, profiles, and custom field definitions
+        const [attRes, profilesRes, cfDefsRes] = await Promise.all([
           supabase
             .from('attendance')
-            .select('member_id, status, event_id, events(event_type, event_category)')
+            .select('member_id, status, event_id, events(event_type, event_category, event_date)')
             .order('event_id'),
           supabase
             .from('profiles')
-            .select('id, full_name, voice_part, status')
+            .select('id, full_name, voice_part, status, joined_choir_date, custom_fields')
             .in('status', ['active', 'associate'])
             .order('full_name'),
+          supabase
+            .from('custom_field_definitions')
+            .select('id, field_name'),
         ]);
 
         loadingEl.style.display = 'none';
@@ -290,6 +293,22 @@
         const profiles = profilesRes.data;
         const allRecords = attRes.data;
 
+        // Find the "Date of Joining Choir" custom field definition ID (if it exists)
+        const joinCfDef = (cfDefsRes.data || []).find(
+          d => d.field_name.toLowerCase() === 'date of joining choir'
+        );
+        const joinCfId = joinCfDef?.id || null;
+
+        // Resolve effective join date per member:
+        // 1. joined_choir_date column (set by admin or member explicitly)
+        // 2. "Date of Joining Choir" custom field value
+        profiles.forEach(p => {
+          if (!p.joined_choir_date && joinCfId) {
+            const cfVal = p.custom_fields?.[joinCfId];
+            if (cfVal) p.joined_choir_date = cfVal;
+          }
+        });
+
         // Count distinct events overall and per type
         const eventIds = new Set(allRecords.map(r => r.event_id));
         const eventTypeMap = {};
@@ -301,6 +320,12 @@
         const eventCatMap = {};
         allRecords.forEach(r => {
           if (!eventCatMap[r.event_id]) eventCatMap[r.event_id] = r.events?.event_category || 'service';
+        });
+
+        // Build event date map for join-date filtering
+        const eventDateMap = {};
+        allRecords.forEach(r => {
+          if (!eventDateMap[r.event_id]) eventDateMap[r.event_id] = r.events?.event_date || null;
         });
 
         // Build per-member stats, keyed by member_id
@@ -316,6 +341,10 @@
         allRecords.forEach(r => {
           if (!statsMap[r.member_id]) return;
           const s    = statsMap[r.member_id];
+          // Skip events that occurred before this member joined the choir
+          const joinDate  = s.joined_choir_date;
+          const eventDate = eventDateMap[r.event_id];
+          if (joinDate && eventDate && eventDate < joinDate) return;
           const type = eventTypeMap[r.event_id] || 'special';
           const cat  = eventCatMap[r.event_id] || 'service';
           if (r.status === 'present') {

@@ -152,50 +152,24 @@
             </div>
           </div>
 
-          <!-- Liturgical Calendar card -->
-          <div class="card" id="litcal-card" style="margin-bottom:var(--space-6);display:none">
-            <div class="card-header">
-              <h3 class="card-title">Liturgical Calendar</h3>
-              <span id="litcal-season-badge" class="season-badge"></span>
-            </div>
-
-            <!-- Timeline bar -->
-            <div class="litcal-bar-wrap" id="litcal-bar-wrap">
-              <div class="litcal-bar" id="litcal-bar" role="img" aria-label="Liturgical year timeline"></div>
-            </div>
-
-            <!-- Season legend -->
-            <div class="litcal-legend" id="litcal-legend"></div>
-
-            <!-- Today's feast (if rank S or F) -->
-            <div id="litcal-today-feast"></div>
-
-            <!-- Upcoming feasts next 14 days -->
-            <div id="litcal-upcoming"></div>
-
-            <!-- Full-year feast list (toggled) -->
-            <div id="litcal-all-feasts" style="display:none"></div>
-            <button id="litcal-toggle-btn" class="litcal-toggle-btn" style="display:none">View all feasts this year →</button>
-          </div>
-
           <!-- Quick stats -->
           <div class="stat-grid" id="stat-grid">
             <div class="stat-card">
-              <div class="stat-num" id="stat-voice">—</div>
+              <div class="stat-num" id="stat-attend">—</div>
+              <div class="stat-label">Attendance Rate</div>
+            </div>
+            <div class="stat-card" id="stat-fines-card">
+              <div class="stat-num" id="stat-fines">—</div>
+              <div class="stat-label">Unpaid Fines</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num stat-num-text" id="stat-voice">—</div>
               <div class="stat-label">Voice Part</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-num" id="stat-status">—</div>
-              <div class="stat-label">Status</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-num" id="stat-role">—</div>
-              <div class="stat-label">Role</div>
             </div>
           </div>
 
           <!-- Quick-action cards -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:var(--space-6)">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:var(--space-6)">
             <a href="attendance.html" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
               <div style="font-size:28px;opacity:0.7">✓</div>
               <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
@@ -223,7 +197,7 @@
                 View and edit your member profile
               </div>
             </a>
-<a href="../../documents.html?doc=calendar" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
+            <a href="../../documents.html?doc=calendar" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
               <div style="font-size:28px;opacity:0.7">🗓</div>
               <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
                 Calendar of Activities
@@ -232,6 +206,35 @@
                 Choir year 2026–2027 plan — masses, rehearsals, major events
               </div>
             </a>
+          </div>
+
+          <!-- Liturgical Calendar card -->
+          <div class="card" id="litcal-card" style="margin-bottom:var(--space-6);display:none">
+            <div class="card-header">
+              <h3 class="card-title">Liturgical Calendar</h3>
+              <span id="litcal-season-badge" class="season-badge"></span>
+            </div>
+
+            <!-- Timeline bar -->
+            <div class="litcal-bar-wrap" id="litcal-bar-wrap">
+              <div class="litcal-bar" id="litcal-bar" role="img" aria-label="Liturgical year timeline"></div>
+            </div>
+
+            <!-- Season legend -->
+            <div class="litcal-legend" id="litcal-legend"></div>
+
+            <!-- Today's feast (if rank S or F) -->
+            <div id="litcal-today-feast"></div>
+
+            <!-- Rank legend (injected by JS only when feasts exist) -->
+            <div id="litcal-rank-legend"></div>
+
+            <!-- Upcoming feasts next 14 days -->
+            <div id="litcal-upcoming"></div>
+
+            <!-- Full-year feast list (toggled) -->
+            <div id="litcal-all-feasts" style="display:none"></div>
+            <button id="litcal-toggle-btn" class="litcal-toggle-btn" style="display:none">View all feasts this year →</button>
           </div>
 
         </div>
@@ -243,6 +246,7 @@
     </footer>
 
     <script type="module">
+      import { supabase } from '../../js/supabase-client.js';
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
       import { hidePageLoader, initThemeToggle, getLiturgicalSeason, loadLiturgicalData, escHtml, formatRole } from '../../js/utils.js';
       import { initPortalHeader } from '../../js/header.js';
@@ -271,7 +275,7 @@
           const img = document.createElement('img');
           img.src = photoUrl;
           img.alt = name;
-          img.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 0 3px var(--gold-dim);flex-shrink:0';
+          img.style.cssText = 'width:64px;height:64px;min-width:64px;min-height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 0 3px var(--gold-dim);flex-shrink:0';
           img.onerror = () => { img.replaceWith(fallback()); };
           wrap.appendChild(img);
         } else {
@@ -403,6 +407,12 @@
             if (diff === 1) return 'Tomorrow';
             return d.toLocaleDateString('en-PH', { month:'short', day:'numeric' });
           };
+          document.getElementById('litcal-rank-legend').innerHTML = `
+            <div class="litcal-rank-legend">
+              <span class="rank-badge rank-S">S</span><span>Solemnity</span>
+              <span class="rank-badge rank-F">F</span><span>Feast</span>
+              <span class="rank-badge rank-M">M</span><span>Memorial</span>
+            </div>`;
           upcomingEl.innerHTML = `
             <div class="litcal-feasts-heading">Upcoming — next 14 days</div>
             <div class="litcal-feast-list">
@@ -467,9 +477,47 @@
       }
 
       const cap = v => v ? v.charAt(0).toUpperCase() + v.slice(1) : '—';
-      document.getElementById('stat-voice').textContent  = cap(profile.voice_part);
-      document.getElementById('stat-status').textContent = cap(profile.status);
-      document.getElementById('stat-role').textContent   = formatRole(profile.role);
+      document.getElementById('stat-voice').textContent = cap(profile.voice_part);
+
+      // ── Attendance rate + unpaid fines (parallel fetch) ──────
+      const [attRes, finesRes] = await Promise.all([
+        supabase
+          .from('attendance')
+          .select('status, events(event_date)')
+          .eq('member_id', profile.id),
+        supabase
+          .from('fines')
+          .select('amount, status')
+          .eq('member_id', profile.id)
+          .eq('status', 'unpaid'),
+      ]);
+
+      if (!attRes.error && attRes.data) {
+        const joinDate = profile.joined_choir_date || null;
+        const records = joinDate
+          ? attRes.data.filter(r => !r.events?.event_date || r.events.event_date >= joinDate)
+          : attRes.data;
+        // note: event_date and joined_choir_date are both ISO date strings (YYYY-MM-DD), string compare is correct
+        const total   = records.length;
+        const present = records.filter(r => r.status === 'present').length;
+        const rate    = total > 0 ? ((present / total) * 100).toFixed(1) + '%' : '—';
+        const rateEl  = document.getElementById('stat-attend');
+        rateEl.textContent = rate;
+        if (total > 0) {
+          const pct = present / total;
+          rateEl.style.color = pct >= 0.8 ? 'var(--success)' : pct >= 0.6 ? 'var(--gold)' : 'var(--danger)';
+        }
+      }
+
+      if (!finesRes.error && finesRes.data) {
+        const total = finesRes.data.reduce((s, f) => s + Number(f.amount), 0);
+        const finesEl = document.getElementById('stat-fines');
+        finesEl.textContent = total > 0 ? '₱' + total.toLocaleString() : '₱0';
+        if (total > 0) {
+          finesEl.style.color = 'var(--danger)';
+          document.getElementById('stat-fines-card').title = 'You have unpaid fines — visit the fines page to settle.';
+        }
+      }
 
       if (profile.status === 'pending') {
         document.getElementById('pending-banner').style.display = 'flex';

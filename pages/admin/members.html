@@ -260,6 +260,11 @@
             <option value="inactive">Inactive</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="edit-joined-date">Joined Choir Date</label>
+          <input type="date" id="edit-joined-date">
+          <p class="form-hint">Used to exclude events before this member joined from their attendance rate.</p>
+        </div>
         <div id="edit-error" class="alert alert-error" role="alert" style="display:none">
           <span class="alert-icon">⚠</span>
           <span id="edit-error-text"></span>
@@ -485,7 +490,7 @@
 
         const { data, error } = await supabase
           .from('profiles')
-          .select('id, full_name, email, voice_part, role, status, profile_photo_url')
+          .select('id, full_name, email, voice_part, role, status, profile_photo_url, joined_choir_date')
           .neq('status', 'pending')
           .order('full_name');
 
@@ -530,7 +535,8 @@
                       data-id="${m.id}"
                       data-name="${escHtml(m.full_name)}"
                       data-role="${m.role}"
-                      data-status="${m.status}">Edit</button>
+                      data-status="${m.status}"
+                      data-joined="${m.joined_choir_date || ''}">Edit</button>
             </div></td>
           </tr>
         `).join('');
@@ -554,7 +560,7 @@
         const viewBtn = e.target.closest('.js-view');
         const editBtn = e.target.closest('.js-edit');
         if (viewBtn) openViewModal(viewBtn.dataset.id);
-        if (editBtn) openEditModal(editBtn.dataset.id, editBtn.dataset.name, editBtn.dataset.role, editBtn.dataset.status);
+        if (editBtn) openEditModal(editBtn.dataset.id, editBtn.dataset.name, editBtn.dataset.role, editBtn.dataset.status, editBtn.dataset.joined);
       });
 
       // ── View Profile Modal ─────────────────────────────────────
@@ -649,8 +655,9 @@
           ${row('School / Occupation', m.school_occupation)}
           <div class="profile-section">Account</div>
           ${row('Email', m.email)}
-          ${row('Joined', formatDate(m.created_at))}
+          ${row('Registered', formatDate(m.created_at))}
           ${row('Approved', m.approved_at ? formatDate(m.approved_at) : null)}
+          ${row('Joined Choir', m.joined_choir_date ? formatDate(m.joined_choir_date) : null)}
           ${customFieldRows ? `<div class="profile-section">Custom Fields</div>${customFieldRows}` : ''}
         `;
         bodyEl.style.display = 'block';
@@ -702,12 +709,13 @@
       }
 
       // ── Edit Member Modal ──────────────────────────────────────
-      function openEditModal(id, name, role, status) {
+      function openEditModal(id, name, role, status, joined) {
         targetId = id;
-        document.getElementById('edit-name').textContent      = name;
-        document.getElementById('edit-role').value            = role;
-        document.getElementById('edit-status').value          = status;
-        document.getElementById('edit-error').style.display   = 'none';
+        document.getElementById('edit-name').textContent         = name;
+        document.getElementById('edit-role').value               = role;
+        document.getElementById('edit-status').value             = status;
+        document.getElementById('edit-joined-date').value        = joined || '';
+        document.getElementById('edit-error').style.display      = 'none';
         document.getElementById('edit-modal').classList.add('open');
       }
 
@@ -719,9 +727,11 @@
         const btn = document.getElementById('edit-confirm');
         btn.disabled = true; btn.textContent = 'Saving…';
 
+        const joinedVal = document.getElementById('edit-joined-date').value;
         const { error } = await supabase.from('profiles').update({
-          role:   document.getElementById('edit-role').value,
-          status: document.getElementById('edit-status').value,
+          role:              document.getElementById('edit-role').value,
+          status:            document.getElementById('edit-status').value,
+          joined_choir_date: joinedVal || null,
         }).eq('id', targetId);
 
         btn.disabled = false; btn.textContent = 'Save Changes';
