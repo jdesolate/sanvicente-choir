@@ -10,6 +10,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .badge-income  { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-expense { background: rgba(217,83,79,0.15);  color: #F08080; }
+
+      .balance-card {
+        background: var(--charcoal);
+        border: 1px solid var(--gold-dim);
+        padding: var(--space-6) var(--space-8);
+        text-align: center;
+        margin-bottom: var(--space-5);
+      }
+      .balance-label {
+        font-family: var(--font-display);
+        font-size: var(--text-xs);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ivory-muted);
+        margin-bottom: 8px;
+      }
+      .balance-amount {
+        font-family: var(--font-display);
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1;
+      }
+      .balance-positive { color: #8FD68F; }
+      .balance-negative { color: #F08080; }
+      .balance-zero     { color: var(--ivory-muted); }
+    </style>
   </head>
   <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -79,14 +108,64 @@
       <main class="portal-main" id="main-content">
         <div id="page-content" style="display:none">
 
-          <div class="page-heading">
-            <h2>Income / Expense Ledger</h2>
-            <p>Track choir income and expenses</p>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-6)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Income / Expense Ledger</h2>
+              <p>Track choir income and expenses</p>
+            </div>
+            <button class="btn btn-gold" id="add-txn-btn">+ Add Transaction</button>
           </div>
 
-          <div class="empty-state">
+          <!-- Running balance -->
+          <div class="balance-card">
+            <div class="balance-label">Running Balance</div>
+            <div class="balance-amount balance-zero" id="balance-display">₱0.00</div>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="stat-grid" style="margin-bottom:var(--space-6)">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-income" style="color:#8FD68F">₱0.00</div>
+              <div class="stat-label">Total Income</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-expense" style="color:#F08080">₱0.00</div>
+              <div class="stat-label">Total Expense</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-count">0</div>
+              <div class="stat-label">Transactions</div>
+            </div>
+          </div>
+
+          <!-- Filter chips -->
+          <div class="filter-chips" id="txn-filters" style="margin-bottom:var(--space-5)" role="group" aria-label="Filter by type">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="income">Income</button>
+            <button class="filter-chip" data-filter="expense">Expense</button>
+          </div>
+
+          <div id="txn-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="txn-empty" class="empty-state" style="display:none">
             <div class="empty-icon">≡</div>
-            <p>Income / expense ledger is coming in Session 15.</p>
+            <p id="txn-empty-text">No transactions recorded yet. Click "+ Add Transaction" to begin.</p>
+          </div>
+
+          <div id="txn-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Ledger transactions">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="txn-tbody"></tbody>
+            </table>
           </div>
 
         </div>
@@ -97,15 +176,78 @@
       San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
     </footer>
 
+    <!-- ── Add Transaction Modal ── -->
+    <div class="modal-overlay" id="txn-modal" role="dialog" aria-modal="true" aria-labelledby="txn-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="txn-modal-title">Add Transaction</h2>
+          <button class="modal-close" id="txn-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="txn-form" novalidate>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="txn-type">Type <span class="required">*</span></label>
+              <select id="txn-type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="txn-date">Date <span class="required">*</span></label>
+              <input type="date" id="txn-date" required>
+            </div>
+          </div>
+          <div class="form-row form-row-2" style="margin-top:var(--space-5)">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="txn-amount">Amount (₱) <span class="required">*</span></label>
+              <input type="number" id="txn-amount" min="0.01" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="txn-category">Category <span class="required">*</span></label>
+              <input type="text" id="txn-category" list="category-suggestions" placeholder="e.g. Donation" required autocomplete="off">
+              <datalist id="category-suggestions">
+                <option value="Donation">
+                <option value="Mass Offering">
+                <option value="Membership Fee">
+                <option value="Event Income">
+                <option value="Equipment">
+                <option value="Meals">
+                <option value="Materials">
+                <option value="Event Expense">
+                <option value="Other">
+              </datalist>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:var(--space-5)">
+            <label for="txn-description">Description</label>
+            <input type="text" id="txn-description" placeholder="Optional details…" autocomplete="off">
+          </div>
+          <div id="txn-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="txn-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="txn-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="txn-submit">Save Transaction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
-      import { hidePageLoader, initThemeToggle } from '../../js/utils.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
       const profile = await requireRole('treasurer');
       if (!profile) throw new Error('redirecting');
+      if (!['treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        window.location.href = '/pages/members/dashboard.html';
+        throw new Error('unauthorized');
+      }
 
       initPortalHeader(profile, handleSignOut);
       document.getElementById('page-content').style.display = 'block';
@@ -140,6 +282,199 @@
       menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
       backdrop.addEventListener('click', closeSidebar);
 
+      // ── Helpers ────────────────────────────────────────────────
+      function fmtPeso(n) {
+        return '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      // ── State ──────────────────────────────────────────────────
+      let allTxns     = [];
+      let activeFilter = 'all';
+
+      // ── Stats + balance ────────────────────────────────────────
+      function updateStats(txns) {
+        const income  = txns.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
+        const expense = txns.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
+        const balance = income - expense;
+
+        const balEl = document.getElementById('balance-display');
+        balEl.textContent = fmtPeso(Math.abs(balance));
+        balEl.className = 'balance-amount ' + (balance > 0 ? 'balance-positive' : balance < 0 ? 'balance-negative' : 'balance-zero');
+        if (balance < 0) balEl.textContent = '−' + fmtPeso(Math.abs(balance));
+
+        document.getElementById('stat-income').textContent  = fmtPeso(income);
+        document.getElementById('stat-expense').textContent = fmtPeso(expense);
+        document.getElementById('stat-count').textContent   = txns.length;
+      }
+
+      // ── Render table ───────────────────────────────────────────
+      function renderTable(filter) {
+        const loadingEl = document.getElementById('txn-loading');
+        const emptyEl   = document.getElementById('txn-empty');
+        const emptyTxt  = document.getElementById('txn-empty-text');
+        const tableEl   = document.getElementById('txn-table-wrap');
+        const tbody     = document.getElementById('txn-tbody');
+
+        loadingEl.style.display = 'none';
+
+        const rows = filter === 'all' ? allTxns : allTxns.filter(t => t.type === filter);
+
+        if (!rows.length) {
+          emptyTxt.textContent = filter === 'all'
+            ? 'No transactions recorded yet. Click "+ Add Transaction" to begin.'
+            : `No ${filter} transactions.`;
+          emptyEl.style.display  = 'block';
+          tableEl.style.display  = 'none';
+          return;
+        }
+
+        emptyEl.style.display  = 'none';
+        tableEl.style.display  = 'block';
+
+        tbody.innerHTML = rows.map(t => {
+          const desc = t.description
+            ? `<span style="color:var(--ivory-dim)">${escHtml(t.description)}</span>`
+            : '<span style="color:var(--ivory-muted)">—</span>';
+          const amtColor = t.type === 'income' ? 'color:#8FD68F' : 'color:#F08080';
+
+          return `
+            <tr>
+              <td style="white-space:nowrap;color:var(--ivory-muted)">${fmtDate(t.date)}</td>
+              <td><span class="badge badge-${t.type}">${t.type}</span></td>
+              <td style="color:var(--ivory)">${escHtml(t.category)}</td>
+              <td style="max-width:200px">${desc}</td>
+              <td style="white-space:nowrap;font-weight:500;${amtColor}">${fmtPeso(t.amount)}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-danger btn-sm js-delete" data-id="${t.id}">Delete</button>
+                </div>
+              </td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Load all transactions ──────────────────────────────────
+      async function loadTxns() {
+        document.getElementById('txn-loading').style.display    = 'flex';
+        document.getElementById('txn-empty').style.display      = 'none';
+        document.getElementById('txn-table-wrap').style.display = 'none';
+
+        const { data, error } = await supabase
+          .from('ledger')
+          .select('id, type, amount, category, description, date, created_at')
+          .order('date', { ascending: false })
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('loadTxns:', error);
+          document.getElementById('txn-loading').style.display = 'none';
+          document.getElementById('txn-empty-text').textContent = 'Error loading transactions. Please refresh.';
+          document.getElementById('txn-empty').style.display = 'block';
+          return;
+        }
+
+        allTxns = data || [];
+        updateStats(allTxns);
+        renderTable(activeFilter);
+      }
+
+      // ── Table action delegation ────────────────────────────────
+      document.getElementById('txn-tbody').addEventListener('click', async e => {
+        const delBtn = e.target.closest('.js-delete');
+        if (delBtn) { await deleteTxn(delBtn.dataset.id); }
+      });
+
+      async function deleteTxn(id) {
+        if (!confirm('Delete this transaction? This cannot be undone.')) return;
+        const { error } = await supabase.from('ledger').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadTxns();
+      }
+
+      // ── Filter chips ───────────────────────────────────────────
+      document.getElementById('txn-filters').addEventListener('click', e => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        document.querySelectorAll('#txn-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        renderTable(activeFilter);
+      });
+
+      // ── Add Transaction modal ──────────────────────────────────
+      function openTxnModal() {
+        document.getElementById('txn-type').value        = 'income';
+        document.getElementById('txn-date').value        = new Date().toISOString().split('T')[0];
+        document.getElementById('txn-amount').value      = '';
+        document.getElementById('txn-category').value    = '';
+        document.getElementById('txn-description').value = '';
+        document.getElementById('txn-error').style.display = 'none';
+        document.getElementById('txn-modal').classList.add('open');
+        document.getElementById('txn-amount').focus();
+      }
+
+      function closeTxnModal() {
+        document.getElementById('txn-modal').classList.remove('open');
+      }
+
+      document.getElementById('add-txn-btn').addEventListener('click', openTxnModal);
+      document.getElementById('txn-modal-close').addEventListener('click', closeTxnModal);
+      document.getElementById('txn-cancel').addEventListener('click', closeTxnModal);
+      document.getElementById('txn-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeTxnModal();
+      });
+
+      // ── Submit transaction ─────────────────────────────────────
+      document.getElementById('txn-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('txn-error');
+        const errTxt = document.getElementById('txn-error-text');
+        const btn    = document.getElementById('txn-submit');
+        errEl.style.display = 'none';
+
+        const type        = document.getElementById('txn-type').value;
+        const date        = document.getElementById('txn-date').value;
+        const amount      = Number(document.getElementById('txn-amount').value);
+        const category    = document.getElementById('txn-category').value.trim();
+        const description = document.getElementById('txn-description').value.trim() || null;
+
+        if (!type || !date || !amount || amount <= 0 || !category) {
+          errTxt.textContent = 'Type, date, amount, and category are required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Saving…';
+
+        const { error } = await supabase.from('ledger').insert({
+          type,
+          date,
+          amount,
+          category,
+          description,
+          recorded_by: profile.id,
+        });
+
+        btn.disabled    = false;
+        btn.textContent = 'Save Transaction';
+
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        closeTxnModal();
+        await loadTxns();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadTxns();
       hidePageLoader();
     </script>
   </body>

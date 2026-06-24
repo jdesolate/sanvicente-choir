@@ -10,6 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .badge-unpaid { background: rgba(217,83,79,0.15); color: #F08080; }
+      .badge-paid   { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-waived { background: rgba(224,160,48,0.15); color: var(--warning); }
+    </style>
   </head>
   <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -79,14 +84,64 @@
       <main class="portal-main" id="main-content">
         <div id="page-content" style="display:none">
 
-          <div class="page-heading">
-            <h2>Fines Ledger</h2>
-            <p>Track and manage member fines</p>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-6)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Fines Ledger</h2>
+              <p>Track and manage commitment fines</p>
+            </div>
+            <button class="btn btn-gold" id="add-fine-btn">+ Add Fine</button>
           </div>
 
-          <div class="empty-state">
+          <!-- Stat cards -->
+          <div class="stat-grid" style="margin-bottom:var(--space-6)">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-outstanding">₱0.00</div>
+              <div class="stat-label">Outstanding</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-members-owing">0</div>
+              <div class="stat-label">Members Owing</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-paid">₱0.00</div>
+              <div class="stat-label">Total Paid</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-waived">₱0.00</div>
+              <div class="stat-label">Total Waived</div>
+            </div>
+          </div>
+
+          <!-- Filter chips -->
+          <div class="filter-chips" id="fine-filters" style="margin-bottom:var(--space-5)" role="group" aria-label="Filter by status">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="unpaid">Unpaid</button>
+            <button class="filter-chip" data-filter="paid">Paid</button>
+            <button class="filter-chip" data-filter="waived">Waived</button>
+          </div>
+
+          <div id="fines-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="fines-empty" class="empty-state" style="display:none">
             <div class="empty-icon">◈</div>
-            <p>Fines ledger is coming in Session 15.</p>
+            <p id="fines-empty-text">No fines recorded yet.</p>
+          </div>
+
+          <div id="fines-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Fines">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Event</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th>Added</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fines-tbody"></tbody>
+            </table>
           </div>
 
         </div>
@@ -97,15 +152,63 @@
       San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
     </footer>
 
+    <!-- ── Add Fine Modal ── -->
+    <div class="modal-overlay" id="fine-modal" role="dialog" aria-modal="true" aria-labelledby="fine-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="fine-modal-title">Add Fine</h2>
+          <button class="modal-close" id="fine-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="fine-form" novalidate>
+          <div class="form-group">
+            <label for="fine-member">Member <span class="required">*</span></label>
+            <select id="fine-member" required>
+              <option value="">Loading members…</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fine-event">Event <span class="required">*</span></label>
+            <select id="fine-event" required>
+              <option value="">Loading events…</option>
+            </select>
+            <p class="form-hint">Service events in the past 90 days.</p>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="fine-amount">Amount (₱) <span class="required">*</span></label>
+              <input type="number" id="fine-amount" value="20" min="1" step="1" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="fine-notes">Notes</label>
+              <input type="text" id="fine-notes" placeholder="Optional…" autocomplete="off">
+            </div>
+          </div>
+          <div id="fine-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="fine-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="fine-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="fine-submit">Add Fine</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script type="module">
       import { requireRole, signOut } from '../../js/auth.js';
       import { initPortalHeader } from '../../js/header.js';
-      import { hidePageLoader, initThemeToggle } from '../../js/utils.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
       const profile = await requireRole('treasurer');
       if (!profile) throw new Error('redirecting');
+      if (!['treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        window.location.href = '/pages/members/dashboard.html';
+        throw new Error('unauthorized');
+      }
 
       initPortalHeader(profile, handleSignOut);
       document.getElementById('page-content').style.display = 'block';
@@ -140,6 +243,266 @@
       menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
       backdrop.addEventListener('click', closeSidebar);
 
+      // ── Helpers ────────────────────────────────────────────────
+      function fmtPeso(n) {
+        return '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      function statusBadge(s) {
+        return `<span class="badge badge-${s}">${s}</span>`;
+      }
+
+      // ── State ──────────────────────────────────────────────────
+      let allFines   = [];
+      let activeFilter = 'all';
+
+      // ── Stats ──────────────────────────────────────────────────
+      function updateStats(fines) {
+        const unpaid  = fines.filter(f => f.status === 'unpaid');
+        const paid    = fines.filter(f => f.status === 'paid');
+        const waived  = fines.filter(f => f.status === 'waived');
+        const membersOwing = new Set(unpaid.map(f => f.member_id)).size;
+
+        document.getElementById('stat-outstanding').textContent   = fmtPeso(unpaid.reduce((s, f) => s + Number(f.amount), 0));
+        document.getElementById('stat-members-owing').textContent = membersOwing;
+        document.getElementById('stat-paid').textContent          = fmtPeso(paid.reduce((s, f) => s + Number(f.amount), 0));
+        document.getElementById('stat-waived').textContent        = fmtPeso(waived.reduce((s, f) => s + Number(f.amount), 0));
+      }
+
+      // ── Render table ───────────────────────────────────────────
+      function renderTable(filter) {
+        const loadingEl = document.getElementById('fines-loading');
+        const emptyEl   = document.getElementById('fines-empty');
+        const emptyTxt  = document.getElementById('fines-empty-text');
+        const tableEl   = document.getElementById('fines-table-wrap');
+        const tbody     = document.getElementById('fines-tbody');
+
+        loadingEl.style.display = 'none';
+
+        const rows = filter === 'all' ? allFines : allFines.filter(f => f.status === filter);
+
+        if (!rows.length) {
+          emptyTxt.textContent = filter === 'all'
+            ? 'No fines recorded yet. Click "+ Add Fine" to log one.'
+            : `No ${filter} fines.`;
+          emptyEl.style.display  = 'block';
+          tableEl.style.display  = 'none';
+          return;
+        }
+
+        emptyEl.style.display  = 'none';
+        tableEl.style.display  = 'block';
+
+        tbody.innerHTML = rows.map(f => {
+          const memberName = f.member?.full_name ?? '—';
+          const eventTitle = f.event?.title      ?? '—';
+          const eventDate  = f.event?.event_date  ?? null;
+          const notes      = f.notes ? escHtml(f.notes) : '<span style="color:var(--ivory-muted)">—</span>';
+          const added      = f.created_at ? fmtDate(f.created_at.split('T')[0]) : '—';
+
+          const actions = f.status === 'unpaid'
+            ? `<button class="btn btn-outline btn-sm js-mark-paid"  data-id="${f.id}">Mark Paid</button>
+               <button class="btn btn-ghost   btn-sm js-waive"      data-id="${f.id}">Waive</button>
+               <button class="btn btn-danger  btn-sm js-delete"     data-id="${f.id}">Delete</button>`
+            : `<button class="btn btn-danger  btn-sm js-delete"     data-id="${f.id}">Delete</button>`;
+
+          return `
+            <tr>
+              <td style="white-space:nowrap;color:var(--ivory)">${escHtml(memberName)}</td>
+              <td>
+                <div style="color:var(--ivory)">${escHtml(eventTitle)}</div>
+                <div style="font-size:var(--text-xs);color:var(--ivory-muted)">${fmtDate(eventDate)}</div>
+              </td>
+              <td style="white-space:nowrap;font-weight:500">${fmtPeso(f.amount)}</td>
+              <td>${statusBadge(f.status)}</td>
+              <td style="max-width:180px">${notes}</td>
+              <td style="white-space:nowrap;color:var(--ivory-muted)">${added}</td>
+              <td><div class="actions">${actions}</div></td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Load all fines ─────────────────────────────────────────
+      async function loadFines() {
+        document.getElementById('fines-loading').style.display  = 'flex';
+        document.getElementById('fines-empty').style.display    = 'none';
+        document.getElementById('fines-table-wrap').style.display = 'none';
+
+        const { data, error } = await supabase
+          .from('fines')
+          .select(`
+            id, member_id, amount, status, notes, paid_at, created_at,
+            member:profiles!member_id(full_name),
+            event:events!event_id(title, event_date)
+          `)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('loadFines:', error);
+          document.getElementById('fines-loading').style.display = 'none';
+          document.getElementById('fines-empty-text').textContent = 'Error loading fines. Please refresh.';
+          document.getElementById('fines-empty').style.display = 'block';
+          return;
+        }
+
+        allFines = data || [];
+        updateStats(allFines);
+        renderTable(activeFilter);
+      }
+
+      // ── Table action delegation ────────────────────────────────
+      document.getElementById('fines-tbody').addEventListener('click', async e => {
+        const markBtn  = e.target.closest('.js-mark-paid');
+        const waiveBtn = e.target.closest('.js-waive');
+        const delBtn   = e.target.closest('.js-delete');
+
+        if (markBtn)  { await updateFineStatus(markBtn.dataset.id,  'paid');   return; }
+        if (waiveBtn) { await updateFineStatus(waiveBtn.dataset.id, 'waived'); return; }
+        if (delBtn)   { await deleteFine(delBtn.dataset.id); return; }
+      });
+
+      async function updateFineStatus(id, newStatus) {
+        const { error } = await supabase
+          .from('fines')
+          .update({ status: newStatus, paid_at: new Date().toISOString() })
+          .eq('id', id);
+        if (error) { alert(`Failed to update fine: ${error.message}`); return; }
+        await loadFines();
+      }
+
+      async function deleteFine(id) {
+        if (!confirm('Delete this fine record? This cannot be undone.')) return;
+        const { error } = await supabase.from('fines').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadFines();
+      }
+
+      // ── Filter chips ───────────────────────────────────────────
+      document.getElementById('fine-filters').addEventListener('click', e => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        document.querySelectorAll('#fine-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        renderTable(activeFilter);
+      });
+
+      // ── Add Fine modal ─────────────────────────────────────────
+      async function populateModalDropdowns() {
+        const memberSel = document.getElementById('fine-member');
+        const eventSel  = document.getElementById('fine-event');
+
+        // Members
+        const { data: members } = await supabase
+          .from('profiles')
+          .select('id, full_name')
+          .in('status', ['active', 'associate'])
+          .order('full_name');
+
+        memberSel.innerHTML = '<option value="">Select member…</option>' +
+          (members || []).map(m => `<option value="${m.id}">${escHtml(m.full_name)}</option>`).join('');
+
+        // Service events in past 90 days
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - 90);
+        const cutoffStr = cutoff.toISOString().split('T')[0];
+        const today     = new Date().toISOString().split('T')[0];
+
+        const { data: events } = await supabase
+          .from('events')
+          .select('id, title, event_date')
+          .eq('event_category', 'service')
+          .lte('event_date', today)
+          .gte('event_date', cutoffStr)
+          .order('event_date', { ascending: false });
+
+        if (!events?.length) {
+          eventSel.innerHTML = '<option value="">No service events in past 90 days</option>';
+        } else {
+          eventSel.innerHTML = '<option value="">Select event…</option>' +
+            events.map(ev =>
+              `<option value="${ev.id}">${escHtml(ev.title)} — ${fmtDate(ev.event_date)}</option>`
+            ).join('');
+        }
+      }
+
+      let dropdownsReady = false;
+
+      function openFineModal() {
+        document.getElementById('fine-member').value = '';
+        document.getElementById('fine-event').value  = '';
+        document.getElementById('fine-amount').value = '20';
+        document.getElementById('fine-notes').value  = '';
+        document.getElementById('fine-error').style.display = 'none';
+        document.getElementById('fine-modal').classList.add('open');
+        document.getElementById('fine-member').focus();
+
+        if (!dropdownsReady) {
+          dropdownsReady = true;
+          populateModalDropdowns();
+        }
+      }
+
+      function closeFineModal() {
+        document.getElementById('fine-modal').classList.remove('open');
+      }
+
+      document.getElementById('add-fine-btn').addEventListener('click', openFineModal);
+      document.getElementById('fine-modal-close').addEventListener('click', closeFineModal);
+      document.getElementById('fine-cancel').addEventListener('click', closeFineModal);
+      document.getElementById('fine-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeFineModal();
+      });
+
+      // ── Submit fine ────────────────────────────────────────────
+      document.getElementById('fine-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('fine-error');
+        const errTxt = document.getElementById('fine-error-text');
+        const btn    = document.getElementById('fine-submit');
+        errEl.style.display = 'none';
+
+        const memberId = document.getElementById('fine-member').value;
+        const eventId  = document.getElementById('fine-event').value;
+        const amount   = Number(document.getElementById('fine-amount').value);
+        const notes    = document.getElementById('fine-notes').value.trim() || null;
+
+        if (!memberId || !eventId || !amount || amount < 1) {
+          errTxt.textContent = 'Member, event, and a valid amount are required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Saving…';
+
+        const { error } = await supabase.from('fines').insert({
+          member_id:   memberId,
+          event_id:    eventId,
+          amount,
+          notes,
+          recorded_by: profile.id,
+          status:      'unpaid',
+        });
+
+        btn.disabled    = false;
+        btn.textContent = 'Add Fine';
+
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        closeFineModal();
+        await loadFines();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadFines();
       hidePageLoader();
     </script>
   </body>
