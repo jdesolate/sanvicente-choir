@@ -2162,17 +2162,11 @@
               just a conversation.
             </p>
             <form
-              name="sponsor-contact"
+              action="https://formspree.io/f/mjgqgbal"
               method="POST"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
               id="sponsor-form"
               class="sponsor-form"
             >
-              <input type="hidden" name="form-name" value="sponsor-contact" />
-              <p style="display: none">
-                <label>Don't fill this out: <input name="bot-field" /></label>
-              </p>
               <div class="form-row">
                 <div class="form-group">
                   <label for="sponsor-name">Name</label>
@@ -2567,10 +2561,10 @@
             var btn = document.getElementById("sponsor-submit");
             btn.textContent = "Sending…";
             btn.disabled = true;
-            fetch("/", {
+            fetch("https://formspree.io/f/mjgqgbal", {
               method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: new URLSearchParams(new FormData(sponsorForm)).toString(),
+              headers: { "Accept": "application/json" },
+              body: new FormData(sponsorForm),
             })
               .then(function () {
                 document.getElementById("sponsor-success").style.display =

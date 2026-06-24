@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/documents", "destination": "/pages/documents.html" },
+    { "source": "/login", "destination": "/pages/login.html" },
+    { "source": "/register", "destination": "/pages/register.html" },
+    { "source": "/dashboard", "destination": "/pages/members/dashboard.html" },
+    { "source": "/attendance", "destination": "/pages/members/attendance.html" },
+    { "source": "/songs", "destination": "/pages/members/songs.html" },
+    { "source": "/profile", "destination": "/pages/members/profile.html" }
+  ]
+}
