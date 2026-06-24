@@ -114,10 +114,34 @@
         <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
         <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
         <hr class="sidebar-divider">
-        <div class="sidebar-section-label">Secretary</div>
-        <a href="tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
-        <a href="absences.html" class="sidebar-link active"><span class="sidebar-icon">✉</span> Absence Requests</a>
-        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="../secretary/absences.html" class="sidebar-link active"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Song Management</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../officer/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Event Management</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Fines Ledger</a>
+          <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
         <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
       </nav>
 
@@ -227,6 +251,20 @@
 
       initPortalHeader(profile, handleSignOut);
       document.getElementById('page-content').style.display = 'block';
+
+      // Show role-gated nav sections
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (['officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
+      }
+      if (['admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('admin-section').style.display = 'block';
+      }
 
       // ── Sign out ───────────────────────────────────────────────
       async function handleSignOut() {
