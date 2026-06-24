@@ -560,14 +560,44 @@ ALTER TABLE awards ENABLE ROW LEVEL SECURITY;
 
 ---
 
+## Session 17.5: Joined Choir Date + Dashboard UX Audit + Mobile Fixes
+
+**Status:** [x] Complete
+
+**Goal:** Prevent new members from being penalised with absences for events before they joined, audit and reorder the member dashboard for mobile-first priority, and fix mobile UI regressions.
+
+**What was done:**
+
+*Joined choir date (`supabase/migration_joined_choir_date.sql`, `pages/admin/members.html`, `pages/members/profile.html`, `pages/admin/attendance-summary.html`):*
+- Added `joined_choir_date date` column to `profiles`
+- Migration backfill priority: (1) existing "Date of Joining Choir" custom field value, (2) `approved_at::date`, (3) `created_at::date`
+- Attendance summary excludes events dated before `joined_choir_date` per member; also checks the custom field at runtime as a fallback for members not yet backfilled
+- Admin members page: shows "Joined Choir" in the view panel; edit modal has a date picker to set it
+- Member profile page: "Joined" display field shows `joined_choir_date` (fallback: registration date); members can edit it in the edit form
+
+*Dashboard reorder (`pages/members/dashboard.html`):*
+- New section order: stat cards → quick-action cards → liturgical calendar
+- Replaced Voice Part / Status / Role stat cards with **Attendance Rate** (colour-coded green/gold/red), **Unpaid Fines** (red when balance > 0), and **Voice Part** (smaller font via `.stat-num-text`)
+- Attendance rate respects `joined_choir_date` — only counts events after join date
+- Liturgical calendar rank legend (S/F/M) now injected by JS only when upcoming feasts exist; hidden when "no feasts in 14 days"
+- Added missing `import { supabase }` to dashboard script
+
+*Mobile fixes (`css/design-system.css`, `pages/members/dashboard.html`):*
+- Dashboard avatar: added `min-width:64px; min-height:64px` to prevent flexbox squashing the circle on narrow screens
+- Notification dropdown: switched from `position:absolute` with `right:-8px` to `position:fixed; left:16px; right:16px` on mobile — dropdown now always stays within the viewport regardless of bell button position
+
+---
+
 ## Session 19: Dashboard Polish
 
 **Status:** [ ] Not Started
 
 **Goal:** Fix minor UX issues on the member dashboard identified during a UX audit — redundant sub-text, dead-end stat cards, emoji inconsistency, inline style, missing date context, and weak quick-action hover affordance.
 
+**Note:** Session 17.5 already replaced the stat cards with Attendance Rate + Unpaid Fines + Voice Part, and reordered the dashboard. The remaining tasks from this session are: date sub-text, stat cards as links, quick-action CSS class, and calendar icon swap.
+
 **Context to provide Claude:**
-- "Sessions 1–14 are done. Now build Session 19: dashboard polish. Read SESSIONS.md Session 19 only."
+- "Sessions 1–17.5 are done. Now build Session 19: dashboard polish. Read SESSIONS.md Session 19 only."
 
 **Tasks:**
 
@@ -793,6 +823,7 @@ document.addEventListener('keydown', e => {
 | 15 | Treasurer Features | 11 | ✅ Complete |
 | 16 | In-App Notifications | 15 | ✅ Complete |
 | 17 | Admin CMS — Gallery & Officer Profiles | 11 | ⏳ Planned |
+| 17.5 | Joined Choir Date + Dashboard UX Audit + Mobile Fixes | 16 | ✅ Complete |
 | 18 | Semester Awards + Certificate Generation | 16 | ⏳ Planned |
 | 19 | Dashboard Polish | 14 | ⏳ Planned |
 | 20 | Attendance Page UX | 13 | ⏳ Planned |
