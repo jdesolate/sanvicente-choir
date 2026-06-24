@@ -558,6 +558,219 @@ ALTER TABLE awards ENABLE ROW LEVEL SECURITY;
 
 ---
 
+---
+
+## Session 19: Dashboard Polish
+
+**Status:** [ ] Not Started
+
+**Goal:** Fix minor UX issues on the member dashboard identified during a UX audit — redundant sub-text, dead-end stat cards, emoji inconsistency, inline style, missing date context, and weak quick-action hover affordance.
+
+**Context to provide Claude:**
+- "Sessions 1–14 are done. Now build Session 19: dashboard polish. Read SESSIONS.md Session 19 only."
+
+**Tasks:**
+
+*`pages/members/dashboard.html`:*
+1. **Welcome sub-text** — replace the static `"San Vicente Choir Member Portal"` sub-line with today's date (e.g., `"Wednesday, 25 June 2026"`) formatted using `toLocaleDateString('en-PH', { weekday:'long', year:'numeric', month:'long', day:'numeric' })`.
+2. **Stat cards as links** — wrap each `.stat-card` in an `<a href="profile.html">` so clicking Voice Part, Status, or Role takes the member to their profile. Add a small `"View profile →"` text link below the stat grid (font-size xs, gold, right-aligned).
+3. **Calendar of Activities icon** — replace the `🗓` emoji with `◷` to match the Unicode-only icon set used across the other quick-action cards.
+4. **Quick-action card hover** — add `transform: translateY(-2px)` and `box-shadow: 0 4px 16px rgba(0,0,0,0.35)` to `.card:hover` in the design system, or scope it to the quick-action cards via an added class if the global card hover change would affect other pages.
+
+*`css/design-system.css`:*
+5. **Quick-action grid class** — add `.quick-action-grid` utility class:
+   ```css
+   .quick-action-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+     gap: 12px;
+     margin-top: var(--space-6);
+   }
+   ```
+   Replace the inline `style=""` block on the quick-action wrapper `<div>` in `dashboard.html` with `class="quick-action-grid"`.
+
+**Acceptance criteria:**
+- [ ] Welcome sub-text shows today's date in en-PH locale
+- [ ] Clicking any stat card navigates to `profile.html`
+- [ ] "View profile →" link appears below stat grid
+- [ ] Calendar of Activities card uses `◷` icon, not 🗓
+- [ ] Quick-action cards have a visible lift on hover (no inline styles remain)
+
+---
+
+## Session 20: Attendance Page UX
+
+**Status:** [ ] Not Started
+
+**Goal:** Fix a colour-variable bug on the history filter, improve the practice attendance section, and make the absence request button more discoverable.
+
+**Context to provide Claude:**
+- "Sessions 1–14 are done. Now build Session 20: attendance UX. Read SESSIONS.md Session 20 only."
+
+**Tasks:**
+
+*`pages/members/attendance.html`:*
+
+1. **Bug fix — filter button active colour** — the page-scoped style `.hist-cat-btn.active-filter` sets `color: var(--bg-base)`, which does not exist in the design system. Replace with `color: #0A0A0A` (dark text on the gold background). While here, change the active background to use `var(--gold)` for consistency with the design system's existing `.filter-chip.active` pattern.
+
+2. **Practice attendance — richer display** — replace the single prose line (`X of Y practices attended`) with a small stat card identical in structure to the Service Rate card:
+   - Stat number: `X%` rate (or `—` if no records), calculated as `practicePresent / practiceTotal`
+   - Stat label: "Practice Rate"
+   - Below it: muted sub-line `"X of Y practices attended"` as supporting text
+   - No On Track / At Risk badge (practice is informational only per PRD)
+
+3. **Absence request button — secondary placement** — add a second `"+ Request Advance Absence"` button directly above the History table heading (inside `#att-history`), right-aligned in the same flex row as the "Attendance History" heading. Both buttons must call the same `openModal('advance')` handler.
+
+4. **Action column — hide when empty** — in `renderHistory()`, check whether any row in the current filtered set has an actionable absent record. If none do, add a `no-actions` class to the table and hide the Action `<th>` and each Action `<td>` via CSS:
+   ```css
+   .data-table.no-actions .actions-col { display: none; }
+   ```
+   This avoids the empty column when all records are Present or Excused.
+
+**Acceptance criteria:**
+- [ ] Active filter button shows dark text on gold background (not the browser default)
+- [ ] Practice section shows a stat card with percentage and supporting count text
+- [ ] Second "Request Advance Absence" button appears above the history table
+- [ ] Both buttons open the same modal
+- [ ] Action column is hidden when no row in the current view has an actionable absent record
+
+---
+
+## Session 21: Profile Page Improvements
+
+**Status:** [ ] Not Started
+
+**Goal:** Fix an accessibility bug on the Age field, add a password change flow, and style the raw file input for profile photo.
+
+**Context to provide Claude:**
+- "Sessions 1–14 are done. Now build Session 21: profile improvements. Read SESSIONS.md Session 21 only."
+
+**Tasks:**
+
+*`pages/members/profile.html`:*
+
+1. **Age field a11y fix** — in edit mode the Age row has a `<label>Age</label>` with no associated control (age is computed and displayed as a `<p>`, not an `<input>`). Replace the `<label>` with a `<p class="profile-label">Age</p>` styled identically, so no unassociated label exists. The computed age display (`<p id="e-age-display">`) remains unchanged.
+
+2. **Password change section** — add a "Change Password" section below the edit form (always visible in view mode, not inside the edit form):
+   - A collapsible panel toggled by a `"Change Password"` button (`.btn-ghost` style)
+   - Inside: single email field pre-filled with the member's email, read-only, and a `"Send Reset Link"` button
+   - On click: call `supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/pages/reset-password.html' })`
+   - Show success alert: `"A password reset link has been sent to your email."`
+   - Show error alert if the call fails
+   - This keeps the flow simple: no current-password entry, no inline new-password form — just the Supabase email reset flow
+
+3. **File input styling** — replace the raw `<input type="file" id="e-photo">` with a styled upload trigger:
+   - Hide the native input with `display:none`
+   - Add a `<label for="e-photo" class="btn btn-ghost btn-sm" style="cursor:pointer">Choose Photo</label>` as the visible trigger
+   - After file selection, show the filename in a small muted `<span>` next to the button
+   - The existing `change` event listener on `#e-photo` (which shows the preview) remains unchanged
+
+**Acceptance criteria:**
+- [ ] No `<label>` elements in edit mode are missing a `for` / associated control
+- [ ] "Change Password" button appears on the profile page in view mode
+- [ ] Clicking it reveals the reset panel; submitting sends the Supabase reset email
+- [ ] Profile photo file picker shows a styled button, not the raw browser input
+- [ ] Selected filename is displayed next to the choose button
+
+---
+
+## Session 22: Weekend Songs on Dashboard
+
+**Status:** [ ] Not Started
+
+**Goal:** Surface the "Songs for this Weekend" data directly on the dashboard as a mini-widget, so members see upcoming song assignments without navigating away.
+
+**Context to provide Claude:**
+- "Session 12 (song assignments) is done. Now build Session 22: weekend songs on dashboard. Read SESSIONS.md Session 22 only."
+
+**Depends on:** Session 12 (song_assignments table)
+
+**Tasks:**
+
+*`pages/members/dashboard.html`:*
+
+1. **Weekend songs widget** — add a new card between the stat grid and the quick-action grid:
+   ```html
+   <div class="card" id="weekend-songs-card" style="margin-top:var(--space-6)">
+     <div class="card-header">
+       <h3 class="card-title">Songs for this Weekend</h3>
+       <a href="songs.html" class="btn btn-ghost btn-sm">See all →</a>
+     </div>
+     <div id="weekend-songs-body">
+       <div class="loading-text"><div class="spinner"></div> Loading…</div>
+     </div>
+   </div>
+   ```
+
+2. **Data fetch** — reuse the same query pattern from `songs.html` `loadWeekendSongs()`:
+   - Query `events` where `event_date >= today AND event_date <= today + 7` and `event_category = 'service'`
+   - Query `song_assignments` for those event IDs, join `songs(title)`
+   - Group by event; render a compact list:
+     - Event title + formatted date as a sub-heading
+     - Bulleted song titles (plain text, no expand/collapse needed)
+   - If no assignments: render `<p class="litcal-empty">No songs assigned for this weekend yet.</p>`
+   - If Supabase query fails: hide the card silently (don't block dashboard load)
+
+3. **Performance** — fetch in parallel with the liturgical calendar data; do not block `hidePageLoader()`.
+
+**Acceptance criteria:**
+- [ ] Widget appears on dashboard between stat grid and quick-action cards
+- [ ] Shows correct songs for events in the next 7 days (service events only)
+- [ ] "See all →" link goes to `songs.html`
+- [ ] Empty state shows when no assignments exist
+- [ ] Card does not appear / shows empty state gracefully if the fetch fails
+
+---
+
+## Session 23: Cross-Portal Infrastructure
+
+**Status:** [ ] Not Started
+
+**Goal:** Extract the duplicated sidebar HTML and mobile-toggle JS into a shared module, and add Escape-key support to close the mobile drawer.
+
+**Context to provide Claude:**
+- "Sessions 1–14 are done. Now build Session 23: cross-portal infrastructure. Read SESSIONS.md Session 23 only."
+
+**Why:** Every portal page currently contains a full copy of the sidebar HTML (~40 lines) and mobile open/close JS (~10 lines). Adding a new nav link requires editing 5–8 files. This session centralises both.
+
+**Tasks:**
+
+*`js/sidebar.js` (new module):*
+- Export `renderSidebar(activeLink)` — returns the complete sidebar `<nav>` HTML string as a template literal
+- `activeLink` is one of: `'dashboard'`, `'attendance'`, `'songs'`, `'profile'`, `'documents'`, `'tracker'`, `'absences'`, `'officer-songs'`, `'officer-events'`, `'fines'`, `'ledger'`, `'admin-members'`, `'admin-summary'`, `'admin-events'`, `'admin-songs'`, `'admin-fields'`
+- The function marks the matching `sidebar-link` as `active` by comparing against `activeLink`
+- Role-gated sections (`#secretary-section`, `#officer-section`, `#treasurer-section`, `#admin-section`) remain hidden by default; JS still reveals them after profile loads
+- Export `initMobileSidebar()` — sets up the hamburger button, backdrop click, and Escape key listeners; call once after the sidebar is inserted into the DOM
+
+*All portal pages (update):*
+- Remove the inline `<nav class="portal-sidebar">` block and mobile sidebar JS
+- Replace with:
+  ```js
+  import { renderSidebar, initMobileSidebar } from '../../js/sidebar.js';
+  document.getElementById('sidebar-placeholder').outerHTML = renderSidebar('dashboard');
+  initMobileSidebar();
+  ```
+- Add `<div id="sidebar-placeholder"></div>` in the HTML where the sidebar was
+
+*Escape key support (in `initMobileSidebar`):*
+```js
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+});
+```
+
+**Pages to update:** `pages/members/dashboard.html`, `attendance.html`, `songs.html`, `profile.html`, `pages/secretary/tracker.html`, `pages/secretary/absences.html`, `pages/officer/songs.html`, `pages/officer/events.html` (if exists), `pages/treasurer/fines.html`, `pages/treasurer/ledger.html`, `pages/admin/members.html`, `pages/admin/attendance-summary.html`, `pages/admin/events.html`, `pages/admin/songs.html`, `pages/admin/fields.html`
+
+**Acceptance criteria:**
+- [ ] Sidebar renders identically across all pages (compare side by side)
+- [ ] Active link is highlighted correctly on each page
+- [ ] Role-gated sections still appear correctly after profile loads
+- [ ] Pressing Escape on mobile closes the sidebar drawer
+- [ ] Backdrop click still closes the sidebar
+- [ ] Adding a new sidebar link requires editing only `js/sidebar.js`
+
+---
+
 ## Session Order Summary
 
 | # | Session | Depends On | Status |
@@ -573,11 +786,16 @@ ALTER TABLE awards ENABLE ROW LEVEL SECURITY;
 | 9 | Dark Mode Toggle + Liturgical Season Badge | 8 | ✅ Complete |
 | 10 | Registration ToS Modal + Profile Picture | 8 | ✅ Complete |
 | 10.5 | Registration Hardening + Member Lifecycle | 10 | ✅ Complete |
-| 11 | Role System Overhaul + UI Bug Fixes | 10.5 | ⏳ Next |
-| 12 | Song Enhancements | 11 | ⏳ Planned |
+| 11 | Role System Overhaul + UI Bug Fixes | 10.5 | ✅ Complete |
+| 12 | Song Enhancements | 11 | ✅ Complete |
 | 13 | Attendance Split (Practice vs. Service) | 11 | ✅ Complete |
-| 14 | Liturgical Calendar | 11 | ⏳ Planned |
+| 14 | Liturgical Calendar | 11 | ✅ Complete |
 | 15 | Treasurer Features | 11 | ⏳ Planned |
 | 16 | In-App Notifications | 15 | ⏳ Planned |
 | 17 | Admin CMS — Gallery & Officer Profiles | 11 | ⏳ Planned |
 | 18 | Semester Awards + Certificate Generation | 16 | ⏳ Planned |
+| 19 | Dashboard Polish | 14 | ⏳ Planned |
+| 20 | Attendance Page UX | 13 | ⏳ Planned |
+| 21 | Profile Page Improvements | 10 | ⏳ Planned |
+| 22 | Weekend Songs on Dashboard | 12 | ⏳ Planned |
+| 23 | Cross-Portal Infrastructure | Any complete | ⏳ Planned |
