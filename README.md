@@ -29,8 +29,8 @@ Official website and member portal for the San Vicente Choir — a liturgical ch
 
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+) — no framework
 - **Backend / Auth / Database:** [Supabase](https://supabase.com) free tier
-- **Form handling:** Netlify Forms (sponsor contact)
-- **Hosting:** [Netlify](https://netlify.com) free tier
+- **Form handling:** [Formspree](https://formspree.io) (sponsor contact)
+- **Hosting:** [Vercel](https://vercel.com) free tier
 - **Markdown rendering:** marked.js (CDN)
 - **Fonts:** Google Fonts — Cinzel, Cormorant Garamond, Inter
 
@@ -101,13 +101,18 @@ Then open `http://localhost:8080` in your browser.
 3. Copy your project URL and anon key into `js/supabase-client.js`
 4. Under Authentication → Providers, ensure Email is enabled
 
-## Netlify Deployment
+## Vercel Deployment
 
 1. Push this repository to GitHub
-2. Connect the repo to [Netlify](https://netlify.com) (New site → Import from Git)
-3. Build command: *(leave empty)*
-4. Publish directory: `.`
-5. Go to Forms in the Netlify dashboard and set up email notifications for the sponsor contact form
+2. Connect the repo to [Vercel](https://vercel.com) (New Project → Import from Git)
+3. Framework preset: **Other**
+4. Build command: *(leave empty)*
+5. Output directory: `.`
+6. Clean URL rewrites are handled by `vercel.json`
+
+After deploying, update Supabase → Authentication → URL Configuration with your Vercel domain (Site URL and Redirect URLs allowlist).
+
+The sponsor contact form submits to [Formspree](https://formspree.io) — configure email notification recipients in the Formspree dashboard.
 
 ## Documents
 
