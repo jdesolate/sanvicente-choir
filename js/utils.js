@@ -59,7 +59,15 @@ function baptismOfLord(y) {
   return new Date(y, 0, 6 + (dow === 0 ? 7 : 7 - dow));
 }
 
-export function getLiturgicalSeason(date = new Date()) {
+const _SEASON_NAMES = {
+  christmas:    'Christmas Season',
+  ordinary_time:'Ordinary Time',
+  lent:         'Lent',
+  easter:       'Easter Season',
+  advent:       'Advent',
+};
+
+function _computeSeason(date) {
   const MS = 86400000;
   const y = date.getFullYear();
   const t = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
@@ -73,46 +81,65 @@ export function getLiturgicalSeason(date = new Date()) {
   const christmas = new Date(y, 11, 25);
   const baptism   = baptismOfLord(y);
 
-  // Jan 1 through Baptism of Lord: Christmas season (from prev Dec 25)
   if (dt <= t(baptism)) {
-    return { season: 'Christmas', seasonKey: 'christmas', week: null, label: 'Christmas Season' };
+    return { season: 'Christmas Season', seasonKey: 'christmas', week: null, label: 'Christmas Season' };
   }
-
-  // Baptism+1 through Ash Wednesday–1: Ordinary Time I
   if (dt < t(ashWed)) {
     const week = Math.floor((dt - t(baptism)) / (7 * MS)) + 1;
     return { season: 'Ordinary Time', seasonKey: 'ordinary_time', week, label: `Ordinary Time · Week ${week}` };
   }
-
-  // Ash Wednesday through Holy Saturday: Lent
   if (dt < t(easter)) {
     const week = Math.floor((dt - t(ashWed)) / (7 * MS)) + 1;
     return { season: 'Lent', seasonKey: 'lent', week, label: `Lent · Week ${week}` };
   }
-
-  // Easter Sunday through Pentecost Sunday: Easter season
   if (dt <= t(pentecost)) {
     const week = Math.floor((dt - t(easter)) / (7 * MS)) + 1;
-    return { season: 'Easter', seasonKey: 'easter', week, label: `Easter · Week ${week}` };
+    return { season: 'Easter Season', seasonKey: 'easter', week, label: `Easter Season · Week ${week}` };
   }
-
-  // Pentecost+1 through Saturday before Advent: Ordinary Time II
   if (dt < t(advent)) {
-    // Continue week count from where OT I left off before Lent
     const weeksInOTI = Math.floor((t(ashWed) - t(baptism)) / (7 * MS));
     const weeksSinceOTII = Math.floor((dt - t(pentecost)) / (7 * MS));
     const week = weeksInOTI + weeksSinceOTII + 1;
     return { season: 'Ordinary Time', seasonKey: 'ordinary_time', week, label: `Ordinary Time · Week ${week}` };
   }
-
-  // First Sunday of Advent through Dec 24: Advent
   if (dt < t(christmas)) {
     const week = Math.floor((dt - t(advent)) / (7 * MS)) + 1;
     return { season: 'Advent', seasonKey: 'advent', week, label: `Advent · Week ${week}` };
   }
+  return { season: 'Christmas Season', seasonKey: 'christmas', week: null, label: 'Christmas Season' };
+}
 
-  // Dec 25–Dec 31: Christmas
-  return { season: 'Christmas', seasonKey: 'christmas', week: null, label: 'Christmas Season' };
+// ── JSON-backed liturgical data ───────────────────────────────────────────────
+
+const _litCache = {};
+
+async function _fetchLit(year) {
+  if (_litCache[year] !== undefined) return _litCache[year];
+  try {
+    const r = await fetch(`/assets/data/liturgical-${year}.json`);
+    _litCache[year] = r.ok ? await r.json() : null;
+  } catch (_) {
+    _litCache[year] = null;
+  }
+  return _litCache[year];
+}
+
+export async function loadLiturgicalData(year) {
+  return _fetchLit(year);
+}
+
+export async function getLiturgicalSeason(date = new Date()) {
+  const data = await _fetchLit(date.getFullYear());
+  if (data) {
+    const ds = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    const e = data.find(x => x.date === ds);
+    if (e) {
+      const season = _SEASON_NAMES[e.season] || e.season;
+      const label = e.week ? `${season} · Week ${e.week}` : season;
+      return { season, seasonKey: e.season, week: e.week, label };
+    }
+  }
+  return _computeSeason(date);
 }
 
 

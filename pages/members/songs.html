@@ -347,7 +347,7 @@
       // ── Pre-set season filter to current liturgical season ─────
       // (must come after syncFilterToggle is defined above)
       const VALID_SONG_SEASONS = new Set(['advent','christmas','lent','easter','ordinary_time']);
-      const { seasonKey: currentSeasonKey, season: currentSeasonName } = getLiturgicalSeason(new Date());
+      const { seasonKey: currentSeasonKey, season: currentSeasonName } = await getLiturgicalSeason(new Date());
 
       function applySeasonPreset(seasonKey, seasonName) {
         active.season.add(seasonKey);

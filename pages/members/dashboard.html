@@ -133,7 +133,32 @@
           <div class="page-heading">
             <h2 id="welcome-heading">Welcome</h2>
             <p id="welcome-sub">San Vicente Choir Member Portal</p>
-            <div id="season-badge-wrap" style="margin-top:var(--space-3)"></div>
+          </div>
+
+          <!-- Liturgical Calendar card -->
+          <div class="card" id="litcal-card" style="margin-bottom:var(--space-6);display:none">
+            <div class="card-header">
+              <h3 class="card-title">Liturgical Calendar</h3>
+              <span id="litcal-season-badge" class="season-badge"></span>
+            </div>
+
+            <!-- Timeline bar -->
+            <div class="litcal-bar-wrap" id="litcal-bar-wrap">
+              <div class="litcal-bar" id="litcal-bar" role="img" aria-label="Liturgical year timeline"></div>
+            </div>
+
+            <!-- Season legend -->
+            <div class="litcal-legend" id="litcal-legend"></div>
+
+            <!-- Today's feast (if rank S or F) -->
+            <div id="litcal-today-feast"></div>
+
+            <!-- Upcoming feasts next 14 days -->
+            <div id="litcal-upcoming"></div>
+
+            <!-- Full-year feast list (toggled) -->
+            <div id="litcal-all-feasts" style="display:none"></div>
+            <button id="litcal-toggle-btn" class="litcal-toggle-btn" style="display:none">View all feasts this year →</button>
           </div>
 
           <!-- Pending approval banner -->
@@ -199,6 +224,15 @@
                 View upcoming service song assignments
               </div>
             </a>
+            <a href="../../documents.html?doc=calendar" class="card" style="text-decoration:none;display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:28px;opacity:0.7">🗓</div>
+              <div style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory)">
+                Calendar of Activities
+              </div>
+              <div style="font-size:var(--text-sm);color:var(--ivory-muted)">
+                Choir year 2026–2027 plan — masses, rehearsals, major events
+              </div>
+            </a>
           </div>
 
         </div>
@@ -211,7 +245,7 @@
 
     <script type="module">
       import { requireAuth, getProfile, signOut } from '../../js/auth.js';
-      import { hidePageLoader, initThemeToggle, getLiturgicalSeason, escHtml, formatRole } from '../../js/utils.js';
+      import { hidePageLoader, initThemeToggle, getLiturgicalSeason, loadLiturgicalData, escHtml, formatRole } from '../../js/utils.js';
       import { initPortalHeader } from '../../js/header.js';
       initThemeToggle();
 
@@ -227,13 +261,188 @@
 
       // ── Populate UI ─────────────────────────────────────────
       document.getElementById('dashboard-content').style.display = 'block';
-
       document.getElementById('welcome-heading').textContent = `Welcome, ${profile.full_name}`;
 
-      // ── Liturgical season badge ──────────────────────────────
-      const { label: seasonLabel } = getLiturgicalSeason(new Date());
-      document.getElementById('season-badge-wrap').innerHTML =
-        `<span class="season-badge">⛪ ${escHtml(seasonLabel)}</span>`;
+      // ── Liturgical calendar ──────────────────────────────────
+      const today = new Date();
+      const YEAR  = today.getFullYear();
+
+      // Season + week (JSON-backed, falls back to algorithm)
+      const { label: seasonLabel, seasonKey } = await getLiturgicalSeason(today);
+      document.getElementById('litcal-season-badge').textContent = '⛪ ' + seasonLabel;
+
+      // Load full year data for timeline + feasts
+      const litData = await loadLiturgicalData(YEAR);
+
+      // ── Timeline bar ─────────────────────────────────────────
+      (function renderTimeline() {
+        // Compute Easter for the year using the same Meeus/Jones/Butcher algorithm
+        function computeEaster(y) {
+          const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,
+                f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+                h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,
+                l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+                mo=Math.floor((h+l-7*m+114)/31),dy=(h+l-7*m+114)%31+1;
+          return new Date(y,mo-1,dy);
+        }
+        const MS = 86400000;
+        const add = (d,n) => new Date(d.getTime() + n*MS);
+        const dayOf = d => new Date(d.getFullYear(),d.getMonth(),d.getDate());
+
+        const easter    = computeEaster(YEAR);
+        const ashWed    = add(easter,-46);
+        const pentecost = add(easter, 49);
+        const dec3      = new Date(YEAR,11,3);
+        const advent    = new Date(YEAR,11,3-dec3.getDay());
+        const jan6      = new Date(YEAR,0,6);
+        const baptism   = add(jan6, jan6.getDay()===0 ? 7 : 7-jan6.getDay());
+        const yearStart = new Date(YEAR,0,1);
+        const yearEnd   = new Date(YEAR,11,31);
+        const totalDays = (dayOf(yearEnd)-dayOf(yearStart))/MS + 1;
+
+        const segments = [
+          { key:'christmas',     start:yearStart,          end:dayOf(baptism) },
+          { key:'ordinary_time', start:add(dayOf(baptism),1), end:add(dayOf(ashWed),-1) },
+          { key:'lent',          start:dayOf(ashWed),      end:add(dayOf(easter),-1) },
+          { key:'easter',        start:dayOf(easter),      end:dayOf(pentecost) },
+          { key:'ordinary_time', start:add(dayOf(pentecost),1), end:add(dayOf(advent),-1) },
+          { key:'advent',        start:dayOf(advent),      end:new Date(YEAR,11,24) },
+          { key:'christmas',     start:new Date(YEAR,11,25), end:yearEnd },
+        ];
+
+        const bar  = document.getElementById('litcal-bar');
+        const wrap = document.getElementById('litcal-bar-wrap');
+        segments.forEach(seg => {
+          const days = (seg.end - seg.start)/MS + 1;
+          const div  = document.createElement('div');
+          div.className = `litcal-segment season-${seg.key}`;
+          div.style.flexGrow = days;
+          bar.appendChild(div);
+        });
+
+        // Today marker — placed in wrapper so it can extend above/below the bar
+        const todayDay = (dayOf(today) - dayOf(yearStart))/MS;
+        const pct = (todayDay / (totalDays-1)) * 100;
+        const marker = document.createElement('div');
+        marker.className = 'litcal-today-marker';
+        marker.style.left = pct.toFixed(2) + '%';
+        wrap.appendChild(marker);
+
+        // Legend
+        const legendEl = document.getElementById('litcal-legend');
+        const shown = new Set();
+        const legendItems = [
+          { key:'christmas',     color:'#D4C89A', name:'Christmas' },
+          { key:'ordinary_time', color:'#3A6B35', name:'Ordinary Time' },
+          { key:'lent',          color:'#6B3A6B', name:'Lent' },
+          { key:'easter',        color:'#C9A86A', name:'Easter' },
+          { key:'advent',        color:'#5B2D8E', name:'Advent' },
+        ];
+        legendItems.forEach(({ key, color, name }) => {
+          if (shown.has(key)) return;
+          const item = document.createElement('span');
+          item.className = 'litcal-legend-item';
+          item.innerHTML = `<span class="litcal-legend-dot" style="background:${color}"></span>${escHtml(name)}`;
+          legendEl.appendChild(item);
+          shown.add(key);
+        });
+      })();
+
+      // ── Today's feast + upcoming feasts ──────────────────────
+      if (litData) {
+        const todayStr = `${YEAR}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        const todayEntry = litData.find(e => e.date === todayStr);
+
+        // Today's feast (if Solemnity or Feast)
+        if (todayEntry && (todayEntry.rank === 'S' || todayEntry.rank === 'F') && todayEntry.feast) {
+          document.getElementById('litcal-today-feast').innerHTML = `
+            <div class="litcal-feast-today">
+              <span class="litcal-feast-today-label">Today</span>
+              <div class="litcal-feast-today-name">${escHtml(todayEntry.feast)}</div>
+            </div>`;
+        }
+
+        // Upcoming feasts in next 14 days (rank S, F, or M); use local midnight for comparison
+        const todayLocal  = new Date(todayStr + 'T00:00:00');
+        const ahead14 = new Date(todayStr + 'T00:00:00');
+        ahead14.setDate(ahead14.getDate() + 14);
+        const upcoming = litData.filter(e => {
+          if (!e.feast || !e.rank || e.rank === 'm') return false;
+          const d = new Date(e.date + 'T00:00:00');
+          return d >= todayLocal && d <= ahead14;
+        });
+
+        const upcomingEl = document.getElementById('litcal-upcoming');
+        if (upcoming.length) {
+          const fmtDate = ds => {
+            const d = new Date(ds + 'T00:00:00');
+            if (ds === todayStr) return 'Today';
+            const diff = Math.round((new Date(ds+'T00:00:00') - new Date(todayStr+'T00:00:00')) / 86400000);
+            if (diff === 1) return 'Tomorrow';
+            return d.toLocaleDateString('en-PH', { month:'short', day:'numeric' });
+          };
+          upcomingEl.innerHTML = `
+            <div class="litcal-feasts-heading">Upcoming — next 14 days</div>
+            <div class="litcal-feast-list">
+              ${upcoming.map(e => `
+                <div class="litcal-feast-item">
+                  <span class="litcal-feast-date">${escHtml(fmtDate(e.date))}</span>
+                  <span class="litcal-feast-name${e.date===todayStr?' is-today':''}">${escHtml(e.feast)}</span>
+                  <span class="rank-badge rank-${e.rank}">${e.rank}</span>
+                </div>`).join('')}
+            </div>`;
+        } else {
+          upcomingEl.innerHTML = '<p class="litcal-empty">No major feasts in the next 14 days.</p>';
+        }
+
+        // ── Full-year feast toggle ────────────────────────────
+        const allFeasts = litData.filter(e => {
+          if (!e.feast || !e.rank || e.rank === 'm') return false;
+          return new Date(e.date + 'T00:00:00') >= todayLocal;
+        });
+
+        if (allFeasts.length > upcoming.length) {
+          // Group by month
+          const monthGroups = {};
+          allFeasts.forEach(e => {
+            const ym = e.date.slice(0, 7);
+            if (!monthGroups[ym]) monthGroups[ym] = [];
+            monthGroups[ym].push(e);
+          });
+
+          const allFeastsEl = document.getElementById('litcal-all-feasts');
+          allFeastsEl.innerHTML = Object.entries(monthGroups).map(([ym, feasts]) => {
+            const monthLabel = new Date(ym + '-01T00:00:00')
+              .toLocaleDateString('en-PH', { month: 'long', year: 'numeric' });
+            return `
+              <div class="litcal-month-group">
+                <div class="litcal-month-heading">${escHtml(monthLabel)}</div>
+                <div class="litcal-feast-list">
+                  ${feasts.map(e => `
+                    <div class="litcal-feast-item">
+                      <span class="litcal-feast-date">${new Date(e.date+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric'})}</span>
+                      <span class="litcal-feast-name${e.date===todayStr?' is-today':''}">${escHtml(e.feast)}</span>
+                      <span class="rank-badge rank-${e.rank}">${e.rank}</span>
+                    </div>`).join('')}
+                </div>
+              </div>`;
+          }).join('');
+
+          const toggleBtn = document.getElementById('litcal-toggle-btn');
+          toggleBtn.style.display = 'block';
+          let expanded = false;
+          toggleBtn.addEventListener('click', () => {
+            expanded = !expanded;
+            allFeastsEl.style.display = expanded ? 'block' : 'none';
+            toggleBtn.textContent = expanded ? '← Show less' : 'View all feasts this year →';
+          });
+        }
+
+        document.getElementById('litcal-card').style.display = 'block';
+      } else {
+        // Fallback: just show the season badge area without the card
+        document.getElementById('litcal-card').style.display = 'block';
+      }
 
       const cap = v => v ? v.charAt(0).toUpperCase() + v.slice(1) : '—';
       document.getElementById('stat-voice').textContent  = cap(profile.voice_part);

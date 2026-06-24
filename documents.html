@@ -2757,6 +2757,13 @@ Come ready to share one personal goal for your year in the choir (Article XIII) 
         // Render constitution (English by default)
         document.getElementById("constitution-content").innerHTML =
           marked.parse(document.getElementById("md-constitution").textContent);
+
+        // Deep-link support: ?doc=calendar opens that document automatically
+        const docParam = new URLSearchParams(window.location.search).get('doc');
+        if (docParam) {
+          const btn = document.querySelector(`button[onclick*="'${docParam}'"]`);
+          if (btn) showPage(docParam, btn);
+        }
       });
 
       // Constitution language toggle

@@ -1,0 +1,1892 @@
+[
+  {
+    "date": "2026-01-01",
+    "season": "christmas",
+    "week": 1,
+    "feast": "The Blessed Virgin Mary, the Mother of God",
+    "rank": "S"
+  },
+  {
+    "date": "2026-01-02",
+    "season": "christmas",
+    "week": 1,
+    "feast": "Saint Basil the Great and Saint Gregory Nazianzen, bishops and doctors of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-04",
+    "season": "christmas",
+    "week": 1,
+    "feast": "The Epiphany of the Lord",
+    "rank": "S"
+  },
+  {
+    "date": "2026-01-05",
+    "season": "christmas",
+    "week": 1,
+    "feast": "Monday after Epiphany",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-06",
+    "season": "christmas",
+    "week": 1,
+    "feast": "Tuesday after Epiphany",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-08",
+    "season": "christmas",
+    "week": 2,
+    "feast": "Thursday after Epiphany",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-09",
+    "season": "christmas",
+    "week": 2,
+    "feast": "Our Lord Jesus Christ, Señor Jesus Nazareno",
+    "rank": "F"
+  },
+  {
+    "date": "2026-01-10",
+    "season": "christmas",
+    "week": 2,
+    "feast": "Saturday after Epiphany",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-11",
+    "season": "christmas",
+    "week": 2,
+    "feast": "The Baptism of the Lord",
+    "rank": "F"
+  },
+  {
+    "date": "2026-01-12",
+    "season": "ordinary_time",
+    "week": 1,
+    "feast": "Monday in the 1ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-14",
+    "season": "ordinary_time",
+    "week": 1,
+    "feast": "Wednesday in the 1ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-15",
+    "season": "ordinary_time",
+    "week": 1,
+    "feast": "Thursday in the 1ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-16",
+    "season": "ordinary_time",
+    "week": 1,
+    "feast": "Friday in the 1ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-17",
+    "season": "ordinary_time",
+    "week": 1,
+    "feast": "Saint Anthony, abbot",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-18",
+    "season": "ordinary_time",
+    "week": 2,
+    "feast": "Santo Niño",
+    "rank": "F"
+  },
+  {
+    "date": "2026-01-19",
+    "season": "ordinary_time",
+    "week": 2,
+    "feast": "Monday in the 2ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-21",
+    "season": "ordinary_time",
+    "week": 2,
+    "feast": "Saint Agnes, virgin and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-23",
+    "season": "ordinary_time",
+    "week": 2,
+    "feast": "Friday in the 2ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-24",
+    "season": "ordinary_time",
+    "week": 2,
+    "feast": "Saint Francis de Sales, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-25",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "3ʳᵈ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-26",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "Saint Timothy and Saint Titus, bishops",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-28",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "Saint Thomas Aquinas, priest and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-01-29",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "Thursday in the 3ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-30",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "Friday in the 3ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-01-31",
+    "season": "ordinary_time",
+    "week": 3,
+    "feast": "Saint John Bosco, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-02-01",
+    "season": "ordinary_time",
+    "week": 4,
+    "feast": "4ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-02",
+    "season": "ordinary_time",
+    "week": 4,
+    "feast": "The Presentation of the Lord",
+    "rank": "F"
+  },
+  {
+    "date": "2026-02-04",
+    "season": "ordinary_time",
+    "week": 4,
+    "feast": "Wednesday in the 4ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-05",
+    "season": "ordinary_time",
+    "week": 4,
+    "feast": "Saint Agatha, virgin and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-02-06",
+    "season": "ordinary_time",
+    "week": 4,
+    "feast": "Saints Pedro Baustista, Paul Miki and companions, martyrs",
+    "rank": "M"
+  },
+  {
+    "date": "2026-02-08",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "5ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-09",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "Monday in the 5ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-10",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "Saint Scholastica, virgin",
+    "rank": "M"
+  },
+  {
+    "date": "2026-02-12",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "Thursday in the 5ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-13",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "Friday in the 5ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-14",
+    "season": "ordinary_time",
+    "week": 5,
+    "feast": "Saint Cyril, monk, and Saint Methodius, bishop",
+    "rank": "M"
+  },
+  {
+    "date": "2026-02-15",
+    "season": "ordinary_time",
+    "week": 6,
+    "feast": "6ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-16",
+    "season": "ordinary_time",
+    "week": 6,
+    "feast": "Monday in the 6ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-18",
+    "season": "lent",
+    "week": 1,
+    "feast": "Ash Wednesday",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-19",
+    "season": "lent",
+    "week": 1,
+    "feast": "Thursday after Ash Wednesday",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-20",
+    "season": "lent",
+    "week": 1,
+    "feast": "Friday after Ash Wednesday",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-22",
+    "season": "lent",
+    "week": 1,
+    "feast": "1ˢᵗ Sunday of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-24",
+    "season": "lent",
+    "week": 1,
+    "feast": "Tuesday in the 1ˢᵗ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-25",
+    "season": "lent",
+    "week": 2,
+    "feast": "Wednesday in the 1ˢᵗ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-26",
+    "season": "lent",
+    "week": 2,
+    "feast": "Thursday in the 1ˢᵗ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-02-28",
+    "season": "lent",
+    "week": 2,
+    "feast": "Saturday in the 1ˢᵗ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-01",
+    "season": "lent",
+    "week": 2,
+    "feast": "2ⁿᵈ Sunday of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-02",
+    "season": "lent",
+    "week": 2,
+    "feast": "Monday in the 2ⁿᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-03",
+    "season": "lent",
+    "week": 2,
+    "feast": "Tuesday in the 2ⁿᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-05",
+    "season": "lent",
+    "week": 3,
+    "feast": "Thursday in the 2ⁿᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-06",
+    "season": "lent",
+    "week": 3,
+    "feast": "Friday in the 2ⁿᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-08",
+    "season": "lent",
+    "week": 3,
+    "feast": "3ʳᵈ Sunday of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-10",
+    "season": "lent",
+    "week": 3,
+    "feast": "Tuesday in the 3ʳᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-11",
+    "season": "lent",
+    "week": 4,
+    "feast": "Wednesday in the 3ʳᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-12",
+    "season": "lent",
+    "week": 4,
+    "feast": "Thursday in the 3ʳᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-13",
+    "season": "lent",
+    "week": 4,
+    "feast": "Friday in the 3ʳᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-14",
+    "season": "lent",
+    "week": 4,
+    "feast": "Saturday in the 3ʳᵈ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-15",
+    "season": "lent",
+    "week": 4,
+    "feast": "4ᵗʰ Sunday of Lent (Laetare)",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-16",
+    "season": "lent",
+    "week": 4,
+    "feast": "Monday in the 4ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-19",
+    "season": "lent",
+    "week": 5,
+    "feast": "Saint Joseph, husband of Mary",
+    "rank": "S"
+  },
+  {
+    "date": "2026-03-20",
+    "season": "lent",
+    "week": 5,
+    "feast": "Friday in the 4ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-21",
+    "season": "lent",
+    "week": 5,
+    "feast": "Saturday in the 4ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-22",
+    "season": "lent",
+    "week": 5,
+    "feast": "5ᵗʰ Sunday of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-24",
+    "season": "lent",
+    "week": 5,
+    "feast": "Tuesday in the 5ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-25",
+    "season": "lent",
+    "week": 6,
+    "feast": "The Annunciation of the Lord",
+    "rank": "S"
+  },
+  {
+    "date": "2026-03-26",
+    "season": "lent",
+    "week": 6,
+    "feast": "Thursday in the 5ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-27",
+    "season": "lent",
+    "week": 6,
+    "feast": "Friday in the 5ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-28",
+    "season": "lent",
+    "week": 6,
+    "feast": "Saturday in the 5ᵗʰ Week of Lent",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-29",
+    "season": "lent",
+    "week": 6,
+    "feast": "Palm Sunday of the Lord’s Passion",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-30",
+    "season": "lent",
+    "week": 6,
+    "feast": "Monday of Holy Week",
+    "rank": ""
+  },
+  {
+    "date": "2026-03-31",
+    "season": "lent",
+    "week": 6,
+    "feast": "Tuesday of Holy Week",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-01",
+    "season": "lent",
+    "week": 7,
+    "feast": "Wednesday of Holy Week",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-02",
+    "season": "lent",
+    "week": 7,
+    "feast": "Holy Thursday of the Lord’s Supper",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-03",
+    "season": "lent",
+    "week": 7,
+    "feast": "Good Friday of the Lord’s Passion",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-04",
+    "season": "lent",
+    "week": 7,
+    "feast": "Holy Saturday",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-05",
+    "season": "easter",
+    "week": 1,
+    "feast": "Easter Sunday of the Lord’s Resurrection",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-06",
+    "season": "easter",
+    "week": 1,
+    "feast": "Monday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-07",
+    "season": "easter",
+    "week": 1,
+    "feast": "Tuesday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-08",
+    "season": "easter",
+    "week": 1,
+    "feast": "Wednesday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-09",
+    "season": "easter",
+    "week": 1,
+    "feast": "Thursday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-10",
+    "season": "easter",
+    "week": 1,
+    "feast": "Friday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-11",
+    "season": "easter",
+    "week": 1,
+    "feast": "Saturday in the Octave of Easter",
+    "rank": "S"
+  },
+  {
+    "date": "2026-04-12",
+    "season": "easter",
+    "week": 2,
+    "feast": "2ⁿᵈ Sunday of Easter (Divine Mercy)",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-14",
+    "season": "easter",
+    "week": 2,
+    "feast": "Tuesday in the 2ⁿᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-15",
+    "season": "easter",
+    "week": 2,
+    "feast": "Wednesday in the 2ⁿᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-16",
+    "season": "easter",
+    "week": 2,
+    "feast": "Thursday in the 2ⁿᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-17",
+    "season": "easter",
+    "week": 2,
+    "feast": "Friday in the 2ⁿᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-18",
+    "season": "easter",
+    "week": 2,
+    "feast": "Saturday in the 2ⁿᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-19",
+    "season": "easter",
+    "week": 3,
+    "feast": "3ʳᵈ Sunday of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-20",
+    "season": "easter",
+    "week": 3,
+    "feast": "Monday in the 3ʳᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-22",
+    "season": "easter",
+    "week": 3,
+    "feast": "Wednesday in the 3ʳᵈ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-25",
+    "season": "easter",
+    "week": 3,
+    "feast": "Saint Mark, evangelist",
+    "rank": "F"
+  },
+  {
+    "date": "2026-04-26",
+    "season": "easter",
+    "week": 4,
+    "feast": "4ᵗʰ Sunday of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-27",
+    "season": "easter",
+    "week": 4,
+    "feast": "Monday in the 4ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-04-29",
+    "season": "easter",
+    "week": 4,
+    "feast": "Saint Catherine of Siena, virgin and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-05-02",
+    "season": "easter",
+    "week": 4,
+    "feast": "Saint Athanasius, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-05-03",
+    "season": "easter",
+    "week": 5,
+    "feast": "5ᵗʰ Sunday of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-04",
+    "season": "easter",
+    "week": 5,
+    "feast": "Monday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-05",
+    "season": "easter",
+    "week": 5,
+    "feast": "Tuesday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-06",
+    "season": "easter",
+    "week": 5,
+    "feast": "Wednesday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-07",
+    "season": "easter",
+    "week": 5,
+    "feast": "Thursday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-08",
+    "season": "easter",
+    "week": 5,
+    "feast": "Friday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-09",
+    "season": "easter",
+    "week": 5,
+    "feast": "Saturday in the 5ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-10",
+    "season": "easter",
+    "week": 6,
+    "feast": "6ᵗʰ Sunday of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-11",
+    "season": "easter",
+    "week": 6,
+    "feast": "Monday in the 6ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-14",
+    "season": "easter",
+    "week": 6,
+    "feast": "Saint Matthias, apostle",
+    "rank": "F"
+  },
+  {
+    "date": "2026-05-15",
+    "season": "easter",
+    "week": 6,
+    "feast": "Saint Isidore the Farmer",
+    "rank": "M"
+  },
+  {
+    "date": "2026-05-16",
+    "season": "easter",
+    "week": 6,
+    "feast": "Saturday in the 6ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-17",
+    "season": "easter",
+    "week": 7,
+    "feast": "Ascension of the Lord",
+    "rank": "S"
+  },
+  {
+    "date": "2026-05-19",
+    "season": "easter",
+    "week": 7,
+    "feast": "Tuesday in the 7ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-23",
+    "season": "easter",
+    "week": 7,
+    "feast": "Saturday in the 7ᵗʰ Week of Easter",
+    "rank": ""
+  },
+  {
+    "date": "2026-05-24",
+    "season": "easter",
+    "week": 8,
+    "feast": "Pentecost Sunday",
+    "rank": "S"
+  },
+  {
+    "date": "2026-05-25",
+    "season": "ordinary_time",
+    "week": 6,
+    "feast": "The Blessed Virgin Mary, Mother of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-05-26",
+    "season": "ordinary_time",
+    "week": 6,
+    "feast": "Saint Philip Neri, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-05-28",
+    "season": "ordinary_time",
+    "week": 6,
+    "feast": "Our Lord Jesus Christ, the Eternal High Priest",
+    "rank": "F"
+  },
+  {
+    "date": "2026-05-31",
+    "season": "ordinary_time",
+    "week": 7,
+    "feast": "The Most Holy Trinity",
+    "rank": "S"
+  },
+  {
+    "date": "2026-06-01",
+    "season": "ordinary_time",
+    "week": 7,
+    "feast": "Saint Justin, martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-06-03",
+    "season": "ordinary_time",
+    "week": 7,
+    "feast": "Saint Charles Lwanga and companions, martyrs",
+    "rank": "M"
+  },
+  {
+    "date": "2026-06-04",
+    "season": "ordinary_time",
+    "week": 7,
+    "feast": "Thursday in the 9ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-05",
+    "season": "ordinary_time",
+    "week": 7,
+    "feast": "Saint Boniface, bishop and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-06-07",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "The Most Holy Body and Blood of Christ",
+    "rank": "S"
+  },
+  {
+    "date": "2026-06-08",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "Monday in the 10ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-10",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "Wednesday in the 10ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-11",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "Saint Barnabas, apostle",
+    "rank": "M"
+  },
+  {
+    "date": "2026-06-12",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "The Most Sacred Heart of Jesus",
+    "rank": "S"
+  },
+  {
+    "date": "2026-06-13",
+    "season": "ordinary_time",
+    "week": 8,
+    "feast": "The Immaculate Heart of the Blessed Virgin Mary",
+    "rank": "M"
+  },
+  {
+    "date": "2026-06-14",
+    "season": "ordinary_time",
+    "week": 9,
+    "feast": "11ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-15",
+    "season": "ordinary_time",
+    "week": 9,
+    "feast": "Monday in the 11ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-16",
+    "season": "ordinary_time",
+    "week": 9,
+    "feast": "Tuesday in the 11ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-17",
+    "season": "ordinary_time",
+    "week": 9,
+    "feast": "Wednesday in the 11ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-18",
+    "season": "ordinary_time",
+    "week": 9,
+    "feast": "Thursday in the 11ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-21",
+    "season": "ordinary_time",
+    "week": 10,
+    "feast": "12ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-23",
+    "season": "ordinary_time",
+    "week": 10,
+    "feast": "Tuesday in the 12ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-24",
+    "season": "ordinary_time",
+    "week": 10,
+    "feast": "The Nativity of Saint John the Baptist",
+    "rank": "S"
+  },
+  {
+    "date": "2026-06-25",
+    "season": "ordinary_time",
+    "week": 10,
+    "feast": "Thursday in the 12ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-26",
+    "season": "ordinary_time",
+    "week": 10,
+    "feast": "Friday in the 12ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-28",
+    "season": "ordinary_time",
+    "week": 11,
+    "feast": "13ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-06-29",
+    "season": "ordinary_time",
+    "week": 11,
+    "feast": "Saint Peter and Saint Paul, apostles",
+    "rank": "S"
+  },
+  {
+    "date": "2026-07-01",
+    "season": "ordinary_time",
+    "week": 11,
+    "feast": "Wednesday in the 13ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-02",
+    "season": "ordinary_time",
+    "week": 11,
+    "feast": "Thursday in the 13ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-03",
+    "season": "ordinary_time",
+    "week": 11,
+    "feast": "Saint Thomas, apostle",
+    "rank": "F"
+  },
+  {
+    "date": "2026-07-05",
+    "season": "ordinary_time",
+    "week": 12,
+    "feast": "14ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-07",
+    "season": "ordinary_time",
+    "week": 12,
+    "feast": "Tuesday in the 14ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-08",
+    "season": "ordinary_time",
+    "week": 12,
+    "feast": "Wednesday in the 14ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-10",
+    "season": "ordinary_time",
+    "week": 12,
+    "feast": "Friday in the 14ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-11",
+    "season": "ordinary_time",
+    "week": 12,
+    "feast": "Saint Benedict, abbot",
+    "rank": "M"
+  },
+  {
+    "date": "2026-07-12",
+    "season": "ordinary_time",
+    "week": 13,
+    "feast": "15ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-15",
+    "season": "ordinary_time",
+    "week": 13,
+    "feast": "Saint Bonaventure, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-07-17",
+    "season": "ordinary_time",
+    "week": 13,
+    "feast": "Friday in the 15ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-19",
+    "season": "ordinary_time",
+    "week": 14,
+    "feast": "16ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-22",
+    "season": "ordinary_time",
+    "week": 14,
+    "feast": "Saint Mary Magdalene",
+    "rank": "F"
+  },
+  {
+    "date": "2026-07-25",
+    "season": "ordinary_time",
+    "week": 14,
+    "feast": "Saint James, apostle",
+    "rank": "F"
+  },
+  {
+    "date": "2026-07-26",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "17ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-27",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "Monday in the 17ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-28",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "Tuesday in the 17ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-07-29",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "Saint Martha, Saint Mary and Saint Lazarus",
+    "rank": "M"
+  },
+  {
+    "date": "2026-07-31",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "Saint Ignatius of Loyola, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-01",
+    "season": "ordinary_time",
+    "week": 15,
+    "feast": "Saint Alphonsus Liguori, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-02",
+    "season": "ordinary_time",
+    "week": 16,
+    "feast": "18ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-03",
+    "season": "ordinary_time",
+    "week": 16,
+    "feast": "Monday in the 18ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-04",
+    "season": "ordinary_time",
+    "week": 16,
+    "feast": "Saint John Vianney, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-06",
+    "season": "ordinary_time",
+    "week": 16,
+    "feast": "The Transfiguration of the Lord",
+    "rank": "F"
+  },
+  {
+    "date": "2026-08-08",
+    "season": "ordinary_time",
+    "week": 16,
+    "feast": "Saint Dominic, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-09",
+    "season": "ordinary_time",
+    "week": 17,
+    "feast": "19ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-10",
+    "season": "ordinary_time",
+    "week": 17,
+    "feast": "Saint Lawrence, deacon and martyr",
+    "rank": "F"
+  },
+  {
+    "date": "2026-08-11",
+    "season": "ordinary_time",
+    "week": 17,
+    "feast": "Saint Clare, virgin",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-14",
+    "season": "ordinary_time",
+    "week": 17,
+    "feast": "Saint Maximilian Kolbe, priest and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-15",
+    "season": "ordinary_time",
+    "week": 17,
+    "feast": "The Assumption of the Blessed Virgin Mary",
+    "rank": "S"
+  },
+  {
+    "date": "2026-08-16",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "20ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-17",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "Monday in the 20ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-18",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "Tuesday in the 20ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-20",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "Saint Bernard, abbot and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-21",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "Saint Pius X, pope",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-22",
+    "season": "ordinary_time",
+    "week": 18,
+    "feast": "The Queenship of the Blessed Virgin Mary",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-23",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "21ˢᵗ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-24",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "Saint Bartholomew, apostle",
+    "rank": "F"
+  },
+  {
+    "date": "2026-08-26",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "Wednesday in the 21ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-27",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "Saint Monica",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-28",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "Saint Augustine, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-29",
+    "season": "ordinary_time",
+    "week": 19,
+    "feast": "The Passion of Saint John the Baptist, martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-08-30",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "22ⁿᵈ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-08-31",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "Monday in the 22ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-01",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "Tuesday in the 22ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-02",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "Wednesday in the 22ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-03",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "Saint Gregory the Great, pope and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-09-04",
+    "season": "ordinary_time",
+    "week": 20,
+    "feast": "Friday in the 22ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-06",
+    "season": "ordinary_time",
+    "week": 21,
+    "feast": "23ʳᵈ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-07",
+    "season": "ordinary_time",
+    "week": 21,
+    "feast": "Monday in the 23ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-08",
+    "season": "ordinary_time",
+    "week": 21,
+    "feast": "The Nativity of the Blessed Virgin Mary",
+    "rank": "F"
+  },
+  {
+    "date": "2026-09-10",
+    "season": "ordinary_time",
+    "week": 21,
+    "feast": "Thursday in the 23ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-11",
+    "season": "ordinary_time",
+    "week": 21,
+    "feast": "Friday in the 23ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-13",
+    "season": "ordinary_time",
+    "week": 22,
+    "feast": "24ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-14",
+    "season": "ordinary_time",
+    "week": 22,
+    "feast": "The Exaltation of the Holy Cross",
+    "rank": "F"
+  },
+  {
+    "date": "2026-09-15",
+    "season": "ordinary_time",
+    "week": 22,
+    "feast": "Our Lady of Sorrows",
+    "rank": "M"
+  },
+  {
+    "date": "2026-09-16",
+    "season": "ordinary_time",
+    "week": 22,
+    "feast": "Saint Cornelius, pope, and Saint Cyprian, bishop, martyrs",
+    "rank": "M"
+  },
+  {
+    "date": "2026-09-18",
+    "season": "ordinary_time",
+    "week": 22,
+    "feast": "Friday in the 24ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-20",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "25ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-21",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "Saint Matthew, apostle and evangelist",
+    "rank": "F"
+  },
+  {
+    "date": "2026-09-22",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "Tuesday in the 25ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-23",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "Saint Pius of Pietrelcina, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-09-24",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "Thursday in the 25ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-25",
+    "season": "ordinary_time",
+    "week": 23,
+    "feast": "Friday in the 25ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-27",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "26ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-09-28",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "Saint Lawrence Ruiz and companions, martyrs",
+    "rank": "F"
+  },
+  {
+    "date": "2026-09-29",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "Saint Michael, Saint Gabriel, and Saint Raphael, archangels",
+    "rank": "F"
+  },
+  {
+    "date": "2026-09-30",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "Saint Jerome, priest and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-01",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "Saint Thérèse of the Child Jesus, virgin and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-02",
+    "season": "ordinary_time",
+    "week": 24,
+    "feast": "The Holy Guardian Angels",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-04",
+    "season": "ordinary_time",
+    "week": 25,
+    "feast": "27ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-07",
+    "season": "ordinary_time",
+    "week": 25,
+    "feast": "Our Lady of the Rosary",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-08",
+    "season": "ordinary_time",
+    "week": 25,
+    "feast": "Thursday in the 27ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-11",
+    "season": "ordinary_time",
+    "week": 26,
+    "feast": "28ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-12",
+    "season": "ordinary_time",
+    "week": 26,
+    "feast": "Monday in the 28ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-13",
+    "season": "ordinary_time",
+    "week": 26,
+    "feast": "Tuesday in the 28ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-15",
+    "season": "ordinary_time",
+    "week": 26,
+    "feast": "Saint Teresa of Jesus, virgin and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-17",
+    "season": "ordinary_time",
+    "week": 26,
+    "feast": "Saint Ignatius of Antioch, bishop and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-10-18",
+    "season": "ordinary_time",
+    "week": 27,
+    "feast": "29ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-20",
+    "season": "ordinary_time",
+    "week": 27,
+    "feast": "Tuesday in the 29ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-21",
+    "season": "ordinary_time",
+    "week": 27,
+    "feast": "Saint Pedro Calungsod, martyr",
+    "rank": "F"
+  },
+  {
+    "date": "2026-10-25",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "30ᵗʰ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-26",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "Monday in the 30ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-27",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "Tuesday in the 30ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-28",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "Saint Simon and Saint Jude, apostles",
+    "rank": "F"
+  },
+  {
+    "date": "2026-10-29",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "Thursday in the 30ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-10-30",
+    "season": "ordinary_time",
+    "week": 28,
+    "feast": "Friday in the 30ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-01",
+    "season": "ordinary_time",
+    "week": 29,
+    "feast": "All Saints",
+    "rank": "S"
+  },
+  {
+    "date": "2026-11-02",
+    "season": "ordinary_time",
+    "week": 29,
+    "feast": "The Commemoration of all the Faithful Departed (All Souls)",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-04",
+    "season": "ordinary_time",
+    "week": 29,
+    "feast": "Saint Charles Borromeo, bishop",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-05",
+    "season": "ordinary_time",
+    "week": 29,
+    "feast": "Thursday in the 31ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-06",
+    "season": "ordinary_time",
+    "week": 29,
+    "feast": "Friday in the 31ˢᵗ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-08",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "32ⁿᵈ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-09",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "The Dedication of the Lateran Basilica in Rome",
+    "rank": "F"
+  },
+  {
+    "date": "2026-11-10",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "Saint Leo the Great, pope and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-11",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "Saint Martin of Tours, bishop",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-12",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "Saint Josaphat, bishop and martyr",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-13",
+    "season": "ordinary_time",
+    "week": 30,
+    "feast": "Friday in the 32ⁿᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-15",
+    "season": "ordinary_time",
+    "week": 31,
+    "feast": "33ʳᵈ Sunday in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-17",
+    "season": "ordinary_time",
+    "week": 31,
+    "feast": "Saint Elizabeth of Hungary, religious",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-19",
+    "season": "ordinary_time",
+    "week": 31,
+    "feast": "Thursday in the 33ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-20",
+    "season": "ordinary_time",
+    "week": 31,
+    "feast": "Friday in the 33ʳᵈ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-21",
+    "season": "ordinary_time",
+    "week": 31,
+    "feast": "The Presentation of the Blessed Virgin Mary",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-22",
+    "season": "ordinary_time",
+    "week": 32,
+    "feast": "Our Lord Jesus Christ, King of the Universe",
+    "rank": "S"
+  },
+  {
+    "date": "2026-11-24",
+    "season": "ordinary_time",
+    "week": 32,
+    "feast": "Saint Andrew Dung-Lac, priest, and companions, martyrs",
+    "rank": "M"
+  },
+  {
+    "date": "2026-11-26",
+    "season": "ordinary_time",
+    "week": 32,
+    "feast": "Thursday in the 34ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-27",
+    "season": "ordinary_time",
+    "week": 32,
+    "feast": "Friday in the 34ᵗʰ Week in Ordinary Time",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-29",
+    "season": "advent",
+    "week": 1,
+    "feast": "1ˢᵗ Sunday of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-11-30",
+    "season": "advent",
+    "week": 1,
+    "feast": "Saint Andrew, apostle",
+    "rank": "F"
+  },
+  {
+    "date": "2026-12-01",
+    "season": "advent",
+    "week": 1,
+    "feast": "Tuesday in the 1ˢᵗ Week of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-02",
+    "season": "advent",
+    "week": 1,
+    "feast": "Wednesday in the 1ˢᵗ Week of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-03",
+    "season": "advent",
+    "week": 1,
+    "feast": "Saint Francis Xavier, priest",
+    "rank": "M"
+  },
+  {
+    "date": "2026-12-05",
+    "season": "advent",
+    "week": 1,
+    "feast": "Saturday in the 1ˢᵗ Week of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-06",
+    "season": "advent",
+    "week": 2,
+    "feast": "2ⁿᵈ Sunday of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-07",
+    "season": "advent",
+    "week": 2,
+    "feast": "Saint Ambrose, bishop and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-12-08",
+    "season": "advent",
+    "week": 2,
+    "feast": "The Immaculate Conception of the Blessed Virgin Mary",
+    "rank": "S"
+  },
+  {
+    "date": "2026-12-12",
+    "season": "advent",
+    "week": 2,
+    "feast": "Our Lady of Guadalupe",
+    "rank": "M"
+  },
+  {
+    "date": "2026-12-13",
+    "season": "advent",
+    "week": 3,
+    "feast": "3ʳᵈ Sunday of Advent (Gaudete)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-14",
+    "season": "advent",
+    "week": 3,
+    "feast": "Saint John of the Cross, priest and doctor of the Church",
+    "rank": "M"
+  },
+  {
+    "date": "2026-12-15",
+    "season": "advent",
+    "week": 3,
+    "feast": "Tuesday in the 3ʳᵈ Week of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-16",
+    "season": "advent",
+    "week": 3,
+    "feast": "Wednesday in the 3ʳᵈ Week of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-17",
+    "season": "advent",
+    "week": 3,
+    "feast": "Advent Weekday (December 17)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-18",
+    "season": "advent",
+    "week": 3,
+    "feast": "Advent Weekday (December 18)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-19",
+    "season": "advent",
+    "week": 3,
+    "feast": "Advent Weekday (December 19)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-20",
+    "season": "advent",
+    "week": 4,
+    "feast": "4ᵗʰ Sunday of Advent",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-22",
+    "season": "advent",
+    "week": 4,
+    "feast": "Advent Weekday (December 22)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-24",
+    "season": "advent",
+    "week": 4,
+    "feast": "Advent Weekday (December 24)",
+    "rank": ""
+  },
+  {
+    "date": "2026-12-25",
+    "season": "christmas",
+    "week": 1,
+    "feast": "The Nativity of the Lord (Christmas)",
+    "rank": "S"
+  },
+  {
+    "date": "2026-12-26",
+    "season": "christmas",
+    "week": 1,
+    "feast": "Saint Stephen, first martyr",
+    "rank": "F"
+  },
+  {
+    "date": "2026-12-27",
+    "season": "christmas",
+    "week": 1,
+    "feast": "The Holy Family of Jesus, Mary and Joseph",
+    "rank": "F"
+  },
+  {
+    "date": "2026-12-28",
+    "season": "christmas",
+    "week": 1,
+    "feast": "The Holy Innocents, martyrs",
+    "rank": "F"
+  },
+  {
+    "date": "2026-12-30",
+    "season": "christmas",
+    "week": 1,
+    "feast": "6ᵗʰ Day in the Octave of Christmas",
+    "rank": ""
+  }
+]

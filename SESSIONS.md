@@ -274,7 +274,7 @@ The assignment modal and member weekend section currently query **all upcoming e
 
 ## Session 14: Liturgical Calendar
 
-**Status:** [ ] Not Started
+**Status:** [x] Done
 
 **Goal:** Parse the Philippine gcatholic.org calendar into a JSON file and display a liturgical timeline bar + upcoming feasts list on the member dashboard.
 
