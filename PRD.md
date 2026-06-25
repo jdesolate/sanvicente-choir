@@ -163,8 +163,8 @@ Both `event_category` and `event_type` are stored on every event.
 - Language tags: Bisaya, Filipino, English, Latin
 - Liturgical use tags: Entrance, Offertory, Communion, Recessional, Responsorial Psalm, Gloria, Sanctus, Agnus Dei, Other
 - Liturgical season tags: Advent, Christmas, Lent, Easter, Ordinary Time, Marian, Patron Saint Feast, Other
-- Google Drive PDF link *(optional)*
-- YouTube reference link *(optional)*
+- PDF Sheet URL *(optional)* — music sheet, typically a Google Drive link
+- Guide URL *(optional)* — full song video or voice guide; YouTube or Google Drive
 - `is_currently_practicing` *(boolean, default false)* — admin/officer toggles this on/off
 
 **Song Assignments:**
@@ -176,7 +176,7 @@ Both `event_category` and `event_type` are stored on every event.
 - Filter by language, liturgical use, liturgical season
 - "Practicing Now" filter chip — shows only songs where `is_currently_practicing = true`
 - "Songs for this Sunday / Saturday" section — upcoming service assignments
-- Song detail: full lyrics, GDrive PDF button, YouTube button
+- Song detail: full lyrics, PDF Sheet button, Guide button
 
 **Admin / officer management:**
 - Add, edit, delete songs and all metadata
@@ -387,8 +387,8 @@ Both `event_category` and `event_type` are stored on every event.
 | liturgical_use_tags | text[] | entrance / offertory / communion / etc. |
 | season_tags | text[] | advent / lent / easter / etc. |
 | is_currently_practicing | boolean | default false *(new)* |
-| gdrive_url | text | nullable |
-| youtube_url | text | nullable |
+| gdrive_url | text | nullable — UI label: "PDF Sheet URL" |
+| youtube_url | text | nullable — UI label: "Guide URL" (YouTube or Drive) |
 | created_by | uuid | FK → profiles |
 | created_at | timestamptz | |
 | updated_at | timestamptz | |

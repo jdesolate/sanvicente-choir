@@ -293,8 +293,8 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 | liturgical_use_tags | text[] | entrance / offertory / communion / etc. |
 | season_tags | text[] | advent / christmas / lent / easter / ordinary_time / marian / patron_saint_feast / other |
 | is_currently_practicing | boolean | default false *(added Session 12)* |
-| gdrive_url | text | nullable |
-| youtube_url | text | nullable |
+| gdrive_url | text | nullable — UI label: "PDF Sheet URL" |
+| youtube_url | text | nullable — UI label: "Guide URL" (YouTube or Drive) |
 | created_by | uuid | FK → profiles |
 | created_at | timestamptz | |
 | updated_at | timestamptz | |

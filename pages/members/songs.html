@@ -83,6 +83,24 @@
         color: var(--ivory-dim); font-size: var(--text-sm);
       }
       .weekend-song-list li { padding: 2px 0; }
+
+      .copy-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: 1px solid var(--gold-dim);
+        color: var(--ivory-dim);
+        padding: 0 12px;
+        height: 32px;
+        font-family: var(--font-ui);
+        font-size: var(--text-sm);
+        cursor: pointer;
+        transition: all var(--t-fast);
+        white-space: nowrap;
+      }
+      .copy-btn:hover { border-color: var(--gold); color: var(--ivory); }
+      .copy-btn.copied { border-color: #4ade80; color: #4ade80; }
     </style>
   </head>
   <body class="portal-body">
@@ -458,7 +476,7 @@
           s.gdrive_url  ? `<a href="${escHtml(s.gdrive_url)}" target="_blank" rel="noopener noreferrer"
               class="btn btn-outline btn-sm">↓ PDF Sheet</a>` : '',
           s.youtube_url ? `<a href="${escHtml(s.youtube_url)}" target="_blank" rel="noopener noreferrer"
-              class="btn btn-ghost btn-sm">▶ YouTube</a>` : '',
+              class="btn btn-ghost btn-sm">▶ Guide</a>` : '',
         ].filter(Boolean).join('');
 
         return `
@@ -473,8 +491,13 @@
               <span class="song-card-chevron" aria-hidden="true">▼</span>
             </div>
             <div class="song-card-body" id="body-${s.id}">
+              <div class="song-links" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:var(--space-4)">
+                ${links}
+                ${s.lyrics ? `<button class="copy-btn" data-copy-id="${s.id}"
+                    data-title="${escHtml(s.title)}"
+                    aria-label="Copy lyrics for ${escHtml(s.title)}">⎘ Copy Lyrics</button>` : ''}
+              </div>
               <pre class="song-lyrics">${escHtml(s.lyrics || '')}</pre>
-              ${links ? `<div class="song-links">${links}</div>` : ''}
             </div>
           </article>
         `;
@@ -495,6 +518,30 @@
         if (!header) return;
         e.preventDefault();
         header.click();
+      });
+
+      // ── Copy lyrics to clipboard ───────────────────────────────
+      document.getElementById('song-list').addEventListener('click', async e => {
+        const btn = e.target.closest('.copy-btn');
+        if (!btn) return;
+        e.stopPropagation();
+
+        const songId = btn.dataset.copyId;
+        const title  = btn.dataset.title;
+        const lyrics = document.querySelector(`#body-${songId} .song-lyrics`)?.textContent?.trim() || '';
+        const text   = `${title}\n\n${lyrics}`;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = '✓ Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = '⎘ Copy Lyrics';
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch (_) {
+          btn.textContent = 'Copy failed';
+        }
       });
 
       // ── Songs for this Weekend ─────────────────────────────────
