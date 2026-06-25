@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for the SVC choir portal project.
 > Upload this to your Claude project so any conversation starts with full context.
-> Last updated: 2026-06-23
+> Last updated: 2026-06-25
 
 ---
 
@@ -48,10 +48,10 @@ A full-featured choir management web portal built on top of a static public webs
 | Frontend | Vanilla HTML5, CSS3, JavaScript (ES6+) — no frameworks |
 | Auth / Database | Supabase (free tier) |
 | File storage | Google Drive links (no file uploads to Supabase) |
-| Form handling | Netlify Forms (sponsor contact form only) |
+| Form handling | Formspree (sponsor contact form only) |
 | Markdown rendering | marked.js (CDN) |
 | Fonts | Google Fonts: Cinzel, Cormorant Garamond, Inter |
-| Hosting | Netlify |
+| Hosting | Vercel |
 | Shared CSS | `css/design-system.css` — dark luxury palette, design tokens, WCAG AA compliant |
 
 **Design system rules (apply to every page under `pages/`):**
@@ -87,6 +87,7 @@ sanvicente-choir/
 ├── js/
 │   ├── supabase-client.js
 │   ├── auth.js
+│   ├── header.js
 │   ├── utils.js
 │   └── notifications.js          # (Session 16)
 ├── pages/
@@ -114,8 +115,9 @@ sanvicente-choir/
 │       ├── events.html
 │       ├── songs.html
 │       ├── fields.html
-│       ├── awards.html           # (Session 18)
-│       └── cms.html              # (Session 17)
+│       ├── leadership-plan.html
+│       ├── awards.html           # (Session 18 — not yet built)
+│       └── cms.html              # (deferred — not yet built)
 ├── supabase/
 │   └── schema.sql
 ├── index.html
@@ -189,12 +191,13 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 
 ---
 
-## 6. Current Features (Live as of 2026-06-23)
+## 6. Current Features (Live as of 2026-06-25)
 
 ### Public Pages
-- **Landing page** (`index.html`) — choir story, gallery, officers, Join Us CTA → Facebook, Sponsor section with Netlify contact form (3 tiers: Supporter ₱500, Partner ₱1,000, Patron ₱2,000+)
+- **Landing page** (`index.html`) — choir story, gallery, officers, Join Us CTA → Facebook, Sponsor section with Formspree contact form (3 tiers: Supporter ₱500, Partner ₱1,000, Patron ₱2,000+)
 - **Documents hub** (`documents.html`) — role-gated; shows/hides documents based on auth state
 - **Login / Register / Forgot Password / Reset Password**
+- **PWA support** — `manifest.json` + home screen icon; installable on mobile
 
 ### Registration Flow
 1. Full-screen ToS modal — Constitution + Member Handbook — acknowledgement required
@@ -204,10 +207,10 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 5. Admin approves → member gains full access
 
 ### Member Portal
-- **Dashboard** — welcome greeting, liturgical season badge ("Ordinary Time · Week 12"), quick stat cards, light/dark mode toggle
-- **My Attendance** — own history table, per-tier rates (Core / Major / Special), On Track / At Risk badge, submit absence requests
-- **Song Library** — full-text search, filter by language / liturgical use / season, auto pre-filters to current season on load, expandable song cards
-- **My Profile** — read-only display of all profile fields; profile photo as circular avatar if set
+- **Dashboard** — personalized welcome greeting (first name), liturgical season badge ("Ordinary Time · Week 12"), upcoming feasts timeline, quick stat cards, light/dark mode toggle
+- **My Attendance** — own history table, split into service rate (On Track ≥80% / At Risk <80%) and practice rate (informational), submit absence requests
+- **Song Library** — full-text search, filter by language / liturgical use / season, auto pre-filters to current season on load, expandable song cards with **Copy Lyrics** button, PDF Sheet URL and Guide URL links
+- **My Profile** — read-only display of all profile fields including joined choir date; large circular profile avatar (initials fallback); profile photo as circular avatar if set
 
 ### Secretary Portal (inherits all member features)
 - **Attendance Tracker** — select event → mark each member Present / Absent / Excused → save
@@ -242,6 +245,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 | status | text | pending / active / associate / honorary / inactive |
 | profile_photo_url | text | nullable — Google Drive link |
 | custom_fields | jsonb | admin-defined extra fields |
+| joined_choir_date | date | backfilled from custom field / approved_at / created_at |
 | tos_accepted_at | timestamptz | set on registration |
 | created_at | timestamptz | |
 | approved_at | timestamptz | |
@@ -387,6 +391,9 @@ Initializes and exports the Supabase client.
 - Date formatting helpers
 - Google Drive image URL converter
 
+### `js/header.js`
+- `initPortalHeader(profile, onSignOut)` — renders the circular avatar in `#portal-header-user`; shows profile photo or initials fallback; avatar click opens dropdown with My Profile + Sign Out links
+
 ### `js/notifications.js` *(Session 16)*
 - `getUnreadCount(memberId)`
 - `getNotifications(memberId, limit)`
@@ -400,12 +407,12 @@ Initializes and exports the Supabase client.
 | Session | Title | Status |
 |---|---|---|
 | 11 | Role System Overhaul + UI Bug Fixes | ✅ Done |
-| 12 | Song Enhancements (practicing flag, service assignments) | ⏳ Next |
-| 13 | Attendance Split (practice vs. service rates) | ⏳ Planned |
-| 14 | Liturgical Calendar (timeline bar + upcoming feasts) | ⏳ Planned |
-| 15 | Treasurer Features (fines ledger + income/expense ledger) | ⏳ Planned |
-| 16 | In-App Notifications | ⏳ Planned |
-| 17 | Admin CMS — Gallery & Officer Profiles | ⏳ Planned |
+| 12 | Song Enhancements (practicing flag, event assignments) | ✅ Done |
+| 13 | Attendance Split (practice vs. service rates) | ✅ Done |
+| 14 | Liturgical Calendar (timeline bar + upcoming feasts on dashboard) | ✅ Done |
+| 15 | Treasurer Features (fines ledger + income/expense ledger) | ✅ Done |
+| 16 | In-App Notifications | ✅ Done |
+| 17 | Profile avatar, dashboard greeting + joined choir date, mobile fixes | ✅ Done |
 | 18 | Semester Awards + Certificate Generation | ⏳ Planned |
 
 ---
