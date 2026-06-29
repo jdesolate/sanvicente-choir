@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sinking Fund — San Vicente Choir</title>
+    <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SVC">
+    <link rel="apple-touch-icon" href="/assets/images/officers/SVC_Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+  </head>
+  <body class="portal-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Secretary Portal</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
+      <div class="portal-header-user" id="portal-header-user"></div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
+        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="sinking-fund.html" class="sidebar-link active"><span class="sidebar-icon">₱</span> Sinking Fund</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Song Management</a>
+          <a href="absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../officer/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Event Management</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Fines Ledger</a>
+          <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-6)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Sinking Fund</h2>
+              <p>Record and track member contributions to the choir sinking fund</p>
+            </div>
+            <button class="btn btn-gold" id="add-btn">+ Add Contribution</button>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="stat-grid" style="margin-bottom:var(--space-6)">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-total">₱0.00</div>
+              <div class="stat-label">Total Collected</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-members">0</div>
+              <div class="stat-label">Members Contributing</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-month">₱0.00</div>
+              <div class="stat-label">This Month</div>
+            </div>
+          </div>
+
+          <!-- Filter: member search -->
+          <div style="margin-bottom:var(--space-5);display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center">
+            <input type="text" id="member-filter" placeholder="Search by member name…"
+              style="flex:1;min-width:200px;max-width:340px;padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-2);color:var(--ivory);font-size:var(--text-sm)">
+          </div>
+
+          <div id="sf-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="sf-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">₱</div>
+            <p id="sf-empty-text">No contributions recorded yet.</p>
+          </div>
+
+          <div id="sf-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Sinking Fund Contributions">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Notes</th>
+                  <th>Recorded</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sf-tbody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Add / Edit Contribution Modal ── -->
+    <div class="modal-overlay" id="contrib-modal" role="dialog" aria-modal="true" aria-labelledby="contrib-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="contrib-modal-title">Add Contribution</h2>
+          <button class="modal-close" id="contrib-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="contrib-form" novalidate>
+          <input type="hidden" id="edit-id">
+          <div class="form-group">
+            <label for="contrib-member">Member <span class="required">*</span></label>
+            <select id="contrib-member" required>
+              <option value="">Loading members…</option>
+            </select>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="contrib-amount">Amount (₱) <span class="required">*</span></label>
+              <input type="number" id="contrib-amount" min="1" step="0.01" required placeholder="0.00">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="contrib-date">Date <span class="required">*</span></label>
+              <input type="date" id="contrib-date" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contrib-notes">Notes</label>
+            <input type="text" id="contrib-notes" placeholder="Optional…" autocomplete="off">
+          </div>
+          <div id="contrib-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="contrib-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="contrib-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="contrib-submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell, createNotification } from '../../js/notifications.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      initThemeToggle();
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('secretary');
+      if (!profile) throw new Error('redirecting');
+      if (!['secretary', 'admin', 'super_admin'].includes(profile.role)) {
+        window.location.href = '/pages/members/dashboard.html';
+        throw new Error('unauthorized');
+      }
+
+      initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
+      document.getElementById('page-content').style.display = 'block';
+
+      // Show role-gated nav sections
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('secretary-section').style.display = 'block';
+      }
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['secretary', 'treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
+      }
+      if (['admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Helpers ────────────────────────────────────────────────
+      function fmtPeso(n) {
+        return '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      // ── State ──────────────────────────────────────────────────
+      let allContribs = [];
+      let memberFilter = '';
+
+      // ── Stats ──────────────────────────────────────────────────
+      function updateStats(contribs) {
+        const total = contribs.reduce((s, c) => s + Number(c.amount), 0);
+        const uniqueMembers = new Set(contribs.map(c => c.member_id)).size;
+
+        const now = new Date();
+        const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+        const thisMonth = contribs
+          .filter(c => c.date && c.date.startsWith(ym))
+          .reduce((s, c) => s + Number(c.amount), 0);
+
+        document.getElementById('stat-total').textContent   = fmtPeso(total);
+        document.getElementById('stat-members').textContent = uniqueMembers;
+        document.getElementById('stat-month').textContent   = fmtPeso(thisMonth);
+      }
+
+      // ── Render table ───────────────────────────────────────────
+      function renderTable() {
+        const loadingEl = document.getElementById('sf-loading');
+        const emptyEl   = document.getElementById('sf-empty');
+        const emptyTxt  = document.getElementById('sf-empty-text');
+        const tableEl   = document.getElementById('sf-table-wrap');
+        const tbody     = document.getElementById('sf-tbody');
+
+        loadingEl.style.display = 'none';
+
+        const q = memberFilter.toLowerCase();
+        const rows = q
+          ? allContribs.filter(c => (c.member?.full_name || '').toLowerCase().includes(q))
+          : allContribs;
+
+        if (!rows.length) {
+          emptyTxt.textContent = q
+            ? `No contributions found for "${memberFilter}".`
+            : 'No contributions recorded yet. Click "+ Add Contribution" to log one.';
+          emptyEl.style.display  = 'block';
+          tableEl.style.display  = 'none';
+          return;
+        }
+
+        emptyEl.style.display  = 'none';
+        tableEl.style.display  = 'block';
+
+        tbody.innerHTML = rows.map(c => {
+          const memberName  = c.member?.full_name ?? '—';
+          const recorderName = c.recorder?.full_name ?? '—';
+          const notes = c.notes ? escHtml(c.notes) : '<span style="color:var(--ivory-muted)">—</span>';
+          return `
+            <tr>
+              <td style="white-space:nowrap;color:var(--ivory)">${escHtml(memberName)}</td>
+              <td style="white-space:nowrap;font-weight:500;color:var(--gold)">${fmtPeso(c.amount)}</td>
+              <td style="white-space:nowrap;color:var(--ivory-muted)">${fmtDate(c.date)}</td>
+              <td style="max-width:200px">${notes}</td>
+              <td style="white-space:nowrap;color:var(--ivory-muted);font-size:var(--text-xs)">${escHtml(recorderName)}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-outline btn-sm js-edit" data-id="${c.id}">Edit</button>
+                  <button class="btn btn-danger  btn-sm js-delete" data-id="${c.id}">Delete</button>
+                </div>
+              </td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Load all contributions ─────────────────────────────────
+      async function loadContribs() {
+        document.getElementById('sf-loading').style.display  = 'flex';
+        document.getElementById('sf-empty').style.display    = 'none';
+        document.getElementById('sf-table-wrap').style.display = 'none';
+
+        const { data, error } = await supabase
+          .from('sinking_fund_contributions')
+          .select(`
+            id, member_id, amount, date, notes, created_at,
+            member:profiles!member_id(full_name),
+            recorder:profiles!recorded_by(full_name)
+          `)
+          .order('date', { ascending: false })
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('loadContribs:', error);
+          document.getElementById('sf-loading').style.display = 'none';
+          document.getElementById('sf-empty-text').textContent = 'Error loading contributions. Please refresh.';
+          document.getElementById('sf-empty').style.display = 'block';
+          return;
+        }
+
+        allContribs = data || [];
+        updateStats(allContribs);
+        renderTable();
+      }
+
+      // ── Table action delegation ────────────────────────────────
+      document.getElementById('sf-tbody').addEventListener('click', async e => {
+        const editBtn = e.target.closest('.js-edit');
+        const delBtn  = e.target.closest('.js-delete');
+
+        if (editBtn) { openModal(editBtn.dataset.id); return; }
+        if (delBtn)  { await deleteContrib(delBtn.dataset.id); return; }
+      });
+
+      async function deleteContrib(id) {
+        if (!confirm('Delete this contribution record? This cannot be undone.')) return;
+        const { error } = await supabase.from('sinking_fund_contributions').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadContribs();
+      }
+
+      // ── Member filter ──────────────────────────────────────────
+      document.getElementById('member-filter').addEventListener('input', e => {
+        memberFilter = e.target.value.trim();
+        renderTable();
+      });
+
+      // ── Modal ──────────────────────────────────────────────────
+      let members = [];
+      let membersLoaded = false;
+
+      async function ensureMembers() {
+        if (membersLoaded) return;
+        const { data } = await supabase
+          .from('profiles')
+          .select('id, full_name')
+          .in('status', ['active', 'associate'])
+          .order('full_name');
+        members = data || [];
+        membersLoaded = true;
+        const sel = document.getElementById('contrib-member');
+        sel.innerHTML = '<option value="">Select member…</option>' +
+          members.map(m => `<option value="${m.id}">${escHtml(m.full_name)}</option>`).join('');
+      }
+
+      function openModal(editId) {
+        const isEdit = !!editId;
+        document.getElementById('contrib-modal-title').textContent = isEdit ? 'Edit Contribution' : 'Add Contribution';
+        document.getElementById('contrib-submit').textContent = isEdit ? 'Save Changes' : 'Save';
+        document.getElementById('contrib-error').style.display = 'none';
+        document.getElementById('edit-id').value = editId || '';
+
+        if (isEdit) {
+          const c = allContribs.find(x => x.id === editId);
+          if (c) {
+            ensureMembers().then(() => {
+              document.getElementById('contrib-member').value = c.member_id;
+            });
+            document.getElementById('contrib-amount').value = c.amount;
+            document.getElementById('contrib-date').value   = c.date;
+            document.getElementById('contrib-notes').value  = c.notes || '';
+          }
+        } else {
+          ensureMembers().then(() => {
+            document.getElementById('contrib-member').value = '';
+          });
+          document.getElementById('contrib-amount').value = '';
+          document.getElementById('contrib-date').value   = new Date().toISOString().split('T')[0];
+          document.getElementById('contrib-notes').value  = '';
+        }
+
+        document.getElementById('contrib-modal').classList.add('open');
+        document.getElementById('contrib-member').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('contrib-modal').classList.remove('open');
+      }
+
+      document.getElementById('add-btn').addEventListener('click', () => openModal(null));
+      document.getElementById('contrib-modal-close').addEventListener('click', closeModal);
+      document.getElementById('contrib-cancel').addEventListener('click', closeModal);
+      document.getElementById('contrib-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      // ── Submit ─────────────────────────────────────────────────
+      document.getElementById('contrib-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('contrib-error');
+        const errTxt = document.getElementById('contrib-error-text');
+        const btn    = document.getElementById('contrib-submit');
+        errEl.style.display = 'none';
+
+        const editId   = document.getElementById('edit-id').value || null;
+        const memberId = document.getElementById('contrib-member').value;
+        const amount   = Number(document.getElementById('contrib-amount').value);
+        const date     = document.getElementById('contrib-date').value;
+        const notes    = document.getElementById('contrib-notes').value.trim() || null;
+
+        if (!memberId || !amount || amount <= 0 || !date) {
+          errTxt.textContent = 'Member, amount, and date are required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Saving…';
+
+        let error;
+        if (editId) {
+          ({ error } = await supabase
+            .from('sinking_fund_contributions')
+            .update({ member_id: memberId, amount, date, notes })
+            .eq('id', editId));
+        } else {
+          ({ error } = await supabase
+            .from('sinking_fund_contributions')
+            .insert({ member_id: memberId, amount, date, notes, recorded_by: profile.id }));
+        }
+
+        btn.disabled    = false;
+        btn.textContent = editId ? 'Save Changes' : 'Save';
+
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        // Notify the member of their contribution
+        if (!editId) {
+          const fmtD = new Date(date + 'T00:00:00').toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
+          createNotification(memberId, 'sinking_fund',
+            `Your sinking fund contribution of ₱${Number(amount).toFixed(2)} on ${fmtD} has been recorded. Thank you!`);
+        }
+
+        closeModal();
+        await loadContribs();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadContribs();
+      hidePageLoader();
+    </script>
+  </body>
+</html>

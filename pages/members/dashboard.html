@@ -70,6 +70,9 @@
           <a href="../secretary/absences.html" class="sidebar-link">
             <span class="sidebar-icon">✉</span> Absence Requests
           </a>
+          <a href="../secretary/sinking-fund.html" class="sidebar-link">
+            <span class="sidebar-icon">₱</span> Sinking Fund
+          </a>
           <hr class="sidebar-divider">
         </div>
 
@@ -165,6 +168,10 @@
             <div class="stat-card">
               <div class="stat-num stat-num-text" id="stat-voice">—</div>
               <div class="stat-label">Voice Part</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-sinking">—</div>
+              <div class="stat-label">Sinking Fund</div>
             </div>
           </div>
 
@@ -480,7 +487,7 @@
       document.getElementById('stat-voice').textContent = cap(profile.voice_part);
 
       // ── Attendance rate + unpaid fines (parallel fetch) ──────
-      const [attRes, finesRes] = await Promise.all([
+      const [attRes, finesRes, sfRes] = await Promise.all([
         supabase
           .from('attendance')
           .select('status, events(event_date)')
@@ -490,6 +497,10 @@
           .select('amount, status')
           .eq('member_id', profile.id)
           .eq('status', 'unpaid'),
+        supabase
+          .from('sinking_fund_contributions')
+          .select('amount')
+          .eq('member_id', profile.id),
       ]);
 
       if (!attRes.error && attRes.data) {
@@ -517,6 +528,13 @@
           finesEl.style.color = 'var(--danger)';
           document.getElementById('stat-fines-card').title = 'You have unpaid fines — visit the fines page to settle.';
         }
+      }
+
+      if (!sfRes.error && sfRes.data) {
+        const total = sfRes.data.reduce((s, c) => s + Number(c.amount), 0);
+        const sfEl = document.getElementById('stat-sinking');
+        sfEl.textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (total > 0) sfEl.style.color = 'var(--success)';
       }
 
       if (profile.status === 'pending') {
