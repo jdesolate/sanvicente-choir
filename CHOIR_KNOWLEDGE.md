@@ -191,7 +191,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 
 ---
 
-## 6. Current Features (Live as of 2026-06-25)
+## 6. Current Features (Live as of 2026-07-04)
 
 ### Public Pages
 - **Landing page** (`index.html`) — choir story, gallery, officers, Join Us CTA → Facebook, Sponsor section with Formspree contact form (3 tiers: Supporter ₱500, Partner ₱1,000, Patron ₱2,000+)
@@ -210,6 +210,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 - **Dashboard** — personalized welcome greeting (first name), liturgical season badge ("Ordinary Time · Week 12"), upcoming feasts timeline, quick stat cards, light/dark mode toggle
 - **My Attendance** — own history table, split into service rate (On Track ≥80% / At Risk <80%) and practice rate (informational), submit absence requests
 - **Song Library** — full-text search, filter by language / liturgical use / season, auto pre-filters to current season on load, expandable song cards with **Copy Lyrics** button, PDF Sheet URL and Guide URL links
+  - **Songs for this Weekend** — assigned songs for upcoming service events, ordered by mass part (Entrance → Recessional). Each song has a **Copy** button for its own lyrics; per mass there's **Copy Lineup** (labeled title list, e.g. `Entrance : Song Title`) and **Copy Full Lyrics** (each part heading followed by its lyrics) — built for the president to paste the weekend lineup into the group chat without opening each song on slow chapel data
 - **My Profile** — read-only display of all profile fields including joined choir date; large circular profile avatar (initials fallback); profile photo as circular avatar if set
 
 ### Secretary Portal (inherits all member features)
@@ -220,7 +221,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 ### Admin Portal (inherits all member + secretary features)
 - **Member Management** — pending registrations queue, all members table, Create Account, View Profile modal, Delete Member (super_admin only)
 - **Event Management** — add/edit/delete events (title, date, type: Core/Major/Special, description)
-- **Song Management** — add/edit/delete songs with all metadata
+- **Song Management** (officer + admin) — add/edit/delete songs with all metadata; instant client-side **search + filters** mirroring the member library (title/tag search, language / liturgical use / season chips, Practicing Now toggle); **Assign** a song to a service event with a required **mass part** so the weekend lineup can be ordered and labeled
 - **Custom Field Management** — add/edit/delete/reorder fields
 - **Attendance Summary** — aggregate leaderboard
 
@@ -309,6 +310,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 | id | uuid | |
 | song_id | uuid | FK → songs (cascade) |
 | event_id | uuid | FK → events (cascade) |
+| mass_part | text | nullable — liturgical part the song fills (entrance, kyrie, gloria, …); drives ordered lineup + full-lyrics copy |
 | assigned_by | uuid | FK → profiles |
 | assigned_at | timestamptz | |
 
@@ -386,7 +388,8 @@ Initializes and exports the Supabase client.
 - `requireRole(role, redirectTo)` — hierarchy: member < secretary = officer = treasurer < admin < super_admin
 
 ### `js/utils.js`
-- `getLiturgicalSeason(date)` — returns current liturgical season + week number; uses `assets/data/liturgical-YYYY.json` when present, falls back to algorithm
+- `getLiturgicalSeason(date)` — returns current liturgical season + week number; uses `assets/data/liturgical-YYYY.json` when present, falls back to algorithm. The JSON's `week` field is unreliable for Ordinary Time, so the week is computed via `_ordinaryTimeWeek()` for that season (see §11)
+- `MASS_PARTS` — canonical mass parts in liturgical order (Entrance → Recessional); single source of truth shared by the song assign UI and the library weekend render. Helpers: `massPartLabel(value)`, `massPartOrder(value)`
 - `initThemeToggle()` — reads `localStorage`, applies `data-theme` to `<html>`, wires toggle button
 - Date formatting helpers
 - Google Drive image URL converter
@@ -443,6 +446,8 @@ Seasons and display colors:
 | Easter | gold `#C9A86A` |
 
 Song library auto-filters to the current season on load. Dashboard shows timeline bar + upcoming feasts (Session 14).
+
+**Ordinary Time week numbering:** the Church numbers resumed Ordinary Time (after Pentecost) *backward* from Christ the King, the 34th and final Sunday before Advent — so the weeks consumed by Lent and Easter are skipped. Counting forward from Pentecost undercounts (it was off by 2). `_ordinaryTimeWeek(date)` in `js/utils.js` does this correctly: forward from the Baptism of the Lord before Lent, backward from week 34 after Pentecost. Both the prebuilt `liturgical-YYYY.json` `week` field and the old fallback had this bug, so the week is now always computed for Ordinary Time and the JSON `week` is used only for the other seasons.
 
 ---
 

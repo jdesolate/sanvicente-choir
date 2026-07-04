@@ -98,8 +98,9 @@ Then open `http://localhost:8080` in your browser.
 
 1. Create a project at [supabase.com](https://supabase.com)
 2. Go to the SQL Editor and run `supabase/schema.sql`
-3. Copy your project URL and anon key into `js/supabase-client.js`
-4. Under Authentication → Providers, ensure Email is enabled
+3. Run the incremental `supabase/migration_*.sql` files (e.g. `migration_song_mass_part.sql` adds the mass-part column used by the weekend lineup) to bring an existing database up to date
+4. Copy your project URL and anon key into `js/supabase-client.js`
+5. Under Authentication → Providers, ensure Email is enabled
 
 ## Vercel Deployment
 

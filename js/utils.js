@@ -18,6 +18,34 @@ export function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+// Canonical mass parts in liturgical order — drives the ordered lineup and
+// full-lyrics copy. Shared so the assign UI and library render never drift.
+export const MASS_PARTS = [
+  { value: 'entrance',            label: 'Entrance' },
+  { value: 'kyrie',              label: 'Kyrie' },
+  { value: 'gloria',             label: 'Gloria' },
+  { value: 'responsorial_psalm', label: 'Responsorial Psalm' },
+  { value: 'gospel_acclamation', label: 'Gospel Acclamation' },
+  { value: 'offertory',          label: 'Offertory' },
+  { value: 'sanctus',            label: 'Sanctus' },
+  { value: 'mysterium_fidei',    label: 'Mysterium Fidei' },
+  { value: 'great_amen',         label: 'Amen' },
+  { value: 'our_father',         label: 'Amahan Namo' },
+  { value: 'agnus_dei',          label: 'Agnus Dei' },
+  { value: 'communion',          label: 'Communion' },
+  { value: 'recessional',        label: 'Recessional' },
+];
+
+export function massPartLabel(value) {
+  return MASS_PARTS.find(p => p.value === value)?.label || '';
+}
+
+// Sort index for a mass part; unknown/blank parts sort to the end.
+export function massPartOrder(value) {
+  const i = MASS_PARTS.findIndex(p => p.value === value);
+  return i === -1 ? MASS_PARTS.length : i;
+}
+
 export function showAlert(message, type = 'info') {}
 
 export function clearAlerts() {}
@@ -67,6 +95,29 @@ const _SEASON_NAMES = {
   advent:       'Advent',
 };
 
+// Ordinary Time week number, computed the way the liturgical calendar does it:
+// forward from the Baptism of the Lord before Lent, and backward from Christ the
+// King (the 34th Sunday, the Sunday before Advent) after Pentecost — so the weeks
+// skipped by Lent and Easter are accounted for.
+function _ordinaryTimeWeek(date) {
+  const MS = 86400000;
+  const y = date.getFullYear();
+  const t = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const add = (d, n) => new Date(d.getTime() + n * MS);
+
+  // The Sunday on or before the date labels its week.
+  const curSun = add(new Date(y, date.getMonth(), date.getDate()), -date.getDay());
+  const ashWed = add(computeEaster(y), -46);
+
+  if (t(curSun) < t(ashWed)) {
+    // Before Lent: week containing the Baptism of the Lord is week 1.
+    return Math.round((t(curSun) - t(baptismOfLord(y))) / (7 * MS)) + 1;
+  }
+  // After Pentecost: count back from Christ the King = week 34.
+  const christKing = add(firstSundayOfAdvent(y), -7);
+  return 34 - Math.round((t(christKing) - t(curSun)) / (7 * MS));
+}
+
 function _computeSeason(date) {
   const MS = 86400000;
   const y = date.getFullYear();
@@ -85,7 +136,7 @@ function _computeSeason(date) {
     return { season: 'Christmas Season', seasonKey: 'christmas', week: null, label: 'Christmas Season' };
   }
   if (dt < t(ashWed)) {
-    const week = Math.floor((dt - t(baptism)) / (7 * MS)) + 1;
+    const week = _ordinaryTimeWeek(date);
     return { season: 'Ordinary Time', seasonKey: 'ordinary_time', week, label: `Ordinary Time · Week ${week}` };
   }
   if (dt < t(easter)) {
@@ -97,9 +148,7 @@ function _computeSeason(date) {
     return { season: 'Easter Season', seasonKey: 'easter', week, label: `Easter Season · Week ${week}` };
   }
   if (dt < t(advent)) {
-    const weeksInOTI = Math.floor((t(ashWed) - t(baptism)) / (7 * MS));
-    const weeksSinceOTII = Math.floor((dt - t(pentecost)) / (7 * MS));
-    const week = weeksInOTI + weeksSinceOTII + 1;
+    const week = _ordinaryTimeWeek(date);
     return { season: 'Ordinary Time', seasonKey: 'ordinary_time', week, label: `Ordinary Time · Week ${week}` };
   }
   if (dt < t(christmas)) {
@@ -135,8 +184,11 @@ export async function getLiturgicalSeason(date = new Date()) {
     const e = data.find(x => x.date === ds);
     if (e) {
       const season = _SEASON_NAMES[e.season] || e.season;
-      const label = e.week ? `${season} · Week ${e.week}` : season;
-      return { season, seasonKey: e.season, week: e.week, label };
+      // The JSON's week is unreliable for Ordinary Time after Pentecost, so
+      // compute that ourselves; other seasons count simply and are trustworthy.
+      const week = e.season === 'ordinary_time' ? _ordinaryTimeWeek(date) : e.week;
+      const label = week ? `${season} · Week ${week}` : season;
+      return { season, seasonKey: e.season, week, label };
     }
   }
   return _computeSeason(date);

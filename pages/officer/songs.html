@@ -40,6 +40,22 @@
         border-bottom: 1px solid var(--gold-dim);
       }
       .assignment-item:last-child { border-bottom: none; }
+      .filter-toggle {
+        display: flex; align-items: center; gap: 8px;
+        background: none; border: 1px solid var(--gold-dim);
+        color: var(--ivory-dim); padding: 0 16px;
+        min-height: var(--touch-min); font-family: var(--font-ui);
+        font-size: var(--text-sm); cursor: pointer;
+        transition: all var(--t-fast); white-space: nowrap; flex-shrink: 0;
+      }
+      .filter-toggle:hover { border-color: var(--gold); color: var(--ivory); }
+      .filter-toggle.has-active { border-color: var(--gold); color: var(--gold); background: var(--gold-faint); }
+      @media (max-width: 640px) { .filter-toggle { flex-basis: 100%; justify-content: center; } }
+      .filter-panel { display: none; }
+      .filter-panel.open { display: block; }
+      .filter-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+      @media (min-width: 640px) { .filter-grid { grid-template-columns: repeat(3, 1fr); } }
+      .results-meta { font-size: var(--text-sm); color: var(--ivory-muted); margin-bottom: var(--space-4); font-style: italic; }
     </style>
   </head>
   <body class="portal-body">
@@ -119,6 +135,38 @@
             </div>
             <button class="btn btn-gold" id="add-song-btn">+ Add Song</button>
           </div>
+
+          <!-- Search + filter toggles -->
+          <div class="search-bar" style="align-items:stretch;margin-bottom:var(--space-4)">
+            <input type="search" id="song-search" placeholder="Search by title or tag…"
+              aria-label="Search songs" autocomplete="off">
+            <button class="filter-toggle" id="practicing-btn" aria-pressed="false">● Practicing Now</button>
+            <button class="filter-toggle" id="filter-toggle"
+              aria-expanded="false" aria-controls="filter-panel">⚙ Filters</button>
+          </div>
+
+          <!-- Filter panel -->
+          <div class="filter-panel" id="filter-panel" aria-hidden="true">
+            <div class="filter-grid" style="background:var(--charcoal);border:1px solid var(--gold-dim);padding:var(--space-5);margin-bottom:var(--space-5)">
+              <div>
+                <div class="filter-section-label">Language</div>
+                <div class="filter-chips" id="lang-filter"></div>
+              </div>
+              <div>
+                <div class="filter-section-label">Liturgical Use</div>
+                <div class="filter-chips" id="use-filter"></div>
+              </div>
+              <div>
+                <div class="filter-section-label">Season</div>
+                <div class="filter-chips" id="season-filter"></div>
+              </div>
+              <div style="grid-column:1/-1;margin-top:var(--space-2)">
+                <button class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
+              </div>
+            </div>
+          </div>
+
+          <p id="results-meta" class="results-meta" style="display:none"></p>
 
           <div id="songs-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
 
@@ -219,7 +267,7 @@
       import { initPortalHeader } from '../../js/header.js';
       import { initNotificationBell, createNotifications } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
-      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      import { hidePageLoader, escHtml, initThemeToggle, MASS_PARTS, massPartLabel } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
@@ -322,12 +370,89 @@
         return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
       }
 
+      // ── Search + filter state ──────────────────────────────────
+      const active = { lang: new Set(), use: new Set(), season: new Set(), practicingOnly: false };
+
+      function buildChips(containerId, options, filterSet) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = options.map(o =>
+          `<button class="filter-chip" data-value="${o.value}" type="button">${escHtml(o.label)}</button>`
+        ).join('');
+        el.addEventListener('click', e => {
+          const chip = e.target.closest('.filter-chip');
+          if (!chip) return;
+          const val = chip.dataset.value;
+          if (filterSet.has(val)) { filterSet.delete(val); chip.classList.remove('active'); }
+          else                    { filterSet.add(val);    chip.classList.add('active'); }
+          syncFilterToggle();
+          renderSongs();
+        });
+      }
+      buildChips('lang-filter',   LANG_OPTIONS,   active.lang);
+      buildChips('use-filter',    USE_OPTIONS,    active.use);
+      buildChips('season-filter', SEASON_OPTIONS, active.season);
+
+      const filterPanel  = document.getElementById('filter-panel');
+      const filterToggle = document.getElementById('filter-toggle');
+      filterToggle.addEventListener('click', () => {
+        const open = filterPanel.classList.toggle('open');
+        filterToggle.setAttribute('aria-expanded', String(open));
+        filterPanel.setAttribute('aria-hidden', String(!open));
+      });
+      function syncFilterToggle() {
+        const n = active.lang.size + active.use.size + active.season.size;
+        filterToggle.classList.toggle('has-active', !!n);
+        filterToggle.textContent = n ? `⚙ Filters (${n})` : '⚙ Filters';
+      }
+
+      const practicingBtn = document.getElementById('practicing-btn');
+      practicingBtn.addEventListener('click', () => {
+        active.practicingOnly = !active.practicingOnly;
+        practicingBtn.classList.toggle('has-active', active.practicingOnly);
+        practicingBtn.setAttribute('aria-pressed', String(active.practicingOnly));
+        renderSongs();
+      });
+
+      document.getElementById('clear-filters').addEventListener('click', () => {
+        active.lang.clear(); active.use.clear(); active.season.clear();
+        active.practicingOnly = false;
+        document.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
+        practicingBtn.classList.remove('has-active');
+        practicingBtn.setAttribute('aria-pressed', 'false');
+        syncFilterToggle();
+        renderSongs();
+      });
+
+      // Song passes when it matches the search term and every active filter.
+      function songMatches(s, q) {
+        if (q) {
+          const haystack = [
+            s.title,
+            ...labelsFor(s.language_tags, LANG_OPTIONS),
+            ...labelsFor(s.liturgical_use_tags, USE_OPTIONS),
+            ...labelsFor(s.season_tags, SEASON_OPTIONS),
+          ].join(' ').toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+        if (active.practicingOnly && !s.is_currently_practicing) return false;
+        if (active.lang.size   && ![...active.lang].every(v => (s.language_tags || []).includes(v)))       return false;
+        if (active.use.size    && ![...active.use].every(v => (s.liturgical_use_tags || []).includes(v)))  return false;
+        if (active.season.size && ![...active.season].every(v => (s.season_tags || []).includes(v)))       return false;
+        return true;
+      }
+
+      function filtersActive() {
+        return !!(active.lang.size || active.use.size || active.season.size || active.practicingOnly
+          || document.getElementById('song-search').value.trim());
+      }
+
       // ── Load & render song list ────────────────────────────────
+      let allSongs = [];
+
       async function loadSongs() {
         const loadingEl = document.getElementById('songs-loading');
         const emptyEl   = document.getElementById('songs-empty');
         const tableEl   = document.getElementById('songs-table-wrap');
-        const tbody     = document.getElementById('songs-tbody');
 
         loadingEl.style.display = 'flex';
         emptyEl.style.display   = 'none';
@@ -340,13 +465,41 @@
 
         loadingEl.style.display = 'none';
 
-        if (error || !data?.length) {
+        allSongs = data || [];
+        if (error || !allSongs.length) {
           emptyEl.style.display = 'block';
           return;
         }
 
+        renderSongs();
+      }
+
+      // Filter the loaded songs by search term and active filters, then render.
+      function renderSongs() {
+        const emptyEl = document.getElementById('songs-empty');
+        const tableEl = document.getElementById('songs-table-wrap');
+        const tbody   = document.getElementById('songs-tbody');
+        const metaEl  = document.getElementById('results-meta');
+        const q = document.getElementById('song-search').value.trim().toLowerCase();
+
+        const rows = allSongs.filter(s => songMatches(s, q));
+        const filtered = filtersActive();
+
+        metaEl.style.display = filtered ? 'block' : 'none';
+        if (filtered) metaEl.textContent = `${rows.length} of ${allSongs.length} song${allSongs.length !== 1 ? 's' : ''}`;
+
+        if (!rows.length) {
+          tableEl.style.display = 'none';
+          emptyEl.style.display = 'block';
+          emptyEl.querySelector('p').textContent = filtered
+            ? 'No songs match your search or filters.'
+            : 'No songs yet. Add the first song to begin building the library.';
+          return;
+        }
+
+        emptyEl.style.display = 'none';
         tableEl.style.display = 'block';
-        tbody.innerHTML = data.map(s => {
+        tbody.innerHTML = rows.map(s => {
           const allTags = [
             ...labelsFor(s.language_tags, LANG_OPTIONS),
             ...labelsFor(s.liturgical_use_tags, USE_OPTIONS),
@@ -456,7 +609,7 @@
         const [assignRes, eventsRes] = await Promise.all([
           supabase
             .from('song_assignments')
-            .select('id, event_id, events(id, title, event_date)')
+            .select('id, event_id, mass_part, events(id, title, event_date)')
             .eq('song_id', songId),
           supabase
             .from('events')
@@ -487,7 +640,7 @@
               <div class="assignment-item">
                 <div>
                   <div style="color:var(--ivory);font-size:var(--text-sm)">${escHtml(ev?.title || 'Unknown event')}</div>
-                  <div style="color:var(--ivory-muted);font-size:11px">${fmtDate(ev?.event_date)}</div>
+                  <div style="color:var(--ivory-muted);font-size:11px">${fmtDate(ev?.event_date)}${a.mass_part ? ` · ${escHtml(massPartLabel(a.mass_part))}` : ''}</div>
                 </div>
                 <button class="btn btn-danger btn-sm js-remove-assign"
                   data-assign-id="${a.id}" style="flex-shrink:0">Remove</button>
@@ -509,6 +662,14 @@
                   <option value="">Select event…</option>
                   ${availableEvents.map(ev =>
                     `<option value="${ev.id}">${escHtml(ev.title)} — ${fmtDate(ev.event_date)}</option>`
+                  ).join('')}
+                </select>
+              </div>
+              <div style="flex:1;min-width:160px">
+                <select id="part-select" aria-label="Select mass part">
+                  <option value="">Mass part…</option>
+                  ${MASS_PARTS.map(p =>
+                    `<option value="${p.value}">${escHtml(p.label)}</option>`
                   ).join('')}
                 </select>
               </div>
@@ -541,11 +702,17 @@
         const doAssignBtn = body.querySelector('#do-assign-btn');
         if (doAssignBtn) {
           doAssignBtn.addEventListener('click', async () => {
-            const eventId = body.querySelector('#event-select')?.value;
-            const errEl   = body.querySelector('#assign-error');
-            const errTxt  = body.querySelector('#assign-error-text');
+            const eventId  = body.querySelector('#event-select')?.value;
+            const massPart = body.querySelector('#part-select')?.value || null;
+            const errEl    = body.querySelector('#assign-error');
+            const errTxt   = body.querySelector('#assign-error-text');
             if (!eventId) {
               errTxt.textContent = 'Please select an event.';
+              errEl.style.display = 'flex';
+              return;
+            }
+            if (!massPart) {
+              errTxt.textContent = 'Please select which mass part this song fills.';
               errEl.style.display = 'flex';
               return;
             }
@@ -555,6 +722,7 @@
             const { error } = await supabase.from('song_assignments').insert({
               song_id:     songId,
               event_id:    eventId,
+              mass_part:   massPart,
               assigned_by: profile.id,
             });
             if (error) {
@@ -670,6 +838,9 @@
         if (error) { alert(`Failed to delete: ${error.message}`); return; }
         await loadSongs();
       }
+
+      // ── Search filter ──────────────────────────────────────────
+      document.getElementById('song-search').addEventListener('input', () => renderSongs());
 
       // ── Init ───────────────────────────────────────────────────
       await loadSongs();
