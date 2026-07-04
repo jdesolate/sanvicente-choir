@@ -1,3 +1,5 @@
+import { supabase } from './supabase-client.js';
+
 export function formatRole(role) {
   if (!role) return '—';
   return role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -205,6 +207,38 @@ export function gdriveImgUrl(url) {
   const m2 = url.match(/[?&]id=([-\w]+)/);
   if (m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
   return url;
+}
+
+
+// ── Finance proof uploads (private bucket) ───────────────────────────────────
+
+const PROOF_BUCKET = 'finance-proofs';
+const PROOF_MAX_BYTES = 5 * 1024 * 1024;
+const PROOF_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+
+// Uploads an optional proof file for a finance record and returns its storage
+// path. Throws with a user-facing message on validation or upload failure.
+export async function uploadProof(folder, id, file) {
+  if (file.size > PROOF_MAX_BYTES) throw new Error('Proof file must be under 5 MB.');
+  if (!PROOF_TYPES.includes(file.type)) throw new Error('Proof must be a JPG, PNG, WebP, or PDF.');
+  const ext = file.type === 'application/pdf' ? 'pdf' : (file.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+  const path = `${folder}/${id}/proof-${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from(PROOF_BUCKET).upload(path, file, { upsert: true });
+  if (error) throw new Error(`Proof upload failed: ${error.message}`);
+  return path;
+}
+
+// Opens a stored proof in a new tab via a short-lived signed URL.
+export async function openProof(path) {
+  const { data, error } = await supabase.storage.from(PROOF_BUCKET).createSignedUrl(path, 60);
+  if (error) { alert(`Could not open proof: ${error.message}`); return; }
+  window.open(data.signedUrl, '_blank', 'noopener');
+}
+
+// Removes a proof file when its record is deleted; failures are non-fatal.
+export async function removeProof(path) {
+  if (!path) return;
+  try { await supabase.storage.from(PROOF_BUCKET).remove([path]); } catch (_) {}
 }
 
 

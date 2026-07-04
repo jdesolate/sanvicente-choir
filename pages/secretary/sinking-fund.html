@@ -175,6 +175,11 @@
             <label for="contrib-notes">Notes</label>
             <input type="text" id="contrib-notes" placeholder="Optional…" autocomplete="off">
           </div>
+          <div class="form-group">
+            <label for="contrib-proof">Proof <span style="color:var(--ivory-muted);font-weight:400">(optional)</span></label>
+            <input type="file" id="contrib-proof" accept="image/*,application/pdf">
+            <p class="form-hint" id="contrib-proof-hint">Screenshot, GCash slip, or the collection-day summary. Max 5 MB.</p>
+          </div>
           <div id="contrib-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
             <span class="alert-icon">⚠</span>
             <span id="contrib-error-text"></span>
@@ -192,7 +197,7 @@
       import { initPortalHeader } from '../../js/header.js';
       import { initNotificationBell, createNotification } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
-      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      import { hidePageLoader, escHtml, initThemeToggle, uploadProof, openProof, removeProof } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
@@ -297,6 +302,9 @@
           const memberName  = c.member?.full_name ?? '—';
           const recorderName = c.recorder?.full_name ?? '—';
           const notes = c.notes ? escHtml(c.notes) : '<span style="color:var(--ivory-muted)">—</span>';
+          const proofBtn = c.proof_path
+            ? `<button class="btn btn-ghost btn-sm js-proof" data-path="${escHtml(c.proof_path)}" title="View proof">📎 View</button>`
+            : '';
           return `
             <tr>
               <td style="white-space:nowrap;color:var(--ivory)">${escHtml(memberName)}</td>
@@ -306,6 +314,7 @@
               <td style="white-space:nowrap;color:var(--ivory-muted);font-size:var(--text-xs)">${escHtml(recorderName)}</td>
               <td>
                 <div class="actions">
+                  ${proofBtn}
                   <button class="btn btn-outline btn-sm js-edit" data-id="${c.id}">Edit</button>
                   <button class="btn btn-danger  btn-sm js-delete" data-id="${c.id}">Delete</button>
                 </div>
@@ -323,7 +332,7 @@
         const { data, error } = await supabase
           .from('sinking_fund_contributions')
           .select(`
-            id, member_id, amount, date, notes, created_at,
+            id, member_id, amount, date, notes, created_at, proof_path,
             member:profiles!member_id(full_name),
             recorder:profiles!recorded_by(full_name)
           `)
@@ -345,17 +354,21 @@
 
       // ── Table action delegation ────────────────────────────────
       document.getElementById('sf-tbody').addEventListener('click', async e => {
+        const proofBtn = e.target.closest('.js-proof');
         const editBtn = e.target.closest('.js-edit');
         const delBtn  = e.target.closest('.js-delete');
 
+        if (proofBtn) { await openProof(proofBtn.dataset.path); return; }
         if (editBtn) { openModal(editBtn.dataset.id); return; }
         if (delBtn)  { await deleteContrib(delBtn.dataset.id); return; }
       });
 
       async function deleteContrib(id) {
         if (!confirm('Delete this contribution record? This cannot be undone.')) return;
+        const contrib = allContribs.find(c => c.id === id);
         const { error } = await supabase.from('sinking_fund_contributions').delete().eq('id', id);
         if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await removeProof(contrib?.proof_path);
         await loadContribs();
       }
 
@@ -389,6 +402,8 @@
         document.getElementById('contrib-submit').textContent = isEdit ? 'Save Changes' : 'Save';
         document.getElementById('contrib-error').style.display = 'none';
         document.getElementById('edit-id').value = editId || '';
+        document.getElementById('contrib-proof').value = '';
+        document.getElementById('contrib-proof-hint').textContent = 'Screenshot, GCash slip, or the collection-day summary. Max 5 MB.';
 
         if (isEdit) {
           const c = allContribs.find(x => x.id === editId);
@@ -399,6 +414,9 @@
             document.getElementById('contrib-amount').value = c.amount;
             document.getElementById('contrib-date').value   = c.date;
             document.getElementById('contrib-notes').value  = c.notes || '';
+            if (c.proof_path) {
+              document.getElementById('contrib-proof-hint').textContent = 'A proof is already attached. Choose a file to replace it.';
+            }
           }
         } else {
           ensureMembers().then(() => {
@@ -444,29 +462,52 @@
           return;
         }
 
+        const file = document.getElementById('contrib-proof').files[0];
+
         btn.disabled    = true;
         btn.textContent = 'Saving…';
 
-        let error;
+        let error, savedId = editId;
         if (editId) {
           ({ error } = await supabase
             .from('sinking_fund_contributions')
             .update({ member_id: memberId, amount, date, notes })
             .eq('id', editId));
         } else {
-          ({ error } = await supabase
+          let inserted;
+          ({ data: inserted, error } = await supabase
             .from('sinking_fund_contributions')
-            .insert({ member_id: memberId, amount, date, notes, recorded_by: profile.id }));
+            .insert({ member_id: memberId, amount, date, notes, recorded_by: profile.id })
+            .select('id').single());
+          if (!error) savedId = inserted.id;
         }
 
-        btn.disabled    = false;
-        btn.textContent = editId ? 'Save Changes' : 'Save';
-
         if (error) {
+          btn.disabled = false; btn.textContent = editId ? 'Save Changes' : 'Save';
           errTxt.textContent = error.message;
           errEl.style.display = 'flex';
           return;
         }
+
+        // Record is saved; upload the optional proof and attach it. If this
+        // fails, keep the record and surface the error rather than losing it.
+        if (file) {
+          try {
+            btn.textContent = 'Uploading proof…';
+            const path = await uploadProof('sinking-fund', savedId, file);
+            const { error: upErr } = await supabase.from('sinking_fund_contributions').update({ proof_path: path }).eq('id', savedId);
+            if (upErr) throw new Error(upErr.message);
+          } catch (err) {
+            btn.disabled = false; btn.textContent = editId ? 'Save Changes' : 'Save';
+            errTxt.textContent = `Saved, but proof upload failed: ${err.message}`;
+            errEl.style.display = 'flex';
+            await loadContribs();
+            return;
+          }
+        }
+
+        btn.disabled    = false;
+        btn.textContent = editId ? 'Save Changes' : 'Save';
 
         // Notify the member of their contribution
         if (!editId) {

@@ -228,6 +228,11 @@
             <label for="txn-description">Description</label>
             <input type="text" id="txn-description" placeholder="Optional details…" autocomplete="off">
           </div>
+          <div class="form-group" style="margin-top:var(--space-5)">
+            <label for="txn-proof">Receipt / Proof <span style="color:var(--ivory-muted);font-weight:400">(optional)</span></label>
+            <input type="file" id="txn-proof" accept="image/*,application/pdf">
+            <p class="form-hint">Photo or PDF of a receipt, deposit slip, or screenshot. Max 5 MB.</p>
+          </div>
           <div id="txn-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
             <span class="alert-icon">⚠</span>
             <span id="txn-error-text"></span>
@@ -245,7 +250,7 @@
       import { initPortalHeader } from '../../js/header.js';
       import { initNotificationBell } from '../../js/notifications.js';
       import { supabase } from '../../js/supabase-client.js';
-      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      import { hidePageLoader, escHtml, initThemeToggle, uploadProof, openProof, removeProof } from '../../js/utils.js';
       initThemeToggle();
 
       // ── Auth guard ─────────────────────────────────────────────
@@ -348,6 +353,9 @@
             ? `<span style="color:var(--ivory-dim)">${escHtml(t.description)}</span>`
             : '<span style="color:var(--ivory-muted)">—</span>';
           const amtColor = t.type === 'income' ? 'color:#8FD68F' : 'color:#F08080';
+          const proofBtn = t.proof_path
+            ? `<button class="btn btn-ghost btn-sm js-proof" data-path="${escHtml(t.proof_path)}" title="View proof">📎 View</button>`
+            : '';
 
           return `
             <tr>
@@ -358,6 +366,7 @@
               <td style="white-space:nowrap;font-weight:500;${amtColor}">${fmtPeso(t.amount)}</td>
               <td>
                 <div class="actions">
+                  ${proofBtn}
                   <button class="btn btn-danger btn-sm js-delete" data-id="${t.id}">Delete</button>
                 </div>
               </td>
@@ -373,7 +382,7 @@
 
         const { data, error } = await supabase
           .from('ledger')
-          .select('id, type, amount, category, description, date, created_at')
+          .select('id, type, amount, category, description, date, created_at, proof_path')
           .order('date', { ascending: false })
           .order('created_at', { ascending: false });
 
@@ -392,14 +401,18 @@
 
       // ── Table action delegation ────────────────────────────────
       document.getElementById('txn-tbody').addEventListener('click', async e => {
+        const proofBtn = e.target.closest('.js-proof');
+        if (proofBtn) { await openProof(proofBtn.dataset.path); return; }
         const delBtn = e.target.closest('.js-delete');
         if (delBtn) { await deleteTxn(delBtn.dataset.id); }
       });
 
       async function deleteTxn(id) {
         if (!confirm('Delete this transaction? This cannot be undone.')) return;
+        const txn = allTxns.find(t => t.id === id);
         const { error } = await supabase.from('ledger').delete().eq('id', id);
         if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await removeProof(txn?.proof_path);
         await loadTxns();
       }
 
@@ -420,6 +433,7 @@
         document.getElementById('txn-amount').value      = '';
         document.getElementById('txn-category').value    = '';
         document.getElementById('txn-description').value = '';
+        document.getElementById('txn-proof').value       = '';
         document.getElementById('txn-error').style.display = 'none';
         document.getElementById('txn-modal').classList.add('open');
         document.getElementById('txn-amount').focus();
@@ -456,26 +470,46 @@
           return;
         }
 
+        const file = document.getElementById('txn-proof').files[0];
+
         btn.disabled    = true;
         btn.textContent = 'Saving…';
 
-        const { error } = await supabase.from('ledger').insert({
+        const { data: inserted, error } = await supabase.from('ledger').insert({
           type,
           date,
           amount,
           category,
           description,
           recorded_by: profile.id,
-        });
-
-        btn.disabled    = false;
-        btn.textContent = 'Save Transaction';
+        }).select('id').single();
 
         if (error) {
+          btn.disabled = false; btn.textContent = 'Save Transaction';
           errTxt.textContent = error.message;
           errEl.style.display = 'flex';
           return;
         }
+
+        // Row is saved; upload the optional proof and attach it. If this fails,
+        // keep the transaction and surface the error rather than losing it.
+        if (file) {
+          try {
+            btn.textContent = 'Uploading proof…';
+            const path = await uploadProof('ledger', inserted.id, file);
+            const { error: upErr } = await supabase.from('ledger').update({ proof_path: path }).eq('id', inserted.id);
+            if (upErr) throw new Error(upErr.message);
+          } catch (err) {
+            btn.disabled = false; btn.textContent = 'Save Transaction';
+            errTxt.textContent = `Transaction saved, but proof upload failed: ${err.message}`;
+            errEl.style.display = 'flex';
+            await loadTxns();
+            return;
+          }
+        }
+
+        btn.disabled    = false;
+        btn.textContent = 'Save Transaction';
 
         closeTxnModal();
         await loadTxns();

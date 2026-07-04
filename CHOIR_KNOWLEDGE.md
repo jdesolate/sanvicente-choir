@@ -47,7 +47,7 @@ A full-featured choir management web portal built on top of a static public webs
 |---|---|
 | Frontend | Vanilla HTML5, CSS3, JavaScript (ES6+) — no frameworks |
 | Auth / Database | Supabase (free tier) |
-| File storage | Google Drive links (no file uploads to Supabase) |
+| File storage | Google Drive links for songs; Supabase Storage for uploads — `avatars` (public) and `finance-proofs` (private, staff-only) buckets |
 | Form handling | Formspree (sponsor contact form only) |
 | Markdown rendering | marked.js (CDN) |
 | Fonts | Google Fonts: Cinzel, Cormorant Garamond, Inter |
@@ -337,6 +337,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 | description | text | |
 | date | date | |
 | recorded_by | uuid | FK → profiles |
+| proof_path | text | optional — path in `finance-proofs` bucket |
 | created_at | timestamptz | |
 
 ### `notifications` *(Session 16)*
@@ -391,6 +392,7 @@ Initializes and exports the Supabase client.
 - `getLiturgicalSeason(date)` — returns current liturgical season + week number; uses `assets/data/liturgical-YYYY.json` when present, falls back to algorithm. The JSON's `week` field is unreliable for Ordinary Time, so the week is computed via `_ordinaryTimeWeek()` for that season (see §11)
 - `MASS_PARTS` — canonical mass parts in liturgical order (Entrance → Recessional); single source of truth shared by the song assign UI and the library weekend render. Helpers: `massPartLabel(value)`, `massPartOrder(value)`
 - `initThemeToggle()` — reads `localStorage`, applies `data-theme` to `<html>`, wires toggle button
+- `uploadProof(folder, id, file)` / `openProof(path)` / `removeProof(path)` — optional finance-proof uploads to the private `finance-proofs` bucket; validates ≤5 MB and image/PDF, and opens via a short-lived signed URL
 - Date formatting helpers
 - Google Drive image URL converter
 
@@ -458,6 +460,7 @@ Song library auto-filters to the current season on load. Dashboard shows timelin
 - **Fine statuses:** unpaid / paid / waived
 - **No online payment** — treasurer marks paid/waived manually
 - **Ledger:** income / expense transactions with category and running balance
+- **Proof uploads (optional):** ledger transactions and sinking-fund contributions can carry an optional receipt/screenshot/PDF, stored in the private `finance-proofs` bucket and viewed via signed URL. Staff-only (secretary/treasurer/admin); members see totals, not proofs. Fines have no proof upload
 - Semesters: S1 = June 20 – Oct 31; S2 = Nov 1 – May 31
 
 ---
@@ -484,5 +487,6 @@ Song library auto-filters to the current season on load. Dashboard shows timelin
 - `email` is stored in `profiles` table (not just `auth.users`) for admin query convenience
 - `tos_accepted_at` is stored in profiles at registration time
 - Constitution and Handbook are currently static Markdown files — admin editor deferred indefinitely
+- Finance proofs use a **private** `finance-proofs` bucket (not public like `avatars`) — financial records match the staff-only RLS of the ledger/sinking-fund tables; member visibility of their own proofs is deferred
 - Initials avatar (gold on charcoal) is the fallback when no profile photo is set
 - Sign Out is accessible via the avatar dropdown AND the sidebar — not the top navbar as a standalone button
