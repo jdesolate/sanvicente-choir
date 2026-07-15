@@ -247,7 +247,7 @@
         }
 
         const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
-        const CAT_LABELS  = { service: 'Service', practice: 'Practice', meeting: 'Meeting' };
+        const CAT_LABELS  = { service: 'Service', practice: 'Practice', meeting: 'Meeting', assembly: 'Assembly', activity: 'Activity' };
         data.forEach(ev => {
           eventCategoryById[ev.id] = ev.event_category || 'service';
           const opt = document.createElement('option');

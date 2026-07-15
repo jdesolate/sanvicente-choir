@@ -162,6 +162,8 @@
                 <option value="service">Service — Mass / Feast</option>
                 <option value="practice">Practice — Rehearsal</option>
                 <option value="meeting">Meeting — Officers only</option>
+                <option value="assembly">Assembly — All members</option>
+                <option value="activity">Activity — Recreational / seminar / outreach</option>
               </select>
             </div>
           </div>
@@ -234,8 +236,8 @@
       // ── Constants ──────────────────────────────────────────────
       const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
       const TYPE_BADGE  = { core: 'badge-active', major: 'badge-honorary', special: 'badge-pending' };
-      const CAT_LABELS  = { service: 'Service', practice: 'Practice', meeting: 'Meeting' };
-      const CAT_BADGE   = { service: 'badge-honorary', practice: 'badge-pending', meeting: 'badge-active' };
+      const CAT_LABELS  = { service: 'Service', practice: 'Practice', meeting: 'Meeting', assembly: 'Assembly', activity: 'Activity' };
+      const CAT_BADGE   = { service: 'badge-honorary', practice: 'badge-pending', meeting: 'badge-active', assembly: 'badge-honorary', activity: 'badge-pending' };
 
       let editingId = null;
 

@@ -22,9 +22,11 @@
         --cat-practice: var(--success);
         --cat-special:  #B08CD9;
         --cat-meeting:  var(--info);
+        --cat-assembly: #E0A030;
+        --cat-activity: #5FA88A;
         --cat-lit:      var(--info);
       }
-      html.light { --cat-special: #7C4DAB; }
+      html.light { --cat-special: #7C4DAB; --cat-activity: #3E7A62; }
 
       .cal-toolbar {
         display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
@@ -281,6 +283,8 @@
               <span><i style="background:var(--cat-practice)"></i> Practice</span>
               <span><i style="background:var(--cat-special)"></i> Special</span>
               <span><i style="background:var(--cat-meeting)"></i> Meeting (officers)</span>
+              <span><i style="background:var(--cat-assembly)"></i> Assembly</span>
+              <span><i style="background:var(--cat-activity)"></i> Activity</span>
               <span><i style="background:var(--cat-lit)"></i> Feast day</span>
               <span><i style="background:none;box-shadow:inset 0 0 0 1.5px var(--cat-core)"></i> Regular schedule</span>
             </div>
@@ -349,6 +353,8 @@
                 <option value="service">Service — Mass / Feast</option>
                 <option value="practice">Practice — Rehearsal</option>
                 <option value="meeting">Meeting — Officers only</option>
+                <option value="assembly">Assembly — All members</option>
+                <option value="activity">Activity — Recreational / seminar / outreach</option>
               </select>
             </div>
           </div>
@@ -444,13 +450,15 @@
           covers: i => i.event_category === 'practice' },
         // Last Sunday of the month: assembly + birthday celebration after mass.
         { dow: 0, lastOfMonth: true, title: 'General Assembly & Birthdays', location: null, time: '20:00',
-          type: 'special', category: 'service',
+          type: 'major', category: 'assembly',
           desc: 'Monthly general assembly and birthday celebration after mass',
-          covers: i => i.event_type === 'special' && (i.event_category || 'service') === 'service' },
+          covers: i => i.event_category === 'assembly' },
       ];
       const CAT_COLOR = ev =>
         ev.event_category === 'practice' ? 'var(--cat-practice)'
-        : ev.event_category === 'meeting' ? 'var(--cat-meeting)'
+        : ev.event_category === 'meeting'  ? 'var(--cat-meeting)'
+        : ev.event_category === 'assembly' ? 'var(--cat-assembly)'
+        : ev.event_category === 'activity' ? 'var(--cat-activity)'
         : ev.event_type === 'major'      ? 'var(--cat-major)'
         : ev.event_type === 'special'    ? 'var(--cat-special)'
         : 'var(--cat-core)';

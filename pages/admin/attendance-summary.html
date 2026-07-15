@@ -151,6 +151,8 @@
                 <option value="service">Service</option>
                 <option value="practice">Practice</option>
                 <option value="meeting">Meeting</option>
+                <option value="assembly">Assembly</option>
+                <option value="activity">Activity</option>
               </select>
             </div>
             <div class="form-group" style="margin-bottom:0;flex:0 0 auto">
@@ -337,7 +339,7 @@
           statsMap[p.id] = {
             ...p, present: 0, absent: 0, excused: 0,
             byType: { core:{p:0,a:0,e:0}, major:{p:0,a:0,e:0}, special:{p:0,a:0,e:0} },
-            byCategory: { service:{p:0,a:0,e:0}, practice:{p:0,a:0,e:0}, meeting:{p:0,a:0,e:0} },
+            byCategory: { service:{p:0,a:0,e:0}, practice:{p:0,a:0,e:0}, meeting:{p:0,a:0,e:0}, assembly:{p:0,a:0,e:0}, activity:{p:0,a:0,e:0} },
           };
         });
 
