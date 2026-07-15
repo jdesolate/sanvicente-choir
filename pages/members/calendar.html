@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar — San Vicente Choir</title>
+    <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SVC">
+    <link rel="apple-touch-icon" href="/assets/images/officers/SVC_Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      /* ── Calendar-specific styles ── */
+      :root {
+        --cat-major:    var(--danger);
+        --cat-core:     var(--gold);
+        --cat-practice: var(--success);
+        --cat-special:  #B08CD9;
+        --cat-lit:      var(--info);
+      }
+      html.light { --cat-special: #7C4DAB; }
+
+      .cal-toolbar {
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        margin-bottom: var(--space-4);
+      }
+      .cal-toolbar h2 {
+        font-family: var(--font-display); color: var(--ivory);
+        font-size: var(--text-xl); margin: 0; flex: 1; min-width: 150px;
+      }
+      .cal-nav-btn {
+        width: var(--touch-min); height: var(--touch-min);
+        display: inline-flex; align-items: center; justify-content: center;
+        background: none; border: 1px solid var(--gold-dim); border-radius: 8px;
+        color: var(--ivory-dim); font-size: 1.1rem; cursor: pointer;
+        transition: border-color var(--t-fast), color var(--t-fast);
+      }
+      .cal-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+      .view-toggle {
+        display: inline-flex; border: 1px solid var(--gold-dim); border-radius: 8px; overflow: hidden;
+      }
+      .view-toggle button {
+        min-height: var(--touch-min); padding: 0 14px; background: none; border: none;
+        color: var(--ivory-muted); font-family: var(--font-ui); font-size: var(--text-sm);
+        cursor: pointer; transition: background var(--t-fast), color var(--t-fast);
+      }
+      .view-toggle button.active { background: var(--gold-dim); color: var(--ivory); }
+
+      /* Month grid */
+      .cal-grid-wrap { background: var(--surface); border: 1px solid var(--gold-faint); border-radius: 12px; overflow: hidden; }
+      .cal-weekdays, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+      .cal-weekdays div {
+        text-align: center; padding: 10px 0 8px; font-family: var(--font-ui);
+        font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--ivory-muted); border-bottom: 1px solid var(--gold-faint);
+      }
+      .cal-cell {
+        position: relative; min-height: 64px; padding: 6px 2px 4px;
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+        background: none; border: none; border-bottom: 1px solid var(--gold-faint);
+        cursor: pointer; transition: background var(--t-fast);
+        font-family: var(--font-ui);
+      }
+      .cal-cell:hover { background: var(--gold-faint); }
+      .cal-cell:focus-visible { outline: var(--focus-outline); outline-offset: -2px; }
+      .cal-cell.other-month .cal-daynum { color: var(--ivory-muted); opacity: 0.4; }
+      .cal-daynum {
+        width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+        border-radius: 50%; font-size: var(--text-sm); color: var(--ivory-dim);
+      }
+      .cal-cell.today .cal-daynum { background: var(--gold); color: var(--black); font-weight: 600; }
+      .cal-cell.selected { background: var(--gold-faint); }
+      .cal-cell.selected .cal-daynum { box-shadow: inset 0 0 0 1.5px var(--gold); }
+      .cal-dots { display: flex; gap: 3px; height: 6px; }
+      .cal-dot { width: 6px; height: 6px; border-radius: 50%; }
+      .cal-dot.ghost { background: none; box-shadow: inset 0 0 0 1.5px var(--cat-core); }
+      .cal-more { font-size: 9px; color: var(--ivory-muted); line-height: 6px; }
+      .cal-lit-mark {
+        position: absolute; top: 4px; right: 4px; width: 5px; height: 5px;
+        border-radius: 50%; background: var(--cat-lit); opacity: 0.8;
+      }
+
+      /* Desktop: taller cells with event chips */
+      @media (min-width: 768px) {
+        .cal-cell { min-height: 104px; align-items: stretch; padding: 6px; }
+        .cal-daynum { align-self: flex-end; }
+        .cal-dots { display: none; }
+        .cal-chips { display: flex; flex-direction: column; gap: 2px; width: 100%; overflow: hidden; }
+        .cal-chip {
+          font-size: 11px; line-height: 1.3; padding: 2px 6px; border-radius: 4px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          color: var(--black); text-align: left; font-weight: 500;
+        }
+        .cal-chip.ghost { background: none !important; box-shadow: inset 0 0 0 1px var(--gold-dim); color: var(--ivory-muted); font-weight: 400; }
+      }
+      @media (max-width: 767px) { .cal-chips { display: none; } }
+
+      /* Legend */
+      .cal-legend {
+        display: flex; flex-wrap: wrap; gap: 12px 18px; margin-top: var(--space-4);
+        font-family: var(--font-ui); font-size: var(--text-xs); color: var(--ivory-muted);
+      }
+      .cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .cal-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+      /* Day bottom sheet */
+      .sheet-backdrop {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 40;
+        opacity: 0; pointer-events: none; transition: opacity var(--t-base);
+      }
+      .sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+      .day-sheet {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+        margin: 0 auto; max-width: 560px; max-height: 75vh; overflow-y: auto;
+        background: var(--charcoal); border: 1px solid var(--gold-dim); border-bottom: none;
+        border-radius: 16px 16px 0 0; padding: var(--space-4) var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));
+        transform: translateY(105%); transition: transform 0.28s ease;
+      }
+      .day-sheet.open { transform: translateY(0); }
+      @media (prefers-reduced-motion: reduce) {
+        .day-sheet, .sheet-backdrop { transition: none; }
+      }
+      .sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--gold-dim); margin: 0 auto var(--space-3); }
+      .sheet-date {
+        font-family: var(--font-display); color: var(--ivory); font-size: var(--text-lg);
+        margin: 0 0 2px;
+      }
+      .sheet-lit { font-family: var(--font-ui); font-size: var(--text-sm); color: var(--cat-lit); margin: 0 0 var(--space-3); }
+      .sheet-empty { color: var(--ivory-muted); font-family: var(--font-ui); font-size: var(--text-sm); padding: var(--space-4) 0; }
+      .sheet-item {
+        display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--gold-faint);
+        font-family: var(--font-ui); align-items: flex-start;
+      }
+      .sheet-item-bar { width: 4px; align-self: stretch; border-radius: 2px; flex-shrink: 0; }
+      .sheet-item-main { flex: 1; min-width: 0; }
+      .sheet-item-title { color: var(--ivory); font-weight: 500; font-size: var(--text-base); }
+      .sheet-item-meta { color: var(--ivory-muted); font-size: var(--text-sm); margin-top: 2px; }
+      .sheet-item-desc { color: var(--ivory-dim); font-size: var(--text-sm); margin-top: 4px; }
+      .sheet-item .actions { display: flex; gap: 6px; flex-shrink: 0; }
+      .sheet-add-row { margin-top: var(--space-4); display: flex; gap: 8px; flex-wrap: wrap; }
+
+      /* Agenda view */
+      .agenda-day { margin-bottom: var(--space-4); }
+      .agenda-date {
+        font-family: var(--font-ui); font-size: var(--text-sm); color: var(--gold);
+        letter-spacing: 0.05em; margin-bottom: 6px; display: flex; gap: 8px; align-items: baseline;
+      }
+      .agenda-date .lit { color: var(--cat-lit); font-size: var(--text-xs); }
+      .agenda-card {
+        background: var(--surface); border: 1px solid var(--gold-faint); border-radius: 10px;
+        padding: 10px 14px; display: flex; gap: 12px; margin-bottom: 6px; cursor: pointer;
+        transition: border-color var(--t-fast);
+      }
+      .agenda-card:hover { border-color: var(--gold-dim); }
+
+      /* Floating add button */
+      .cal-fab {
+        position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 30;
+        width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+        background: var(--gold); color: var(--black); font-size: 1.6rem; line-height: 1;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        display: none; align-items: center; justify-content: center;
+        transition: background var(--t-fast);
+      }
+      .cal-fab:hover { background: var(--gold-hover); }
+    </style>
+  </head>
+  <body class="portal-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Member Portal</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
+      <div class="portal-header-user" id="portal-header-user"></div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/calendar.html" class="sidebar-link active"><span class="sidebar-icon">▦</span> Calendar</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
+        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../secretary/sinking-fund.html" class="sidebar-link"><span class="sidebar-icon">₱</span> Sinking Fund</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Song Management</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../officer/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Event Management</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Fines Ledger</a>
+          <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading" style="margin-bottom:var(--space-4)">
+            <h2>Choir Calendar</h2>
+            <p>Masses, rehearsals, feasts, and choir activities</p>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="cal-toolbar">
+            <h2 id="cal-title" aria-live="polite">Month</h2>
+            <button class="cal-nav-btn" id="cal-prev" aria-label="Previous month">‹</button>
+            <button class="cal-nav-btn" id="cal-next" aria-label="Next month">›</button>
+            <button class="btn btn-outline btn-sm" id="cal-today" style="min-height:var(--touch-min)">Today</button>
+            <div class="view-toggle" role="tablist" aria-label="Calendar view">
+              <button id="view-month" class="active" role="tab" aria-selected="true">Month</button>
+              <button id="view-agenda" role="tab" aria-selected="false">Agenda</button>
+            </div>
+          </div>
+
+          <div id="cal-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <!-- Month view -->
+          <div id="month-view" style="display:none">
+            <div class="cal-grid-wrap">
+              <div class="cal-weekdays">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+            <div class="cal-legend">
+              <span><i style="background:var(--cat-major)"></i> Major event</span>
+              <span><i style="background:var(--cat-core)"></i> Mass / core</span>
+              <span><i style="background:var(--cat-practice)"></i> Practice</span>
+              <span><i style="background:var(--cat-special)"></i> Special</span>
+              <span><i style="background:var(--cat-lit)"></i> Feast day</span>
+              <span><i style="background:none;box-shadow:inset 0 0 0 1.5px var(--cat-core)"></i> Weekly mass (regular)</span>
+            </div>
+          </div>
+
+          <!-- Agenda view -->
+          <div id="agenda-view" style="display:none"></div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- Floating add button (editors only) -->
+    <button class="cal-fab" id="cal-fab" aria-label="Add event">+</button>
+
+    <!-- ── Day sheet ── -->
+    <div class="sheet-backdrop" id="sheet-backdrop"></div>
+    <div class="day-sheet" id="day-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-date">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <h3 class="sheet-date" id="sheet-date"></h3>
+      <p class="sheet-lit" id="sheet-lit" style="display:none"></p>
+      <div id="sheet-items"></div>
+      <div class="sheet-add-row" id="sheet-add-row" style="display:none">
+        <button class="btn btn-gold btn-sm" id="sheet-add-btn">+ Add event on this date</button>
+      </div>
+    </div>
+
+    <!-- ── Add / Edit Event Modal ── -->
+    <div class="modal-overlay" id="event-modal" role="dialog" aria-modal="true" aria-labelledby="event-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="event-modal-title">Add Event</h2>
+          <button class="modal-close" id="event-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="event-form" novalidate>
+          <div class="form-group">
+            <label for="ev-title">Title <span class="required">*</span></label>
+            <input type="text" id="ev-title" required autocomplete="off">
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="ev-date">Date <span class="required">*</span></label>
+              <input type="date" id="ev-date" required>
+            </div>
+            <div class="form-group">
+              <label for="ev-time">Time</label>
+              <input type="time" id="ev-time">
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="ev-type">Event Type <span class="required">*</span></label>
+              <select id="ev-type" required>
+                <option value="core">Core — Weekly Mass</option>
+                <option value="major">Major — Feast / Solemnity</option>
+                <option value="special">Special — Voluntary</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ev-category">Category <span class="required">*</span></label>
+              <select id="ev-category" required>
+                <option value="service">Service — Mass / Feast</option>
+                <option value="practice">Practice — Rehearsal</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ev-location">Location</label>
+            <input type="text" id="ev-location" autocomplete="off" placeholder="e.g. SVF Chapel, Duljo">
+          </div>
+          <div class="form-group">
+            <label for="ev-desc">Description</label>
+            <textarea id="ev-desc" style="min-height:80px;resize:vertical"></textarea>
+          </div>
+          <div id="event-error" class="alert alert-error" role="alert" style="display:none">
+            <span class="alert-icon">⚠</span>
+            <span id="event-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm" id="event-delete" style="display:none;margin-right:auto">Delete</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="event-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="event-submit">Save Event</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell } from '../../js/notifications.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle, loadLiturgicalData } from '../../js/utils.js';
+      initThemeToggle();
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('member');
+      if (!profile) throw new Error('redirecting');
+
+      initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
+      document.getElementById('page-content').style.display = 'block';
+
+      const CAN_EDIT = ['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role);
+
+      // Show role-gated nav sections
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('secretary-section').style.display = 'block';
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['secretary', 'treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
+      }
+      if (['admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Constants ──────────────────────────────────────────────
+      const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const DAYS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      // Weekly mass obligations rendered as ghost items unless a real core service event exists that day.
+      const RECURRING = [
+        { dow: 6, title: '7PM Mass', location: 'SVF Chapel, Duljo', time: '19:00' },
+        { dow: 0, title: '7PM Mass', location: 'San Nicolas de Tolentino Parish', time: '19:00' },
+      ];
+      const CAT_COLOR = ev =>
+        ev.event_category === 'practice' ? 'var(--cat-practice)'
+        : ev.event_type === 'major'      ? 'var(--cat-major)'
+        : ev.event_type === 'special'    ? 'var(--cat-special)'
+        : 'var(--cat-core)';
+
+      // ── State ──────────────────────────────────────────────────
+      const today = new Date();
+      let viewYear  = today.getFullYear();
+      let viewMonth = today.getMonth();
+      let view = 'month';
+      let events = [];                 // rows from the events table
+      const litByDate = {};            // dateStr -> feast entry
+      const litLoaded = new Set();     // years already fetched
+      let selectedDate = null;         // dateStr of open day sheet
+      let editingId = null;
+
+      const dstr = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const parseD = s => { const [y,m,dd] = s.split('-').map(Number); return new Date(y, m-1, dd); };
+      const fmtTime = t => {
+        if (!t) return '';
+        const [h, m] = t.split(':').map(Number);
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const hh = h % 12 || 12;
+        return m ? `${hh}:${String(m).padStart(2,'0')} ${ampm}` : `${hh} ${ampm}`;
+      };
+
+      // ── Data loading ───────────────────────────────────────────
+      async function loadEvents() {
+        const { data, error } = await supabase
+          .from('events')
+          .select('id, title, event_date, event_time, location, event_type, event_category, description')
+          .order('event_date');
+        if (!error && data) events = data;
+      }
+
+      async function ensureLiturgical(year) {
+        if (litLoaded.has(year)) return;
+        litLoaded.add(year);
+        const data = await loadLiturgicalData(year);
+        if (data) for (const e of data) {
+          // Only surface solemnities and feasts; memorials would clutter the grid.
+          if (e.rank === 'S' || e.rank === 'F') litByDate[e.date] = e;
+        }
+      }
+
+      // Items for one date: real events + ghost weekly masses not covered by a real core service.
+      function itemsFor(dateStr) {
+        const d = parseD(dateStr);
+        const items = events.filter(e => e.event_date === dateStr)
+          .map(e => ({ kind: 'event', ...e }));
+        for (const r of RECURRING) {
+          if (d.getDay() !== r.dow) continue;
+          const covered = items.some(i => i.event_type === 'core' && (i.event_category || 'service') === 'service');
+          if (!covered) items.push({
+            kind: 'ghost', title: r.title, event_date: dateStr, event_time: r.time,
+            location: r.location, event_type: 'core', event_category: 'service',
+            description: 'Regular weekly mass obligation',
+          });
+        }
+        items.sort((a, b) => (a.event_time || '99') < (b.event_time || '99') ? -1 : 1);
+        return items;
+      }
+
+      // ── Month view ─────────────────────────────────────────────
+      async function renderMonth() {
+        await ensureLiturgical(viewYear);
+        document.getElementById('cal-title').textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+
+        const first = new Date(viewYear, viewMonth, 1);
+        const start = new Date(viewYear, viewMonth, 1 - first.getDay());
+        const todayStr = dstr(today);
+        const cells = [];
+
+        for (let i = 0; i < 42; i++) {
+          const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+          const ds = dstr(d);
+          const inMonth = d.getMonth() === viewMonth;
+          const items = itemsFor(ds);
+          const lit = litByDate[ds];
+
+          const dots = items.slice(0, 3).map(i =>
+            i.kind === 'ghost'
+              ? '<span class="cal-dot ghost"></span>'
+              : `<span class="cal-dot" style="background:${CAT_COLOR(i)}"></span>`
+          ).join('') + (items.length > 3 ? '<span class="cal-more">+</span>' : '');
+
+          const chips = items.slice(0, 3).map(i =>
+            i.kind === 'ghost'
+              ? `<span class="cal-chip ghost">${escHtml(i.title)}</span>`
+              : `<span class="cal-chip" style="background:${CAT_COLOR(i)}">${i.event_time ? fmtTime(i.event_time) + ' ' : ''}${escHtml(i.title)}</span>`
+          ).join('') + (items.length > 3 ? `<span class="cal-chip ghost">+${items.length - 3} more</span>` : '');
+
+          cells.push(`
+            <button class="cal-cell${inMonth ? '' : ' other-month'}${ds === todayStr ? ' today' : ''}${ds === selectedDate ? ' selected' : ''}"
+              data-date="${ds}" aria-label="${DAYS_LONG[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}${items.length ? `, ${items.length} item${items.length > 1 ? 's' : ''}` : ''}">
+              ${lit ? '<span class="cal-lit-mark" title="Feast day"></span>' : ''}
+              <span class="cal-daynum">${d.getDate()}</span>
+              <span class="cal-dots">${dots}</span>
+              <span class="cal-chips">${chips}</span>
+            </button>`);
+        }
+        document.getElementById('cal-grid').innerHTML = cells.join('');
+      }
+
+      document.getElementById('cal-grid').addEventListener('click', e => {
+        const cell = e.target.closest('.cal-cell');
+        if (cell) openSheet(cell.dataset.date);
+      });
+
+      // ── Agenda view ────────────────────────────────────────────
+      async function renderAgenda() {
+        const el = document.getElementById('agenda-view');
+        document.getElementById('cal-title').textContent = 'Upcoming';
+        await ensureLiturgical(today.getFullYear());
+        await ensureLiturgical(today.getFullYear() + 1);
+
+        const days = [];
+        for (let i = 0; i < 90; i++) {
+          const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+          const ds = dstr(d);
+          const items = itemsFor(ds);
+          if (items.length || litByDate[ds]) days.push({ d, ds, items });
+        }
+
+        el.innerHTML = days.length ? days.map(({ d, ds, items }) => `
+          <div class="agenda-day">
+            <div class="agenda-date">
+              ${DAYS_LONG[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}${d.getFullYear() !== today.getFullYear() ? ', ' + d.getFullYear() : ''}
+              ${litByDate[ds] ? `<span class="lit">✝ ${escHtml(litByDate[ds].feast)}</span>` : ''}
+            </div>
+            ${items.map(i => `
+              <div class="agenda-card" data-date="${ds}">
+                <span class="sheet-item-bar" style="background:${i.kind === 'ghost' ? 'var(--gold-dim)' : CAT_COLOR(i)}"></span>
+                <div class="sheet-item-main">
+                  <div class="sheet-item-title">${escHtml(i.title)}</div>
+                  <div class="sheet-item-meta">${[fmtTime(i.event_time), i.location].filter(Boolean).map(escHtml).join(' · ')}</div>
+                </div>
+              </div>`).join('')}
+          </div>`).join('')
+          : '<div class="empty-state"><div class="empty-icon">▦</div><p>Nothing scheduled in the next 90 days.</p></div>';
+      }
+
+      document.getElementById('agenda-view').addEventListener('click', e => {
+        const card = e.target.closest('.agenda-card');
+        if (card) openSheet(card.dataset.date);
+      });
+
+      // ── View switching / navigation ────────────────────────────
+      async function refresh() {
+        document.getElementById('month-view').style.display  = view === 'month'  ? 'block' : 'none';
+        document.getElementById('agenda-view').style.display = view === 'agenda' ? 'block' : 'none';
+        document.getElementById('view-month').classList.toggle('active', view === 'month');
+        document.getElementById('view-agenda').classList.toggle('active', view === 'agenda');
+        document.getElementById('view-month').setAttribute('aria-selected', view === 'month');
+        document.getElementById('view-agenda').setAttribute('aria-selected', view === 'agenda');
+        document.getElementById('cal-prev').style.visibility  = view === 'month' ? 'visible' : 'hidden';
+        document.getElementById('cal-next').style.visibility  = view === 'month' ? 'visible' : 'hidden';
+        document.getElementById('cal-today').style.visibility = view === 'month' ? 'visible' : 'hidden';
+        if (view === 'month') await renderMonth(); else await renderAgenda();
+      }
+
+      function shiftMonth(delta) {
+        viewMonth += delta;
+        if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+        if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
+        renderMonth();
+      }
+      document.getElementById('cal-prev').addEventListener('click', () => shiftMonth(-1));
+      document.getElementById('cal-next').addEventListener('click', () => shiftMonth(1));
+      document.getElementById('cal-today').addEventListener('click', () => {
+        viewYear = today.getFullYear(); viewMonth = today.getMonth(); renderMonth();
+      });
+      document.getElementById('view-month').addEventListener('click', () => { view = 'month'; refresh(); });
+      document.getElementById('view-agenda').addEventListener('click', () => { view = 'agenda'; refresh(); });
+
+      // Swipe to change month
+      let touchX = null;
+      const gridWrap = document.querySelector('.cal-grid-wrap');
+      gridWrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+      gridWrap.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 60) shiftMonth(dx < 0 ? 1 : -1);
+        touchX = null;
+      }, { passive: true });
+
+      // ── Day sheet ──────────────────────────────────────────────
+      const sheet = document.getElementById('day-sheet');
+      const sheetBackdrop = document.getElementById('sheet-backdrop');
+
+      function openSheet(dateStr) {
+        selectedDate = dateStr;
+        const d = parseD(dateStr);
+        document.getElementById('sheet-date').textContent =
+          `${DAYS_LONG[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+
+        const lit = litByDate[dateStr];
+        const litEl = document.getElementById('sheet-lit');
+        litEl.style.display = lit ? 'block' : 'none';
+        if (lit) litEl.textContent = `✝ ${lit.feast}`;
+
+        const items = itemsFor(dateStr);
+        document.getElementById('sheet-items').innerHTML = items.length ? items.map((i, idx) => `
+          <div class="sheet-item">
+            <span class="sheet-item-bar" style="background:${i.kind === 'ghost' ? 'var(--gold-dim)' : CAT_COLOR(i)}"></span>
+            <div class="sheet-item-main">
+              <div class="sheet-item-title">${escHtml(i.title)}${i.kind === 'ghost' ? ' <span style="color:var(--ivory-muted);font-size:var(--text-xs)">(weekly)</span>' : ''}</div>
+              <div class="sheet-item-meta">${[fmtTime(i.event_time), i.location].filter(Boolean).map(escHtml).join(' · ')}</div>
+              ${i.description ? `<div class="sheet-item-desc">${escHtml(i.description)}</div>` : ''}
+            </div>
+            ${CAN_EDIT && i.kind === 'event' ? `<div class="actions"><button class="btn btn-outline btn-sm js-edit" data-idx="${idx}">Edit</button></div>` : ''}
+            ${CAN_EDIT && i.kind === 'ghost' ? `<div class="actions"><button class="btn btn-ghost btn-sm js-materialize" data-idx="${idx}" title="Create a real event for attendance tracking">Track</button></div>` : ''}
+          </div>`).join('')
+          : '<div class="sheet-empty">Nothing scheduled on this day.</div>';
+
+        document.getElementById('sheet-add-row').style.display = CAN_EDIT ? 'flex' : 'none';
+        sheet.classList.add('open');
+        sheetBackdrop.classList.add('open');
+        if (view === 'month') renderMonth();
+      }
+
+      function closeSheet() {
+        sheet.classList.remove('open');
+        sheetBackdrop.classList.remove('open');
+        const prev = selectedDate;
+        selectedDate = null;
+        if (prev && view === 'month') renderMonth();
+      }
+      sheetBackdrop.addEventListener('click', closeSheet);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSheet(); closeModal(); } });
+
+      document.getElementById('sheet-items').addEventListener('click', e => {
+        const editBtn = e.target.closest('.js-edit');
+        const matBtn  = e.target.closest('.js-materialize');
+        if (!editBtn && !matBtn) return;
+        const items = itemsFor(selectedDate);
+        if (editBtn) {
+          const i = items[Number(editBtn.dataset.idx)];
+          openModal(i);
+        } else {
+          const g = items[Number(matBtn.dataset.idx)];
+          openModal({ title: g.title, event_date: g.event_date, event_time: g.event_time,
+            location: g.location, event_type: 'core', event_category: 'service' });
+        }
+      });
+
+      document.getElementById('sheet-add-btn').addEventListener('click', () => {
+        openModal({ event_date: selectedDate });
+      });
+
+      // ── Event modal (add / edit / delete) ──────────────────────
+      function openModal(data = {}) {
+        editingId = data.id || null;
+        document.getElementById('event-modal-title').textContent = editingId ? 'Edit Event' : 'Add Event';
+        document.getElementById('ev-title').value    = data.title || '';
+        document.getElementById('ev-date').value     = data.event_date || dstr(today);
+        document.getElementById('ev-time').value     = data.event_time ? data.event_time.slice(0, 5) : '';
+        document.getElementById('ev-type').value     = data.event_type || 'core';
+        document.getElementById('ev-category').value = data.event_category || 'service';
+        document.getElementById('ev-location').value = data.location || '';
+        document.getElementById('ev-desc').value     = data.description || '';
+        document.getElementById('event-error').style.display = 'none';
+        document.getElementById('event-delete').style.display = editingId ? 'inline-flex' : 'none';
+        document.getElementById('event-modal').classList.add('open');
+        document.getElementById('ev-title').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('event-modal').classList.remove('open');
+        editingId = null;
+      }
+      document.getElementById('event-modal-close').addEventListener('click', closeModal);
+      document.getElementById('event-cancel').addEventListener('click', closeModal);
+      document.getElementById('event-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      document.getElementById('cal-fab').addEventListener('click', () => {
+        openModal({ event_date: selectedDate || dstr(today) });
+      });
+      if (CAN_EDIT) document.getElementById('cal-fab').style.display = 'flex';
+
+      document.getElementById('event-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('event-submit');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        document.getElementById('event-error').style.display = 'none';
+
+        const payload = {
+          title:          document.getElementById('ev-title').value.trim(),
+          event_date:     document.getElementById('ev-date').value,
+          event_time:     document.getElementById('ev-time').value || null,
+          event_type:     document.getElementById('ev-type').value,
+          event_category: document.getElementById('ev-category').value,
+          location:       document.getElementById('ev-location').value.trim() || null,
+          description:    document.getElementById('ev-desc').value.trim() || null,
+        };
+
+        let error;
+        if (!payload.title || !payload.event_date) {
+          error = { message: 'Title and date are required.' };
+        } else if (editingId) {
+          ({ error } = await supabase.from('events').update(payload).eq('id', editingId));
+        } else {
+          ({ error } = await supabase.from('events').insert({ ...payload, created_by: profile.id }));
+        }
+
+        btn.disabled = false;
+        btn.textContent = 'Save Event';
+
+        if (error) {
+          document.getElementById('event-error-text').textContent = error.message;
+          document.getElementById('event-error').style.display = 'flex';
+          return;
+        }
+
+        const savedDate = payload.event_date;
+        closeModal();
+        await loadEvents();
+        await refresh();
+        if (sheet.classList.contains('open')) openSheet(savedDate);
+      });
+
+      document.getElementById('event-delete').addEventListener('click', async () => {
+        if (!editingId) return;
+        if (!confirm('Delete this event? Attendance records tied to it will also be removed.')) return;
+        const btn = document.getElementById('event-delete');
+        btn.disabled = true;
+        const { error } = await supabase.from('events').delete().eq('id', editingId);
+        btn.disabled = false;
+        if (error) {
+          document.getElementById('event-error-text').textContent = error.message;
+          document.getElementById('event-error').style.display = 'flex';
+          return;
+        }
+        const prevDate = selectedDate;
+        closeModal();
+        await loadEvents();
+        await refresh();
+        if (sheet.classList.contains('open') && prevDate) openSheet(prevDate);
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadEvents();
+      document.getElementById('cal-loading').style.display = 'none';
+      await refresh();
+      hidePageLoader();
+    </script>
+  </body>
+</html>
