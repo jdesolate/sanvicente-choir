@@ -219,6 +219,10 @@
 
       const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
 
+      // Meetings track officers only, so the roster narrows to officer roles.
+      const eventCategoryById = {};
+      const OFFICER_ROLES = ['secretary', 'officer', 'treasurer', 'admin'];
+
       // ── Load events into selector ──────────────────────────────
       async function loadEventOptions() {
         // Show events from 60 days ago through all future events
@@ -243,8 +247,9 @@
         }
 
         const TYPE_LABELS = { core: 'Core', major: 'Major', special: 'Special' };
-        const CAT_LABELS  = { service: 'Service', practice: 'Practice' };
+        const CAT_LABELS  = { service: 'Service', practice: 'Practice', meeting: 'Meeting' };
         data.forEach(ev => {
+          eventCategoryById[ev.id] = ev.event_category || 'service';
           const opt = document.createElement('option');
           const catLabel = CAT_LABELS[ev.event_category] || 'Service';
           opt.value = ev.id;
@@ -273,7 +278,7 @@
         const [membersRes, attendanceRes] = await Promise.all([
           supabase
             .from('profiles')
-            .select('id, full_name, voice_part, status')
+            .select('id, full_name, voice_part, status, role')
             .in('status', ['active', 'associate'])
             .order('full_name'),
           supabase
@@ -289,7 +294,14 @@
           return;
         }
 
-        members = membersRes.data;
+        const isMeeting = eventCategoryById[eventId] === 'meeting';
+        members = isMeeting
+          ? membersRes.data.filter(m => OFFICER_ROLES.includes(m.role))
+          : membersRes.data;
+        if (!members.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
         attendance.clear();
 
         // Pre-fill from existing records; default absent for unmarked members
@@ -297,8 +309,11 @@
         const existingMap = new Map(existingRows.map(r => [r.member_id, r.status]));
         members.forEach(m => attendance.set(m.id, existingMap.get(m.id) || 'absent'));
 
-        if (existingRows.length > 0) {
-          hintEl.textContent = `${existingRows.length} attendance record(s) already saved for this event. Saving again will update them.`;
+        const hints = [];
+        if (isMeeting) hints.push('Officer meeting — the roster shows officers only.');
+        if (existingRows.length > 0) hints.push(`${existingRows.length} attendance record(s) already saved for this event. Saving again will update them.`);
+        if (hints.length) {
+          hintEl.textContent = hints.join(' ');
           hintEl.style.display = 'block';
         }
 

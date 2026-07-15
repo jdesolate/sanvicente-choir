@@ -21,6 +21,7 @@
         --cat-core:     var(--gold);
         --cat-practice: var(--success);
         --cat-special:  #B08CD9;
+        --cat-meeting:  var(--info);
         --cat-lit:      var(--info);
       }
       html.light { --cat-special: #7C4DAB; }
@@ -279,6 +280,7 @@
               <span><i style="background:var(--cat-core)"></i> Mass / core</span>
               <span><i style="background:var(--cat-practice)"></i> Practice</span>
               <span><i style="background:var(--cat-special)"></i> Special</span>
+              <span><i style="background:var(--cat-meeting)"></i> Meeting (officers)</span>
               <span><i style="background:var(--cat-lit)"></i> Feast day</span>
               <span><i style="background:none;box-shadow:inset 0 0 0 1.5px var(--cat-core)"></i> Regular schedule</span>
             </div>
@@ -346,6 +348,7 @@
               <select id="ev-category" required>
                 <option value="service">Service — Mass / Feast</option>
                 <option value="practice">Practice — Rehearsal</option>
+                <option value="meeting">Meeting — Officers only</option>
               </select>
             </div>
           </div>
@@ -447,6 +450,7 @@
       ];
       const CAT_COLOR = ev =>
         ev.event_category === 'practice' ? 'var(--cat-practice)'
+        : ev.event_category === 'meeting' ? 'var(--cat-meeting)'
         : ev.event_type === 'major'      ? 'var(--cat-major)'
         : ev.event_type === 'special'    ? 'var(--cat-special)'
         : 'var(--cat-core)';

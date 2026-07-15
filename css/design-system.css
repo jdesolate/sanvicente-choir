@@ -405,6 +405,8 @@ input[type="password"],
 input[type="tel"],
 input[type="number"],
 input[type="date"],
+input[type="time"],
+input[type="search"],
 select,
 textarea {
   font-family: var(--font-ui);
@@ -435,6 +437,18 @@ select {
 
 input::placeholder,
 textarea::placeholder { color: var(--ivory-muted); }
+
+/* Native date/time pickers: render icons and spinners in the active theme */
+input[type="date"],
+input[type="time"] { color-scheme: dark; }
+:root.light input[type="date"],
+:root.light input[type="time"] { color-scheme: light; }
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) input[type="date"],
+  :root:not(.dark) input[type="time"] { color-scheme: light; }
+}
+/* Keep the segmented time value on one line and vertically centered */
+input[type="time"]::-webkit-datetime-edit { display: inline-flex; align-items: center; padding: 0; }
 
 /* Password show/hide wrapper */
 .password-wrapper {
