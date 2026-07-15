@@ -80,6 +80,12 @@
       .cal-dot { width: 6px; height: 6px; border-radius: 50%; }
       .cal-dot.ghost { background: none; box-shadow: inset 0 0 0 1.5px var(--cat-core); }
       .cal-more { font-size: 9px; color: var(--ivory-muted); line-height: 6px; }
+      .cal-dot.cancelled { opacity: 0.35; }
+      .cal-chip.cancelled, .sheet-item.cancelled .sheet-item-title,
+      .agenda-card.cancelled .sheet-item-title { text-decoration: line-through; }
+      .cal-chip.cancelled { opacity: 0.5; }
+      .sheet-item.cancelled, .agenda-card.cancelled { opacity: 0.6; }
+      .cancelled-tag { color: var(--danger); font-size: var(--text-xs); font-weight: 500; text-decoration: none; }
       .cal-lit-mark {
         position: absolute; top: 4px; right: 4px; width: 5px; height: 5px;
         border-radius: 50%; background: var(--cat-lit); opacity: 0.8;
@@ -274,7 +280,7 @@
               <span><i style="background:var(--cat-practice)"></i> Practice</span>
               <span><i style="background:var(--cat-special)"></i> Special</span>
               <span><i style="background:var(--cat-lit)"></i> Feast day</span>
-              <span><i style="background:none;box-shadow:inset 0 0 0 1.5px var(--cat-core)"></i> Weekly mass (regular)</span>
+              <span><i style="background:none;box-shadow:inset 0 0 0 1.5px var(--cat-core)"></i> Regular schedule</span>
             </div>
           </div>
 
@@ -351,6 +357,12 @@
             <label for="ev-desc">Description</label>
             <textarea id="ev-desc" style="min-height:80px;resize:vertical"></textarea>
           </div>
+          <div class="form-group" id="ev-cancelled-wrap" style="display:none">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" id="ev-cancelled" style="width:18px;height:18px;accent-color:var(--danger)">
+              Mark as cancelled (stays visible, struck through)
+            </label>
+          </div>
           <div id="event-error" class="alert alert-error" role="alert" style="display:none">
             <span class="alert-icon">⚠</span>
             <span id="event-error-text"></span>
@@ -412,10 +424,26 @@
       // ── Constants ──────────────────────────────────────────────
       const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
       const DAYS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-      // Weekly mass obligations rendered as ghost items unless a real core service event exists that day.
+      // Standing schedule rendered as ghost items unless a matching real event exists that day.
+      // covers() decides which real event replaces the ghost (materialized or cancelled).
       const RECURRING = [
-        { dow: 6, title: '7PM Mass', location: 'SVF Chapel, Duljo', time: '19:00' },
-        { dow: 0, title: '7PM Mass', location: 'San Nicolas de Tolentino Parish', time: '19:00' },
+        { dow: 6, title: '7PM Mass', location: 'SVF Chapel, Duljo', time: '19:00',
+          type: 'core', category: 'service', desc: 'Regular weekly mass obligation',
+          covers: i => i.event_type === 'core' && (i.event_category || 'service') === 'service' },
+        { dow: 0, title: '7PM Mass', location: 'San Nicolas de Tolentino Parish', time: '19:00',
+          type: 'core', category: 'service', desc: 'Regular weekly mass obligation',
+          covers: i => i.event_type === 'core' && (i.event_category || 'service') === 'service' },
+        { dow: 2, title: 'Rehearsal', location: null, time: '20:00',
+          type: 'core', category: 'practice', desc: 'Regular weekly rehearsal',
+          covers: i => i.event_category === 'practice' },
+        { dow: 4, title: 'Rehearsal', location: null, time: '20:00',
+          type: 'core', category: 'practice', desc: 'Regular weekly rehearsal',
+          covers: i => i.event_category === 'practice' },
+        // Last Sunday of the month: assembly + birthday celebration after mass.
+        { dow: 0, lastOfMonth: true, title: 'General Assembly & Birthdays', location: null, time: '20:00',
+          type: 'special', category: 'service',
+          desc: 'Monthly general assembly and birthday celebration after mass',
+          covers: i => i.event_type === 'special' && (i.event_category || 'service') === 'service' },
       ];
       const CAT_COLOR = ev =>
         ev.event_category === 'practice' ? 'var(--cat-practice)'
@@ -448,7 +476,7 @@
       async function loadEvents() {
         const { data, error } = await supabase
           .from('events')
-          .select('id, title, event_date, event_time, location, event_type, event_category, description')
+          .select('id, title, event_date, event_time, location, event_type, event_category, description, status')
           .order('event_date');
         if (!error && data) events = data;
       }
@@ -463,18 +491,20 @@
         }
       }
 
-      // Items for one date: real events + ghost weekly masses not covered by a real core service.
+      // Items for one date: real events + standing-schedule ghosts not covered by a real event.
       function itemsFor(dateStr) {
         const d = parseD(dateStr);
+        const lastOfMonth = d.getDate() + 7 > new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
         const items = events.filter(e => e.event_date === dateStr)
           .map(e => ({ kind: 'event', ...e }));
         for (const r of RECURRING) {
           if (d.getDay() !== r.dow) continue;
-          const covered = items.some(i => i.event_type === 'core' && (i.event_category || 'service') === 'service');
-          if (!covered) items.push({
+          if (r.lastOfMonth && !lastOfMonth) continue;
+          if (items.some(r.covers)) continue;
+          items.push({
             kind: 'ghost', title: r.title, event_date: dateStr, event_time: r.time,
-            location: r.location, event_type: 'core', event_category: 'service',
-            description: 'Regular weekly mass obligation',
+            location: r.location, event_type: r.type, event_category: r.category,
+            description: r.desc,
           });
         }
         items.sort((a, b) => (a.event_time || '99') < (b.event_time || '99') ? -1 : 1);
@@ -501,13 +531,13 @@
           const dots = items.slice(0, 3).map(i =>
             i.kind === 'ghost'
               ? '<span class="cal-dot ghost"></span>'
-              : `<span class="cal-dot" style="background:${CAT_COLOR(i)}"></span>`
+              : `<span class="cal-dot${i.status === 'cancelled' ? ' cancelled' : ''}" style="background:${CAT_COLOR(i)}"></span>`
           ).join('') + (items.length > 3 ? '<span class="cal-more">+</span>' : '');
 
           const chips = items.slice(0, 3).map(i =>
             i.kind === 'ghost'
               ? `<span class="cal-chip ghost">${escHtml(i.title)}</span>`
-              : `<span class="cal-chip" style="background:${CAT_COLOR(i)}">${i.event_time ? fmtTime(i.event_time) + ' ' : ''}${escHtml(i.title)}</span>`
+              : `<span class="cal-chip${i.status === 'cancelled' ? ' cancelled' : ''}" style="background:${CAT_COLOR(i)}">${i.event_time ? fmtTime(i.event_time) + ' ' : ''}${escHtml(i.title)}</span>`
           ).join('') + (items.length > 3 ? `<span class="cal-chip ghost">+${items.length - 3} more</span>` : '');
 
           cells.push(`
@@ -549,10 +579,10 @@
               ${litByDate[ds] ? `<span class="lit">✝ ${escHtml(litByDate[ds].feast)}</span>` : ''}
             </div>
             ${items.map(i => `
-              <div class="agenda-card" data-date="${ds}">
+              <div class="agenda-card${i.status === 'cancelled' ? ' cancelled' : ''}" data-date="${ds}">
                 <span class="sheet-item-bar" style="background:${i.kind === 'ghost' ? 'var(--gold-dim)' : CAT_COLOR(i)}"></span>
                 <div class="sheet-item-main">
-                  <div class="sheet-item-title">${escHtml(i.title)}</div>
+                  <div class="sheet-item-title">${escHtml(i.title)}${i.status === 'cancelled' ? ' <span class="cancelled-tag">Cancelled</span>' : ''}</div>
                   <div class="sheet-item-meta">${[fmtTime(i.event_time), i.location].filter(Boolean).map(escHtml).join(' · ')}</div>
                 </div>
               </div>`).join('')}
@@ -621,15 +651,18 @@
 
         const items = itemsFor(dateStr);
         document.getElementById('sheet-items').innerHTML = items.length ? items.map((i, idx) => `
-          <div class="sheet-item">
+          <div class="sheet-item${i.status === 'cancelled' ? ' cancelled' : ''}">
             <span class="sheet-item-bar" style="background:${i.kind === 'ghost' ? 'var(--gold-dim)' : CAT_COLOR(i)}"></span>
             <div class="sheet-item-main">
-              <div class="sheet-item-title">${escHtml(i.title)}${i.kind === 'ghost' ? ' <span style="color:var(--ivory-muted);font-size:var(--text-xs)">(weekly)</span>' : ''}</div>
+              <div class="sheet-item-title">${escHtml(i.title)}${i.kind === 'ghost' ? ' <span style="color:var(--ivory-muted);font-size:var(--text-xs);text-decoration:none">(regular)</span>' : ''}${i.status === 'cancelled' ? ' <span class="cancelled-tag">Cancelled</span>' : ''}</div>
               <div class="sheet-item-meta">${[fmtTime(i.event_time), i.location].filter(Boolean).map(escHtml).join(' · ')}</div>
               ${i.description ? `<div class="sheet-item-desc">${escHtml(i.description)}</div>` : ''}
             </div>
             ${CAN_EDIT && i.kind === 'event' ? `<div class="actions"><button class="btn btn-outline btn-sm js-edit" data-idx="${idx}">Edit</button></div>` : ''}
-            ${CAN_EDIT && i.kind === 'ghost' ? `<div class="actions"><button class="btn btn-ghost btn-sm js-materialize" data-idx="${idx}" title="Create a real event for attendance tracking">Track</button></div>` : ''}
+            ${CAN_EDIT && i.kind === 'ghost' ? `<div class="actions">
+              <button class="btn btn-ghost btn-sm js-materialize" data-idx="${idx}" title="Create a real event for attendance tracking">Track</button>
+              <button class="btn btn-ghost btn-sm js-cancel-ghost" data-idx="${idx}" title="Mark this occurrence as cancelled" style="color:var(--danger)">Cancel</button>
+            </div>` : ''}
           </div>`).join('')
           : '<div class="sheet-empty">Nothing scheduled on this day.</div>';
 
@@ -649,18 +682,34 @@
       sheetBackdrop.addEventListener('click', closeSheet);
       document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSheet(); closeModal(); } });
 
-      document.getElementById('sheet-items').addEventListener('click', e => {
-        const editBtn = e.target.closest('.js-edit');
-        const matBtn  = e.target.closest('.js-materialize');
-        if (!editBtn && !matBtn) return;
+      document.getElementById('sheet-items').addEventListener('click', async e => {
+        const editBtn   = e.target.closest('.js-edit');
+        const matBtn    = e.target.closest('.js-materialize');
+        const cancelBtn = e.target.closest('.js-cancel-ghost');
+        if (!editBtn && !matBtn && !cancelBtn) return;
         const items = itemsFor(selectedDate);
         if (editBtn) {
-          const i = items[Number(editBtn.dataset.idx)];
-          openModal(i);
-        } else {
+          openModal(items[Number(editBtn.dataset.idx)]);
+        } else if (matBtn) {
           const g = items[Number(matBtn.dataset.idx)];
           openModal({ title: g.title, event_date: g.event_date, event_time: g.event_time,
-            location: g.location, event_type: 'core', event_category: 'service' });
+            location: g.location, event_type: g.event_type, event_category: g.event_category,
+            description: g.description });
+        } else {
+          // One-tap cancel: materialize the ghost directly as a cancelled event.
+          const g = items[Number(cancelBtn.dataset.idx)];
+          if (!confirm(`Cancel "${g.title}" on this date? It will stay visible, struck through.`)) return;
+          cancelBtn.disabled = true;
+          const { error } = await supabase.from('events').insert({
+            title: g.title, event_date: g.event_date, event_time: g.event_time,
+            location: g.location, event_type: g.event_type, event_category: g.event_category,
+            description: g.description, status: 'cancelled', created_by: profile.id,
+          });
+          cancelBtn.disabled = false;
+          if (error) { alert(error.message); return; }
+          await loadEvents();
+          await refresh();
+          openSheet(g.event_date);
         }
       });
 
@@ -679,6 +728,8 @@
         document.getElementById('ev-category').value = data.event_category || 'service';
         document.getElementById('ev-location').value = data.location || '';
         document.getElementById('ev-desc').value     = data.description || '';
+        document.getElementById('ev-cancelled').checked = data.status === 'cancelled';
+        document.getElementById('ev-cancelled-wrap').style.display = editingId ? 'block' : 'none';
         document.getElementById('event-error').style.display = 'none';
         document.getElementById('event-delete').style.display = editingId ? 'inline-flex' : 'none';
         document.getElementById('event-modal').classList.add('open');
@@ -715,6 +766,7 @@
           event_category: document.getElementById('ev-category').value,
           location:       document.getElementById('ev-location').value.trim() || null,
           description:    document.getElementById('ev-desc').value.trim() || null,
+          status:         document.getElementById('ev-cancelled').checked ? 'cancelled' : 'scheduled',
         };
 
         let error;
