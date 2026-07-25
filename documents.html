@@ -690,6 +690,12 @@
         </button>
         <hr class="nav-divider" />
         <div class="nav-label">Documents</div>
+        <button onclick="showPage('rules', this)">
+          <span class="nav-emoji">⭐</span> Working Rules 2026–2027
+        </button>
+        <button onclick="showPage('events', this)">
+          <span class="nav-emoji">📌</span> Event Tiers & Practices
+        </button>
         <button onclick="showPage('constitution', this)">
           <span class="nav-emoji">📜</span> Constitution & By-Laws
         </button>
@@ -779,6 +785,16 @@
 
           <div class="section-heading">📂 Official Documents</div>
           <div class="doc-grid">
+            <div class="doc-card" onclick="showPage('rules', document.querySelector('button[onclick*=rules]'))">
+              <div class="card-emoji">⭐</div>
+              <div class="card-title">Working Rules 2026–2027</div>
+              <div class="card-desc">Start here. Membership status, attendance, fines, and choir funds as agreed for this choir year.</div>
+            </div>
+            <div class="doc-card" onclick="showPage('events', document.querySelector('button[onclick*=events]'))">
+              <div class="card-emoji">📌</div>
+              <div class="card-title">Event Tiers & Practices</div>
+              <div class="card-desc">What counts as Core, Major, Special, and Practice — and what is expected at each.</div>
+            </div>
             <div class="doc-card" onclick="showPage('constitution', document.querySelector('button[onclick*=constitution]'))">
               <div class="card-emoji">📜</div>
               <div class="card-title">Constitution & By-Laws</div>
@@ -868,11 +884,13 @@
               line-height: 1.8;
             "
           >
-            This page contains the official documents of San Vicente Choir
-            ratified on <strong>June 20, 2026</strong>. It is intended for
-            current and incoming members to read before signing their Membership
-            Form. All documents are subject to amendment per Article XV of the
-            Constitution. For questions, contact any officer directly.
+            This page contains the official documents of San Vicente Choir. Start
+            with the <strong>⭐ Working Rules 2026–2027</strong> — that is what we
+            follow this choir year, as agreed at the General Assembly of
+            <strong>July 26, 2026</strong>. The Constitution remains a working
+            draft, discussed and ratified article by article at each monthly
+            assembly, and the Handbook is being updated to match. For questions,
+            contact any officer directly.
           </p>
         </div>
 
@@ -897,6 +915,8 @@
           </div>
           <div id="constitution-content"></div>
         </div>
+        <div id="page-rules" class="doc-content" style="display: none"></div>
+        <div id="page-events" class="doc-content" style="display: none"></div>
         <div id="page-handbook" class="doc-content" style="display: none"></div>
         <div id="page-calendar" class="doc-content" style="display: none"></div>
         <div id="page-budget" class="doc-content" style="display: none"></div>
@@ -913,10 +933,376 @@
 
     <!-- MARKDOWN CONTENT STORED IN SCRIPT TAGS -->
 
+    <script type="text/plain" id="md-rules">
+# ⭐ WORKING RULES 2026–2027
+## San Vicente Choir
+### Presented for ratification at the General Assembly of July 26, 2026
+
+---
+
+> **Read this first.** The Constitution is still a draft — we discuss and ratify it
+> article by article at our monthly assemblies. **This page is what we actually
+> live by this choir year.** Where the Constitution and this page differ, this page
+> is what we agreed to.
+>
+> *Basaha kini una. Ang Saligang Batas draft pa — hisgotan namo kini article by
+> article kada buwan. Kini nga pahina ang atong gisunod karong tuiga.*
+
+---
+
+## 1. MEMBERSHIP STATUS
+
+| | **Active** | **Associate (On Leave)** | **Inactive** |
+|---|---|---|---|
+| Ministry regular-members list | ✅ | — | — |
+| Active group chat | ✅ | General / Lyrics GC | General / Lyrics GC |
+| Voting rights | ✅ | — | — |
+| Uniform priority | ✅ | Next batch on return | — |
+| Commitment fines apply | ✅ | — | — |
+| Major Events | Expected | 5 practices for that event first | — |
+| Core masses (Sat & Sun) | Expected | Anytime, always welcome | Always welcome |
+
+**How status is decided:** from the attendance record (June–July 2026, 26 events)
+**and** from whether you communicate.
+
+- **50% and above → Active.**
+- **Officers, accompanists, and ministry support are Active** regardless of
+  percentage — their service is not measured by weekend attendance alone.
+- **25%–49% → Associate**, if you declare a reason. You may also commit to Active.
+- **No response and no declared reason → Inactive.**
+
+> **Silence is what moves someone down — never busyness.** If you tell us, we can
+> work with anything.
+>
+> *Ang paghilom ang hinungdan sa pag-usab sa status — dili ang pagkabusy.*
+
+**Associate is not quitting.** Return to Active anytime by telling an officer — no
+screening, no probation. Inactive members stay in the General GC and are always
+welcome back.
+
+**New members, and anyone returning after leaving entirely:** a **4-week screening**
+(practices and services) before joining the Active GC and the ministry list.
+Returning Associates do **not** screen.
+
+---
+
+## 2. DECLARED AVAILABILITY *(new this year)*
+
+On your membership form, write down your **standing unavailability** — work shifts,
+class schedule, another choir, gigs, a new baby, health.
+
+- **An absence inside what you declared is automatically excused.**
+- Outside choirs and commitments are welcome. The limits: our own Saturday and
+  Sunday masses and all **Major Events come first**; conflicts with a Major Event
+  are declared **3–4 weeks ahead**; your role's duties still get done; and an
+  outside commitment may not cause you to miss a Major Event twice in one term.
+
+*Isulat ang imong regular nga schedule nga dili ka available. Kung mag-absent ka
+sulod niana, excused ka dayon — walay multa.*
+
+---
+
+## 3. ATTENDANCE FORM
+
+- One weekly form covers **practices and the weekend masses**.
+- **Weekend masses:** answer by the announced deadline — the **Friday 9 PM
+  snapshot is the official record**.
+- **Practices:** confirm before the practice day.
+- **Answering "not attending" costs you nothing.** It is how we plan, and it is
+  the responsible thing to do.
+- **Practice cancellation:** if fewer than **4 Active Members** have confirmed by
+  **12 NN on the practice day**, the practice is cancelled and announced right
+  away — so nobody travels to an empty rehearsal.
+
+---
+
+## 4. COMMITMENT FINE — ₱20
+
+**The fine is never for being absent.** It applies only when you:
+
+1. **do not answer the form**, or
+2. **say you will attend and then do not come.**
+
+*Ang multa dili para sa pag-absent. Para kini sa (1) wala pagtubag sa form, o
+(2) nagsulti nga motambong apan wala miabot.*
+
+- Applies to **practices and services** alike.
+- Logged in the portal ledger and paid to the **Treasurer within 2 weeks**.
+- **Waiver:** a fine may be waived **only by the Treasurer or Vice President with
+  the President's approval**, and the reason is recorded in the ledger where
+  members can see it.
+- **Unpaid fines suspend privileges** (uniform priority, party eligibility) —
+  **never your membership**, and never a public call-out. Just a quiet standing
+  balance you can settle anytime.
+
+**Why we do this:** so that the members who always answer are not the only ones
+carrying the planning. Fines exist so communication is fair — **not to raise
+money.**
+
+---
+
+## 5. SINKING FUND — VOLUNTARY
+
+For the **December Christmas party**, collected after Sunday mass and recorded in
+the portal.
+
+- **Suggested ₱20 per week · ₱5 for students · any amount is welcome.** Give what
+  you can. Nobody is penalized for giving nothing.
+- **Earmarked** — it cannot be spent on anything else.
+- **Refundable in full on request until the announced cutoff date.** After the
+  cutoff the money is committed to the party, and **the contributor list is the
+  party list**.
+- If you leave the choir before the cutoff, you are **refunded automatically**.
+- The party budget is **whatever we collect together**.
+
+*Boluntaryo ang sinking fund. Ang imong hatag, mabalik kung mangayo ka sa wala pa
+ang cutoff. Human sa cutoff, para na kini sa Christmas party.*
+
+---
+
+## 6. BIRTHDAY CELEBRATIONS
+
+**One cake per month for everyone with a birthday that month**, at the monthly
+assembly, funded by **amot** — not from choir funds. Two separate cakes cost us
+₱520 in two months; doing it monthly saves roughly ₱2,000–₱2,500 a year, which is
+most of a uniform.
+
+---
+
+## 7. OUR GROUP CHATS
+
+| Chat | What it is for |
+|---|---|
+| **Officers GC** | Officer business. Conflicts stay with officers or come to the President. |
+| **SVC Active GC** | The ministry-listed roster: attendance, assignments, funds — anything actionable. |
+| **SVC General / Lyrics GC** | Lyrics, song files, general announcements, and onboarding for new members. |
+
+- **Nobody is removed from the choir's group chat.** Associate and Inactive
+  members keep the General GC permanently.
+- Every choir-wide announcement is **cross-posted to the General GC**.
+- We do not discuss members of one chat inside another.
+
+---
+
+## 8. CHOIR FUNDS — FULL TRANSPARENCY
+
+Three separate funds, all visible in the portal:
+
+| Fund | Purpose | Held by |
+|---|---|---|
+| **General fund** | Honorarium, event income, fines — transportation, materials, uniforms, choir needs | Treasurer |
+| **Sinking fund** | Christmas party only — earmarked | Secretary |
+| **Outstanding fines** | Recorded until settled | — |
+
+- The **Treasurer reports the balance at every assembly**, and any member may ask
+  to see the records anytime.
+- **Monthly verification:** a non-collecting officer confirms the cash matches the
+  portal ledger — one officer for the general fund, another for the sinking fund,
+  and never a relative of the person holding the money. *This protects the people
+  who carry our money, not the other way around.*
+- Any expense above **₱300** needs officer majority approval.
+- **No funds are ever used for the personal benefit of any officer or member.**
+
+**Uniforms:** funded by the choir and by solicitation — **no cost to members**.
+Active members are outfitted first; Associates receive theirs on returning to
+Active status in the next batch, or sooner if they self-fund or help with
+solicitation.
+
+---
+
+## 9. HOW WE TREAT EACH OTHER
+
+- No public call-outs, shaming, or threats — in the group chat or anywhere.
+- Concerns about a person go **privately to an officer first**.
+- Group chat content stays in the group chat.
+- Before assuming the worst, ask: *"Okay ka ba?"* Absence is not rejection.
+- Every member may suggest songs, raise concerns, and be heard.
+
+---
+
+## 10. WHAT HAPPENS NEXT
+
+- **Every monthly assembly, we discuss 2–3 articles of the Constitution** until it
+  is ratified as a whole. Bring your questions — this is your document too.
+- These Working Rules are updated as the assembly decides. The date below tells
+  you how current this page is.
+
+---
+
+*San Vicente Choir · Working Rules for Choir Year 2026–2027*
+*Presented at the General Assembly of July 26, 2026*
+    </script>
+
+    <script type="text/plain" id="md-events">
+# 📌 EVENT TIERS &amp; PRACTICES
+## San Vicente Choir · Choir Year 2026–2027
+
+*So that every member knows exactly what is expected, and when.*
+
+---
+
+## The four kinds of choir activity
+
+| | What it is | Expected of | Answer the form? | ₱20 fine applies? | Counts toward status? |
+|---|---|---|---|---|---|
+| 🟡 **CORE** | Our two weekly masses | All Active Members | **Yes, every week** | **Yes** | **Yes** |
+| 🔴 **MAJOR** | Big parish liturgies &amp; ministry services | All Active Members, unless excused | **Yes** | **Yes** | **Yes** |
+| 🟣 **SPECIAL** | Gigs, competitions, engagements, seminars | Voluntary | Yes, so we can plan | **No** | Yes, as a bonus — never against you |
+| 🟢 **PRACTICE** | Rehearsals &amp; training | All Active Members | **Yes, every week** | **Yes** | **Yes** |
+
+**Remember:**
+
+1. **The ₱20 fine is never about being absent.** Only for (a) not answering the
+   form, or (b) saying you will come and then not coming.
+2. **Practices are on the form too** — we need to know who is coming so we can
+   cancel a practice that will not reach quorum.
+3. **Practices count toward your status.** Our record covers services *and*
+   practices together.
+
+---
+
+## 🟡 CORE — every week, all year
+
+| | |
+|---|---|
+| **Saturday 7:00 PM** | Mass — San Vicente Ferrer Chapel, Duljo Barangay Hall |
+| **Sunday 7:00 PM** | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish |
+
+- **Minimum to proceed with a mass: 4 members, at least 1 per voice part.** If we
+  fall short, an officer decides whether to proceed or notify the parish
+  coordinator — never a single member's burden.
+- **Associate members may sing at Core masses anytime**, no practice requirement.
+
+---
+
+## 🔴 MAJOR — expected of all Active Members unless excused
+
+Associate members joining a Major event attend **5 practices** for it first.
+Working members may request a **Leave Request Letter** (5 days ahead; 2–3 weeks for
+Holy Week, Christmas, Sinulog); students may request an **Excuse Letter** (3 days
+ahead).
+
+### Coming up first — the ministry block
+| Date | Event |
+|---|---|
+| **Aug 29 (Sat)** | **Opening Salvo** — multi-choir ministry service |
+| **Aug 30 (Sun)** | 5:30 PM choir ministry service |
+| **Sept 8 (Tue)** | 10:00 AM choir ministry service |
+| **~Sept 10** | **Fiesta — Archdiocesan Shrine of San Nicolas de Tolentino** |
+
+*Uniform update for these: ministry name on the back.*
+
+### The rest of the year
+| When | Event |
+|---|---|
+| October (whole month) | Holy Rosary — daily rosary / visiting of homes |
+| Oct 31 | Block Rosary |
+| Nov 1 · Nov 2 | All Saints' Day · All Souls' Day Mass |
+| Nov 1 or 2 | **Kanta sa Calamba** — singing &amp; *responso* at Calamba Cemetery |
+| Dec 16–24 | **Misa de Gallo / Simbang Gabi** *(days to confirm with parish)* |
+| Dec 24 · Dec 25 | Christmas Eve · Christmas Day Mass |
+| Dec 31 · Jan 1 | New Year's Eve · New Year's Day Mass |
+| Early January | Santo Niño Novena (9 days) + Sto. Niño engagements |
+| Feb 10 (Wed) | Ash Wednesday — Lent begins |
+| Mar 21 (Sun) | Palm Sunday |
+| Mar 24 (Wed) | Tinieblas |
+| Mar 25 (Thu) | Holy Thursday — Mass of the Lord's Supper + Visita Iglesia |
+| Mar 26 (Fri) | Good Friday — Passion + Stations of the Cross |
+| Mar 27 (Sat) | Black Saturday — Easter Vigil |
+| Mar 28 (Sun) | **Easter Sunday** |
+| Apr 4 (Sun) | Divine Mercy Sunday |
+| 2nd or 3rd weekend of May | **Anniversary Celebration + Elections** |
+
+---
+
+## 🟣 SPECIAL — voluntary, always announced in advance
+
+Never fined, never held against you. Officers vote before committing the choir.
+
+- Singing engagements and talent-fee gigs — weddings, thanksgiving masses,
+  community events
+- Wake masses, funeral masses, and *responso* for families
+- Competitions and concerts
+- Seminars, workshops, and formation activities
+- Christmas Caroling and the Choir Christmas Party
+- Feast days and parish services outside the Major list
+- 🟠 **Saturday Gathering, 3:00–5:00 PM** — rotating: recreation, content
+  creation, seminar, community service, practice, or fellowship. Optional but
+  encouraged; announced at least 3 days ahead.
+
+---
+
+## 🟢 PRACTICES — three kinds
+
+**1. Standing weekly training — Tuesday &amp; Thursday.** Our regular rehearsal with
+the Music Director. This is where the choir is actually built.
+
+**2. Monthly rehearsal — minimum one per month**, all year.
+
+**3. Intensified practice before Major Events — 1 to 3 sessions per week**, before
+the September fiestas, the Christmas season, and Holy Week.
+
+**Rehearsal time standard**
+
+| Time | |
+|---|---|
+| 7:30 PM | Call time — arrive |
+| 7:45 PM | Warm-up |
+| 8:00 PM | Rehearsal starts **sharp**, once 4 Active Members are present |
+
+- A song plan is shared **before** the rehearsal day.
+- **Answer the form for practices too**, same ₱20 rule as services.
+- **Quorum cancellation:** fewer than **4 Active Members** confirmed by **12 NN on
+  the practice day** → practice cancelled and announced right away, rescheduled at
+  the next available date.
+- **Personal practice** at home is not a rehearsal — but it is what makes
+  rehearsals worth attending.
+- Also cancelled for heavy rain or typhoon signal, emergencies affecting most
+  members, or a parish suspension.
+
+---
+
+## 😴 REST PERIODS — no practices, mass obligations continue
+
+Minimum **one week** after every Major season: **Dec 26–31** after Christmas, and
+**Mar 29 – early April** after Holy Week. Consistent members deserve recovery.
+
+---
+
+## The weekly rhythm
+
+| When | What |
+|---|---|
+| **Thursday, before 9 PM** | Attendance form posted |
+| **Friday, 9 PM** | **Snapshot — the official record** |
+| Saturday 3–5 PM | Saturday Gathering 🟠 *(optional)* |
+| **Saturday 7 PM** | Mass — SVF Chapel 🟡 |
+| **Sunday 7 PM** | Mass — San Nicolas 🟡 · sinking fund collected after |
+| Tuesday &amp; Thursday | Practice 🟢 — cancelled if fewer than 4 confirmed by 12 NN |
+| Once a month | Members' Meeting / General Assembly 🔵 — agenda 2 days ahead, birthday cake for the month |
+
+---
+
+*Dates marked "to confirm" are being followed up with the parish by the External
+Committee. This is a living list — the Secretary updates it as dates are confirmed.*
+
+*San Vicente Choir · 54 years of singing for God, and counting.*
+    </script>
+
     <script type="text/plain" id="md-constitution">
 # CONSTITUTION AND BY-LAWS
 ## San Vicente Choir
-### Established in Service Since 1972 | Formalized June 20, 2026
+### Established in Service Since 1972 | Draft for ratification
+
+---
+
+> ⚠️ **This is a working draft, not yet ratified as a whole.** The choir discusses
+> and ratifies it **article by article** at each monthly assembly. Some sections —
+> particularly on attendance, discipline, and finances — **have already been
+> superseded** by decisions taken at the General Assembly of July 26, 2026.
+>
+> **For what we actually follow this choir year, read the ⭐ Working Rules
+> 2026–2027 page.** Where the two differ, the Working Rules apply.
 
 ---
 
@@ -1375,7 +1761,16 @@ This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratifie
     <script type="text/plain" id="md-constitution-bisaya">
 # SALIGANG BATAS UG MGA PATAKARAN
 ## San Vicente Choir
-### Nagsilbi Sukad 1972 | Gitunhay sa Hunyo 20, 2026
+### Nagsilbi Sukad 1972 | Draft, para pa sa ratipikasyon
+
+---
+
+> ⚠️ **Draft pa kini — wala pa matunhay isip tibuok.** Hisgotan namo kini **article
+> by article** kada buwanang asembliya. Adunay mga bahin — labi na sa attendance,
+> disiplina, ug pinansya — nga **giusab na** sa General Assembly sa Hulyo 26, 2026.
+>
+> **Ang atong gisunod karong tuiga anaa sa ⭐ Working Rules 2026–2027.** Kung
+> magkalahi, ang Working Rules ang gamiton.
 
 ---
 
@@ -1817,6 +2212,16 @@ Ang Saligang Batas ug Mga Patakaran sa San Vicente Choir gitunhay sa **Hunyo 20,
 
 ---
 
+> ⚠️ **Some parts of this Handbook are out of date.** Our rules on attendance,
+> fines, the sinking fund, and group chats were updated at the General Assembly of
+> July 26, 2026. **For the current rules, read the ⭐ Working Rules 2026–2027
+> page** — it takes precedence over this Handbook where they differ.
+>
+> *Adunay mga bahin niining Handbook nga karaan na. Ang bag-o nga mga patakaran
+> anaa sa ⭐ Working Rules 2026–2027.*
+
+---
+
 ## 👋 WELCOME! / WELCOME KA DINHI!
 
 *English:*
@@ -2092,35 +2497,46 @@ Every June, you are invited to share one personal goal for the choir year. Music
 > 🔴 Major Required Event | 🟡 Core Weekly Obligation | 🟢 Rehearsal
 > 🔵 Administrative / Meeting | 🟠 Saturday Activity | 🟣 Special / Optional | 😴 Rest Period
 
+> 📌 For what is expected at each type of event — and when the ₱20 commitment fine
+> applies — see the **Event Tiers & Practices** page. For membership, funds, and
+> attendance rules, see the **⭐ Working Rules 2026–2027**.
+
 ---
 
-## JUNE 2026 — NEW BEGINNINGS
+## JUNE 2026 — NEW BEGINNINGS ✅
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel, Duljo | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | June 20 (Sat) | **First General Assembly** *(inaugural — new officers lead for the first time)* — 4PM Mass San Pedro Chapel → 5PM Assembly + Dinner → 7PM Mass SVF Chapel | 🔴 |
-| June 20 | **New Officers' First Meeting** — Membership Renewal, Constitution Signing, Personal Goals, Plans & Priorities, Rehearsal Schedule Setting | 🔵 |
+| Mid-June | **Oath-taking of officers** *(mass offering — bread & wine)* | 🔵 |
 | Late June | First Official Rehearsal of new term | 🟢 |
 
-## JULY 2026
+## JULY 2026 — SETTLING IN ✅
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
-| TBD | Monthly Rehearsal | 🟢 |
-| TBD | Semester 1 Schedule Released | 🔵 |
-| Saturdays | Saturday Group Activity (3–5PM or after 8PM) | 🟠 |
+| Tuesdays & Thursdays | **Standing weekly practice begins** | 🟢 |
+| Mid-July | Members' meeting — attendance summary review | 🔵 |
+| July 6 | Tupaba Thanksgiving Mass *(first singing engagement)* | 🟣 |
+| **July 26 (Sun)** | **General Assembly** — Active/Associate classification, membership signing, choir rules & fines, sinking fund, funds review, committees, expectations | 🔵 |
 
-## AUGUST 2026
+## AUGUST 2026 — MINISTRY SERVICES
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
-| TBD | Monthly Rehearsal | 🟢 |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 |
+| **Aug 9** | Deadline for accompanist confirmation *(otherwise we rehearse to guide recordings)* | 🔵 |
+| Mid-August | Solicitation letters out — first sponsors approached | 🔵 |
+| **Aug 29 (Sat)** | **Opening Salvo — multi-choir ministry service** | 🔴 |
+| **Aug 30 (Sun)** | **5:30PM choir ministry service** | 🔴 |
+| Late August | Intensified practice for the ministry block & fiesta (1–3x/week) | 🟢 |
+| End of month | **General Assembly** — Constitution Articles I–III, monthly birthday cake, funds report | 🔵 |
 | Saturdays | Saturday Group Activity | 🟠 |
 
 ## SEPTEMBER 2026 — FIESTA SEASON
@@ -2129,9 +2545,13 @@ Every June, you are invited to share one personal goal for the choir year. Music
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 |
+| **Sept 8 (Tue)** | **10:00AM choir ministry service** | 🔴 |
+| ~Sept 10 | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** *(feast day Sept 10 — confirm exact schedule)* | 🔴 |
 | TBD | **Fiesta of San Vicente Ferrer Chapel (SVF), Duljo** — confirm with chapel | 🔴 |
-| TBD (around Sept 10) | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** *(feast day Sept 10)* | 🔴 |
-| TBD | Additional rehearsals before Fiestas (1–2x/week) | 🟢 |
+| TBD | Additional rehearsals before the Fiestas (1–3x/week) | 🟢 |
+| September | Uniform design & supplier finalized *(ministry name on the back)* | 🔵 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## OCTOBER 2026 — HOLY ROSARY MONTH
 
@@ -2139,9 +2559,11 @@ Every June, you are invited to share one personal goal for the choir year. Music
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 |
 | Whole month | **Holy Rosary — Daily Rosary / Visiting of Homes** | 🔴 |
 | October 31 | **Block Rosary** *(confirm choir role with parish)* | 🔴 |
-| TBD | Monthly Rehearsal | 🟢 |
+| October | **Uniform ordering target** *(funded by choir funds + solicitation — no cost to members)* | 🔵 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## NOVEMBER 2026
 
@@ -2152,8 +2574,10 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | November 1 | **All Saints' Day Mass** | 🔴 |
 | November 2 | **All Souls' Day Mass** | 🔴 |
 | Nov 1 or 2 | **Kanta sa Calamba** — singing & *responso* for departed relatives at Calamba Cemetery | 🔴 |
-| TBD | Monthly Rehearsal | 🟢 |
-| Late November | **Christmas Season Rehearsals Begin (1–2x/week)** | 🟢 |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 |
+| **Nov 15** | **Sinking fund refund cutoff** — after this date contributions are committed to the Christmas party, and the contributor list is the party list | 🔵 |
+| Late November | **Christmas Season Rehearsals Begin (1–3x/week)** | 🟢 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## DECEMBER 2026 — CHRISTMAS SEASON 🎄
 
@@ -2162,7 +2586,7 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 |
 | 1st–2nd week | **Christmas Caroling** *(schedule TBD)* | 🟣 |
-| After Caroling | 🎉 **Christmas Party / Simple Celebration** | 🟣 |
+| After Caroling | 🎉 **Christmas Party** — funded by the **sinking fund**; the budget is whatever we collect together | 🟣 |
 | Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm with parish | 🔴 |
 | December 24 | **Christmas Eve Mass** | 🔴 |
 | December 25 | **Christmas Day Mass** | 🔴 |
@@ -2179,7 +2603,8 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | First 2 weeks | **Santo Niño Novena** (9-day novena) | 🔴 |
 | TBD | **Sto. Niño Chapel & Church singing engagements** *(confirm with parish)* | 🔴 |
 | 3rd Sunday | **Sinulog Sunday — Feast of Santo Niño** | 🔴 |
-| Mid-January | Rehearsals resume | 🟢 |
+| Mid-January | Standing Tuesday & Thursday practice resumes | 🟢 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## FEBRUARY 2027 — LENT BEGINS
 
@@ -2190,8 +2615,9 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | February 10 (Wed) | **Ash Wednesday Mass** — start of Lent | 🔴 |
 | Fridays | Stations of the Cross *(confirm with parish)* | 🟣 |
 | TBD | Holy Week Song Selection finalized | 🔵 |
-| TBD | Holy Week Rehearsals Begin (1–2x/week) | 🟢 |
+| TBD | Holy Week Rehearsals Begin (1–3x/week) | 🟢 |
 | TBD | 🟣 Possible competition / singing engagement | 🟣 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## MARCH 2027 — HOLY WEEK & EASTER 🙏
 
@@ -2218,7 +2644,8 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Every Sunday | 7PM Mass | 🟡 |
 | Early April | Rest Period continues *(see March)* | 😴 |
 | April 4 (Sun) | **Divine Mercy Sunday Mass** | 🔴 |
-| Mid-April | Rehearsals resume; prep for May Anniversary | 🟢 |
+| Mid-April | Standing practice resumes; prep for May Anniversary | 🟢 |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 |
 
 ## MAY 2027 — ANNIVERSARY & ELECTIONS
 
@@ -2228,7 +2655,8 @@ Every June, you are invited to share one personal goal for the choir year. Music
 | Every Sunday | 7PM Mass | 🟡 |
 | 2nd or 3rd Weekend | 🎉 **Choir Anniversary + Annual Elections** | 🔴 |
 | Last week of May | **Oath Taking of New Officers** | 🔵 |
-| TBD | Outgoing officers complete handover | 🔵 |
+| TBD | Outgoing officers complete handover · **Treasurer's end-of-term report and turnover** | 🔵 |
+| TBD | **Annual membership renewal** — every member signs for the new choir year | 🔵 |
 
 ---
 
@@ -2236,16 +2664,26 @@ Every June, you are invited to share one personal goal for the choir year. Music
 
 | Day | Activity |
 |---|---|
-| Thursday before 9PM | Attendance poll posted |
-| Friday before 12NN | Deadline to respond to poll |
-| Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 |
+| Tuesday & Thursday | **Standing weekly practice** 🟢 — cancelled if fewer than 4 Active Members confirmed by 12NN that day |
+| Thursday before 9PM | Attendance form posted — covers practices and the weekend masses |
+| **Friday 9PM** | **Snapshot — the official attendance record** |
+| Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 *(optional)* |
 | Saturday 7PM | Mass — SVF Chapel 🟡 |
-| Sunday 7PM | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish 🟡 |
-| Once a month | Mandatory Members Meeting 🔵 |
+| Sunday 7PM | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish 🟡 · **sinking fund collected after** |
+| **End of each month** | **General Assembly** 🔵 — agenda 2 days ahead · Constitution articles discussed · birthday cake for the month · Treasurer's funds report and verification |
 
 ---
 
-*All TBD dates confirmed by Secretary as parish schedules are released. Calendar updated throughout the year.*
+## REST PERIODS 😴
+
+Minimum one week with no rehearsals or extra activities after every Major season —
+**Dec 26–31** and **Mar 29 to early April**. Saturday and Sunday mass obligations
+continue.
+
+---
+
+*All TBD dates confirmed by the Secretary and External Committee as parish
+schedules are released. Calendar updated throughout the year.*
     </script>
 
     <script type="text/plain" id="md-budget">
@@ -2693,56 +3131,75 @@ Each member shares one personal goal at the General Assembly (Article XIII).
     <script type="text/plain" id="md-commitments">
 # Our Commitments — Term 2026–2027
 
-The full Constitution is our long-term foundation. This page is what we're
-actually focusing on together this first year — the things we agreed on as a
-group and are holding ourselves to.
+The full Constitution is our long-term foundation. This page is the spirit of what
+we're building together this year. For the exact rules — status, attendance, fines,
+funds — see the **⭐ Working Rules 2026–2027**.
 
 ---
 
 ## Who we are this year
 
-- **Active members** — commit to the weekly services and the Google Form attendance submission before every mass; hold voting rights.
-- **Associate members** — serving when life allows; can sing at Core Masses (Sat/Sun) anytime. For Major or Special Events, attend at least 5 practice sessions for that event. Always welcome back to Active status.
+- **Active members** — on the ministry's regular-members list. Commit to the weekly services and the Tuesday & Thursday practices, and answer the attendance form every week. Hold voting rights and uniform priority.
+- **Associate members (on leave)** — serving when life allows, with a declared reason on file: work, studies, board review, health, a new child, another ministry. No fines, no penalties. Can sing at Core Masses (Sat/Sun) anytime; for a Major Event, attend 5 practices for it first. Return to Active status anytime by telling an officer — no screening, no probation.
+- **Inactive members** — no response and no declared status. Off the ministry list, but never out of the choir: you keep the General/Lyrics group chat and you are always welcome back.
 - **Honorary members** — long-serving voices, welcome to sing anytime.
+
+> **Silence is what changes someone's status — never busyness.** If you tell us, we can work with almost anything.
 
 ---
 
 ## What we're committing to
 
-1. **A steady weekly rhythm.** Show up for the Saturday and Sunday 7PM masses. Submit the Google Form before each service — a "not attending" response helps us plan just as much as a "yes."
+1. **A steady weekly rhythm.** The Saturday and Sunday 7PM masses, and our standing Tuesday & Thursday practice. Answer the attendance form every week — a "not attending" helps us plan just as much as a "yes," and it costs you nothing.
 
-2. **Saturdays are ours — 3:00 PM to 5:00 PM.** Before the Saturday mass, we gather for practice, recreational activities, content creation, or bonding. Not mandatory, but this is when we build the group outside of the mass itself.
+2. **We keep our word to each other.** The ₱20 commitment fine is not a punishment for being absent — it applies only when someone doesn't answer the form, or says they'll come and doesn't. It exists so the members who always communicate aren't the only ones carrying the planning.
 
-3. **We serve willingly, never by guilt.** No public call-outs or shaming — concerns go privately to an officer first. This is our non-negotiable culture.
+3. **We fund our year together, without pressure.** The sinking fund is voluntary — give what you can, ₱5 or ₱20 or nothing, and it's refundable until the cutoff. Our Christmas party will be whatever we build together. Every peso is recorded in the portal and verified monthly by an officer who doesn't hold the money.
 
-4. **If you go quiet, we'll check on you with care** — to understand, not to scold. Three unexcused absences means an officer reaches out. That's it.
+4. **Saturdays are ours — 3:00 PM to 5:00 PM.** Practice, recreation, content creation, or simply bonding. Not mandatory; this is where the group is built outside the mass.
 
-5. **Uniforms this year.** We're actively pursuing sponsorship so every member can wear a proper choir uniform by the Christmas masses. No cost to members.
+5. **We serve willingly, never by guilt.** No public call-outs or shaming — concerns go privately to an officer first. This is our non-negotiable culture.
 
-6. **Documentation matters.** Hany and Fatima are our media officers, with Gezd coordinating. We document what we do — masses, activities, milestones — because this year is worth remembering.
+6. **If you go quiet, we'll check on you with care** — to understand, not to scold.
 
-7. **We complete our registration.** Every member is expected to register in the portal with complete information. This is how we track membership, attendance, and status properly.
+7. **Nobody is removed from the choir's group chat.** Active members coordinate in the Active GC; everyone else keeps the General/Lyrics GC permanently, and every choir-wide announcement is posted there too.
 
-8. **We recognize each other.** A recognition and awards program is being planned — top performers and consistent members will be acknowledged. Details TBD by officers.
+8. **Uniforms this year — no cost to members.** Funded by choir funds and solicitation. Active members are outfitted first; Associates get theirs on returning to Active status, or sooner by self-funding or helping with solicitation.
+
+9. **We celebrate together, once a month.** One cake at each end-of-month assembly for everyone with a birthday that month, funded by amot — so we can put our choir funds toward uniforms and real needs.
+
+10. **Documentation matters.** Our media committee documents what we do — masses, activities, milestones — because this year is worth remembering.
+
+11. **We complete our registration.** Every member registers in the portal with complete information, including the availability we declare.
+
+12. **We recognize each other.** A recognition and awards program is being planned — consistent, dedicated members will be acknowledged.
 
 ---
 
 ## What we're still building
 
-Section leaders (Soprano, Alto, Tenor, Bass) are still to be assigned. The Music Committee Head, Logistics Head, and some committee roles are being decided. We grow into the full structure — not all at once.
+Section leaders (Soprano, Alto, Tenor, Bass) are still to be assigned, and some
+committee roles are being filled as we grow. We're also training more accompanists
+so the choir never depends on one person being available.
 
-Weekday rehearsals are also being planned; specific days will be set through a member availability poll each semester.
+**Our Constitution is a draft, and that's on purpose.** We discuss two or three
+articles at every monthly assembly until the whole choir has read it, questioned
+it, and agreed to it. It is meant to be *ours* — not handed down.
 
 ---
 
-## The one ask at the June 20 General Assembly
+## The one ask at every assembly
 
-Come ready to share one personal goal for your year in the choir (Article XIII) — musical, personal, or spiritual. That's how we open this chapter together.
+Come ready to share one personal goal for your year in the choir (Article XIII) —
+musical, personal, or spiritual. Not a grade, not a metric. Just so that one day
+you can look back and say: *"I grew here."*
     </script>
 
     <script>
       // Map page IDs to markdown source IDs (constitution handled separately for lang toggle)
       const docMap = {
+        rules: "md-rules",
+        events: "md-events",
         handbook: "md-handbook",
         calendar: "md-calendar",
         budget: "md-budget",

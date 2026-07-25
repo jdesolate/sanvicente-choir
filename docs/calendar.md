@@ -13,6 +13,10 @@
 > 🟣 Special / Optional Event
 > 😴 Rest Period
 
+> 📌 For what is expected at each type of event — and when the ₱20 commitment fine
+> applies — see `event-tiers-2026-2027.md`. For membership, funds, and attendance
+> rules, see the Working Rules 2026–2027.
+
 ---
 
 ## JUNE 2026 — NEW BEGINNINGS
@@ -34,19 +38,26 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| TBD (officers poll) | Monthly Rehearsal | 🟢 Rehearsal |
-| TBD | Semester 1 Rehearsal Schedule Released | 🔵 Admin |
+| Tuesdays & Thursdays | **Standing weekly practice begins** | 🟢 Rehearsal |
+| July 6 | Tupaba Thanksgiving Mass *(first singing engagement)* | 🟣 Special |
+| Mid-July | Members' meeting — attendance summary review | 🔵 Admin |
+| **July 26 (Sun)** | **General Assembly** — Active/Associate classification, membership signing, choir rules & fines, sinking fund, funds review, committees, expectations | 🔵 Admin |
 
 ---
 
-## AUGUST 2026 — BUWAN NG WIKA / REGULAR SERVICE
+## AUGUST 2026 — MINISTRY SERVICES
 
 | Date | Activity | Type |
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
-| TBD | Monthly Rehearsal | 🟢 Rehearsal |
-| August 28 | Feast of St. Augustine *(check if relevant to parish)* | 🟣 Special |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 Rehearsal |
+| **August 9** | Deadline for accompanist confirmation *(otherwise we rehearse to guide recordings)* | 🔵 Admin |
+| Mid-August | Solicitation letters out — first sponsors approached | 🔵 Admin |
+| **August 29 (Sat)** | **Opening Salvo — multi-choir ministry service** | 🔴 Major |
+| **August 30 (Sun)** | **5:30PM choir ministry service** | 🔴 Major |
+| Late August | Intensified practice for the ministry block & fiesta (1–3x/week) | 🟢 Rehearsal |
+| End of month | **General Assembly** — Constitution Articles I–III, birthday cake, funds report | 🔵 Admin |
 
 ---
 
@@ -56,10 +67,13 @@
 |---|---|---|
 | Every Saturday | 7PM Mass — SVF Chapel | 🟡 Core |
 | Every Sunday | 7PM Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish | 🟡 Core |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 Rehearsal |
+| **September 8 (Tue)** | **10:00AM choir ministry service** | 🔴 Major |
+| ~Sept 10 | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** *(feast day Sept 10 — confirm exact parish schedule)* | 🔴 Major |
 | TBD | **Fiesta of San Vicente Ferrer Chapel (SVF), Duljo** — confirm exact date with chapel | 🔴 Major |
-| TBD (around Sept 10) | **Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish** *(Feast of San Nicolas de Tolentino is Sept 10 — confirm exact parish schedule)* | 🔴 Major |
-| TBD | Additional rehearsals before Fiestas (1–2x/week) | 🟢 Rehearsal |
-| TBD | Monthly Rehearsal (if not covered by Fiesta rehearsals) | 🟢 Rehearsal |
+| TBD | Additional rehearsals before the Fiestas (1–3x/week) | 🟢 Rehearsal |
+| September | Uniform design & supplier finalized *(ministry name on the back)* | 🔵 Admin |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 Admin |
 
 ---
 
@@ -85,8 +99,10 @@
 | November 1 | **All Saints' Day Mass** | 🔴 Major |
 | November 2 | **All Souls' Day Mass** | 🔴 Major |
 | November 1 or 2 | **Kanta sa Calamba** — singing & *responso* (prayers for the dead) for departed relatives of choir members at Calamba Cemetery | 🔴 Major |
-| TBD | Monthly Rehearsal | 🟢 Rehearsal |
-| Late November | **Christmas Season Rehearsals Begin** (1–2x/week) | 🟢 Rehearsal |
+| Tuesdays & Thursdays | Standing weekly practice | 🟢 Rehearsal |
+| **November 15** | **Sinking fund refund cutoff** — after this date contributions are committed to the Christmas party, and the contributor list is the party list | 🔵 Admin |
+| Late November | **Christmas Season Rehearsals Begin** (1–3x/week) | 🟢 Rehearsal |
+| End of month | **General Assembly** — Constitution articles, birthday cake, funds report | 🔵 Admin |
 | Late November | Christmas Song Selection finalized by Music Director | 🔵 Admin |
 
 ---
@@ -102,7 +118,7 @@
 | Dec 16–24 | **Misa de Gallo (Simbang Gabi)** — confirm choir schedule with parish | 🔴 Major |
 | December 24 | **Christmas Eve Mass** | 🔴 Major |
 | December 25 | **Christmas Day Mass** | 🔴 Major |
-| Late Dec (TBD) | 🎉 **Choir Christmas Party** *(fellowship — date set by officers)* | 🟣 Special |
+| Late Dec (TBD) | 🎉 **Choir Christmas Party** — funded by the **sinking fund**; the budget is whatever we collect together | 🟣 Special |
 | December 31 | **New Year's Eve Mass** *(thanksgiving / media noche)* | 🔴 Major |
 | Dec 26–31 | 😴 **Rest Period** — minimum 1 week. No rehearsals. Mass obligations and the Christmas Party continue. | 😴 Rest |
 
@@ -189,12 +205,13 @@
 
 | Day | Activity |
 |---|---|
-| Thursday before 9PM | Attendance poll posted for Saturday and Sunday masses |
-| Friday before 12NN | Deadline to respond to attendance poll |
+| Tuesday & Thursday | **Standing weekly practice** 🟢 — cancelled if fewer than 4 Active Members confirmed by 12NN that day |
+| Thursday before 9PM | Attendance form posted — covers practices and the weekend masses |
+| **Friday 9PM** | **Snapshot — the official attendance record** |
 | Saturday 3–5PM or after 8PM | Saturday Group Activity 🟠 *(rotating: recreational, seminar, community service, practice, or fellowship — timing and schedule decided by officers, announced 3 days prior)* |
 | Saturday 7PM | Mass — SVF Chapel, Duljo 🟡 |
-| Sunday 7PM | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City 🟡 |
-| Once a month (TBD) | Mandatory Members Meeting 🔵 *(agenda shared 2 days prior, quorum required)* |
+| Sunday 7PM | Mass — Archdiocesan Shrine of San Nicolas de Tolentino Parish, Cebu City 🟡 · **sinking fund collected after** |
+| **End of each month** | **General Assembly** 🔵 *(agenda 2 days prior · Constitution articles discussed · birthday cake for the month · Treasurer's funds report and verification)* |
 
 ---
 
