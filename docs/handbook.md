@@ -66,7 +66,7 @@ Welcome sa San Vicente Choir — usa ka komunidad nga nag-awit alang sa Ginoo su
 - 🤝 Be treated with respect by all officers and members
 - 🌿 Take a leave without guilt
 - 🔄 Return whenever you are ready
-- 🚪 Leave with dignity — you will **never** be kicked from the group chat
+- 🚪 Leave with dignity — and **never be removed from a group chat as a shortcut.** Removal follows due process and needs a vote of the Active Members, never one person's frustration
 - 💰 Know how the choir's money is spent
 - 🗳️ Vote in elections and decisions (Active Members)
 - 🎶 Suggest songs, raise concerns, and be heard
@@ -75,7 +75,7 @@ Welcome sa San Vicente Choir — usa ka komunidad nga nag-awit alang sa Ginoo su
 
 ## 💪 YOUR RESPONSIBILITIES / ANG IMONG MGA RESPONSIBILIDAD
 
-1. 📲 **Submit the Google Form before every service** — do this before the Saturday and Sunday mass each week
+1. 📲 **Answer the weekly form** — posted Thursday, covers our Tuesday & Thursday practices and both weekend masses. Friday 9PM is the official snapshot
 2. 📢 Notify an officer if you cannot attend — before the mass
 3. ⛪ Attend Saturday and Sunday 7PM masses as much as you are able
 4. 🌟 Be present for Christmas and Holy Week unless you have a valid reason
@@ -84,7 +84,7 @@ Welcome sa San Vicente Choir — usa ka komunidad nga nag-awit alang sa Ginoo su
 7. 📋 Keep your registration profile complete and up to date
 
 *Bisaya:*
-1. 📲 **Mag-submit sa Google Form bago ang matag serbisyo** — buhaton kini bago ang Sabado ug Domingo na misa matag semana
+1. 📲 **Tubaga ang weekly form** — gipost matag Huwebes, apil ang practice sa Martes ug Huwebes ug ang duha ka misa. Biyernes 9PM ang official snapshot
 2. 📢 Magpahibalo sa opisyal kung dili ka makadalo — bago ang misa
 3. ⛪ Moapil sa Sabado ug Domingo 7PM na mga misa sa labing magamit
 4. 🌟 Manganhi sa Pasko ug Holy Week maliban kung adunay balido nga rason
@@ -187,27 +187,49 @@ We serve God alongside people with different schedules, personalities, and circu
 
 ## 🗓️ ATTENDANCE / PRESENSYA
 
-We do not punish absence. We ask only that you communicate. 💬
+**We never punish you for being absent. We only ask that you tell us.** 💬
 
-**Submit the Google Form before every service.** The Secretary checks the portal before each mass.
+**One weekly form covers our practices and both weekend masses.** It is posted every **Thursday before 9PM**, and the **Friday 9PM snapshot is the official record**.
 
 | Situation | What to do |
 |---|---|
-| 🏥 Work, exam, medical, family emergency | No explanation needed — submit the form |
-| ✈️ Out of town, school org, personal | Submit the form and message any officer before mass |
-| 🔇 No form submitted, no notice | The only thing we ask you to avoid |
+| 🏥 Work, exam, medical, family emergency | No explanation needed — just answer the form |
+| ✈️ Out of town, school org, personal | Answer the form and message any officer before the mass |
+| 🔇 No form and no notice at all | **The only thing that carries a fine** |
+
+**The ₱20 commitment fine** *(Active Members only)* applies in exactly two cases:
+1. You did not answer the form or inform the group at all
+2. You said you would come, and did not come
+
+Answering **"not attending" costs you nothing** — it is how we plan, and it is the responsible thing to do. Unpaid fines suspend privileges like uniform priority — **never your membership**, and never with a public call-out. A fine may only be waived by the Treasurer or Vice President with the President's approval, and the reason is recorded where members can see it.
+
+**Declared availability:** tell us your regular unavailable days — work shifts, class schedule, another choir, a new baby — and **an absence inside what you declared is automatically excused.** 🌿
 
 After 3 consecutive unexcused absences, an officer checks on you — not to scold, but to make sure you're okay. 🫂
+
+*Bisaya: Wala kay multa kung dili ka maka-attend. Ang multa (₱20) para ra sa (1) wala pagtubag sa form o wala gyud nagpahibalo, o (2) nagsulti nga motambong apan wala miabot. Ang pagtubag nga "dili ko maka-attend" walay bayad — mao gyud kana ang tama nga buhaton.*
 
 ---
 
 ## 🌿 MEMBER STATUS / STATUS SA MIYEMBRO
 
-- 🟢 **Active Member** — regular participant, holds voting rights
-- 🟡 **Associate / On Leave** — busy right now, still family. Can sing at **Core Masses** (Sat/Sun) anytime. To join a **Major or Special Event**, must attend at least **5 practice sessions** for that event. Return to Active status anytime.
+- 🟢 **Active Member** — on the parish ministry's regular-members list. In the Active GC, holds voting rights, uniform priority, and first consideration for engagements, solos, seminars, and awards. Subject to the commitment fine. **Active means more is asked of you** — the privileges exist because of that duty.
+- 🟡 **Associate / On Leave** — busy right now, still family. **No fines, no chasing, no guilt.** Can sing at **Core Masses** (Sat/Sun) anytime. Full access to lyrics, files, and practices in the General GC. To join a **Major or Special Event**, attend **5 practice sessions** for that event first.
+- ⚪ **Inactive** — no attendance and no declared reason. Off the ministry list, but **still in the General GC and always welcome back.**
 - 🏅 **Honorary Member** — long-serving member, always welcome to sing
 
-*Going on leave is not quitting. Returning is always possible.* 💛
+**How to become Active** *(new members, returnees, Associates — one path for everyone)*
+1. Tell any officer you want to be Active
+2. Show up for **4 weeks — at least 3 of the 4**, services and practices
+3. **Confirmed at the next monthly assembly** by a majority of the Active Members present
+
+**You may sing at any weekend mass the whole time** — the label waits, your service does not. 💛
+
+**Every new member starts as Associate** — no fines, no pressure, full access to lyrics and practices, while you see if this fits your life.
+
+*Going on leave is not quitting. Returning is always possible. And silence is what changes your status — never busyness.* 💛
+
+*Bisaya: Ang pag-leave dili pag-quit. Ang paghilom ang hinungdan sa pag-usab sa status — dili ang pagkabusy. Makakanta ka sa bisan unsang misa samtang naghulat sa confirmation.*
 
 ---
 
@@ -219,11 +241,25 @@ Tell any officer personally. You will receive a proper farewell. You will **neve
 
 ## 💰 THE CHOIR'S MONEY / ANG PONDO SA KORO
 
-San Vicente Choir is voluntary. No membership dues. Funds — from honoraria, talent fees, donations, or sponsorships — belong to all members and are used for group needs: transportation, uniforms, events, equipment, and when needed, to help a member in difficult times. 🤝
+San Vicente Choir is voluntary. **No membership dues.** Funds — from the parish honorarium, talent fees, donations, sponsorships, and commitment fines — belong to all members and are used for group needs: transportation, uniforms, events, equipment, and when needed, to help a member in difficult times. 🤝
 
-**This year's priority:** Choir uniforms, funded through sponsorship — no cost to members.
+**Three separate funds, all visible in the portal:**
 
-Financial report shared at every General Assembly. Any member may ask to see records anytime. Full transparency. 📊
+| Fund | For what |
+|---|---|
+| **General fund** | Uniforms, transportation, materials, choir needs *(Treasurer)* |
+| **Sinking fund** | **Christmas party only** — earmarked, never spent on anything else *(Secretary)* |
+| **Outstanding fines** | Recorded until settled |
+
+**The sinking fund is voluntary** — suggested ₱20/week, ₱5 for students, **any amount welcome**, and **refundable in full until the announced cutoff**. After the cutoff it is committed to the party, and the contributor list is the party list. If you leave the choir before the cutoff, you are refunded automatically.
+
+**This year's priority:** Choir uniforms — **funded by the choir and by solicitation, at no cost to members.** Active members are outfitted first; Associates in the next batch on returning to Active, or sooner by self-funding or helping with solicitation.
+
+**Every month, an officer who does not hold the money** checks that the cash matches the portal ledger — and never a relative of the person holding it. This protects the people who carry our funds.
+
+**Care is never gated by status** — community assistance, excuse and leave letters, condolence singing, and birthday greetings are for **every** member.
+
+Financial report shared at every assembly. Any member may ask to see records anytime. Full transparency. 📊
 
 ---
 
@@ -265,4 +301,17 @@ Every June, you are invited to share one personal goal for the choir year. Music
 
 ---
 
-*🎶 San Vicente Choir — 54 years of singing for God, and counting. | Ratified June 20, 2026*
+## 💬 OUR GROUP CHATS
+
+| Chat | For what |
+|---|---|
+| **Active GC** | For members on the ministry list — attendance, assignments, coordination |
+| **General / Lyrics GC** | Lyrics, song files, announcements, and onboarding. Associates and Inactive members stay here permanently |
+| **Officers GC** | Officer business |
+
+Every choir-wide announcement is **cross-posted to the General GC**, so nobody misses anything. Concerns about a person go **privately to that person or to an officer** — never to the group chat. 💛
+
+---
+
+*🎶 San Vicente Choir — 54 years of singing for God, and counting.*
+*Handbook updated after the General Assembly of July 26, 2026*

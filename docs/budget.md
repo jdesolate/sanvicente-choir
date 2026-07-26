@@ -1,19 +1,25 @@
 # 💰 SAN VICENTE CHOIR
 ## Suggested Budget Plan — Choir Year 2026–2027
 ### Prepared by: Mervin John Tampus, President
-### Draft as of June 2026 — for officer discussion
+### Revised after the General Assembly of July 26, 2026
 
 ---
 
-## STARTING POINT
+## STARTING POINT — REVISED
 
 | | |
 |---|---|
-| **Honorarium (monthly)** | ₱400/month from parish (subject to change) |
-| **Projected annual honorarium** | ₱4,800 |
+| **Honorarium (monthly)** | **~₱867/month** — actual: ₱2,600 received for 3 months *(the original plan assumed ₱400; confirm the breakdown with the parish)* |
+| **Projected annual honorarium** | **~₱10,400** *(was ₱4,800)* |
+| **General fund on hand (July 26)** | ₱1,798 |
+| **Sinking fund on hand (July 26)** | ₱1,285 from 18 contributors — **earmarked for Christmas** |
+| **Outstanding fines** | ₱40 |
 | **Current equipment** | 1 guitar, 1 bass amp (donated) |
 | **Membership dues** | None — voluntary group |
-| **June 20 General Assembly meal** | ₱1,000 — covered separately, not from choir funds |
+
+> ⚠️ **The honorarium is more than double what this plan originally assumed.** That
+> single fact changes the year: **the uniform is now self-fundable** without waiting
+> for a sponsor, and solicitation becomes upside rather than survival.
 
 ---
 
@@ -27,29 +33,36 @@
 
 | Source | Estimated Amount | Notes |
 |---|---|---|
-| Parish honorarium (12 months) | ₱4,800 | ₱400/month, may change |
-| Talent fees / singing engagements | ₱500–₱2,000 | If any gigs are accepted |
+| Parish honorarium (12 months) | **₱10,400** | ~₱867/month on current trend — confirm with parish |
+| Talent fees / singing engagements | ₱500–₱3,000 | ₱300 already received (Tupaba Thanksgiving Mass, July 6) |
 | Donations / sponsorships | ₱0–₱5,000 | Unpredictable — treat as bonus |
+| Commitment fines | ₱200–₱600 | **Small by design.** A fine is a deterrent, not income — the better we communicate, the less this collects |
 | Caroling collections (December) | ₱500–₱2,000 | Depends on how many houses/venues |
-| **Conservative total estimate** | **₱5,300–₱9,800** | |
+| **Conservative total estimate** | **₱11,000–₱16,000** | |
 
-*Budget planning should be based on the conservative estimate (₱5,300). Anything above that is a bonus.*
+*Plan against the conservative figure (~₱11,000). Never budget as if fine income is
+reliable — if that number is high, something is wrong.*
+
+**Held separately, not spendable:** the sinking fund (~₱20/week voluntary,
+refundable until the November cutoff) funds the Christmas party and nothing else.
 
 ---
 
 ## PROPOSED SPENDING PRIORITIES
 
-### 🥇 PRIORITY 1 — Choir Uniform *(when funded)*
-**Status: Aspirational — proceed only when sponsorship or donations are confirmed**
+### 🥇 PRIORITY 1 — Choir Uniform
+**Status: FUNDABLE THIS YEAR — from choir funds, with solicitation on top**
 
-A uniform gives the choir identity and makes every member feel equally part of the group. It is a meaningful goal for the year — but it is not a committed expenditure. The choir will not order uniforms until the funding is in hand.
+A uniform gives the choir identity and makes every member feel equally part of the group. At ~₱867/month we should hold roughly **₱4,400 by late October**, against a cost of ₱3,000–₱5,000 for our size — so this no longer depends on finding a sponsor. Design finalized in September, ordered in October, worn by Christmas. Include the **ministry name on the back**.
 
 | Item | Estimated Cost |
 |---|---|
-| Custom choir shirt × 20 members | ₱3,000–₱5,000 |
+| Custom choir shirt × ~19 members | ₱3,000–₱5,000 |
 | *(₱150–₱250 per shirt depending on design)* | |
 
-**Funding strategy — do NOT use honorarium for this:**
+**Who gets one:** Active Members first, at no cost. Associates receive theirs in the next batch on returning to Active, or sooner by self-funding or helping with solicitation.
+
+**Solicitation is now upside, not survival** — it funds equipment, materials, and formation. Approaches still worth making:
 - 🎯 Approach 1–2 sponsors (alumni, local business, parishioner) to donate or co-sponsor shirts
 - 🎯 After website is live — post a sponsorship appeal online
 - 🎯 Ask the priest to mention it during parish announcements
@@ -121,14 +134,15 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 
 | Priority | Item | Estimated Cost | Funding Source |
 |---|---|---|---|
-| 1 | Choir Uniform *(when funded)* | ₱3,000–₱5,000 | Sponsorship / donations only |
-| 2 | Christmas Celebration | ₱500–₱1,500 | Caroling collections + choir funds |
-| 3 | Music Materials | ₱600–₱1,300 | Honorarium |
-| 4 | Community Assistance Reserve | ₱500–₱1,000 | Honorarium |
-| 5 | Anniversary Celebration | ₱700–₱2,000 | Choir funds |
-| — | Contingency / miscellaneous | ₱500 | Choir funds |
-| | **Total from choir funds** | **~₱3,150–₱6,500** | |
-| | **Total uniform (sponsorship target)** | **₱3,000–₱5,000** | External |
+| 1 | **Choir Uniform** | ₱3,000–₱5,000 | **Choir funds** + solicitation |
+| 2 | Christmas Celebration | whatever we collect | **Sinking fund** (voluntary, earmarked) |
+| 3 | Music Materials | ₱600–₱1,300 | General fund |
+| 4 | Community Assistance Reserve | ₱500–₱1,000 | General fund |
+| 5 | Anniversary Celebration | ₱700–₱2,000 | General fund |
+| — | Mass offerings *(e.g. oath-taking bread & wine, ₱582 in June)* | ₱600–₱1,200 | General fund |
+| — | Birthday cakes — **one per month, funded by amot** | ₱0 from choir funds | Member contributions |
+| — | Contingency / miscellaneous | ₱500 | General fund |
+| | **Total from choir funds** | **~₱5,400–₱11,000** | against ~₱11,000 income |
 
 ---
 
@@ -165,10 +179,13 @@ Combined with elections and oath-taking. Keep it celebratory but affordable.
 
 ## WHAT NOT TO DO THIS YEAR
 
-- ❌ Do not fund a team outing from choir funds — the group isn't financially stable enough yet and the Saturday program handles bonding for free
-- ❌ Do not commit to buying equipment (speakers, etc.) this year — save that for Year 2
+- ❌ **Never spend the sinking fund on anything but the Christmas party.** The moment an earmarked fund is touched for something else, every future contribution gets second-guessed
+- ❌ **Never budget as if fine income is reliable** — the better members communicate, the less it collects. That is success, not shortfall
 - ❌ Do not pressure members to contribute personal money for group expenses
-- ❌ Do not spend the honorarium all at once — save first, spend intentionally
+- ❌ Do not fund a team outing from choir funds — the Saturday program handles bonding for free
+- ❌ Do not commit to buying equipment (speakers, etc.) until the uniform is delivered
+- ❌ **Never delete a ledger entry.** Void it with the reason recorded and visible
+- ❌ **Never gate care by status** — community assistance, excuse and leave letters, and condolence singing are for every member
 
 ---
 

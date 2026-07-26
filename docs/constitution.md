@@ -1,6 +1,13 @@
 # CONSTITUTION AND BY-LAWS
 ## San Vicente Choir
-### Established in Service Since 1972 | Formalized June 20, 2026
+### Established in Service Since 1972 | Draft for ratification
+
+> ⚠️ **This is a working draft, not yet ratified as a whole.** The Choir discusses and
+> ratifies it **article by article** at each monthly assembly, beginning with Articles
+> I–III at the assembly of August 2026. **For the rules the Choir follows this year,
+> read the Working Rules 2026–2027** — where the two differ, the Working Rules apply.
+> Amendments recorded here reflect decisions taken at the General Assembly of
+> **July 26, 2026**.
 
 ---
 
@@ -26,7 +33,7 @@ This Constitution exists not to punish, but to protect — to give every generat
 
 **Section 3.** The Choir is not a paid ensemble. Members serve as an act of worship and community. Any honoraria or funds received are communal resources managed transparently by the officers.
 
-**Section 4.** This Constitution supersedes all previous informal agreements, rules, or understandings as of June 20, 2026, the date of its ratification.
+**Section 4.** This Constitution was adopted as a working draft on June 20, 2026 and is being ratified article by article at the Choir's monthly assemblies. Until ratification is complete, the **Working Rules 2026–2027**, adopted at the General Assembly of July 26, 2026, govern where the two differ.
 
 ---
 
@@ -69,16 +76,27 @@ Instrumentalists and accompanists (e.g., guitarist, keyboardist, bassist) who se
 A member who has signed the Membership Form, committed to the attendance expectations in Article V, and participates in the weekly attendance poll. Active Members hold voting rights in general assemblies.
 
 **(b) Associate Member (On Leave)**
-A member who, due to personal circumstances (pregnancy, board review, work schedule, health, family), cannot fulfill weekly attendance but wishes to remain part of the Choir community. Associate Members:
-- Are not subject to attendance penalties
-- Remain in the group chat
-- Do not hold voting rights while on Associate status
+A member who, due to personal circumstances (pregnancy, board review, work schedule, health, family, studies, another ministry, or living away), cannot fulfill weekly attendance but wishes to remain part of the Choir community. Associate Members:
+- Are not subject to attendance penalties or fines
+- Remain in the General / Lyrics group chat, with full access to lyrics, song files, and practices
+- Do not hold voting rights, and may not hold officer or committee-head positions, while on Associate status
 - May sing at **Core Masses** (Saturday and Sunday regular masses) anytime when available and willing
 - To participate in a **Major or Special Event**, an Associate Member must have attended at least **five (5) practice sessions** for that event
-- May return to Active status at any time by notifying an officer
+- May move to Active status through the process in Section 2(e)
 
-**(c) Honorary Member**
+**(c) Inactive Member**
+A member who has neither attended nor communicated, and who has not declared a reason for their absence. Inactive Members are not on the ministry's regular-members list and do not hold voting rights. They **remain in the General / Lyrics group chat** and are always welcome to return through the process in Section 2(e). *Silence, not busyness, is what places a member in this category.*
+
+**(d) Honorary Member**
 A member who has served the Choir for a significant number of years and whose circumstances no longer allow regular participation. Honorary Members are recognized at the annual assembly and are always welcome to sing.
+
+**(e) Becoming an Active Member.**
+New members, returning members, and Associate Members moving up all follow one path:
+1. Notify any officer of the intention to become Active
+2. Attend for **four (4) weeks — at least three (3) of the four** — covering both services and practices
+3. Be **confirmed at the next monthly General Assembly by a majority of the Active Members present**
+
+Throughout this period the member **may sing at any Core Mass**. What waits is the Active group chat, the ministry list, and voting rights — never the ability to serve. This process exists because the roster submitted to the parish ministry must be accurate, not as a test of any member's worth.
 
 **Section 3. Joining Process.**
 New members must complete the following steps in order:
@@ -93,6 +111,7 @@ New members must complete the following steps in order:
    - The audition is **not a rejection test** — it is a welcome tradition. Applicants who audition in good faith are accepted into the choir.
 6. **Voice section assignment** — the Music Director, in consultation with available Section Leaders, assigns the new member to their appropriate voice section based on the audition
 7. **Introduction to the choir** — the new member is formally introduced to the full choir at the next available mass or meeting
+8. **Associate status and the four-week period** — every new member begins as an **Associate Member**, with full access to lyrics, song files, and practices through the General / Lyrics group chat, and with no fines and no attendance pressure. After four weeks they may be confirmed as Active under Section 2(d).
 
 *Note: The Choir envisions transitioning this process to a digital platform in the future — including online registration forms, digital signing of the Constitution and Handbook, and section assignment tracking — to reduce paperwork and improve accessibility for all members.*
 
@@ -103,9 +122,19 @@ Every June, all Active Members will sign a renewal form. This is not a test of l
 Any member who wishes to leave the Choir permanently shall:
 1. Notify any officer personally (in person, call, or private message)
 2. Be given a proper farewell acknowledgment in the group chat or at the next meeting
-3. Never be kicked from the group chat without their consent
+3. Be refunded any sinking fund contribution automatically if the departure occurs before the announced cutoff date
 
-No member shall be forcibly removed from the group chat or the Choir without the formal process described in Article XI.
+**Section 6. Group Chat Membership and Removal.**
+The Choir maintains three group chats: an **Officers** chat, an **Active** chat for members on the ministry list, and a **General / Lyrics** chat for lyrics, song files, announcements, and onboarding. Associate and Inactive Members remain in the General / Lyrics chat, and every choir-wide announcement shall be cross-posted there.
+
+**No member shall be removed from the Choir's group chats as a shortcut, at the discretion of a single officer, or on account of a personal grievance.** Removal follows this process in full:
+
+1. A private conversation with an officer — to understand, not to scold
+2. If there is no response within fourteen (14) days, the officers may reclassify the member as Inactive; the member **retains the General / Lyrics chat**
+3. Removal from the Choir's group chats may occur only (a) at the member's own request, (b) for serious misconduct under Article XI, or (c) for prolonged inactivity with no response — and in cases (b) and (c) **only by a vote of the Active Members at a General Assembly**
+4. Any member removed may return through the joining process in Section 3
+
+This process is deliberately slow. It protects every member from being pushed out over another person's frustration, and it protects officers from being blamed for a decision the Choir makes together.
 
 ---
 
@@ -201,11 +230,23 @@ Violation of this Code of Conduct by an officer may result in a formal review by
 | **Special** | Competitions, concerts, gigs, seminars | Voluntary; announced in advance |
 
 **Section 2. Weekly Attendance Submission.**
-- Members must submit their attendance for the coming Saturday and Sunday masses via the **official Google Form**, submitted **before each service**.
-- All Active Members are expected to complete the form before every service they intend to attend or miss.
-- No submission before the service = counted as absent for planning purposes.
-- Submitting "not attending" is not a penalty — it is responsible communication.
-- The **Secretary** is responsible for checking attendance submissions in the portal before every service and reporting to the officers.
+- One weekly form covers **both the practices and the weekend masses**. It is posted each **Thursday before 9PM**, and the **Friday 9PM snapshot is the official record**.
+- All Active Members are expected to answer the form every week, whether they intend to attend or not.
+- **Submitting "not attending" is not a penalty** — it is responsible communication, and it carries no fine.
+- No response and no notice at all is the only thing subject to the commitment fine in Article XI, Section 1.
+- Where a member submits more than once for the same weekend, the **latest response is the one counted**.
+- The **Secretary** maintains the attendance record in the portal; the weekly cross-check against the frozen snapshot may be automated.
+
+**Section 2-A. Declared Availability.**
+Each member may record in the portal their **standing unavailability** — work shifts, class schedules, another choir or ministry, care of a new child, or health. An absence falling **inside a member's declared availability is automatically excused** and carries no fine.
+
+Outside commitments, including membership in other choirs, are welcome, subject to these limits:
+- The Choir's own Core Masses and all Major Events take precedence
+- Conflicts with a Major Event must be declared **three to four (3–4) weeks in advance**
+- The member's role and responsibilities must still be fulfilled
+- An outside commitment may not cause a member to miss a Major Event more than once in a term
+
+Repeated failure to observe these limits is addressed under Article IV, Section 6 for officers, or through a status change under Section 5 of this Article for members.
 
 **Section 3. Absence Classification.**
 
@@ -239,8 +280,9 @@ No status change shall happen without the member being informed directly and per
 *(b) Rehearsal* — An official group session where members sing together, with or without instrumentalists and/or the Choir Director present. Rehearsals are scheduled by the officers and constitute an official choir activity subject to attendance expectations.
 
 **Section 2. Regular Rehearsal Schedule.**
-- At minimum, **one (1) official rehearsal per month** shall be held throughout the year
-- **Weekday rehearsals** are also held as needed; specific days and times are to be determined (TBD) each semester based on member availability
+- The Choir's **standing weekly practice is held every Tuesday and Thursday**, led by the Music Director. This satisfies and exceeds the minimum of one (1) official rehearsal per month.
+- Practices are included in the weekly attendance form, and are subject to the same commitment fine as services, so that a session which cannot reach quorum may be cancelled in advance.
+- **Practice quorum cancellation:** if fewer than **four (4) Active Members** have confirmed by **12:00 noon on the day of the practice**, the practice is cancelled and announced immediately, so that no member travels to an empty rehearsal. It is rescheduled at the next available date.
 - The schedule for each semester shall be set by the officers through a **member availability poll** posted in the group chat at least **2 weeks before the semester begins**
 - During months leading up to **Major Events** (Christmas season, Holy Week, competitions), rehearsals shall increase to **one to two (1–2) sessions per week** depending on group availability
 
@@ -366,7 +408,19 @@ The Choir may receive funds from:
 - Talent fees from performances or singing engagements
 - Donations from benefactors, alumni, or community supporters
 - Sponsorships solicited for specific events, uniforms, or equipment
+- Commitment fines under Article XI, Section 1
 - Other voluntary contributions
+
+**Section 2-A. The Sinking Fund.**
+The Choir maintains a **voluntary sinking fund** for the annual Christmas celebration:
+- Contributions are entirely voluntary — a suggested ₱20 per week, ₱5 for students, and **any amount is welcome**. No member is penalized for contributing nothing.
+- The fund is **earmarked** and shall not be spent on any other purpose.
+- Contributions are **refundable in full on request until the cutoff date announced each year**. After the cutoff, contributions are committed to the celebration and the contributor list serves as the guest list.
+- A member who leaves the Choir before the cutoff is **refunded automatically**.
+- The fund is recorded in the choir portal, counted in front of the members at each monthly assembly, and stored securely — never held loosely.
+
+**Section 2-B. Separation of Funds.**
+The general fund, the sinking fund, and outstanding fines are reported as **three separate figures** at every assembly, so that no fund appears to have been moved into another.
 
 **Section 3. Use of Funds.**
 Funds shall be used for purposes that benefit the Choir and its members, including but not limited to:
@@ -378,13 +432,22 @@ Funds shall be used for purposes that benefit the Choir and its members, includi
 - **Community assistance** — the Choir may allocate funds to help a current or former member in need (medical, emergency, bereavement), subject to officer approval by majority vote
 
 **Section 4. Financial Management.**
-- The Treasurer shall maintain a written record of all income and expenses
+- The Treasurer shall maintain a written record of all income and expenses, with proof of receipt attached for **both** expenses and income
 - A financial report shall be presented to all members at every General Assembly, or upon request by any Active Member
 - Any expenditure above **₱300** must be approved by a majority of officers
 - Emergency expenditures below ₱300 may be approved by the President and Treasurer jointly, with full disclosure at the next meeting
+- Ledger entries shall not be deleted. A mistaken entry is **voided with the reason recorded and left visible**, so that every correction is part of the record
+
+**Section 4-A. Monthly Verification.**
+At each monthly assembly, an officer **who does not hold the money** shall confirm that the cash on hand matches the portal ledger, and the confirmation shall be recorded in the minutes. A verifier shall **not be a relative of the person holding the fund** being verified. This exists to protect the members who carry the Choir's money, not to cast doubt on them.
 
 **Section 5. Transparency.**
 All members have the right to know how choir funds are managed. The Treasurer's records are open to any member upon request. No funds shall be used for personal benefit of any officer or member.
+
+**Section 5-A. Priority in Benefits, and What Is Never Gated.**
+The Choir's funds and uniforms come from the services its members sing. Accordingly, **Active Members receive first priority** for uniforms, paid engagements, solo and feature parts, choir-funded formation and seminars, and recognition. Associate Members receive uniforms in the following batch upon becoming Active, or sooner if they self-fund or assist with solicitation.
+
+**Care is never gated by status.** Community assistance under Section 3, excuse and leave letters, condolence and *responso* singing, and the ordinary courtesies of belonging are available to **every** member regardless of classification.
 
 **Section 6. End-of-Term Turnover.**
 At the end of each term, the outgoing Treasurer shall present a full financial report and turn over all funds, records, and receipts to the incoming Treasurer, with the President and one other officer as witnesses.
@@ -446,7 +509,20 @@ The Choir envisions the website eventually supporting **online membership regist
 
 ## ARTICLE XI — DISCIPLINE AND DUE PROCESS
 
-**Section 1.** San Vicente Choir does not believe in punitive discipline for attendance. Members who cannot attend are not fined or penalized — they are reclassified and supported.
+**Section 1. Absence is not punished; broken communication is.**
+San Vicente Choir does not penalize any member for being unable to attend. A member who cannot attend is never fined for the absence itself — they are reclassified and supported.
+
+However, the Choir maintains a **commitment fine of ₱20**, applicable to Active Members only, in the following two cases:
+
+**(a)** failing to answer the weekly attendance form or to inform the group at all; or
+**(b)** committing to attend a service or practice and then not attending.
+
+- The fine applies to practices and services alike, is recorded in the choir portal, and is paid to the Treasurer within two (2) weeks.
+- A fine may be **waived only by the Treasurer or Vice President with the President's concurrence**, and the reason shall be recorded in the ledger where members can see it.
+- **Unpaid fines suspend privileges only** — uniform priority and event eligibility — never membership, and never through a public call-out.
+- Associate, Inactive, and Honorary Members are **not** subject to fines.
+
+The purpose of the fine is fairness in communication, not revenue. Answering "not attending" carries no penalty of any kind.
 
 **Section 2.** However, behavior that causes harm to the community — harassment, public shaming, theft of choir funds, repeated disrespect toward members or officers — shall be addressed through the following process:
 
@@ -587,9 +663,18 @@ Article IV, Section 2 or by appointment to a vacancy under Article IV, Section
 
 ---
 
-## ARTICLE XVI — RATIFICATION
+## ARTICLE XVI — ADOPTION AND PROGRESSIVE RATIFICATION
 
-This Constitution and By-Laws of San Vicente Choir is hereby adopted and ratified on **June 20, 2026**, at the General Assembly of San Vicente Choir, Cebu City.
+This Constitution and By-Laws was **adopted as a working draft** on **June 20, 2026**, at the General Assembly of San Vicente Choir, Cebu City.
+
+Because no member had yet had the opportunity to read and question it in full, the Choir resolved at the **General Assembly of July 26, 2026** that:
+
+1. The Constitution shall be **ratified article by article**, with two to three articles discussed at each monthly assembly until the whole document has been considered by the membership — beginning with Articles I–III in August 2026.
+2. Until ratification is complete, the **Working Rules 2026–2027** govern where the two differ.
+3. Members sign a **membership form** agreeing to abide by the Choir's current working rules while ratification is completed — not a document they have not yet read.
+4. Each article ratified shall be recorded by the Secretary with the date and the vote.
+
+*A constitution that members have read, questioned, and agreed to is worth more than one signed quickly. This is deliberate.*
 
 ---
 

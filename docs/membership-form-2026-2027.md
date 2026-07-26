@@ -48,7 +48,7 @@ Choose one:
 | Commitment fines | Yes | No |
 | Major Events | Expected | 5 practices for that event first |
 
-*Associate is not quitting. You return to Active anytime by telling an officer — no screening, no probation.*
+*Associate is not quitting. To become Active: tell an officer, show up for 4 weeks (at least 3 weeks of the 4), and you are confirmed at the next monthly assembly by the Active Members. **You may sing at any weekend mass the whole time** — the label waits, your service does not.*
 
 ---
 
@@ -74,10 +74,10 @@ Event twice in one term.
 ### 3. This year's working rules — what I am agreeing to
 
 - I answer the **attendance form every week** — Thursday post, reply by **Friday 12NN**. The Friday 9PM snapshot is the record. Saying "not attending" is not a penalty; it is how we plan.
-- **₱20 commitment fine** if I do not answer the form, or if I commit to attend and do not show up. Fines are logged in the portal and paid to the Treasurer within 2 weeks. A fine may only be waived by the Treasurer with the President's approval, and the reason is recorded where members can see it.
+- **₱20 commitment fine** if I do not answer the form or inform the group at all, or if I commit to attend and do not show up. Fines are logged in the portal and paid to the Treasurer within 2 weeks. A fine may only be waived by the Treasurer with the President's approval, and the reason is recorded where members can see it.
 - **Unpaid fines suspend privileges** (uniform priority, party eligibility) — never my membership, and never a public call-out.
 - **Sinking fund is voluntary** — suggested ₱20/week, ₱5 for students, any amount welcome. It is earmarked for the December Christmas party and nothing else. **Refundable in full on request until ______________ (cutoff); after that it is committed, and the contributor list is the party list.** If I leave the choir before the cutoff, I am refunded automatically.
-- **Group chats:** Active members are in the Active GC. Associates and members on the general list stay in the General / Lyrics GC. **No one is removed from the choir's group chat.**
+- **Group chats:** Active members are in the Active GC. Associates and members on the general list stay in the General / Lyrics GC. **No one is removed from a group chat as a shortcut** — removal follows due process and requires a vote of the Active Members.
 - **Conduct:** no public call-outs or shaming; concerns go privately to an officer first; group chat content stays in the group chat.
 - **Media:** photos and videos from choir activities may be posted on our official pages. I may ask the Secretary to remove any photo of me — no questions asked. *(Members under 18: parent or guardian must co-sign.)*
 - **Privacy:** my information is kept for choir and ministry records only, under RA 10173.

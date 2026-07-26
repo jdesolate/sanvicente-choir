@@ -18,8 +18,8 @@ physically present · Frequency: W weekly · M monthly · E per event · Y yearl
 | Accompanist — keyboard | Plays for services | W | 🙋 | **Vince** · **Kuya Lemuel** |
 | Accompanist trainee | Learning basic church accompaniment so we're never stuck | W | 🙋 | **Merv · Amor · Paolo** |
 | Song plan preparation | Song list per service, shared before the day | W | 💻 | **Vince / Merv / Amor / Ara / Jan** |
-| Lyrics posting | Prepare and post lyrics to the Lyrics GC | W | 💻 | **Merv** — *needs help* |
-| Song library uploads | Guide recordings and voice-part references into the portal | W | 💻 | **Merv** — *needs help* |
+| Lyrics posting | Prepare and post lyrics to the Lyrics GC | W | 💻 / 📱| **Merv** — *needs help* |
+| Song library uploads | Guide recordings and voice-part references into the portal | W | 💻 / 📱| **Merv** — *needs help* |
 | Song researcher | Find songs that fit the season; bring suggestions to the Music Director | M | 📱 | |
 | Repertoire list keeper | Keep the list current — Mastered / Learning / Retired | M | 📱 | |
 | Warm-up leader | Lead vocal warm-ups when the Director is late or away | W | 🙋 | |
@@ -163,7 +163,7 @@ You don't need to be the best singer — just reliable and kind.*
 |---|---|---|---|---|
 | Development & maintenance | Build and fix the portal | W | 💻 | **Merv** |
 | Member data entry | Keep profiles, sections, statuses complete | M | 💻 | **Merv** |
-| Song library data entry | Add songs, lyrics, files | W | 💻 | **Merv** |
+| Song library data entry | Add songs, lyrics, files | W | 💻 | **Merv** / **Need Help** |
 | Portal help desk | Help members who can't log in or register | E | 📱 | **Merv** |
 | Form → portal automation | Push form answers into the portal automatically | Y | 💻 | **Merv** |
 
@@ -175,7 +175,7 @@ You don't need to be the best singer — just reliable and kind.*
 | Birthday greetings | Post greetings for the month's celebrants | M | 📱 | |
 | Bereavement & sick visits | Organize *responso*, wake mass singing, or a visit | E | 🙋 | **Ian** |
 | Saturday activity planning | Plan the rotating 3–5PM gathering | W | 📱 | |
-| Community outreach | Teaching children to sing, parish service projects | M | 🙋 | |
+| Community outreach | Teaching children to sing, parish service projects | Y | 🙋 | |
 | Formation & seminars | Organize vocal training or faith formation sessions | Y | 🙋 | |
 | Recognition & awards | Plan how we acknowledge consistent, dedicated members | Y | 📱 | |
 | Farewells & welcomes | Make sure nobody leaves or arrives unnoticed | E | 📱 | |

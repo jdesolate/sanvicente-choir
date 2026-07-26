@@ -1,300 +1,125 @@
-# 📋 SAN VICENTE CHOIR — TBD SUMMARY
-## Items for Core Officers to Review & Decide
-### To be finalized before or at the June 20, 2026 General Assembly
+# 📋 OPEN ITEMS & ACTION LIST
+## San Vicente Choir — after the General Assembly of July 26, 2026
+
+> What is decided, what is still open, and who owns it. Reviewed at every monthly
+> assembly.
 
 ---
 
-> This document summarizes all unresolved items across the Constitution, Member Handbook, Calendar, and Budget Plan. Each item includes a recommendation to help guide the discussion.
+## ✅ SETTLED AT THE JULY 26 ASSEMBLY
 
----
-
-## 🏛️ A. OFFICER POSITIONS — People to Fill
-
-These roles are listed in the Constitution but have no assigned person yet. Officers decide at the June 20 General Assembly.
-
----
-
-### 1. Treasurer
-**Status:** ✅ Assigned — **Mary Love Lopez**
-**Why it matters:** Handles all choir funds, records income and expenses, presents financial report. With ₱400/month honorarium and potential talent fees incoming, someone needs to own this from Day 1.
-
----
-
-### 2. Soprano Section Leader
-**Status:** TBD
-**Why it matters:** Leads soprano members in preparation, attendance follow-up, and sectional guidance.
-
-> 💡 **Suggestion:** Assign this to the most consistent and confident soprano in the group — not necessarily the best singer, but the one others look up to or listen to. They don't need to be a formal officer, just a reliable point person for their section.
-
----
-
-### 3. Alto Section Leader
-**Status:** TBD
-
-> 💡 **Suggestion:** Same criteria as above — consistent, encouraging, respected by the alto members.
-
----
-
-### 4. Tenor Section Leader
-**Status:** TBD
-
-> 💡 **Suggestion:** Since you and Jan are both tenors and you're already officers, this role could go to the next most reliable tenor. Even Kuya Danny or another consistent male member would work well here.
-
----
-
-### 5. Bass Section Leader
-**Status:** TBD
-
-> 💡 **Suggestion:** Assign to the most consistent bass member. If the bass section is small, the Tenor Section Leader can oversee both initially.
-
----
-
-### 6. Music Committee Head
-**Status:** TBD
-
-> 💡 **Suggestion:** Vince is the Music Director so he naturally leads this, but the Committee Head handles the coordination work (polling members for song suggestions, tracking the repertoire list) so Vince can focus on the actual music. Could be a member who is musically inclined but not yet an officer.
-
----
-
-### 7. Membership Committee Head
-**Status:** TBD
-
-> 💡 **Suggestion:** Assign to Ara (VP & Internal Coordinator) since member welfare is already her role. Or delegate it to a reliable new member who wants more responsibility — it's a good entry-level leadership role.
-
----
-
-### 8. Logistics & Property Head
-**Status:** TBD
-**Why it matters:** Someone needs to own the guitar, bass amp, song folders, and event setup. Currently no one is formally responsible.
-
-> 💡 **Suggestion:** Assign to a physically present and reliable member — ideally someone who attends almost every mass and rehearsal. Could be one of the accompanists (Kuya Lemuel or Kuya Anjun) since they're always there and already handle equipment informally.
-
----
-
-### 9. Documentation & Social Media Head
-**Status:** TBD
-**Why it matters:** Photos, videos, social media posts, and media archiving. Also manages the GitHub website going forward.
-
-> 💡 **Suggestion:** Look for the member who already takes photos during masses or naturally posts about choir events. If you plan to build the full website yourself, you can temporarily hold this role or assign it to someone you trust with the GitHub repo access.
-
----
-
-### 10. Secretary
-**Status:** ✅ Assigned — **Gezd Seloterio**
-
----
-
-## 📅 B. CALENDAR — Dates to Confirm
-
-These are events in the calendar that need exact dates confirmed with the parish or decided by the officers.
-
----
-
-### 11. Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish
-**Status:** September — exact date unknown
-**Action needed:** Ask the parish coordinator or priest of the Archdiocesan Shrine of San Nicolas de Tolentino Parish for the exact fiesta date.
-
-> 💡 **Suggestion:** Assign Gabriella (External Coordinator) to follow up with the Archdiocesan Shrine of San Nicolas de Tolentino Parish by July. Once confirmed, post in the group chat and update the calendar.
-
----
-
-### 12. Holy Rosary Home Visits — October
-**Status:** October — specific schedule of home visits unknown
-**Action needed:** Coordinate with the parish on which homes the choir is expected to visit and on what dates.
-
-> 💡 **Suggestion:** This is typically organized by the parish BEC (Basic Ecclesial Communities). Ask your parish contact or the SVFP coordinator by September to get the schedule early enough to plan attendance.
-
----
-
-### 13. Misa de Gallo (Simbang Gabi) — December 16–24
-**Status:** Exact choir schedule needs parish confirmation
-**Action needed:** Confirm with SVF Chapel and/or San Nicolas which Misa de Gallo services the choir is assigned to sing for.
-
-> 💡 **Suggestion:** Approach the parish priest or liturgy coordinator by October. Misa de Gallo is early morning (4–5AM typically) — confirm if your choir will serve all 9 days or specific days only. Factor this into the rest period planning after Christmas.
-
----
-
-### 14. Semester 1 Rehearsal Schedule
-**Status:** TBD — set by officers via availability poll
-**Action needed:** Officers post a member availability poll after June 20 to determine a regular rehearsal day for July–November.
-
-> 💡 **Suggestion:** Poll within the first week after June 20. Offer 2–3 day options (e.g., Friday, Saturday before mass, or Monday). Once majority responds, lock in the schedule and announce it clearly. Avoid changing it too often — consistency helps attendance.
-
----
-
-### 15. Regular Monthly Meeting Day
-**Status:** TBD — to be set each semester
-**Action needed:** Decide a fixed day for the monthly mandatory meeting (e.g., first Saturday of every month before mass, or a weekday evening).
-
-> 💡 **Suggestion:** Tie the monthly meeting to an existing gathering — e.g., right before or after a Saturday mass, or before a rehearsal. This reduces the burden of "one more thing to attend."
-
----
-
-### 16. Competitions / Singing Engagements — February–March 2027
-**Status:** Optional, no specific event identified yet
-**Action needed:** Officers watch for singing competition announcements or singing engagement requests and vote on whether to join.
-
-> 💡 **Suggestion:** Don't actively chase competitions in Year 1 — focus on building consistency first. However, if a paid singing engagement comes up (fiesta, wedding, corporate event), seriously consider it as a fundraiser for the uniform. Even ₱1,000–₱2,000 from one gig helps significantly.
-
----
-
-### 17. Stations of the Cross Accompaniment — Lenten Fridays
-**Status:** Optional, needs parish confirmation
-**Action needed:** Confirm with parish if they want the choir to sing during Friday Stations of the Cross during Lent.
-
-> 💡 **Suggestion:** This is a low-pressure service that's great for newer members to gain experience. Confirm with the parish by January 2027.
-
----
-
-### 18. Holy Week Monday–Wednesday Services
-**Status:** Possible services, needs parish confirmation
-
-> 💡 **Suggestion:** Confirm with the parish by February 2027 which specific Holy Week services require the choir beyond the core days (Holy Thursday, Good Friday, Easter Vigil, Easter Sunday).
-
----
-
-## 💰 C. BUDGET — Decisions Needed
-
----
-
-### 19. Uniform Design and Supplier
-**Status:** No design or supplier selected yet
-**Action needed:** Decide on shirt style, color, whether to include the choir name/logo, and find a supplier.
-
-> 💡 **Suggestion:** Keep it simple for Year 1 — a polo shirt in one solid color (navy, white, or maroon to match your branding) with "San Vicente Choir" printed or embroidered. Get quotes from 2–3 suppliers before committing. Target: design finalized by August, ordered by October.
-
----
-
-### 20. Logo Design
-**Status:** A logo is already present on the choir's Facebook page — may need redesign or improvement before use on the uniform and website.
-**Action needed:** Officers review the current Facebook logo and decide: use as-is, refine it, or commission a redesign.
-
-> 💡 **Suggestion:** Start by presenting the current Facebook logo to the officers. If the group feels it needs improvement — cleaner lines, better colors, more polished look — ask if any member has graphic design skills (many students do) or use Canva/AI tools. A redesigned version should work well for uniform embroidery and the website header. Assign this to the Documentation & Social Media Committee.
-
----
-
-### 21. Sponsorship Outreach — Uniform
-**Status:** Not yet started
-**Action needed:** Identify 1–3 potential sponsors to approach for the uniform fund.
-
-> 💡 **Suggestion:** Start with the easiest: former members and alumni (Kuya Danny and other veterans may be willing to donate), then approach local businesses near the parish. A simple personal message explaining the choir's 54-year history and the uniform goal is enough. Facebook page can also be used to post a sponsorship appeal to reach the wider parish community.
-
----
-
-### 22. Caroling Schedule — December
-**Status:** TBD by officers
-**Action needed:** Decide which houses, barangays, or establishments the choir will carol at in December, and on what dates.
-
-> 💡 **Suggestion:** Plan caroling for 2–3 evenings in the first two weeks of December, before Misa de Gallo begins. Focus on parishioners and businesses who have supported the parish before. Collections from caroling fund the Christmas party directly.
-
----
-
-## 🌐 D. WEBSITE / DIGITAL — Next Steps
-
-*Note: Facebook handles all choir marketing and announcements. The website's purpose is (1) public choir information and (2) private member data management to reduce paperwork.*
-
----
-
-### 23. Full Choir Website
-**Status:** Document hub live at jdesolate.github.io/sanvicente-choir (free, GitHub Pages)
-**Scope:** Two sides —
-- **Public:** About the choir, history, officers, how to join, contact/inquiry form for sponsors and new members
-- **Private (members only):** Digital membership registration, Constitution & Handbook signing, attendance tracking, member status management, yearly renewals, financial records, repertoire list, excuse/leave letter generation, minutes archive
-
-> 💡 **Suggestion:** Don't rush. Current document hub is enough for now. Build the full website in Year 2 when the choir is stable. Your Next.js + Supabase skillset is exactly right for this — the Constitution already defines your database structure (members, attendance, status, officers, finances). Deployment stays free on Vercel; only the domain costs money annually.
-
----
-
-### 24. Custom Domain
-**Status:** Currently on jdesolate.github.io — free, stays free
-**When needed:** Only when building the full website and if choir funds allow
-
-> 💡 **Suggestion:** Register `sanvicentechoir.org` or `svchoir.com` (~₱500–₱800/year) when the full site is ready. Point it to GitHub Pages for now, then to Vercel when you migrate. Budget for Year 2 — not urgent.
-
----
-
-### 25. Choir GitHub Organization Account
-**Status:** Currently under personal GitHub account (jdesolate)
-
-> 💡 **Suggestion:** Eventually create `github.com/sanvicente-choir` as a separate org account so the website isn't tied to your personal account. This protects the choir across presidency changes. Transfer the repo there when building the full site — not urgent now.
-
----
-
-## 📝 E. DOCUMENTS — Still Needed
-
----
-
-### 26. Membership / Registration Form
-**Status:** Referenced in the Constitution but not yet created
-**Action needed:** Create a simple 1-page form for new and renewing members to fill out and sign.
-
-> 💡 **Suggestion:** Include: Full name, nickname, birthday, contact number, email, voice section, membership type (Active/Associate), emergency contact (optional), parental signature line for minors, and a signature block confirming they have read the Constitution and Handbook. Can be a simple printed form or eventually a Google Form / website form.
-
----
-
-### 27. Master Repertoire List
-**Status:** Mentioned in Article X but not yet created
-**Action needed:** Vince (Music Director) and the Secretary (once assigned) to collaboratively build the initial list — songs the choir knows categorized as Mastered, Learning, and Retired.
-
-> 💡 **Suggestion:** Start with a simple shared Google Sheet or document. Have Vince list all songs he knows the choir has sung, then have Jan (Choir Adviser) and other veterans fill in older songs. This directly solves the song conflict problem by giving everyone an objective reference.
-
----
-
-### 28. Annual Personal Goals Form
-**Status:** Mentioned in Article XIII — to be used at the June 20 General Assembly
-**Action needed:** Prepare a simple slip or section in the renewal form for members to write their personal goal for the year.
-
-> 💡 **Suggestion:** Keep it to 2–3 lines: "My name is ___ and my goal for San Vicente Choir this year is ___." Read them aloud at the assembly if members are willing. Archive them with the Secretary.
-
----
-
-## ✅ QUICK DECISION CHECKLIST
-
-### 🔴 Before June 20 — Prepare in Advance
-
-| # | Item | Who |
-|---|---|---|
-| 1 | Membership / Registration Form created | Secretary |
-| 2 | Personal Goals slip prepared | Secretary |
-| 3 | Constitution & Handbook printed or shared digitally | Secretary |
-
-### 🔴 At June 20 General Assembly — Decide Together
-
-| # | Item | Who Decides |
-|---|---|---|
-| 4 | ~~Treasurer assignment~~ ✅ Mary Love Lopez | Officers vote |
-| 5 | Section Leaders (Soprano, Alto, Tenor, Bass) | Officers + Music Director |
-| 6 | Committee Heads (Music, Membership, Logistics, Documentation) | Officers vote |
-| 7 | Confirm officer positions and titles | All core officers |
-
-### 🟡 Within 2 Weeks After June 20
-
-| # | Item | Who |
-|---|---|---|
-| 8 | Post Semester 1 rehearsal availability poll | President |
-| 9 | Set monthly meeting day | Officers |
-| 10 | Fiesta of the Archdiocesan Shrine of San Nicolas de Tolentino Parish — confirm date with parish | External Coordinator |
-
-### 🟡 By August
-
-| # | Item | Who |
-|---|---|---|
-| 11 | Uniform design finalized | Officers + Documentation |
-| 12 | Logo designed | Documentation Committee |
-| 13 | Sponsorship outreach begins | President + External Coordinator |
-| 14 | Master Repertoire List — first draft | Music Director + Secretary |
-
-### 🗓️ Annual Cycle — For Future Reference
-
-| Event | When |
+| Item | Decision |
 |---|---|
-| **Anniversary + Elections** | May — 2nd or 3rd weekend |
-| **Oath Taking of New Officers** | At the May Assembly or within last week of May |
-| **Officer Transition Handover** | End of May — outgoing to incoming |
-| **June General Assembly** (new officers' first meeting: renewal, goals, plans, schedule-setting) | June — led by newly sworn-in officers |
+| Membership tiers | **Active · Associate · Inactive · Honorary** — classification from attendance data *and* whether a member communicates |
+| Becoming Active | One path: tell an officer → 4 weeks (at least 3 of 4) → confirmed at the next monthly assembly by majority of Active Members. Members may sing at any weekend mass throughout |
+| Commitment fine | **₱20**, Active Members only, for not answering the form / not informing the group, or committing and not attending. **Starts Aug 1–2.** Waiver only by Treasurer or VP with the President's approval, reason recorded |
+| Sinking fund | Voluntary, tracked, earmarked for Christmas. Refundable until the cutoff; after that the contributor list is the party list |
+| Group chats | Three: Officers · Active · General/Lyrics. Nobody removed as a shortcut — removal needs due process and a vote |
+| Birthday cakes | One per month at the assembly, funded by **amot**, not choir funds |
+| Fund verification | A non-collecting officer checks cash against the ledger monthly; never a relative of the holder |
+| Constitution | Ratified **article by article** at monthly assemblies — Articles I–III in August |
+| Facebook Community | **Retired.** Mary Love and Paolo could not join, and they hold Treasurer and Logistics |
+
+**Roles filled:** Logistics & Property — **Paolo** · Social Media Committee — **Hany**
+*(Gezd as adviser)* · External Committee — **Amor** (head), **Dignos** (assistant,
+owns parish follow-ups), **Ian** · Fund verifiers — **Ara** (general fund),
+**Jamaica Heart** (sinking fund) · Section leaders — **Amor** soprano, **Mary Love**
+alto, **Jan** tenor, **Clark** bass · Accompanist trainees — **Merv, Amor, Paolo**
 
 ---
 
-*Prepared by: Mervin John Tampus, President*
-*San Vicente Choir — June 2026*
-*For officer review before the June 20, 2026 General Assembly*
+## 🔴 URGENT — NEXT TWO WEEKS
+
+| # | Item | Owner | Due |
+|---|---|---|---|
+| 1 | **Submit ministry regular-members list** — Active roster, after the 7-day dispute window | President / VP | ASAP |
+| 2 | **Kuya Lems — specific dated ask.** "Can you commit to these practice dates and the Sept 8 and fiesta masses?" Yes or no | President | **Aug 9** |
+| 3 | **Accompaniment fallback** — if no confirmation by Aug 9, rehearse to guide recordings and perform with basic-chord guitar | Music Committee | Aug 9 |
+| 4 | **Assign Kuya Danny's buddy** — he attends everything, has no phone, and appears in no attendance record until someone owns this | VP | This week |
+| 5 | **Marivel** — ask the reason and a realistic start date in writing; no answer in 7 days → Inactive | President | 7 days |
+| 6 | **Augdrian** — private conversation. 52% attendance but has never answered the form in five weekends | VP | This week |
+| 7 | **Clark** — Associate at 36% but named Bass Section Leader; only Active Members may hold posts. Commit to Active or move the role | President | This week |
+| 8 | **Collect outstanding membership signatures** | Secretary | 2 weeks |
+| 9 | **Create the Active GC and External Committee GC**; repurpose the main GC to General/Lyrics | President | Immediately |
+| 10 | **Settle the Tuesday-practice form timing** — a Thursday post is too late to plan a Tuesday practice | Officers | This week |
+| 11 | **Publish the sinking fund refund cutoff date** | Treasurer | This week |
+| 12 | **Confirm the honorarium breakdown with the parish** — is ₱867/month stable, or does it include back-payments? | Treasurer | This month |
+
+---
+
+## 🟡 BY AUGUST
+
+| # | Item | Owner |
+|---|---|---|
+| 13 | Solicitation letters printed; first 5 sponsors approached | External Committee |
+| 14 | Sponsor leave-behind flyer with the landing-page QR | External Committee |
+| 15 | Event point persons named for **Aug 29, Aug 30, Sept 8**, and the fiesta | Officers |
+| 16 | Intensified practice schedule for the ministry block and fiesta | Music Director |
+| 17 | Fiesta lineup chosen **by mastery, not ambition** | Music Director |
+| 18 | Constitution **Articles I–III** discussed at the August assembly | President |
+| 19 | Section assistants recruited — one per voice part | Section leaders |
+| 20 | **Saturday bass coverage** — Clark, Kyle and Bolante are Sunday-only; Saturday SVF has had no bass on at least two of four weekends | Music Director |
+
+---
+
+## 🟢 BY SEPTEMBER–OCTOBER
+
+| # | Item | Owner |
+|---|---|---|
+| 21 | **Uniform design and supplier** finalized — ministry name on the back; get 2–3 quotes | Officers + Documentation |
+| 22 | **Uniform ordered** — funded from choir funds plus solicitation | Treasurer |
+| 23 | Logo reviewed — use as-is, refine, or redesign | Documentation Committee |
+| 24 | Master Repertoire List — first draft (Mastered / Learning / Retired) | Music Director + Secretary |
+| 25 | Wedding promo video, once Vince is back | Documentation + Music |
+| 26 | **Engagement rate card** — and the fee split between choir funds and performing members, decided **before** the first booking | Officers |
+| 27 | Wedding coordinator outreach, for the Dec–Jun season | External Committee |
+
+---
+
+## 📅 DATES STILL TO CONFIRM WITH THE PARISH *(owner: Dignos)*
+
+| Item | Needed by |
+|---|---|
+| Fiesta of San Vicente Ferrer Chapel, Duljo — exact date | August |
+| Fiesta of San Nicolas de Tolentino — exact schedule | August |
+| Holy Rosary home-visit schedule (October) | September |
+| Misa de Gallo — which of the nine days the choir serves | October |
+| Stations of the Cross, Lenten Fridays | January |
+| Holy Week Monday–Wednesday services | February |
+
+---
+
+## 💻 PORTAL WORK
+
+| # | Item | Why |
+|---|---|---|
+| 28 | **Soft-delete with reason** on ledger rows | A ledger with an undo button isn't a record |
+| 29 | **Waiver-reason field** on fines | The waiver rule requires a visible reason |
+| 30 | **Proof required on income**, not just expenses | Income is what nobody can independently verify |
+| 31 | **Last-response-wins** on duplicate form submissions | Dignos submitted twice on two weekends; Vince three times on July 11 |
+| 32 | **Declared-availability fine exemption** | A declared conflict must never generate a fine |
+| 33 | **Borrowing and storage log** for equipment | Paolo's logistics scope |
+| 34 | Apps Script → Supabase: automate the Friday cross-check | Removes it from the President permanently |
+| 35 | **Mobile-friendly lyrics and song upload** | This is what blocks delegating the largest recurring task |
+| 36 | Excused-absence logging | The Excused column is currently zero for every member |
+
+---
+
+## 📄 DOCUMENTS
+
+| # | Item | Status |
+|---|---|---|
+| 37 | Working Rules 2026–2027 | ✅ Live — update heading to "Ratified July 26, 2026" and fill the cutoff date |
+| 38 | How Our Choir Works · Event Tiers | ✅ Live |
+| 39 | Constitution | ⚙️ Amended for fines, tiers, GCs, sinking fund, verification — **ratification continues article by article** |
+| 40 | Handbook | ⚙️ Updated — Bisaya sections still need a full pass |
+| 41 | Constitution (Bisaya) | 🔴 Carries the draft notice but **not yet amended** — needs the same changes as the English version |
+| 42 | Budget | ✅ Revised for the ₱867 honorarium |
+| 43 | Calendar · Commitments | ✅ Aligned |
+| 44 | Task list & sign-up | ✅ Live — collect names |
+| 45 | Master Repertoire List | 🔴 Not yet created |
+
+---
+
+*Reviewed at every monthly assembly. Owners are named so that nothing sits with
+"someone should."*

@@ -11,8 +11,9 @@ funds — see the Working Rules 2026–2027.
 - **Associate members (on leave)** — serving when life allows, with a declared
   reason on file: work, studies, board review, health, a new child, another
   ministry. No fines. Can sing at Core Masses anytime; for a Major Event, attend 5
-  practices for it first. Return to Active anytime by telling an officer — no
-  screening, no probation.
+  practices for it first. To become Active: tell an officer, show up for 4 weeks,
+  and be confirmed at the next monthly assembly — while singing freely the whole
+  time.
 - **Inactive members** — no response and no declared status. Off the ministry list,
   but never out of the choir: they keep the General/Lyrics group chat and are
   always welcome back.
@@ -35,9 +36,10 @@ funds — see the Working Rules 2026–2027.
 5. We serve willingly, never by guilt — no public call-outs or shaming. Concerns go
    privately to an officer first (Code of Conduct, Art. IV & VII).
 6. If you go quiet, we'll check on you with care — to understand, not to scold.
-7. **Nobody is removed from the choir's group chat.** Active members coordinate in
-   the Active GC; everyone else keeps the General/Lyrics GC permanently, and every
-   choir-wide announcement is posted there too.
+7. **Nobody is removed from a group chat as a shortcut.** Active members coordinate
+   in the Active GC; everyone else keeps the General/Lyrics GC, and every choir-wide
+   announcement is posted there too. Removal is possible but follows due process and
+   needs a vote of the Active Members — never one person's frustration.
 8. Uniforms this year, at no cost to members — funded by choir funds and
    solicitation. Active members first; Associates on return to Active, or sooner by
    self-funding or helping with solicitation.

@@ -1,0 +1,5 @@
+# documents.html stores the choir's documents as Markdown inside
+# <script type="text/plain"> blocks. Formatters indent script contents, and
+# Markdown reads 4+ spaces of indentation as a code block — which renders every
+# document as raw grey text. Keep this file out of the formatter.
+documents.html
