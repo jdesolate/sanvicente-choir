@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commitments — San Vicente Choir</title>
+        <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SVC">
+    <link rel="apple-touch-icon" href="/assets/images/officers/SVC_Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .step-card { margin-bottom: var(--space-6); }
+      .step-num {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 26px; height: 26px; border-radius: 50%;
+        background: var(--gold); color: #0A0A0A;
+        font-size: var(--text-sm); font-weight: 600; margin-right: 8px;
+      }
+      .badge-committed   { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-cant-attend { background: rgba(217,83,79,0.15);  color: #F08080; }
+      .badge-matched     { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-alias       { background: rgba(110,168,254,0.15); color: #6EA8FE; }
+      .badge-unmatched   { background: rgba(217,83,79,0.15);  color: #F08080; }
+      .badge-skipped     { background: rgba(160,160,160,0.15); color: var(--ivory-muted); }
+      .badge-ok          { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-fined       { background: rgba(224,160,48,0.15); color: var(--warning); }
+      .map-select, .match-select { max-width: 100%; }
+      .recon-event { margin-bottom: var(--space-6); }
+      .recon-event h4 { margin-bottom: var(--space-3); color: var(--ivory); }
+      .muted-row td { color: var(--ivory-muted); }
+      .reason-cell { max-width: 260px; font-size: var(--text-xs); color: var(--ivory-muted); }
+    </style>
+  </head>
+  <body class="portal-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Treasurer Portal</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
+      <div class="portal-header-user" id="portal-header-user"></div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/calendar.html" class="sidebar-link"><span class="sidebar-icon">▦</span> Calendar</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
+        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../secretary/sinking-fund.html" class="sidebar-link"><span class="sidebar-icon">₱</span> Sinking Fund</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Song Management</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../officer/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Event Management</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Fines Ledger</a>
+          <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
+          <a href="../treasurer/commitments.html" class="sidebar-link active"><span class="sidebar-icon">⇄</span> Commitments</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="logistics-section" style="display:none">
+          <div class="sidebar-section-label">Logistics</div>
+          <a href="../logistics/inventory.html" class="sidebar-link"><span class="sidebar-icon">⛭</span> Inventory &amp; Borrowing</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div class="page-heading">
+            <h2>Commitment Reconciliation</h2>
+            <p>Import Google Form commitments, match them to members, and generate fines</p>
+          </div>
+
+          <!-- ── Step 1: Weekend picker ── -->
+          <div class="card step-card">
+            <div class="card-header">
+              <h3 class="card-title"><span class="step-num">1</span>Pick the Weekend</h3>
+            </div>
+            <div class="form-row form-row-2">
+              <div class="form-group" style="margin-bottom:0">
+                <label for="weekend-date">Weekend Saturday date</label>
+                <input type="date" id="weekend-date">
+                <p class="form-hint">Events from the Monday before through Sunday are listed.</p>
+              </div>
+            </div>
+            <div id="week-events" style="margin-top:var(--space-4)"></div>
+          </div>
+
+          <!-- ── Step 2: CSV import + mapping ── -->
+          <div class="card step-card" id="step2-card" style="display:none">
+            <div class="card-header">
+              <h3 class="card-title"><span class="step-num">2</span>Import Form Responses (CSV)</h3>
+            </div>
+            <div class="form-group">
+              <label for="csv-file">Upload the CSV exported from the Form responses sheet</label>
+              <input type="file" id="csv-file" accept=".csv,text/csv" style="display:none">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <label for="csv-file" class="btn btn-ghost btn-sm" style="cursor:pointer">Choose CSV File</label>
+                <span id="csv-filename" style="font-size:var(--text-xs);color:var(--ivory-muted)"></span>
+              </div>
+            </div>
+            <details style="margin-bottom:var(--space-4)">
+              <summary style="cursor:pointer;color:var(--ivory-muted);font-size:var(--text-sm)">…or paste the raw CSV instead</summary>
+              <textarea id="csv-paste" rows="5" style="width:100%;margin-top:var(--space-3)" placeholder="Paste CSV rows including the header line…"></textarea>
+              <button type="button" class="btn btn-outline btn-sm" id="csv-paste-btn" style="margin-top:var(--space-2)">Parse Pasted CSV</button>
+            </details>
+
+            <div id="csv-error" class="alert alert-error" role="alert" style="display:none">
+              <span class="alert-icon">⚠</span><span id="csv-error-text"></span>
+            </div>
+
+            <div id="weekend-select-wrap" class="form-group" style="display:none">
+              <label for="weekend-label-select">Form weekend to import</label>
+              <select id="weekend-label-select"></select>
+              <p class="form-hint" id="weekend-select-hint"></p>
+            </div>
+
+            <div id="mapping-wrap" style="display:none">
+              <h4 style="color:var(--ivory);margin-bottom:var(--space-2)">Map Form options to portal events</h4>
+              <p class="form-hint" style="margin-bottom:var(--space-3)">Each option ticked in the Form must point to one of this week's events, or be ignored. "I can't serve this weekend" is handled automatically.</p>
+              <div class="table-wrap">
+                <table class="data-table" aria-label="Option mapping">
+                  <thead><tr><th>Form option</th><th>Responses</th><th>Portal event</th></tr></thead>
+                  <tbody id="mapping-tbody"></tbody>
+                </table>
+              </div>
+              <button type="button" class="btn btn-gold" id="to-match-btn" style="margin-top:var(--space-4)">Continue to Name Matching →</button>
+            </div>
+          </div>
+
+          <!-- ── Step 3: Match review ── -->
+          <div class="card step-card" id="step3-card" style="display:none">
+            <div class="card-header">
+              <h3 class="card-title"><span class="step-num">3</span>Match Names to Members</h3>
+            </div>
+            <div id="drift-hint" class="alert alert-warning" style="display:none">
+              <span class="alert-icon">⚠</span>
+              <span>Some names didn't match any member. The Form's Name dropdown may have drifted from the portal roster — consider updating the Form options to match portal full names.</span>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" aria-label="Name matching">
+                <thead><tr><th>Form name</th><th>Commits to</th><th>Match</th><th>Member</th></tr></thead>
+                <tbody id="match-tbody"></tbody>
+              </table>
+            </div>
+            <div id="save-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+              <span class="alert-icon">⚠</span><span id="save-error-text"></span>
+            </div>
+            <button type="button" class="btn btn-gold" id="save-commitments-btn" style="margin-top:var(--space-4)">Save Commitments</button>
+            <span id="save-ok" style="display:none;margin-left:10px;color:#8FD68F;font-size:var(--text-sm)">✓ Saved</span>
+          </div>
+
+          <!-- ── Step 4: Reconcile ── -->
+          <div class="card step-card" id="step4-card" style="display:none">
+            <div class="card-header">
+              <h3 class="card-title"><span class="step-num">4</span>Reconcile &amp; Create Fines</h3>
+              <button type="button" class="btn btn-ghost btn-sm" id="refresh-recon-btn">Refresh</button>
+            </div>
+            <p class="form-hint" style="margin-bottom:var(--space-4)">Service and practice events propose fines, per the working rules. Meeting, assembly, and activity commitments are informational.</p>
+            <div id="recon-body"><div class="loading-text"><div class="spinner"></div> Loading…</div></div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell, createNotification } from '../../js/notifications.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      initThemeToggle();
+
+      // ── Auth guard ─────────────────────────────────────────────
+      const profile = await requireRole('treasurer');
+      if (!profile) throw new Error('redirecting');
+      if (!['treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        window.location.href = '/pages/members/dashboard.html';
+        throw new Error('unauthorized');
+      }
+
+      initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
+      document.getElementById('page-content').style.display = 'block';
+
+      // Show role-gated nav sections
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('secretary-section').style.display = 'block';
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['secretary', 'treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
+      }
+      if (['secretary', 'officer', 'treasurer', 'logistics', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('logistics-section').style.display = 'block';
+      }
+      if (['admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Helpers ────────────────────────────────────────────────
+      function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      function isoDate(d) {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+      // Normalize a name for comparison: lowercase, strip accents/punctuation, collapse whitespace.
+      function normName(s) {
+        return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+          .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+      }
+      const CANT_SERVE_RE = /can'?t serve/i;
+
+      // ── CSV parsing ────────────────────────────────────────────
+      function parseCSV(text) {
+        const rows = [];
+        let row = [], cell = '', inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i];
+          if (inQuotes) {
+            if (c === '"') {
+              if (text[i + 1] === '"') { cell += '"'; i++; }
+              else inQuotes = false;
+            } else cell += c;
+          } else if (c === '"') {
+            inQuotes = true;
+          } else if (c === ',') {
+            row.push(cell); cell = '';
+          } else if (c === '\n' || c === '\r') {
+            if (c === '\r' && text[i + 1] === '\n') i++;
+            row.push(cell); cell = '';
+            if (row.some(v => v.trim() !== '')) rows.push(row);
+            row = [];
+          } else cell += c;
+        }
+        row.push(cell);
+        if (row.some(v => v.trim() !== '')) rows.push(row);
+        return rows;
+      }
+
+      // Google Forms joins multi-select answers with ", " but option labels can
+      // themselves contain commas inside parentheses — merge fragments until parens balance.
+      function splitSelections(cell) {
+        const parts = (cell || '').split(',').map(p => p.trim()).filter(Boolean);
+        const out = [];
+        let buf = '', depth = 0;
+        for (const p of parts) {
+          buf = buf ? buf + ', ' + p : p;
+          depth += (p.match(/\(/g) || []).length - (p.match(/\)/g) || []).length;
+          if (depth <= 0) { out.push(buf); buf = ''; depth = 0; }
+        }
+        if (buf) out.push(buf);
+        return out;
+      }
+
+      // Timestamp format: M/D/YYYY H:MM:SS
+      function parseTs(s) {
+        const m = (s || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+        if (!m) return 0;
+        return new Date(+m[3], +m[1] - 1, +m[2], +m[4], +m[5], +(m[6] || 0)).getTime();
+      }
+
+      // Weekend label like "June 28–29, 2026" or "Aug 1–2, 2026" → [satISO, sunISO] or null
+      const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+      function parseWeekendLabel(label) {
+        const m = (label || '').trim().match(/^([A-Za-z]+)\.?\s+(\d{1,2})\s*[–—-]\s*(?:([A-Za-z]+)\.?\s+)?(\d{1,2}),?\s*(\d{4})$/);
+        if (!m) return null;
+        const mon1 = MONTHS.indexOf(m[1].slice(0, 3).toLowerCase());
+        const mon2 = m[3] ? MONTHS.indexOf(m[3].slice(0, 3).toLowerCase()) : mon1;
+        if (mon1 < 0 || mon2 < 0) return null;
+        const y = +m[5];
+        return [isoDate(new Date(y, mon1, +m[2])), isoDate(new Date(y, mon2, +m[4]))];
+      }
+
+      // ── State ──────────────────────────────────────────────────
+      let weekEvents   = [];   // events in the Mon–Sun window
+      let satISO = null, sunISO = null;
+      let csvRows      = [];   // parsed CSV incl. header
+      let colIdx       = null; // { ts, weekend, name, mass, reason }
+      let responses    = [];   // deduped responses for the selected weekend
+      let optionLabels = [];   // distinct multi-select labels (excl. can't-serve)
+      let members      = [];   // active + associate profiles
+      let aliases      = [];   // member_aliases rows
+
+      // ── Step 1: weekend picker ─────────────────────────────────
+      document.getElementById('weekend-date').addEventListener('change', async e => {
+        const val = e.target.value;
+        if (!val) return;
+        const d = new Date(val + 'T00:00:00');
+        // Snap to the Saturday of the chosen date's weekend.
+        const sat = new Date(d);
+        if (d.getDay() === 0) sat.setDate(d.getDate() - 1);          // Sunday → previous Saturday
+        else if (d.getDay() !== 6) sat.setDate(d.getDate() + (6 - d.getDay())); // weekday → upcoming Saturday
+        const sun = new Date(sat); sun.setDate(sat.getDate() + 1);
+        const mon = new Date(sat); mon.setDate(sat.getDate() - 5);
+        satISO = isoDate(sat); sunISO = isoDate(sun);
+
+        const wrap = document.getElementById('week-events');
+        wrap.innerHTML = '<div class="loading-text"><div class="spinner"></div> Loading events…</div>';
+
+        const { data, error } = await supabase
+          .from('events')
+          .select('id, title, event_date, event_time, event_category')
+          .gte('event_date', isoDate(mon))
+          .lte('event_date', sunISO)
+          .order('event_date').order('event_time');
+
+        if (error) {
+          wrap.innerHTML = '<p style="color:var(--danger)">Failed to load events. Please retry.</p>';
+          return;
+        }
+        weekEvents = data || [];
+        if (!weekEvents.length) {
+          wrap.innerHTML = '<p style="color:var(--ivory-muted)">No portal events found for this week. Create the events first, then return here.</p>';
+          document.getElementById('step2-card').style.display = 'none';
+          return;
+        }
+        wrap.innerHTML = `
+          <p style="font-size:var(--text-sm);color:var(--ivory-muted);margin-bottom:var(--space-2)">Week of ${fmtDate(isoDate(mon))} — ${fmtDate(sunISO)}:</p>
+          <ul style="margin:0;padding-left:1.2em;color:var(--ivory)">${
+            weekEvents.map(ev => `<li>${escHtml(ev.title)} — ${fmtDate(ev.event_date)} <span class="badge badge-${ev.event_category === 'service' ? 'committed' : 'skipped'}">${ev.event_category}</span></li>`).join('')
+          }</ul>`;
+        document.getElementById('step2-card').style.display = 'block';
+        resetFromStep(3);
+        loadReconcile();
+        document.getElementById('step4-card').style.display = 'block';
+      });
+
+      function resetFromStep(n) {
+        if (n <= 3) document.getElementById('step3-card').style.display = 'none';
+        document.getElementById('save-ok').style.display = 'none';
+      }
+
+      // ── Step 2: CSV load ───────────────────────────────────────
+      document.getElementById('csv-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        document.getElementById('csv-filename').textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = () => handleCsvText(String(reader.result));
+        reader.readAsText(file);
+      });
+      document.getElementById('csv-paste-btn').addEventListener('click', () => {
+        const text = document.getElementById('csv-paste').value;
+        if (text.trim()) handleCsvText(text);
+      });
+
+      function csvError(msg) {
+        document.getElementById('csv-error-text').textContent = msg;
+        document.getElementById('csv-error').style.display = msg ? 'flex' : 'none';
+      }
+
+      function handleCsvText(text) {
+        csvError('');
+        resetFromStep(3);
+        csvRows = parseCSV(text);
+        if (csvRows.length < 2) { csvError('The CSV appears to be empty or has no data rows.'); return; }
+
+        // Locate columns by header keyword; headers may have stray whitespace.
+        const headers = csvRows[0].map(h => h.trim().toLowerCase());
+        const find = kw => headers.findIndex(h => h.includes(kw));
+        colIdx = {
+          ts:      find('timestamp'),
+          weekend: find('weekend'),
+          name:    headers.findIndex(h => h === 'name' || h.startsWith('name')),
+          mass:    find('mass'),
+          reason:  find('reason'),
+        };
+        if (colIdx.ts < 0 || colIdx.name < 0 || colIdx.mass < 0) {
+          csvError('Could not locate the Timestamp, Name, or masses column in the CSV header.');
+          return;
+        }
+
+        // Distinct weekend labels with row counts; auto-select the one matching the picked weekend.
+        const labelCounts = new Map();
+        for (const r of csvRows.slice(1)) {
+          const label = (r[colIdx.weekend] || '').trim();
+          labelCounts.set(label, (labelCounts.get(label) || 0) + 1);
+        }
+        const sel = document.getElementById('weekend-label-select');
+        let autoLabel = '';
+        sel.innerHTML = [...labelCounts.entries()].map(([label, count]) => {
+          const parsed = parseWeekendLabel(label);
+          const matches = parsed && (parsed[0] === satISO || parsed[1] === sunISO || parsed[1] === satISO);
+          if (matches && !autoLabel) autoLabel = label;
+          return `<option value="${escHtml(label)}">${escHtml(label || '(blank)')} — ${count} response${count === 1 ? '' : 's'}</option>`;
+        }).join('');
+        if (autoLabel) sel.value = autoLabel;
+        document.getElementById('weekend-select-hint').textContent = autoLabel
+          ? 'Auto-matched to the picked weekend. Change it if wrong.'
+          : 'No label matched the picked weekend — choose the right one manually.';
+        document.getElementById('weekend-select-wrap').style.display = 'block';
+        buildFilteredResponses();
+      }
+
+      document.getElementById('weekend-label-select').addEventListener('change', () => {
+        resetFromStep(3);
+        buildFilteredResponses();
+      });
+
+      function buildFilteredResponses() {
+        const label = document.getElementById('weekend-label-select').value;
+        const rows = csvRows.slice(1).filter(r => (r[colIdx.weekend] || '').trim() === label);
+
+        // Duplicate responses from the same person: latest timestamp wins.
+        const byName = new Map();
+        for (const r of rows) {
+          const key = normName(r[colIdx.name]);
+          if (!key) continue;
+          const prev = byName.get(key);
+          if (!prev || parseTs(r[colIdx.ts]) >= parseTs(prev[colIdx.ts])) byName.set(key, r);
+        }
+        responses = [...byName.values()].map(r => {
+          const selections = splitSelections(r[colIdx.mass]);
+          return {
+            rawName:    (r[colIdx.name] || '').trim(),
+            normName:   normName(r[colIdx.name]),
+            selections: selections.filter(s => !CANT_SERVE_RE.test(s)),
+            cantAttend: selections.some(s => CANT_SERVE_RE.test(s)),
+            reason:     colIdx.reason >= 0 ? (r[colIdx.reason] || '').trim() || null : null,
+          };
+        });
+
+        // Distinct option labels across the filtered rows.
+        const counts = new Map();
+        for (const resp of responses) {
+          for (const s of resp.selections) counts.set(s, (counts.get(s) || 0) + 1);
+        }
+        optionLabels = [...counts.keys()];
+        renderMapping(counts);
+      }
+
+      // ── Mapping UI ─────────────────────────────────────────────
+      const DAY_RE = /\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i;
+      function eventWeekday(ev) {
+        return new Date(ev.event_date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+      }
+      function labelHour(label) {
+        const m = label.match(/(\d{1,2})\s*(am|pm)/i);
+        if (!m) return null;
+        let h = +m[1] % 12;
+        if (m[2].toLowerCase() === 'pm') h += 12;
+        return h;
+      }
+      // Pre-select the likeliest event for a Form option by day, time, and title tokens.
+      function guessEvent(label) {
+        const day = (label.match(DAY_RE) || [])[0]?.toLowerCase();
+        const hour = labelHour(label);
+        const tokens = normName(label).split(' ').filter(t => t.length > 2);
+        let best = null, bestScore = 0;
+        for (const ev of weekEvents) {
+          let score = 0;
+          if (day && eventWeekday(ev) === day) score += 3;
+          if (hour !== null && ev.event_time && parseInt(ev.event_time, 10) === hour) score += 2;
+          const titleNorm = normName(ev.title);
+          for (const t of tokens) if (titleNorm.includes(t)) score += 1;
+          if (score > bestScore) { bestScore = score; best = ev; }
+        }
+        return bestScore >= 3 ? best : null;
+      }
+
+      function renderMapping(counts) {
+        const tbody = document.getElementById('mapping-tbody');
+        const evOptions = ev => weekEvents.map(e2 =>
+          `<option value="${e2.id}" ${ev && ev.id === e2.id ? 'selected' : ''}>${escHtml(e2.title)} — ${fmtDate(e2.event_date)}</option>`).join('');
+        tbody.innerHTML = optionLabels.map((label, i) => {
+          const guess = guessEvent(label);
+          return `
+            <tr>
+              <td style="color:var(--ivory)">${escHtml(label)}</td>
+              <td>${counts.get(label)}</td>
+              <td>
+                <select class="map-select" data-label-idx="${i}">
+                  <option value="">— Ignore —</option>
+                  ${evOptions(guess)}
+                </select>
+              </td>
+            </tr>`;
+        }).join('');
+        document.getElementById('mapping-wrap').style.display = optionLabels.length || responses.length ? 'block' : 'none';
+        if (!responses.length) {
+          document.getElementById('mapping-wrap').style.display = 'none';
+          csvError('No responses found for the selected weekend label.');
+        }
+      }
+
+      // ── Step 3: name matching ──────────────────────────────────
+      async function loadMembersAndAliases() {
+        if (members.length) return;
+        const [{ data: m }, { data: a }] = await Promise.all([
+          supabase.from('profiles').select('id, full_name').in('status', ['active', 'associate', 'honorary']).order('full_name'),
+          supabase.from('member_aliases').select('id, member_id, alias'),
+        ]);
+        members = m || [];
+        aliases = a || [];
+      }
+
+      function fuzzySuggestions(nameNorm) {
+        const tokens = nameNorm.split(' ').filter(Boolean);
+        return members
+          .map(m => {
+            const mn = normName(m.full_name);
+            const mTokens = mn.split(' ');
+            let score = 0;
+            for (const t of tokens) if (mTokens.includes(t)) score += 2; else if (mn.includes(t)) score += 1;
+            return { m, score };
+          })
+          .filter(x => x.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 5)
+          .map(x => x.m);
+      }
+
+      let matchState = []; // { rawName, memberId, how: exact|alias|manual|skip|none, remember }
+
+      document.getElementById('to-match-btn').addEventListener('click', async () => {
+        await loadMembersAndAliases();
+        const byExact = new Map(members.map(m => [normName(m.full_name), m]));
+        const byAlias = new Map(aliases.map(a => [normName(a.alias), a.member_id]));
+
+        matchState = responses.map(resp => {
+          const exact = byExact.get(resp.normName);
+          if (exact) return { resp, memberId: exact.id, how: 'exact', remember: false };
+          const aliasId = byAlias.get(resp.normName);
+          if (aliasId) return { resp, memberId: aliasId, how: 'alias', remember: false };
+          return { resp, memberId: null, how: 'none', remember: false };
+        });
+        renderMatchTable();
+        document.getElementById('step3-card').style.display = 'block';
+        document.getElementById('step3-card').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      function commitSummary(resp) {
+        const mapped = getMappedSelections(resp);
+        const parts = mapped.map(ev => escHtml(ev.title));
+        if (resp.cantAttend) parts.push('<span class="badge badge-cant-attend">can\'t serve</span>');
+        return parts.length ? parts.join(', ') : '<span style="color:var(--ivory-muted)">—</span>';
+      }
+
+      // Resolve a response's selections to events via the current mapping dropdowns.
+      function currentMapping() {
+        const map = new Map();
+        document.querySelectorAll('.map-select').forEach(sel => {
+          const label = optionLabels[+sel.dataset.labelIdx];
+          const ev = weekEvents.find(e2 => e2.id === sel.value);
+          if (ev) map.set(label, ev);
+        });
+        return map;
+      }
+      function getMappedSelections(resp) {
+        const map = currentMapping();
+        const out = [];
+        for (const s of resp.selections) {
+          const ev = map.get(s);
+          if (ev && !out.includes(ev)) out.push(ev);
+        }
+        return out;
+      }
+
+      function matchBadge(st) {
+        if (st.how === 'exact')  return '<span class="badge badge-matched">exact</span>';
+        if (st.how === 'alias')  return '<span class="badge badge-alias">alias</span>';
+        if (st.how === 'manual') return '<span class="badge badge-matched">manual</span>';
+        if (st.how === 'skip')   return '<span class="badge badge-skipped">skipped</span>';
+        return '<span class="badge badge-unmatched">unmatched</span>';
+      }
+
+      function renderMatchTable() {
+        const tbody = document.getElementById('match-tbody');
+        let anyUnmatched = false;
+        tbody.innerHTML = matchState.map((st, i) => {
+          let memberCell;
+          if (st.how === 'exact' || st.how === 'alias') {
+            const m = members.find(m2 => m2.id === st.memberId);
+            memberCell = `<span style="color:var(--ivory)">${escHtml(m?.full_name || '?')}</span>`;
+          } else {
+            anyUnmatched = anyUnmatched || st.how === 'none';
+            const sugg = fuzzySuggestions(st.resp.normName);
+            const suggIds = new Set(sugg.map(s => s.id));
+            memberCell = `
+              <select class="match-select" data-idx="${i}">
+                <option value="">— Select member —</option>
+                <option value="__skip__" ${st.how === 'skip' ? 'selected' : ''}>Skip this response</option>
+                ${sugg.length ? `<optgroup label="Suggestions">${sugg.map(s =>
+                  `<option value="${s.id}" ${st.memberId === s.id ? 'selected' : ''}>${escHtml(s.full_name)}</option>`).join('')}</optgroup>` : ''}
+                <optgroup label="All members">${members.filter(m2 => !suggIds.has(m2.id)).map(m2 =>
+                  `<option value="${m2.id}" ${st.memberId === m2.id ? 'selected' : ''}>${escHtml(m2.full_name)}</option>`).join('')}</optgroup>
+              </select>
+              <label style="display:${st.how === 'manual' ? 'inline-flex' : 'none'};align-items:center;gap:6px;font-size:var(--text-xs);color:var(--ivory-muted);margin-top:4px">
+                <input type="checkbox" class="remember-cb" data-idx="${i}" ${st.remember ? 'checked' : ''}> Remember this spelling
+              </label>`;
+          }
+          return `
+            <tr>
+              <td style="color:var(--ivory);white-space:nowrap">${escHtml(st.resp.rawName)}</td>
+              <td>${commitSummary(st.resp)}</td>
+              <td>${matchBadge(st)}</td>
+              <td>${memberCell}</td>
+            </tr>`;
+        }).join('');
+        document.getElementById('drift-hint').style.display = anyUnmatched ? 'flex' : 'none';
+      }
+
+      document.getElementById('match-tbody').addEventListener('change', e => {
+        const sel = e.target.closest('.match-select');
+        if (sel) {
+          const st = matchState[+sel.dataset.idx];
+          if (sel.value === '__skip__') { st.how = 'skip'; st.memberId = null; st.remember = false; }
+          else if (sel.value)           { st.how = 'manual'; st.memberId = sel.value; }
+          else                          { st.how = 'none'; st.memberId = null; st.remember = false; }
+          renderMatchTable();
+          return;
+        }
+        const cb = e.target.closest('.remember-cb');
+        if (cb) matchState[+cb.dataset.idx].remember = cb.checked;
+      });
+
+      // ── Save commitments ───────────────────────────────────────
+      document.getElementById('save-commitments-btn').addEventListener('click', async () => {
+        const errEl = document.getElementById('save-error');
+        const errTxt = document.getElementById('save-error-text');
+        errEl.style.display = 'none';
+
+        const unresolved = matchState.filter(st => st.how === 'none');
+        if (unresolved.length) {
+          errTxt.textContent = `${unresolved.length} name(s) still unmatched — pick a member or choose "Skip" for each.`;
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        // "I can't serve this weekend" fans out to weekend services only — members do tick it
+        // alongside practice selections, meaning they attend practice but decline the masses.
+        const serviceEvents = weekEvents.filter(ev => ev.event_category === 'service');
+        const rows = [];
+        for (const st of matchState) {
+          if (st.how === 'skip') continue;
+          const mapped = getMappedSelections(st.resp);
+          const committedIds = new Set(mapped.map(ev => ev.id));
+          for (const ev of mapped) {
+            rows.push({
+              member_id: st.memberId, event_id: ev.id, source: 'google_form',
+              status: 'committed', reason: st.resp.reason, raw_name: st.resp.rawName,
+              imported_by: profile.id,
+            });
+          }
+          if (st.resp.cantAttend) {
+            for (const ev of serviceEvents) {
+              if (committedIds.has(ev.id)) continue;
+              rows.push({
+                member_id: st.memberId, event_id: ev.id, source: 'google_form',
+                status: 'cant_attend', reason: st.resp.reason, raw_name: st.resp.rawName,
+                imported_by: profile.id,
+              });
+            }
+          }
+        }
+        if (!rows.length) {
+          errTxt.textContent = 'Nothing to save — no selections are mapped to events.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        const btn = document.getElementById('save-commitments-btn');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        // Remembered spellings become aliases so re-imports auto-match.
+        const newAliases = matchState
+          .filter(st => st.how === 'manual' && st.remember)
+          .map(st => ({ member_id: st.memberId, alias: normName(st.resp.rawName), created_by: profile.id }));
+        if (newAliases.length) {
+          const { error: aliasErr } = await supabase.from('member_aliases')
+            .upsert(newAliases, { onConflict: 'alias' });
+          if (aliasErr) console.error('save aliases:', aliasErr);
+          else aliases.push(...newAliases);
+        }
+
+        const { error } = await supabase.from('commitments')
+          .upsert(rows, { onConflict: 'member_id,event_id' });
+
+        btn.disabled = false; btn.textContent = 'Save Commitments';
+        if (error) {
+          errTxt.textContent = `Failed to save: ${error.message}`;
+          errEl.style.display = 'flex';
+          return;
+        }
+        document.getElementById('save-ok').style.display = 'inline';
+        await loadReconcile();
+        document.getElementById('step4-card').style.display = 'block';
+        document.getElementById('step4-card').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // ── Step 4: reconcile ──────────────────────────────────────
+      document.getElementById('refresh-recon-btn').addEventListener('click', loadReconcile);
+
+      async function loadReconcile() {
+        const body = document.getElementById('recon-body');
+        body.innerHTML = '<div class="loading-text"><div class="spinner"></div> Loading…</div>';
+
+        // Working rules: the commitment fine applies to practices and services alike.
+        const fineableEvents = weekEvents.filter(ev => ['service', 'practice'].includes(ev.event_category));
+        if (!fineableEvents.length) {
+          body.innerHTML = '<p style="color:var(--ivory-muted)">No service or practice events this week — nothing to reconcile.</p>';
+          return;
+        }
+        const eventIds = fineableEvents.map(ev => ev.id);
+        const [{ data: commits }, { data: att }, { data: fines }] = await Promise.all([
+          supabase.from('commitments')
+            .select('id, member_id, event_id, status, reason, reconciled_at, member:profiles!member_id(full_name)')
+            .in('event_id', eventIds),
+          supabase.from('attendance').select('member_id, event_id, status').in('event_id', eventIds),
+          supabase.from('fines').select('member_id, event_id').in('event_id', eventIds),
+        ]);
+
+        if (!commits?.length) {
+          body.innerHTML = '<p style="color:var(--ivory-muted)">No commitments imported for this week yet. Complete steps 2–3 first.</p>';
+          return;
+        }
+
+        const attKey  = new Map((att   || []).map(a => [a.event_id + '|' + a.member_id, a.status]));
+        const fineKey = new Set((fines || []).map(f => f.event_id + '|' + f.member_id));
+
+        body.innerHTML = fineableEvents.map(ev => {
+          const evCommits = commits.filter(c => c.event_id === ev.id);
+          if (!evCommits.length) return '';
+          const hasAttendance = (att || []).some(a => a.event_id === ev.id);
+
+          const cant = evCommits.filter(c => c.status === 'cant_attend');
+          const committed = evCommits.filter(c => c.status === 'committed');
+          const rowsHtml = committed.map(c => {
+            const attStatus = attKey.get(ev.id + '|' + c.member_id) || null;
+            const already = fineKey.has(ev.id + '|' + c.member_id);
+            const name = escHtml(c.member?.full_name || '?');
+            if (attStatus === 'present' || attStatus === 'excused') {
+              return `<tr class="muted-row"><td>${name}</td><td><span class="badge badge-ok">${attStatus}</span></td><td>OK — no fine</td></tr>`;
+            }
+            const attLabel = attStatus ? `<span class="badge badge-cant-attend">absent</span>` : '<span class="badge badge-skipped">not marked</span>';
+            if (already) {
+              return `<tr class="muted-row"><td>${name}</td><td>${attLabel}</td><td><span class="badge badge-fined">already fined</span></td></tr>`;
+            }
+            return `<tr><td>${name}</td><td>${attLabel}</td>
+              <td><label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" class="fine-cb" data-event="${ev.id}" data-member="${c.member_id}" data-name="${name}" checked> Fine ₱20
+              </label></td></tr>`;
+          }).join('');
+
+          const cantHtml = cant.length ? `
+            <p style="font-size:var(--text-sm);color:var(--ivory-muted);margin:var(--space-3) 0 var(--space-1)">Can't serve (never fined):</p>
+            <ul style="margin:0;padding-left:1.2em;font-size:var(--text-sm);color:var(--ivory-muted)">${
+              cant.map(c => `<li>${escHtml(c.member?.full_name || '?')}${c.reason ? ` — <em>${escHtml(c.reason)}</em>` : ''}</li>`).join('')
+            }</ul>` : '';
+
+          const warnHtml = !hasAttendance ? `
+            <div class="alert alert-warning" style="margin-bottom:var(--space-3)">
+              <span class="alert-icon">⚠</span>
+              <span>No attendance has been marked for this event yet — fines are blocked until the secretary marks attendance.</span>
+            </div>` : '';
+
+          return `
+            <div class="recon-event" data-event="${ev.id}">
+              <h4>${escHtml(ev.title)} — ${fmtDate(ev.event_date)} <span class="badge badge-${ev.event_category === 'service' ? 'committed' : 'skipped'}">${ev.event_category}</span></h4>
+              ${warnHtml}
+              <div class="table-wrap">
+                <table class="data-table" aria-label="Reconciliation for ${escHtml(ev.title)}">
+                  <thead><tr><th>Member</th><th>Attendance</th><th>Result</th></tr></thead>
+                  <tbody>${rowsHtml || '<tr><td colspan="3" style="color:var(--ivory-muted)">No committed members.</td></tr>'}</tbody>
+                </table>
+              </div>
+              ${cantHtml}
+              ${hasAttendance ? `<button type="button" class="btn btn-gold btn-sm js-create-fines" data-event="${ev.id}" style="margin-top:var(--space-3)"></button>` : ''}
+            </div>`;
+        }).join('') || '<p style="color:var(--ivory-muted)">No commitments imported for this week yet.</p>';
+
+        updateFineButtons();
+      }
+
+      function updateFineButtons() {
+        document.querySelectorAll('.recon-event').forEach(section => {
+          const btn = section.querySelector('.js-create-fines');
+          if (!btn) return;
+          const n = section.querySelectorAll('.fine-cb:checked').length;
+          btn.textContent = `Create ${n} Fine${n === 1 ? '' : 's'}`;
+          btn.disabled = n === 0;
+        });
+      }
+      document.getElementById('recon-body').addEventListener('change', e => {
+        if (e.target.classList.contains('fine-cb')) updateFineButtons();
+      });
+
+      document.getElementById('recon-body').addEventListener('click', async e => {
+        const btn = e.target.closest('.js-create-fines');
+        if (!btn) return;
+        const eventId = btn.dataset.event;
+        const ev = weekEvents.find(e2 => e2.id === eventId);
+        const checked = [...document.querySelectorAll(`.fine-cb[data-event="${eventId}"]:checked`)];
+        if (!checked.length) return;
+
+        btn.disabled = true; btn.textContent = 'Creating…';
+
+        const fineRows = checked.map(cb => ({
+          member_id: cb.dataset.member,
+          event_id: eventId,
+          amount: 20,
+          status: 'unpaid',
+          notes: 'Committed via Google Form but absent',
+          recorded_by: profile.id,
+        }));
+        const { error } = await supabase.from('fines').insert(fineRows);
+        if (error) {
+          alert(`Failed to create fines: ${error.message}`);
+          btn.disabled = false;
+          updateFineButtons();
+          return;
+        }
+        const evLabel = ev ? `${ev.title} — ${fmtDate(ev.event_date)}` : '';
+        for (const cb of checked) {
+          createNotification(cb.dataset.member, 'fine_added',
+            `A commitment fine of ₱20.00 has been added for ${evLabel}.`);
+        }
+        await supabase.from('commitments')
+          .update({ reconciled_at: new Date().toISOString() })
+          .eq('event_id', eventId);
+        await loadReconcile();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      hidePageLoader();
+    </script>
+  </body>
+</html>
