@@ -893,9 +893,12 @@ alter table member_aliases enable row level security;
   - Split the multi-select cell on commas; collect the distinct option labels across all filtered rows and show a mapping UI: each label → one of that week's portal events (any category — options include practices like "Wednesday 8pm Practice" and specials like "Sunday 8pm General Assembly") or "Ignore". Pre-select by day/time keyword match; option labels change every week, so mapping is per-import
   - The literal option `I can't serve this weekend` is NOT an event: it yields `status='cant_attend'` rows (with the reason text) for every **service** event of the weekend the member did not explicitly select. It can coexist with real selections in the same response (e.g. practices committed + weekend masses declined, or Sunday committed + Saturday declined) — explicit selections still become commitments
   - The reason column is free text and often filled by committed members too ("N/A", ".", partial notes) — never treat it as a can't-attend signal; store it on the member's rows for reference
-- **Step 3 — match review table:** one row per pasted name → matched member
+- **Step 3 — match review table:** one row per response → matched member. The Form's Name field is a dropdown that should mirror portal `full_name` values, so most rows auto-match:
+  - Email column match against `profiles.email` (if present in the export) → auto-matched
   - Exact `full_name` match (case/whitespace-insensitive) → auto-matched
   - `member_aliases` lookup on the normalized name → auto-matched
+  - An unmatched name likely means the Form dropdown drifted from the roster — show a hint to update the Form
+  - Ignore the Voice Section column (portal already knows voice parts)
   - Otherwise: dropdown of fuzzy suggestions (token overlap against full names) + full member list fallback; a "skip" option per row
   - Manual match confirm offers "Remember this spelling" checkbox → inserts into `member_aliases`
   - "Save Commitments" upserts matched rows into `commitments` — one row per member per weekend event (re-import updates, not duplicates)
