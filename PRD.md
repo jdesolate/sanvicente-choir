@@ -317,21 +317,30 @@ Portal tools for the Logistics & Property head (borrowing/storage log ratified a
 
 Automates the manual cross-check between Google Forms commitment responses and attendance. The Google Forms workflow itself is unchanged (the in-portal declaration form stays deferred).
 
+**Form response format (current):** one row per member per weekend, columns:
+`Timestamp, Which weekend is this for, Name, Voice Section, Which masses can you serve this weekend? (Multi-select), Reason if you can't attend`
+
 **Import (treasurer/admin):**
-- Treasurer picks a service event, then pastes the names column (one per line) or uploads the CSV exported from the Google Form responses sheet
+- Treasurer uploads the CSV exported from the Form responses sheet (or pastes rows) and picks the weekend
+- Parsing rules:
+  - Columns are located by header keywords (timestamp / name / masses / reason), not fixed position
+  - The multi-select masses value is split into individual mass commitments; each option is mapped to a portal service event of that weekend (treasurer confirms the option→event mapping once per import; remembered per weekend)
+  - A row with an empty masses field and a filled reason = **cannot attend** — imported as no commitment for any mass (shown for reference, never fined)
+  - Duplicate responses from the same person: latest timestamp wins
 - Portal matches each name to a member profile:
   1. Exact match on `full_name` (case-insensitive)
   2. Saved alias match (`member_aliases` table — maps a Form spelling/nickname to a profile)
   3. Fuzzy suggestion (normalized substring/token match) that the treasurer confirms manually
 - Confirming a fuzzy match offers to save it as an alias so it never needs fixing again
 - Unmatched names can be skipped (recorded nowhere) or left for later
-- Matched rows are saved to `commitments` (unique per member + event; re-import upserts)
+- Matched rows are saved to `commitments` — one row per member per mass/event of the weekend (unique per member + event; re-import upserts). Committed masses get `status = 'committed'`; a can't-attend response gets `status = 'cant_attend'` rows (with the reason) for every mass of that weekend, so the treasurer sees who begged off and why.
 
 **Reconcile:**
 - For the selected event, the portal joins commitments against attendance:
   - committed + present → OK
   - committed + excused (approved absence) → OK, no fine
   - committed + absent (or no attendance record) → **proposed fine**
+  - `cant_attend` → never fined; listed separately with the reason
 - Proposed-fines list shows member, attendance status, and a checkbox per row (all checked by default)
 - "Create Fines" inserts checked rows into the existing `fines` table (default ₱20, notes auto-filled "Committed via Google Form but absent"), fires the existing `fine_added` notifications, and marks those commitments reconciled
 - Members who already have a fine for that event are shown as already-fined and excluded
@@ -524,6 +533,8 @@ Automates the manual cross-check between Google Forms commitment responses and a
 | member_id | uuid | FK → profiles (cascade delete) |
 | event_id | uuid | FK → events (cascade delete) |
 | source | text | google_form (only value for now) |
+| status | text | committed / cant_attend |
+| reason | text | can't-attend reason from the Form, nullable |
 | raw_name | text | name as it appeared in the Form response |
 | reconciled_at | timestamptz | set when fines are generated for this event |
 | imported_by | uuid | FK → profiles |

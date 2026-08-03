@@ -857,6 +857,8 @@ create table if not exists commitments (
   member_id uuid not null references profiles(id) on delete cascade,
   event_id uuid not null references events(id) on delete cascade,
   source text not null default 'google_form',
+  status text not null default 'committed' check (status in ('committed','cant_attend')),
+  reason text,
   raw_name text,
   reconciled_at timestamptz,
   imported_by uuid references profiles(id),
@@ -879,17 +881,24 @@ alter table member_aliases enable row level security;
 
 *`pages/treasurer/commitments.html` (new page):*
 - Auth guard: same pattern as `fines.html` — `requireRole('treasurer')` plus explicit `['treasurer','admin','super_admin']` allowlist
-- **Step 1 — event picker:** service events, past 30 days through next 14 days, default to nearest upcoming/most recent
-- **Step 2 — paste/import:** textarea for pasted names (one per line) with CSV file input as alternative (take the first column that looks like names; strip header row)
+- **Step 1 — weekend picker:** pick a weekend; the panel lists that weekend's service events (Sat/Sun masses)
+- **Step 2 — CSV import:** file input (or paste of the raw CSV) for the Form responses export. Current header format:
+  `Timestamp,Which weekend is this for,Name,Voice Section,Which masses can you serve this weekend? (Multi-select),Reason if you can't attend`
+  - Locate columns by header keyword (timestamp / name / mass / reason), not position — the Form may change
+  - Filter rows to the selected weekend using the "Which weekend" column (show rows that don't match, unchecked)
+  - Split the multi-select masses cell (comma-separated Form option labels); show a one-time mapping UI: each distinct option label → one of the weekend's service events (persist the mapping choice in the import flow; pre-select by matching day/time keywords)
+  - Empty masses cell + filled reason = can't-attend response → `status='cant_attend'` rows for all weekend events, with the reason
+  - Duplicate names in the file: keep the latest Timestamp only
 - **Step 3 — match review table:** one row per pasted name → matched member
   - Exact `full_name` match (case/whitespace-insensitive) → auto-matched
   - `member_aliases` lookup on the normalized name → auto-matched
   - Otherwise: dropdown of fuzzy suggestions (token overlap against full names) + full member list fallback; a "skip" option per row
   - Manual match confirm offers "Remember this spelling" checkbox → inserts into `member_aliases`
-  - "Save Commitments" upserts matched rows into `commitments` (re-import of the same event updates, not duplicates)
-- **Step 4 — reconcile panel:** for the selected event, join commitments × attendance:
+  - "Save Commitments" upserts matched rows into `commitments` — one row per member per weekend event (re-import updates, not duplicates)
+- **Step 4 — reconcile panel:** per event of the weekend (tab or section per mass), join commitments × attendance:
   - present or excused → OK row (muted)
-  - absent or no attendance record → proposed fine row with checkbox (checked by default)
+  - `cant_attend` → listed separately with reason, never proposed for a fine
+  - committed + absent or no attendance record → proposed fine row with checkbox (checked by default)
   - members with an existing fine for that event → shown as already fined, no checkbox
   - "Create N Fines" button: inserts into `fines` (amount 20, notes "Committed via Google Form but absent", recorded_by = current user), fires `fine_added` notification per member (reuse the message pattern from `fines.html`), sets `reconciled_at` on that event's commitments
 - Empty states for: no attendance marked yet for the event (warn and block reconcile), no commitments imported
@@ -901,7 +910,11 @@ alter table member_aliases enable row level security;
 - Add "Commitments" link to `#treasurer-section` → `../treasurer/commitments.html`
 
 **Acceptance criteria:**
-- [ ] Treasurer pastes names for a service event; exact and alias matches auto-resolve
+- [ ] Importing the real Form CSV maps each multi-select mass option to the right weekend event
+- [ ] A can't-attend response (empty masses + reason) never appears in proposed fines and shows its reason
+- [ ] A member who committed to Saturday only is not proposed for a fine on Sunday
+- [ ] Duplicate responses keep only the latest timestamp
+- [ ] Exact and alias name matches auto-resolve
 - [ ] Confirming a fuzzy match with "remember" saves an alias; re-importing the same spelling auto-matches
 - [ ] Reconcile proposes fines only for committed + absent/unmarked members; excused members are excluded
 - [ ] "Create Fines" inserts fines, notifies members, and marks commitments reconciled
