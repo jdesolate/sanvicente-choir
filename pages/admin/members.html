@@ -78,6 +78,11 @@
           <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
           <hr class="sidebar-divider">
         </div>
+        <div id="logistics-section" style="display:none">
+          <div class="sidebar-section-label">Logistics</div>
+          <a href="../logistics/inventory.html" class="sidebar-link"><span class="sidebar-icon">⛭</span> Inventory &amp; Borrowing</a>
+          <hr class="sidebar-divider">
+        </div>
         <div id="admin-section" style="display:none">
           <div class="sidebar-section-label">Admin</div>
           <a href="../admin/members.html" class="sidebar-link active"><span class="sidebar-icon">◈</span> Members</a>
@@ -220,6 +225,7 @@
             <option value="secretary">Secretary</option>
             <option value="officer">Officer</option>
             <option value="treasurer">Treasurer</option>
+            <option value="logistics">Logistics</option>
             <option value="admin">Admin</option>
           </select>
         </div>
@@ -249,6 +255,7 @@
             <option value="secretary">Secretary</option>
             <option value="officer">Officer</option>
             <option value="treasurer">Treasurer</option>
+            <option value="logistics">Logistics</option>
             <option value="admin">Admin</option>
           </select>
         </div>
@@ -377,6 +384,9 @@
       if (['treasurer', 'admin', 'super_admin'].includes(adminProfile.role)) {
         document.getElementById('treasurer-section').style.display = 'block';
       }
+      if (['secretary', 'officer', 'treasurer', 'logistics', 'admin', 'super_admin'].includes(adminProfile.role)) {
+        document.getElementById('logistics-section').style.display = 'block';
+      }
       if (['admin', 'super_admin'].includes(adminProfile.role)) {
         document.getElementById('admin-section').style.display = 'block';
       }
@@ -428,7 +438,7 @@
         return `<span class="badge ${cls[s] || ''}">${cap(s)}</span>`;
       };
       const badgeRole = r => {
-        const cls = { member:'badge-present', secretary:'badge-approved', officer:'badge-approved', treasurer:'badge-honorary', admin:'badge-honorary', super_admin:'badge-super-admin' };
+        const cls = { member:'badge-present', secretary:'badge-approved', officer:'badge-approved', treasurer:'badge-honorary', logistics:'badge-honorary', admin:'badge-honorary', super_admin:'badge-super-admin' };
         return `<span class="badge ${cls[r] || ''}">${formatRole(r)}</span>`;
       };
 

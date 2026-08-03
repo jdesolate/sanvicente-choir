@@ -801,6 +801,42 @@ document.addEventListener('keydown', e => {
 
 ---
 
+## Session 24: Logistics & Property — Inventory + Borrowing Log
+
+**Status:** [x] Complete
+
+**Goal:** Give the Logistics & Property head (per the July 26, 2026 assembly) portal tools for equipment inventory and the borrowing log. Read PRD.md Section 6.10.
+
+**What was done:**
+
+*Database (`supabase/migration_logistics.sql` — run in Supabase SQL editor):*
+- `logistics` role added to `profiles_role_check` and to the officer-tier profiles read policy
+- `inventory_items` table: name, category, quantity, condition, storage location, acquired date, photo URL, notes, retired flag
+- `borrow_records` table: item FK, member borrower FK or free-text non-member name, borrowed/returned dates, return condition, notes
+- RLS: officer-tier and up read both tables; logistics/admin/super_admin write
+
+*`js/auth.js`:*
+- `logistics` added at level 2 (parallel with secretary/officer/treasurer)
+
+*`pages/logistics/inventory.html` (new page):*
+- Guard: `requireRole('logistics')` — any officer-tier role can view; write buttons and a view-only banner gated by `canWrite = logistics/admin/super_admin`
+- Inventory table with category filter chips, condition/status badges, Add/Edit/Delete item modals
+- Lend modal (member dropdown or non-member name) and Mark Returned modal; a degraded return condition also updates the item's condition
+- Borrowing log table with Still Out / All Records filter; stat cards for items, borrowed, needs attention
+
+*All portal pages:*
+- Hidden `#logistics-section` sidebar div (Inventory & Borrowing link) revealed for all officer-tier roles and up
+- `pages/admin/members.html`: `logistics` added to approve/edit role dropdowns and role badge map; badge map also updated in `pages/members/profile.html`
+
+**Acceptance criteria:**
+- [ ] Admin can assign the `logistics` role from member edit
+- [ ] Logistics head can add items, lend, and mark returns; changes persist
+- [ ] Secretary/officer/treasurer see the page read-only (no write buttons; RLS blocks writes)
+- [ ] Plain member cannot access the page or see the sidebar link
+- [ ] Deleting an item removes its borrow history (cascade)
+
+---
+
 ## Session Order Summary
 
 | # | Session | Depends On | Status |
@@ -830,3 +866,4 @@ document.addEventListener('keydown', e => {
 | 21 | Profile Page Improvements | 10 | ⏳ Planned |
 | 22 | Weekend Songs on Dashboard | 12 | ⏳ Planned |
 | 23 | Cross-Portal Infrastructure | Any complete | ⏳ Planned |
+| 24 | Logistics & Property — Inventory + Borrowing Log | 11 | ✅ Complete |

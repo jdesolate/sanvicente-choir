@@ -57,8 +57,8 @@ export async function updatePassword(newPassword) {
 }
 
 // Redirects if the user doesn't have the required role or higher.
-// Role hierarchy: member < secretary | officer | treasurer < admin < super_admin
-// officer and treasurer are parallel to secretary (all at level 2).
+// Role hierarchy: member < secretary | officer | treasurer | logistics < admin < super_admin
+// officer, treasurer, and logistics are parallel to secretary (all at level 2).
 // Returns the profile if authorized.
 export async function requireRole(role, redirectTo = '/index.html') {
   const profile = await getProfile();
@@ -71,7 +71,7 @@ export async function requireRole(role, redirectTo = '/index.html') {
     window.location.href = '/pages/login.html?inactive=1';
     return null;
   }
-  const hierarchy = { member: 1, secretary: 2, officer: 2, treasurer: 2, admin: 3, super_admin: 4 };
+  const hierarchy = { member: 1, secretary: 2, officer: 2, treasurer: 2, logistics: 2, admin: 3, super_admin: 4 };
   const required = hierarchy[role] ?? 1;
   const actual   = hierarchy[profile.role] ?? 0;
   if (actual < required) {

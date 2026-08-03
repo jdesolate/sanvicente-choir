@@ -36,12 +36,13 @@ San Vicente Choir is a 54-year-old liturgical choir ministry. This document defi
 | `secretary` | Member + attendance ops + event management + absence request management |
 | `officer` | Music committee / liturgical lead — song management + event management + absence request management |
 | `treasurer` | Financial ops — fines ledger + income/expense ledger |
+| `logistics` | Logistics & Property head — equipment inventory + borrowing log |
 | `admin` | Full access — VP / webmaster |
 | `super_admin` | President account only — all admin access plus permanent member deletion |
 
-**Role hierarchy:** `member` < `secretary` = `officer` = `treasurer` < `admin` < `super_admin`
+**Role hierarchy:** `member` < `secretary` = `officer` = `treasurer` = `logistics` < `admin` < `super_admin`
 
-Secretary, officer, and treasurer are **parallel roles** — each has distinct ops access but sits at the same tier below admin.
+Secretary, officer, treasurer, and logistics are **parallel roles** — each has distinct ops access but sits at the same tier below admin.
 
 ---
 
@@ -75,6 +76,8 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct o
 | Event Delete | | | | | | ✓ | ✓ |
 | Custom Field Management | | | | | | ✓ | ✓ |
 | Permanently Delete Member | | | | | | | ✓ |
+
+**Logistics additions:** Inventory & Borrowing Log — *view*: secretary, officer, treasurer, logistics, admin, super_admin (no plain members); *manage* (add/edit/delete items, lend, mark returned): logistics, admin, super_admin.
 
 ---
 
@@ -292,6 +295,24 @@ Both `event_category` and `event_type` are stored on every event.
 
 ---
 
+### 6.10 Logistics & Property (Session 24)
+
+Portal tools for the Logistics & Property head (borrowing/storage log ratified at the July 26, 2026 assembly).
+
+**Inventory:**
+- Items with name, category (instrument / sound / folders / uniform / other), quantity, condition (good / needs_repair / broken / lost), storage location, acquired date, photo URL (Google Drive link), notes
+- Retire flag for items no longer in service (history kept)
+- Stat cards: item count, currently borrowed, needs attention (condition ≠ good)
+
+**Borrowing log:**
+- Lend an item to a member (dropdown) or a non-member (free-text name), with borrowed date and expected-return note
+- Mark returned with return date and condition; a degraded return condition updates the item's condition
+- "Still Out" / "All Records" filter
+
+**Access:** page readable by all officer-tier roles and up; write actions (UI + RLS) restricted to logistics, admin, super_admin. Plain members have no access.
+
+---
+
 ## 7. Tech Stack
 
 | Layer | Technology |
@@ -321,7 +342,7 @@ Both `event_category` and `event_type` are stored on every event.
 | birthday | date | NOT NULL; age is always calculated, never stored |
 | school_occupation | text | |
 | voice_part | text | soprano / alto / tenor / bass |
-| role | text | member / secretary / officer / treasurer / admin / super_admin |
+| role | text | member / secretary / officer / treasurer / logistics / admin / super_admin |
 | status | text | pending / active / associate / honorary / inactive |
 | profile_photo_url | text | nullable — Google Drive link |
 | custom_fields | jsonb | admin-defined extra fields |
@@ -437,6 +458,38 @@ Both `event_category` and `event_type` are stored on every event.
 | is_read | boolean | default false |
 | created_at | timestamptz | |
 
+### `inventory_items` *(new — Session 24)*
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| name | text | |
+| category | text | instrument / sound / folders / uniform / other |
+| quantity | int | default 1 |
+| condition | text | good / needs_repair / broken / lost |
+| storage_location | text | nullable |
+| acquired_date | date | nullable |
+| photo_url | text | nullable — Google Drive link |
+| notes | text | nullable |
+| is_retired | boolean | default false |
+| created_by | uuid | FK → profiles |
+| created_at | timestamptz | |
+| updated_at | timestamptz | |
+
+### `borrow_records` *(new — Session 24)*
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| item_id | uuid | FK → inventory_items (cascade delete) |
+| borrower_id | uuid | FK → profiles, nullable |
+| borrower_name | text | free text for non-member borrowers; one of borrower_id / borrower_name required |
+| borrowed_at | date | default current_date |
+| due_note | text | expected return, free text |
+| returned_at | date | null while still out |
+| return_condition | text | good / needs_repair / broken / lost |
+| notes | text | |
+| recorded_by | uuid | FK → profiles |
+| created_at | timestamptz | |
+
 ### `awards`
 | Column | Type | Notes |
 |--------|------|-------|
@@ -493,6 +546,8 @@ sanvicente-choir/
 │   ├── treasurer/                # (Session 15)
 │   │   ├── fines.html
 │   │   └── ledger.html
+│   ├── logistics/                # (Session 24)
+│   │   └── inventory.html
 │   └── admin/
 │       ├── members.html
 │       ├── attendance-summary.html

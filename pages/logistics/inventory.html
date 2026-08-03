@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory & Borrowing — San Vicente Choir</title>
+        <link rel="icon" href="../../SVC_Logo.ico" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SVC">
+    <link rel="apple-touch-icon" href="/assets/images/officers/SVC_Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      .badge-good         { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-needs_repair { background: rgba(224,160,48,0.15); color: var(--warning); }
+      .badge-broken       { background: rgba(217,83,79,0.15);  color: #F08080; }
+      .badge-lost         { background: rgba(217,83,79,0.15);  color: #F08080; }
+      .badge-borrowed     { background: rgba(224,160,48,0.15); color: var(--warning); }
+      .badge-available    { background: rgba(92,184,92,0.15);  color: #8FD68F; }
+      .badge-retired      { background: rgba(150,150,150,0.15); color: var(--ivory-muted); }
+      .section-gap { margin-top: var(--space-8); }
+    </style>
+  </head>
+  <body class="portal-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="" class="page-loader-logo">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="portal-header">
+      <img src="../../assets/images/officers/SVC_Logo.png" alt="SVC" class="portal-header-logo">
+      <div class="portal-header-wordmark">
+        <h1>San Vicente Choir</h1>
+        <p>Logistics Portal</p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">☾</button>
+      <div id="notification-bell-container"></div>
+      <div class="portal-header-user" id="portal-header-user"></div>
+      <button class="portal-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </header>
+
+    <div class="portal-layout">
+
+      <!-- ── Sidebar ── -->
+      <nav class="portal-sidebar" id="sidebar" aria-label="Portal navigation">
+        <div class="sidebar-section-label">Member</div>
+        <a href="../members/dashboard.html" class="sidebar-link"><span class="sidebar-icon">⌂</span> Dashboard</a>
+        <a href="../members/calendar.html" class="sidebar-link"><span class="sidebar-icon">▦</span> Calendar</a>
+        <a href="../members/attendance.html" class="sidebar-link"><span class="sidebar-icon">✓</span> My Attendance</a>
+        <a href="../members/songs.html" class="sidebar-link"><span class="sidebar-icon">♪</span> Song Library</a>
+        <a href="../members/profile.html" class="sidebar-link"><span class="sidebar-icon">◎</span> My Profile</a>
+        <a href="../../documents.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Documents</a>
+        <hr class="sidebar-divider">
+        <div id="secretary-section" style="display:none">
+          <div class="sidebar-section-label">Secretary</div>
+          <a href="../secretary/tracker.html" class="sidebar-link"><span class="sidebar-icon">☑</span> Attendance Tracker</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../secretary/sinking-fund.html" class="sidebar-link"><span class="sidebar-icon">₱</span> Sinking Fund</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="officer-section" style="display:none">
+          <div class="sidebar-section-label">Officer</div>
+          <a href="../officer/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Song Management</a>
+          <a href="../secretary/absences.html" class="sidebar-link"><span class="sidebar-icon">✉</span> Absence Requests</a>
+          <a href="../officer/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Event Management</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="treasurer-section" style="display:none">
+          <div class="sidebar-section-label">Treasurer</div>
+          <a href="../treasurer/fines.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Fines Ledger</a>
+          <a href="../treasurer/ledger.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Income / Expense</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="logistics-section" style="display:none">
+          <div class="sidebar-section-label">Logistics</div>
+          <a href="../logistics/inventory.html" class="sidebar-link active"><span class="sidebar-icon">⛭</span> Inventory &amp; Borrowing</a>
+          <hr class="sidebar-divider">
+        </div>
+        <div id="admin-section" style="display:none">
+          <div class="sidebar-section-label">Admin</div>
+          <a href="../admin/members.html" class="sidebar-link"><span class="sidebar-icon">◈</span> Members</a>
+          <a href="../admin/attendance-summary.html" class="sidebar-link"><span class="sidebar-icon">◉</span> Attendance Summary</a>
+          <a href="../admin/events.html" class="sidebar-link"><span class="sidebar-icon">◷</span> Events</a>
+          <a href="../admin/songs.html" class="sidebar-link"><span class="sidebar-icon">♫</span> Manage Songs</a>
+          <a href="../admin/fields.html" class="sidebar-link"><span class="sidebar-icon">≡</span> Custom Fields</a>
+          <hr class="sidebar-divider">
+        </div>
+        <button class="sidebar-btn" id="sidebar-logout"><span class="sidebar-icon">←</span> Sign Out</button>
+      </nav>
+
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- ── Main Content ── -->
+      <main class="portal-main" id="main-content">
+        <div id="page-content" style="display:none">
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-6)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2>Inventory &amp; Borrowing</h2>
+              <p>Choir equipment, condition, and the borrowing log</p>
+            </div>
+            <button class="btn btn-gold" id="add-item-btn" style="display:none">+ Add Item</button>
+          </div>
+
+          <div id="readonly-note" class="alert alert-info" style="display:none;margin-bottom:var(--space-5)">
+            <span class="alert-icon">ℹ</span>
+            <span>You have view-only access. Only the Logistics head and admins can make changes.</span>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="stat-grid" style="margin-bottom:var(--space-6)">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-items">0</div>
+              <div class="stat-label">Items</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-borrowed">0</div>
+              <div class="stat-label">Currently Borrowed</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-repair">0</div>
+              <div class="stat-label">Needs Attention</div>
+            </div>
+          </div>
+
+          <!-- ── Inventory ── -->
+          <div class="filter-chips" id="item-filters" style="margin-bottom:var(--space-5)" role="group" aria-label="Filter items by category">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="instrument">Instruments</button>
+            <button class="filter-chip" data-filter="sound">Sound</button>
+            <button class="filter-chip" data-filter="folders">Folders</button>
+            <button class="filter-chip" data-filter="uniform">Uniforms</button>
+            <button class="filter-chip" data-filter="other">Other</button>
+          </div>
+
+          <div id="items-loading" class="loading-text"><div class="spinner"></div> Loading…</div>
+
+          <div id="items-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">⛭</div>
+            <p id="items-empty-text">No inventory items yet.</p>
+          </div>
+
+          <div id="items-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Inventory items">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Category</th>
+                  <th>Qty</th>
+                  <th>Condition</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th class="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="items-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- ── Borrowing log ── -->
+          <div class="section-gap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--space-5)">
+            <div class="page-heading" style="margin-bottom:0">
+              <h2 style="font-size:var(--text-xl)">Borrowing Log</h2>
+              <p>Who borrowed what and when it came back</p>
+            </div>
+            <div class="filter-chips" id="borrow-filters" role="group" aria-label="Filter borrow records">
+              <button class="filter-chip active" data-filter="out">Still Out</button>
+              <button class="filter-chip" data-filter="all">All Records</button>
+            </div>
+          </div>
+
+          <div id="borrows-empty" class="empty-state" style="display:none">
+            <div class="empty-icon">⇄</div>
+            <p id="borrows-empty-text">Nothing is currently borrowed.</p>
+          </div>
+
+          <div id="borrows-table-wrap" class="table-wrap" style="display:none">
+            <table class="data-table" aria-label="Borrow records">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Borrower</th>
+                  <th>Borrowed</th>
+                  <th>Returned</th>
+                  <th>Notes</th>
+                  <th class="actions-col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="borrows-tbody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer class="portal-footer">
+      San Vicente Choir &nbsp;·&nbsp; Serving through song since 1972
+    </footer>
+
+    <!-- ── Add/Edit Item Modal ── -->
+    <div class="modal-overlay" id="item-modal" role="dialog" aria-modal="true" aria-labelledby="item-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="item-modal-title">Add Item</h2>
+          <button class="modal-close" id="item-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="item-form" novalidate>
+          <div class="form-group">
+            <label for="item-name">Item Name <span class="required">*</span></label>
+            <input type="text" id="item-name" required autocomplete="off" placeholder="e.g. Acoustic guitar">
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="item-category">Category <span class="required">*</span></label>
+              <select id="item-category" required>
+                <option value="instrument">Instrument</option>
+                <option value="sound">Sound</option>
+                <option value="folders">Folders / Sheets</option>
+                <option value="uniform">Uniform</option>
+                <option value="other" selected>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item-quantity">Quantity <span class="required">*</span></label>
+              <input type="number" id="item-quantity" value="1" min="0" step="1" required>
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="item-condition">Condition</label>
+              <select id="item-condition">
+                <option value="good" selected>Good</option>
+                <option value="needs_repair">Needs Repair</option>
+                <option value="broken">Broken</option>
+                <option value="lost">Lost</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item-acquired">Acquired Date</label>
+              <input type="date" id="item-acquired">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="item-location">Storage Location</label>
+            <input type="text" id="item-location" autocomplete="off" placeholder="e.g. Chapel cabinet">
+          </div>
+          <div class="form-group">
+            <label for="item-photo">Photo URL</label>
+            <input type="url" id="item-photo" autocomplete="off" placeholder="Google Drive link (optional)">
+          </div>
+          <div class="form-group">
+            <label for="item-notes">Notes</label>
+            <input type="text" id="item-notes" autocomplete="off" placeholder="Optional…">
+          </div>
+          <div id="item-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="item-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="item-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="item-submit">Save Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Lend Modal ── -->
+    <div class="modal-overlay" id="lend-modal" role="dialog" aria-modal="true" aria-labelledby="lend-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="lend-modal-title">Lend Item</h2>
+          <button class="modal-close" id="lend-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="lend-form" novalidate>
+          <p id="lend-item-label" style="color:var(--ivory-muted);margin-bottom:var(--space-4)"></p>
+          <div class="form-group">
+            <label for="lend-member">Member Borrower</label>
+            <select id="lend-member">
+              <option value="">Not a member / see name below</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lend-name">Non-member Borrower Name</label>
+            <input type="text" id="lend-name" autocomplete="off" placeholder="Only if not a member">
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="lend-date">Borrowed On <span class="required">*</span></label>
+              <input type="date" id="lend-date" required>
+            </div>
+            <div class="form-group">
+              <label for="lend-due">Expected Return</label>
+              <input type="text" id="lend-due" autocomplete="off" placeholder="e.g. after Sunday mass">
+            </div>
+          </div>
+          <div id="lend-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="lend-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="lend-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="lend-submit">Record Loan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Return Modal ── -->
+    <div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-labelledby="return-modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="return-modal-title">Mark Returned</h2>
+          <button class="modal-close" id="return-modal-close" aria-label="Close">✕</button>
+        </div>
+        <form id="return-form" novalidate>
+          <p id="return-item-label" style="color:var(--ivory-muted);margin-bottom:var(--space-4)"></p>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="return-date">Returned On <span class="required">*</span></label>
+              <input type="date" id="return-date" required>
+            </div>
+            <div class="form-group">
+              <label for="return-condition">Condition on Return</label>
+              <select id="return-condition">
+                <option value="good" selected>Good</option>
+                <option value="needs_repair">Needs Repair</option>
+                <option value="broken">Broken</option>
+                <option value="lost">Lost</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="return-notes">Notes</label>
+            <input type="text" id="return-notes" autocomplete="off" placeholder="Optional…">
+          </div>
+          <div id="return-error" class="alert alert-error" role="alert" style="display:none;margin-top:var(--space-4)">
+            <span class="alert-icon">⚠</span>
+            <span id="return-error-text"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="return-cancel">Cancel</button>
+            <button type="submit" class="btn btn-gold btn-sm" id="return-submit">Mark Returned</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireRole, signOut } from '../../js/auth.js';
+      import { initPortalHeader } from '../../js/header.js';
+      import { initNotificationBell } from '../../js/notifications.js';
+      import { supabase } from '../../js/supabase-client.js';
+      import { hidePageLoader, escHtml, initThemeToggle } from '../../js/utils.js';
+      initThemeToggle();
+
+      // ── Auth guard ─────────────────────────────────────────────
+      // Officer-tier roles and up can view; only logistics/admin can write.
+      const profile = await requireRole('logistics');
+      if (!profile) throw new Error('redirecting');
+      const canWrite = ['logistics', 'admin', 'super_admin'].includes(profile.role);
+
+      initPortalHeader(profile, handleSignOut);
+      initNotificationBell(profile.id);
+      document.getElementById('page-content').style.display = 'block';
+      if (canWrite) {
+        document.getElementById('add-item-btn').style.display = 'inline-flex';
+      } else {
+        document.getElementById('readonly-note').style.display = 'flex';
+      }
+
+      // Show role-gated nav sections
+      if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('secretary-section').style.display = 'block';
+        document.getElementById('officer-section').style.display = 'block';
+      }
+      if (['secretary', 'treasurer', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('treasurer-section').style.display = 'block';
+      }
+      if (['secretary', 'officer', 'treasurer', 'logistics', 'admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('logistics-section').style.display = 'block';
+      }
+      if (['admin', 'super_admin'].includes(profile.role)) {
+        document.getElementById('admin-section').style.display = 'block';
+      }
+
+      // ── Sign out ───────────────────────────────────────────────
+      async function handleSignOut() {
+        try { await signOut(); } catch (_) {}
+        window.location.href = '/index.html';
+      }
+      document.getElementById('sidebar-logout').addEventListener('click', handleSignOut);
+
+      // ── Mobile sidebar ─────────────────────────────────────────
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const menuBtn  = document.getElementById('menu-btn');
+      const openSidebar  = () => { sidebar.classList.add('open');  backdrop.classList.add('open');  menuBtn.setAttribute('aria-expanded','true'); };
+      const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); };
+      menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+      backdrop.addEventListener('click', closeSidebar);
+
+      // ── Helpers ────────────────────────────────────────────────
+      const CONDITION_LABELS = { good: 'Good', needs_repair: 'Needs Repair', broken: 'Broken', lost: 'Lost' };
+      const CATEGORY_LABELS  = { instrument: 'Instrument', sound: 'Sound', folders: 'Folders', uniform: 'Uniform', other: 'Other' };
+      function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      function todayStr() { return new Date().toISOString().split('T')[0]; }
+      function condBadge(c) {
+        return `<span class="badge badge-${c}">${CONDITION_LABELS[c] ?? c}</span>`;
+      }
+
+      // ── State ──────────────────────────────────────────────────
+      let allItems      = [];
+      let allBorrows    = [];
+      let itemFilter    = 'all';
+      let borrowFilter  = 'out';
+      let membersCache  = null;
+      let editingItemId = null;
+      let lendItemId    = null;
+      let returnRecId   = null;
+
+      const outstandingByItem = () => {
+        const map = new Map();
+        allBorrows.filter(b => !b.returned_at).forEach(b => {
+          map.set(b.item_id, (map.get(b.item_id) || 0) + 1);
+        });
+        return map;
+      };
+
+      // ── Stats ──────────────────────────────────────────────────
+      function updateStats() {
+        const active = allItems.filter(i => !i.is_retired);
+        document.getElementById('stat-items').textContent    = active.length;
+        document.getElementById('stat-borrowed').textContent = allBorrows.filter(b => !b.returned_at).length;
+        document.getElementById('stat-repair').textContent   = active.filter(i => i.condition !== 'good').length;
+      }
+
+      // ── Render items ───────────────────────────────────────────
+      function renderItems() {
+        const loadingEl = document.getElementById('items-loading');
+        const emptyEl   = document.getElementById('items-empty');
+        const emptyTxt  = document.getElementById('items-empty-text');
+        const tableEl   = document.getElementById('items-table-wrap');
+        const tbody     = document.getElementById('items-tbody');
+        loadingEl.style.display = 'none';
+
+        const outMap = outstandingByItem();
+        const rows = (itemFilter === 'all' ? allItems : allItems.filter(i => i.category === itemFilter));
+
+        if (!rows.length) {
+          emptyTxt.textContent = itemFilter === 'all'
+            ? (canWrite ? 'No inventory items yet. Click "+ Add Item" to log the first one.' : 'No inventory items yet.')
+            : `No ${CATEGORY_LABELS[itemFilter].toLowerCase()} items.`;
+          emptyEl.style.display = 'block';
+          tableEl.style.display = 'none';
+          return;
+        }
+        emptyEl.style.display = 'none';
+        tableEl.style.display = 'block';
+
+        tbody.innerHTML = rows.map(i => {
+          const outCount = outMap.get(i.id) || 0;
+          const status = i.is_retired
+            ? '<span class="badge badge-retired">Retired</span>'
+            : outCount > 0
+              ? `<span class="badge badge-borrowed">Borrowed${outCount > 1 ? ' ×' + outCount : ''}</span>`
+              : '<span class="badge badge-available">Available</span>';
+          const photo = i.photo_url
+            ? ` <a href="${escHtml(i.photo_url)}" target="_blank" rel="noopener" style="font-size:var(--text-xs)">photo ↗</a>` : '';
+          const notes = i.notes
+            ? `<div style="font-size:var(--text-xs);color:var(--ivory-muted)">${escHtml(i.notes)}</div>` : '';
+          const actions = canWrite
+            ? `<div class="actions">
+                 ${!i.is_retired ? `<button class="btn btn-outline btn-sm js-lend" data-id="${i.id}">Lend</button>` : ''}
+                 <button class="btn btn-ghost btn-sm js-edit" data-id="${i.id}">Edit</button>
+                 <button class="btn btn-danger btn-sm js-delete" data-id="${i.id}">Delete</button>
+               </div>`
+            : '';
+          return `
+            <tr>
+              <td style="color:var(--ivory)">${escHtml(i.name)}${photo}${notes}</td>
+              <td style="white-space:nowrap">${CATEGORY_LABELS[i.category] ?? i.category}</td>
+              <td>${i.quantity}</td>
+              <td>${condBadge(i.condition)}</td>
+              <td>${i.storage_location ? escHtml(i.storage_location) : '<span style="color:var(--ivory-muted)">—</span>'}</td>
+              <td>${status}</td>
+              <td class="actions-col">${actions}</td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Render borrow log ──────────────────────────────────────
+      function renderBorrows() {
+        const emptyEl  = document.getElementById('borrows-empty');
+        const emptyTxt = document.getElementById('borrows-empty-text');
+        const tableEl  = document.getElementById('borrows-table-wrap');
+        const tbody    = document.getElementById('borrows-tbody');
+
+        const rows = borrowFilter === 'out' ? allBorrows.filter(b => !b.returned_at) : allBorrows;
+
+        if (!rows.length) {
+          emptyTxt.textContent = borrowFilter === 'out'
+            ? 'Nothing is currently borrowed.'
+            : 'No borrow records yet.';
+          emptyEl.style.display = 'block';
+          tableEl.style.display = 'none';
+          return;
+        }
+        emptyEl.style.display = 'none';
+        tableEl.style.display = 'block';
+
+        tbody.innerHTML = rows.map(b => {
+          const borrower = b.borrower?.full_name ?? b.borrower_name ?? '—';
+          const returned = b.returned_at
+            ? `${fmtDate(b.returned_at)}${b.return_condition ? '<br>' + condBadge(b.return_condition) : ''}`
+            : '<span class="badge badge-borrowed">Still out</span>';
+          const noteParts = [b.due_note ? 'Due: ' + escHtml(b.due_note) : '', b.notes ? escHtml(b.notes) : ''].filter(Boolean);
+          const actions = canWrite && !b.returned_at
+            ? `<button class="btn btn-outline btn-sm js-return" data-id="${b.id}">Mark Returned</button>`
+            : '';
+          return `
+            <tr>
+              <td style="color:var(--ivory)">${escHtml(b.item?.name ?? '—')}</td>
+              <td>${escHtml(borrower)}</td>
+              <td style="white-space:nowrap">${fmtDate(b.borrowed_at)}</td>
+              <td style="white-space:nowrap">${returned}</td>
+              <td style="max-width:200px;font-size:var(--text-xs);color:var(--ivory-muted)">${noteParts.join(' · ') || '—'}</td>
+              <td class="actions-col">${actions}</td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Load data ──────────────────────────────────────────────
+      async function loadAll() {
+        const [itemsRes, borrowsRes] = await Promise.all([
+          supabase.from('inventory_items').select('*').order('name'),
+          supabase.from('borrow_records')
+            .select('*, item:inventory_items!item_id(name), borrower:profiles!borrower_id(full_name)')
+            .order('borrowed_at', { ascending: false }),
+        ]);
+
+        if (itemsRes.error || borrowsRes.error) {
+          console.error('loadAll:', itemsRes.error || borrowsRes.error);
+          document.getElementById('items-loading').style.display = 'none';
+          document.getElementById('items-empty-text').textContent = 'Error loading inventory. Please refresh.';
+          document.getElementById('items-empty').style.display = 'block';
+          return;
+        }
+
+        allItems   = itemsRes.data || [];
+        allBorrows = borrowsRes.data || [];
+        updateStats();
+        renderItems();
+        renderBorrows();
+      }
+
+      // ── Filters ────────────────────────────────────────────────
+      document.getElementById('item-filters').addEventListener('click', e => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        document.querySelectorAll('#item-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        itemFilter = chip.dataset.filter;
+        renderItems();
+      });
+      document.getElementById('borrow-filters').addEventListener('click', e => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        document.querySelectorAll('#borrow-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        borrowFilter = chip.dataset.filter;
+        renderBorrows();
+      });
+
+      // ── Item modal ─────────────────────────────────────────────
+      function openItemModal(item = null) {
+        editingItemId = item?.id ?? null;
+        document.getElementById('item-modal-title').textContent = item ? 'Edit Item' : 'Add Item';
+        document.getElementById('item-submit').textContent      = item ? 'Save Changes' : 'Save Item';
+        document.getElementById('item-name').value      = item?.name ?? '';
+        document.getElementById('item-category').value  = item?.category ?? 'other';
+        document.getElementById('item-quantity').value  = item?.quantity ?? 1;
+        document.getElementById('item-condition').value = item?.condition ?? 'good';
+        document.getElementById('item-acquired').value  = item?.acquired_date ?? '';
+        document.getElementById('item-location').value  = item?.storage_location ?? '';
+        document.getElementById('item-photo').value     = item?.photo_url ?? '';
+        document.getElementById('item-notes').value     = item?.notes ?? '';
+        document.getElementById('item-error').style.display = 'none';
+        document.getElementById('item-modal').classList.add('open');
+        document.getElementById('item-name').focus();
+      }
+      const closeItemModal = () => document.getElementById('item-modal').classList.remove('open');
+
+      document.getElementById('add-item-btn').addEventListener('click', () => openItemModal());
+      document.getElementById('item-modal-close').addEventListener('click', closeItemModal);
+      document.getElementById('item-cancel').addEventListener('click', closeItemModal);
+      document.getElementById('item-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeItemModal();
+      });
+
+      document.getElementById('item-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('item-error');
+        const errTxt = document.getElementById('item-error-text');
+        const btn    = document.getElementById('item-submit');
+        errEl.style.display = 'none';
+
+        const payload = {
+          name:             document.getElementById('item-name').value.trim(),
+          category:         document.getElementById('item-category').value,
+          quantity:         Number(document.getElementById('item-quantity').value),
+          condition:        document.getElementById('item-condition').value,
+          acquired_date:    document.getElementById('item-acquired').value || null,
+          storage_location: document.getElementById('item-location').value.trim() || null,
+          photo_url:        document.getElementById('item-photo').value.trim() || null,
+          notes:            document.getElementById('item-notes').value.trim() || null,
+        };
+        if (!payload.name || Number.isNaN(payload.quantity) || payload.quantity < 0) {
+          errTxt.textContent = 'Item name and a valid quantity are required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        btn.disabled = true;
+        const { error } = editingItemId
+          ? await supabase.from('inventory_items').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', editingItemId)
+          : await supabase.from('inventory_items').insert({ ...payload, created_by: profile.id });
+        btn.disabled = false;
+
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+        closeItemModal();
+        await loadAll();
+      });
+
+      // ── Item table actions ─────────────────────────────────────
+      document.getElementById('items-tbody').addEventListener('click', async e => {
+        const lendBtn = e.target.closest('.js-lend');
+        const editBtn = e.target.closest('.js-edit');
+        const delBtn  = e.target.closest('.js-delete');
+        if (lendBtn) { openLendModal(lendBtn.dataset.id); return; }
+        if (editBtn) { openItemModal(allItems.find(i => i.id === editBtn.dataset.id)); return; }
+        if (delBtn)  { await deleteItem(delBtn.dataset.id); return; }
+      });
+
+      async function deleteItem(id) {
+        const item = allItems.find(i => i.id === id);
+        if (!confirm(`Delete "${item?.name ?? 'this item'}" and its borrow history? This cannot be undone.`)) return;
+        const { error } = await supabase.from('inventory_items').delete().eq('id', id);
+        if (error) { alert(`Failed to delete: ${error.message}`); return; }
+        await loadAll();
+      }
+
+      // ── Lend modal ─────────────────────────────────────────────
+      async function populateMembers() {
+        if (membersCache) return;
+        const { data } = await supabase
+          .from('profiles')
+          .select('id, full_name')
+          .in('status', ['active', 'associate'])
+          .order('full_name');
+        membersCache = data || [];
+        document.getElementById('lend-member').innerHTML =
+          '<option value="">Not a member / see name below</option>' +
+          membersCache.map(m => `<option value="${m.id}">${escHtml(m.full_name)}</option>`).join('');
+      }
+
+      function openLendModal(itemId) {
+        lendItemId = itemId;
+        const item = allItems.find(i => i.id === itemId);
+        document.getElementById('lend-item-label').textContent = `Item: ${item?.name ?? ''}`;
+        document.getElementById('lend-member').value = '';
+        document.getElementById('lend-name').value   = '';
+        document.getElementById('lend-date').value   = todayStr();
+        document.getElementById('lend-due').value    = '';
+        document.getElementById('lend-error').style.display = 'none';
+        document.getElementById('lend-modal').classList.add('open');
+        populateMembers();
+      }
+      const closeLendModal = () => document.getElementById('lend-modal').classList.remove('open');
+      document.getElementById('lend-modal-close').addEventListener('click', closeLendModal);
+      document.getElementById('lend-cancel').addEventListener('click', closeLendModal);
+      document.getElementById('lend-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeLendModal();
+      });
+
+      document.getElementById('lend-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('lend-error');
+        const errTxt = document.getElementById('lend-error-text');
+        errEl.style.display = 'none';
+
+        const borrowerId   = document.getElementById('lend-member').value || null;
+        const borrowerName = document.getElementById('lend-name').value.trim() || null;
+        const borrowedAt   = document.getElementById('lend-date').value;
+        const dueNote      = document.getElementById('lend-due').value.trim() || null;
+
+        if (!borrowerId && !borrowerName) {
+          errTxt.textContent = 'Select a member or enter a borrower name.';
+          errEl.style.display = 'flex';
+          return;
+        }
+        if (!borrowedAt) {
+          errTxt.textContent = 'Borrowed date is required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        const { error } = await supabase.from('borrow_records').insert({
+          item_id:       lendItemId,
+          borrower_id:   borrowerId,
+          borrower_name: borrowerId ? null : borrowerName,
+          borrowed_at:   borrowedAt,
+          due_note:      dueNote,
+          recorded_by:   profile.id,
+        });
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+        closeLendModal();
+        await loadAll();
+      });
+
+      // ── Return modal ───────────────────────────────────────────
+      document.getElementById('borrows-tbody').addEventListener('click', e => {
+        const btn = e.target.closest('.js-return');
+        if (!btn) return;
+        returnRecId = btn.dataset.id;
+        const rec = allBorrows.find(b => b.id === returnRecId);
+        const borrower = rec?.borrower?.full_name ?? rec?.borrower_name ?? '';
+        document.getElementById('return-item-label').textContent =
+          `${rec?.item?.name ?? ''} — borrowed by ${borrower} on ${fmtDate(rec?.borrowed_at)}`;
+        document.getElementById('return-date').value      = todayStr();
+        document.getElementById('return-condition').value = 'good';
+        document.getElementById('return-notes').value     = '';
+        document.getElementById('return-error').style.display = 'none';
+        document.getElementById('return-modal').classList.add('open');
+      });
+      const closeReturnModal = () => document.getElementById('return-modal').classList.remove('open');
+      document.getElementById('return-modal-close').addEventListener('click', closeReturnModal);
+      document.getElementById('return-cancel').addEventListener('click', closeReturnModal);
+      document.getElementById('return-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeReturnModal();
+      });
+
+      document.getElementById('return-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl  = document.getElementById('return-error');
+        const errTxt = document.getElementById('return-error-text');
+        errEl.style.display = 'none';
+
+        const returnedAt = document.getElementById('return-date').value;
+        const condition  = document.getElementById('return-condition').value;
+        const notes      = document.getElementById('return-notes').value.trim() || null;
+        if (!returnedAt) {
+          errTxt.textContent = 'Return date is required.';
+          errEl.style.display = 'flex';
+          return;
+        }
+
+        const rec = allBorrows.find(b => b.id === returnRecId);
+        const { error } = await supabase.from('borrow_records')
+          .update({ returned_at: returnedAt, return_condition: condition, notes })
+          .eq('id', returnRecId);
+        if (error) {
+          errTxt.textContent = error.message;
+          errEl.style.display = 'flex';
+          return;
+        }
+        // Reflect a degraded return on the item's own condition
+        if (rec && condition !== 'good') {
+          await supabase.from('inventory_items')
+            .update({ condition, updated_at: new Date().toISOString() })
+            .eq('id', rec.item_id);
+        }
+        closeReturnModal();
+        await loadAll();
+      });
+
+      // ── Init ───────────────────────────────────────────────────
+      await loadAll();
+      hidePageLoader();
+    </script>
+  </body>
+</html>
