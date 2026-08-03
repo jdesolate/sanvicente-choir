@@ -336,11 +336,10 @@ Realities of the data (see sample export, June–Aug 2026):
   - Each mapped selection becomes a commitment row for that member and event
   - The literal option "I can't serve this weekend" → `cant_attend` rows (with the reason column's text) for every *service* event of the weekend the member did not explicitly commit to; explicit selections in the same response still count as commitments
   - The reason text is stored on all of that member's rows for the weekend, for treasurer reference
-- Portal matches each response to a member profile. The Form's Name field is a **dropdown** whose options should be kept character-identical to portal `full_name` values, so exact matches are the norm:
-  1. Email match against `profiles.email`, if the export has an Email column (enable "Collect email addresses" on the Form)
-  2. Exact match on `full_name` (case/whitespace-insensitive)
-  3. Saved alias match (`member_aliases` table — maps a Form spelling to a profile)
-  4. Fuzzy suggestion (normalized substring/token match) that the treasurer confirms manually — an unmatched dropdown name usually means the Form's dropdown has drifted from the portal roster; surface that hint
+- Portal matches each response to a member profile by name. The Form's Name field is a **dropdown** whose options should be kept character-identical to portal `full_name` values, so exact matches are the norm. (The Form deliberately does not collect emails — a Google login step would hurt response rates.)
+  1. Exact match on `full_name` (case/whitespace-insensitive)
+  2. Saved alias match (`member_aliases` table — maps a Form spelling to a profile)
+  3. Fuzzy suggestion (normalized substring/token match) that the treasurer confirms manually — an unmatched dropdown name usually means the Form's dropdown has drifted from the portal roster; surface that hint
 - Confirming a fuzzy match offers to save it as an alias so it never needs fixing again
 - Unmatched names can be skipped (recorded nowhere) or left for later
 - Matched rows are saved to `commitments` — one row per member per mapped event (unique per member + event; re-import upserts)
