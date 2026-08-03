@@ -343,10 +343,10 @@ Realities of the data (see sample export, June–Aug 2026):
 - Confirming a fuzzy match offers to save it as an alias so it never needs fixing again
 - Unmatched names can be skipped (recorded nowhere) or left for later
 - Matched rows are saved to `commitments` — one row per member per mapped event (unique per member + event; re-import upserts)
-- Practice/special-event commitments are stored the same way but are informational — reconciliation proposes fines **only for service events**, consistent with the working rules
+- Reconciliation proposes fines for **service and practice events**, per the working rules ("applies to practices and services alike"). Meeting, assembly, and activity commitments are stored the same way but are informational
 
 **Reconcile:**
-- For the selected event, the portal joins commitments against attendance:
+- For each service and practice event of the weekend, the portal joins commitments against attendance:
   - committed + present → OK
   - committed + excused (approved absence) → OK, no fine
   - committed + absent (or no attendance record) → **proposed fine**

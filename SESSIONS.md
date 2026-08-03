@@ -839,6 +839,39 @@ document.addEventListener('keydown', e => {
 
 ## Session 25: Commitment Reconciliation (Google Forms → Fines)
 
+**Status:** [x] Built — pending migration run + live QA
+
+**What was built:**
+
+*`supabase/migration_commitments.sql`:*
+- `commitments` and `member_aliases` tables with RLS matching the `fines` pattern (member reads own commitments; treasurer/admin/super_admin full access)
+- **RLS widening — review before running:** the `attendance` select policy now includes `treasurer`. Reconciliation joins commitments against attendance, and a plain treasurer previously could only read their own attendance rows. Write policy untouched.
+
+*`pages/treasurer/commitments.html` (new page):*
+- Guard: `requireRole('treasurer')` + explicit `['treasurer','admin','super_admin']` allowlist (secretary excluded, unlike `fines.html`)
+- Step 1 — weekend picker snaps any picked date to that weekend's Saturday; lists Mon–Sun portal events with category badges
+- Step 2 — CSV file upload or paste; hand-rolled RFC-style CSV parser; columns located by header keyword; weekend labels (`June 28–29, 2026`, `Aug 1–2, 2026`) parsed and auto-matched to the picked weekend; duplicates deduped by latest timestamp; per-import option→event mapping UI with day/time/title pre-selection
+- Step 3 — match table: exact `full_name` → alias → fuzzy suggestions + full member list + per-row Skip; "Remember this spelling" writes a `member_aliases` row; unmatched rows raise the Form-drift hint. Save upserts on `(member_id, event_id)`
+- Step 4 — reconcile per service **and practice** event (working rules: "applies to practices and services alike"; meeting/assembly/activity stay informational): present/excused muted, `cant_attend` listed with reason, committed+absent/unmarked get a checked fine row, already-fined shown without checkbox. "Create N Fines" inserts at ₱20, fires `fine_added` notifications, sets `reconciled_at`. Events with no attendance marked yet show a warning and no create button
+- The "I can't serve this weekend" fanout stays **service-only** — the real export shows members ticking it alongside practice selections, meaning they attend practice but decline the weekend masses
+
+*Sidebar:* "Commitments" link added to `#treasurer-section` on all 18 portal pages.
+
+**Parser validated against the real June–Aug 2026 export:**
+- All 7 weekend labels parse, including the abbreviated `Aug 1–2, 2026` and en-dash ranges
+- Option labels containing internal commas survive intact (`Thursday 8pm Practice (Paagi selected lineup by Amor, Paolo, Mervs)`) via paren-depth-aware splitting
+- `I can't serve this weekend` coexisting with real selections handled (Jan Dacillo, Gezd Seloterio — practices committed, weekend masses declined)
+- Duplicate submissions deduped to latest timestamp (Vince Rojas 3 rows, Christian Dignos 2 rows on two weekends)
+
+**Still to verify live (needs the migration run and a real weekend's events + attendance):**
+- End-to-end save → reconcile → create fines against Supabase
+- Alias round-trip (save an alias, re-import the same spelling)
+- Re-running reconcile creates no duplicate fines
+
+---
+
+## Session 25 — original spec
+
 **Status:** [ ] Not Started
 
 **Goal:** Replace the treasurer's manual cross-check of Google Forms commitment responses against attendance. Import Form names for a service event, match them to members, reconcile against attendance, and generate fines in one click. The Google Forms workflow itself is unchanged.
@@ -932,6 +965,136 @@ alter table member_aliases enable row level security;
 
 ---
 
+## Session 26: Declared Availability + Commitment Lock
+
+**Status:** [ ] Not Started — spec needs assembly sign-off on the lock rule (see Governance below)
+
+**Goal:** Close the three gaps between the ratified working rules and what the portal
+actually enforces. Session 25 automated fine *proposal*; this session adds the two valves
+the rules assume exist — the humane one (Declared Availability) and the binding one
+(a commitment lock) — plus visibility for late withdrawals.
+
+**Why this comes before the first automated fine batch:** reconciliation currently has no
+knowledge of standing unavailability, so the one mechanism in `docs/working-rules-2026-2027.md`
+that protects members with real life conflicts is invisible to the tool that proposes fines.
+
+---
+
+### Part A — Declared Availability
+
+Ratified July 26, 2026; documented in `docs/working-rules-2026-2027.md` §2; currently lives
+only on the paper/Google membership form.
+
+*Database:*
+```sql
+create table if not exists member_availability (
+  id          uuid primary key default gen_random_uuid(),
+  member_id   uuid not null references profiles(id) on delete cascade,
+  kind        text not null check (kind in ('recurring','date_range')),
+  weekday     int  check (weekday between 0 and 6),   -- kind='recurring'
+  start_date  date,                                    -- kind='date_range'
+  end_date    date,
+  reason      text not null,
+  created_at  timestamptz default now(),
+  check ((kind = 'recurring'  and weekday is not null)
+      or (kind = 'date_range' and start_date is not null and end_date is not null))
+);
+```
+- RLS: member reads/writes own; secretary/officer/treasurer/admin read all.
+- `reason` is NOT NULL by design — the rules say silence is what demotes, not busyness. A
+  declaration without a reason isn't a declaration.
+
+*Member-facing UI (`pages/members/profile.html` or a new `availability.html`):*
+- "My Availability" panel: add/remove recurring weekday entries and date ranges
+- Plain-language copy: an absence inside what you declared is automatically excused
+
+*Reconcile integration (`pages/treasurer/commitments.html`):*
+- Before proposing any fine, check the event date against the member's availability
+- A match → row renders as auto-excused with the declared reason, no checkbox, never fineable
+
+---
+
+### Part B — Commitment Lock
+
+**The problem this fixes:** the assembly ratified a Thursday RSVP. Moving the Form to Monday
+(to cover practices) removed the deadline without replacing it, so a commitment could be
+revised indefinitely and had no binding force.
+
+**The rule:** open Monday, lock Thursday. Before the lock, revise freely — that is planning,
+not flakiness, and it is never fineable. After the lock, your answer is the lineup.
+
+*Database:*
+```sql
+alter table events add column if not exists commitment_locks_at timestamptz;
+```
+- Nullable. Null = no lock, revision free up to the event (current behaviour).
+- **Do not hardcode the deadline in JS.** It is a policy number the assembly owns; a per-event
+  column lets it be tuned without a deploy, and lets a Major Event lock earlier than a core mass.
+- Event create/edit UI: a `commitment_locks_at` field, defaulting to Thursday 23:59 before the
+  event date for weekend services.
+
+*Importer integration:*
+- The parser already sorts responses by timestamp and takes the latest. Split that on the lock:
+  - latest response **at or before** `commitment_locks_at` → the binding answer
+  - a later response that withdraws a commitment → sets `withdrawn_at`, does not erase it
+- With `commitment_locks_at` null, behaviour is unchanged from Session 25.
+
+---
+
+### Part C — Late Withdrawal Visibility
+
+₱20 does not repair the harm when someone drops off a thin roster and the members who showed
+up carry it. What makes a commitment feel real is the withdrawal being *seen* and recorded
+distinctly from "told us early."
+
+*Database:*
+```sql
+alter table commitments add column if not exists withdrawn_at timestamptz;
+```
+- `status` continues to hold the binding at-lock answer.
+- `withdrawn_at` set → committed at lock, pulled out after. Per the working rules this is
+  "say you will attend and then do not come" — fineable, but shown as its own row type.
+
+*Reconcile precedence (first match wins):*
+1. Covered by Declared Availability → auto-excused, never fineable
+2. `cant_attend` declared before lock → no fine, listed with reason
+3. Committed + present, or committed + approved absence request → OK
+4. Committed + `withdrawn_at` set → **late withdrawal**, fine proposed, flagged distinctly
+5. Committed + absent or unmarked → fine proposed
+6. Never answered the form → separate list, surfaced but **not** auto-checked (see below)
+
+---
+
+### Governance — take to the August assembly before shipping
+
+Two items here go beyond what was ratified on July 26. Merv is President/`super_admin` and can
+set them, but the constitution is being ratified article by article at monthly assemblies, so
+these belong on that agenda:
+
+1. **Earlier lock for Major Events.** A tighter deadline than the ratified Thursday is a new,
+   stricter rule. Needs a vote, not a default.
+2. **Fining non-response.** The working rules make "do not answer the form at all" fineable, but
+   automating it would propose fines against every Active member who stayed silent — a far larger
+   surface than anything logged manually to date. Surface the list; do not auto-check it.
+
+*Resolved Aug 4, 2026:* fines apply to practices and services alike, matching the working rules.
+Session 25's reconcile now covers both categories; meeting/assembly/activity stay informational.
+
+**Design guard:** automation makes enforcement frictionless — one click now fines eight people,
+where manual entry forced a moment of thought per person. That friction was doing quiet humane
+work. Keep the per-row checkboxes, keep them individually reviewable, and never add a
+"fine everyone" shortcut.
+
+**Acceptance criteria:**
+- [ ] Member can declare recurring weekday and date-range unavailability with a reason
+- [ ] An absence inside declared availability is auto-excused and never proposed for a fine
+- [ ] Revising a Form answer before the lock produces no fine
+- [ ] Withdrawing after the lock is recorded and shown as a late withdrawal, distinct from an absence
+- [ ] An event with no `commitment_locks_at` behaves exactly as it did in Session 25
+- [ ] Members who never answered are listed separately and not auto-checked for fines
+
+---
+
 ## Session Order Summary
 
 | # | Session | Depends On | Status |
@@ -962,4 +1125,5 @@ alter table member_aliases enable row level security;
 | 22 | Weekend Songs on Dashboard | 12 | ⏳ Planned |
 | 23 | Cross-Portal Infrastructure | Any complete | ⏳ Planned |
 | 24 | Logistics & Property — Inventory + Borrowing Log | 11 | ✅ Complete |
-| 25 | Commitment Reconciliation (Google Forms → Fines) | 15, 16 | ⏳ Planned |
+| 25 | Commitment Reconciliation (Google Forms → Fines) | 15, 16 | 🔨 Built — pending migration + QA |
+| 26 | Declared Availability + Commitment Lock | 25 | ⏳ Planned — needs assembly sign-off |
