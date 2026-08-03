@@ -384,9 +384,23 @@
 
       async function updateFineStatus(id, newStatus) {
         const fine = allFines.find(f => f.id === id);
+        const patch = { status: newStatus, paid_at: new Date().toISOString() };
+
+        // Working rules require a waiver reason recorded where members can see it.
+        if (newStatus === 'waived') {
+          const reason = prompt('Reason for waiving this fine (recorded and visible to the member):');
+          if (reason === null) return;
+          if (!reason.trim()) { alert('A waiver needs a recorded reason.'); return; }
+          const approver = prompt('Approved by (President or VP):');
+          if (approver === null) return;
+          if (!approver.trim()) { alert('A waiver needs a named approver.'); return; }
+          const waiver = `Waived: ${reason.trim()} — approved by ${approver.trim()}`;
+          patch.notes = fine?.notes ? `${fine.notes} · ${waiver}` : waiver;
+        }
+
         const { error } = await supabase
           .from('fines')
-          .update({ status: newStatus, paid_at: new Date().toISOString() })
+          .update(patch)
           .eq('id', id);
         if (error) { alert(`Failed to update fine: ${error.message}`); return; }
         if (fine?.member_id) {

@@ -188,6 +188,39 @@
             </div>
           </div>
 
+          <!-- ── My Fines ── -->
+          <div id="my-fines" style="display:none;margin-top:var(--space-8)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+              <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin:0">
+                My Fines
+              </h3>
+              <div id="fines-outstanding" class="badge badge-at-risk" style="display:none"></div>
+            </div>
+
+            <div id="my-fines-empty" class="empty-state" style="display:none">
+              <div class="empty-icon">◈</div>
+              <p>No fines on your record.</p>
+            </div>
+
+            <div id="my-fines-table-wrap" class="table-wrap" style="display:none">
+              <table class="data-table" aria-label="My fines">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Reason / Note</th>
+                  </tr>
+                </thead>
+                <tbody id="my-fines-tbody"></tbody>
+              </table>
+            </div>
+            <p class="form-hint" style="margin-top:var(--space-3)">
+              A fine can be waived if something genuine came up — message an officer and the reason is recorded here.
+            </p>
+          </div>
+
         </div>
       </main>
     </div>
@@ -607,8 +640,56 @@
         if (excuseBtn) openModal('retroactive', excuseBtn.dataset.eventId, excuseBtn.dataset.eventTitle);
       });
 
+      // ── My Fines ───────────────────────────────────────────────
+      const FINE_BADGE = { unpaid: 'badge-at-risk', paid: 'badge-on-track', waived: 'badge-pending' };
+
+      async function loadMyFines() {
+        const { data, error } = await supabase
+          .from('fines')
+          .select('amount, status, notes, created_at, event:events!event_id(title, event_date)')
+          .eq('member_id', profile.id)
+          .order('created_at', { ascending: false });
+
+        // A failed fines query must not blank the attendance page.
+        if (error) { console.error('loadMyFines:', error); return; }
+
+        const section  = document.getElementById('my-fines');
+        const emptyEl  = document.getElementById('my-fines-empty');
+        const tableEl  = document.getElementById('my-fines-table-wrap');
+        const totalEl  = document.getElementById('fines-outstanding');
+        section.style.display = 'block';
+
+        if (!data?.length) {
+          emptyEl.style.display = 'block';
+          tableEl.style.display = 'none';
+          totalEl.style.display = 'none';
+          return;
+        }
+
+        const outstanding = data
+          .filter(f => f.status === 'unpaid')
+          .reduce((s, f) => s + Number(f.amount), 0);
+        if (outstanding > 0) {
+          totalEl.textContent   = `₱${outstanding.toFixed(2)} outstanding`;
+          totalEl.style.display = 'inline-flex';
+        } else {
+          totalEl.style.display = 'none';
+        }
+
+        emptyEl.style.display = 'none';
+        tableEl.style.display = 'block';
+        document.getElementById('my-fines-tbody').innerHTML = data.map(f => `
+          <tr>
+            <td style="color:var(--ivory);font-weight:500">${escHtml(f.event?.title || '—')}</td>
+            <td style="white-space:nowrap">${f.event?.event_date ? formatDate(f.event.event_date) : '—'}</td>
+            <td style="white-space:nowrap;font-weight:500">₱${Number(f.amount).toFixed(2)}</td>
+            <td><span class="badge ${FINE_BADGE[f.status] || 'badge-pending'}">${f.status}</span></td>
+            <td style="font-size:var(--text-xs);color:var(--ivory-muted)">${f.notes ? escHtml(f.notes) : '—'}</td>
+          </tr>`).join('');
+      }
+
       // ── Init ───────────────────────────────────────────────────
-      if (!isSvcAdmin) await loadAttendance();
+      if (!isSvcAdmin) await Promise.all([loadAttendance(), loadMyFines()]);
       hidePageLoader();
     </script>
   </body>
