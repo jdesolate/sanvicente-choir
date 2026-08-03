@@ -313,6 +313,33 @@ Portal tools for the Logistics & Property head (borrowing/storage log ratified a
 
 ---
 
+### 6.11 Commitment Reconciliation (Session 25)
+
+Automates the manual cross-check between Google Forms commitment responses and attendance. The Google Forms workflow itself is unchanged (the in-portal declaration form stays deferred).
+
+**Import (treasurer/admin):**
+- Treasurer picks a service event, then pastes the names column (one per line) or uploads the CSV exported from the Google Form responses sheet
+- Portal matches each name to a member profile:
+  1. Exact match on `full_name` (case-insensitive)
+  2. Saved alias match (`member_aliases` table — maps a Form spelling/nickname to a profile)
+  3. Fuzzy suggestion (normalized substring/token match) that the treasurer confirms manually
+- Confirming a fuzzy match offers to save it as an alias so it never needs fixing again
+- Unmatched names can be skipped (recorded nowhere) or left for later
+- Matched rows are saved to `commitments` (unique per member + event; re-import upserts)
+
+**Reconcile:**
+- For the selected event, the portal joins commitments against attendance:
+  - committed + present → OK
+  - committed + excused (approved absence) → OK, no fine
+  - committed + absent (or no attendance record) → **proposed fine**
+- Proposed-fines list shows member, attendance status, and a checkbox per row (all checked by default)
+- "Create Fines" inserts checked rows into the existing `fines` table (default ₱20, notes auto-filled "Committed via Google Form but absent"), fires the existing `fine_added` notifications, and marks those commitments reconciled
+- Members who already have a fine for that event are shown as already-fined and excluded
+
+**Access:** treasurer, admin, super_admin only — same tier as the fines ledger.
+
+---
+
 ## 7. Tech Stack
 
 | Layer | Technology |
@@ -490,6 +517,28 @@ Portal tools for the Logistics & Property head (borrowing/storage log ratified a
 | recorded_by | uuid | FK → profiles |
 | created_at | timestamptz | |
 
+### `commitments` *(new — Session 25)*
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| member_id | uuid | FK → profiles (cascade delete) |
+| event_id | uuid | FK → events (cascade delete) |
+| source | text | google_form (only value for now) |
+| raw_name | text | name as it appeared in the Form response |
+| reconciled_at | timestamptz | set when fines are generated for this event |
+| imported_by | uuid | FK → profiles |
+| created_at | timestamptz | |
+| | | UNIQUE(member_id, event_id) |
+
+### `member_aliases` *(new — Session 25)*
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | |
+| member_id | uuid | FK → profiles (cascade delete) |
+| alias | text | normalized Form spelling/nickname; UNIQUE |
+| created_by | uuid | FK → profiles |
+| created_at | timestamptz | |
+
 ### `awards`
 | Column | Type | Notes |
 |--------|------|-------|
@@ -545,7 +594,8 @@ sanvicente-choir/
 │   │   └── songs.html            # Song management + assignments
 │   ├── treasurer/                # (Session 15)
 │   │   ├── fines.html
-│   │   └── ledger.html
+│   │   ├── ledger.html
+│   │   └── commitments.html      # (Session 25)
 │   ├── logistics/                # (Session 24)
 │   │   └── inventory.html
 │   └── admin/

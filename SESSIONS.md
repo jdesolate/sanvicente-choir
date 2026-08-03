@@ -837,6 +837,79 @@ document.addEventListener('keydown', e => {
 
 ---
 
+## Session 25: Commitment Reconciliation (Google Forms → Fines)
+
+**Status:** [ ] Not Started
+
+**Goal:** Replace the treasurer's manual cross-check of Google Forms commitment responses against attendance. Import Form names for a service event, match them to members, reconcile against attendance, and generate fines in one click. The Google Forms workflow itself is unchanged.
+
+**Context to provide Claude:**
+- "Sessions 15–16 and 24 are done. Now build Session 25: commitment reconciliation. Read PRD.md Sections 6.4, 6.11, and 8."
+
+**Depends on:** Session 15 (fines table), Session 16 (notifications)
+
+**Tasks:**
+
+*Database (`supabase/migration_commitments.sql` — run in Supabase SQL editor):*
+```sql
+create table if not exists commitments (
+  id uuid primary key default gen_random_uuid(),
+  member_id uuid not null references profiles(id) on delete cascade,
+  event_id uuid not null references events(id) on delete cascade,
+  source text not null default 'google_form',
+  raw_name text,
+  reconciled_at timestamptz,
+  imported_by uuid references profiles(id),
+  created_at timestamptz default now(),
+  unique(member_id, event_id)
+);
+alter table commitments enable row level security;
+
+create table if not exists member_aliases (
+  id uuid primary key default gen_random_uuid(),
+  member_id uuid not null references profiles(id) on delete cascade,
+  alias text not null unique,
+  created_by uuid references profiles(id),
+  created_at timestamptz default now()
+);
+alter table member_aliases enable row level security;
+
+-- RLS: member reads own commitments; treasurer/admin/super_admin full access on both tables
+```
+
+*`pages/treasurer/commitments.html` (new page):*
+- Auth guard: same pattern as `fines.html` — `requireRole('treasurer')` plus explicit `['treasurer','admin','super_admin']` allowlist
+- **Step 1 — event picker:** service events, past 30 days through next 14 days, default to nearest upcoming/most recent
+- **Step 2 — paste/import:** textarea for pasted names (one per line) with CSV file input as alternative (take the first column that looks like names; strip header row)
+- **Step 3 — match review table:** one row per pasted name → matched member
+  - Exact `full_name` match (case/whitespace-insensitive) → auto-matched
+  - `member_aliases` lookup on the normalized name → auto-matched
+  - Otherwise: dropdown of fuzzy suggestions (token overlap against full names) + full member list fallback; a "skip" option per row
+  - Manual match confirm offers "Remember this spelling" checkbox → inserts into `member_aliases`
+  - "Save Commitments" upserts matched rows into `commitments` (re-import of the same event updates, not duplicates)
+- **Step 4 — reconcile panel:** for the selected event, join commitments × attendance:
+  - present or excused → OK row (muted)
+  - absent or no attendance record → proposed fine row with checkbox (checked by default)
+  - members with an existing fine for that event → shown as already fined, no checkbox
+  - "Create N Fines" button: inserts into `fines` (amount 20, notes "Committed via Google Form but absent", recorded_by = current user), fires `fine_added` notification per member (reuse the message pattern from `fines.html`), sets `reconciled_at` on that event's commitments
+- Empty states for: no attendance marked yet for the event (warn and block reconcile), no commitments imported
+
+*`pages/members/attendance.html` (small update):*
+- In the "My Fines" section, fines created this way already appear — no change needed. Optionally show "Committed" badge in history rows where a commitment exists for that event (nice-to-have, skip if time is short).
+
+*Sidebar (`treasurer` section, all portal pages — or `js/sidebar.js` if Session 23 has landed):*
+- Add "Commitments" link to `#treasurer-section` → `../treasurer/commitments.html`
+
+**Acceptance criteria:**
+- [ ] Treasurer pastes names for a service event; exact and alias matches auto-resolve
+- [ ] Confirming a fuzzy match with "remember" saves an alias; re-importing the same spelling auto-matches
+- [ ] Reconcile proposes fines only for committed + absent/unmarked members; excused members are excluded
+- [ ] "Create Fines" inserts fines, notifies members, and marks commitments reconciled
+- [ ] Re-running reconcile on the same event shows already-fined members and creates no duplicates
+- [ ] Secretary/officer/logistics cannot access the page; member cannot read others' commitments
+
+---
+
 ## Session Order Summary
 
 | # | Session | Depends On | Status |
@@ -867,3 +940,4 @@ document.addEventListener('keydown', e => {
 | 22 | Weekend Songs on Dashboard | 12 | ⏳ Planned |
 | 23 | Cross-Portal Infrastructure | Any complete | ⏳ Planned |
 | 24 | Logistics & Property — Inventory + Borrowing Log | 11 | ✅ Complete |
+| 25 | Commitment Reconciliation (Google Forms → Fines) | 15, 16 | ⏳ Planned |
