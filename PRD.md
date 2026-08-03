@@ -320,20 +320,30 @@ Automates the manual cross-check between Google Forms commitment responses and a
 **Form response format (current):** one row per member per weekend, columns:
 `Timestamp, Which weekend is this for, Name, Voice Section, Which masses can you serve this weekend? (Multi-select), Reason if you can't attend`
 
+Realities of the data (see sample export, June–Aug 2026):
+- The multi-select options change every week and include masses with venue codes ("Saturday 7pm SVF", "Sunday 7pm SNP"), practices ("Wednesday 8pm Practice"), and special events ("Sunday 8pm General Assembly", wake/funeral masses)
+- "I can't serve this weekend" is itself one of the multi-select options, and can appear **alongside** real selections (e.g. committed to practices but not the weekend masses, or committed to Sunday but not Saturday)
+- The reason column is free text and is often filled even by members who committed ("N/A", ".", partial-availability notes) — it is context, not a can't-attend signal
+- The same member may submit multiple times per weekend
+
 **Import (treasurer/admin):**
 - Treasurer uploads the CSV exported from the Form responses sheet (or pastes rows) and picks the weekend
 - Parsing rules:
-  - Columns are located by header keywords (timestamp / name / masses / reason), not fixed position
-  - The multi-select masses value is split into individual mass commitments; each option is mapped to a portal service event of that weekend (treasurer confirms the option→event mapping once per import; remembered per weekend)
-  - A row with an empty masses field and a filled reason = **cannot attend** — imported as no commitment for any mass (shown for reference, never fined)
-  - Duplicate responses from the same person: latest timestamp wins
+  - Columns are located by header keywords (timestamp / name / mass / reason), not fixed position; headers may have stray whitespace
+  - Rows are filtered to the selected weekend via the "Which weekend" column (en-dash date ranges like "June 28–29, 2026"); timestamps are M/D/YYYY H:MM:SS
+  - Duplicate responses from the same person for the same weekend: latest timestamp wins
+  - The multi-select value is split on commas **after quoting is resolved**; each distinct option label across the filtered rows is shown once in a mapping UI where the treasurer assigns it to: a portal event of that week (service *or* practice/special), or "ignore". Mapping is per-import with day/time keyword pre-selection
+  - Each mapped selection becomes a commitment row for that member and event
+  - The literal option "I can't serve this weekend" → `cant_attend` rows (with the reason column's text) for every *service* event of the weekend the member did not explicitly commit to; explicit selections in the same response still count as commitments
+  - The reason text is stored on all of that member's rows for the weekend, for treasurer reference
 - Portal matches each name to a member profile:
   1. Exact match on `full_name` (case-insensitive)
   2. Saved alias match (`member_aliases` table — maps a Form spelling/nickname to a profile)
   3. Fuzzy suggestion (normalized substring/token match) that the treasurer confirms manually
 - Confirming a fuzzy match offers to save it as an alias so it never needs fixing again
 - Unmatched names can be skipped (recorded nowhere) or left for later
-- Matched rows are saved to `commitments` — one row per member per mass/event of the weekend (unique per member + event; re-import upserts). Committed masses get `status = 'committed'`; a can't-attend response gets `status = 'cant_attend'` rows (with the reason) for every mass of that weekend, so the treasurer sees who begged off and why.
+- Matched rows are saved to `commitments` — one row per member per mapped event (unique per member + event; re-import upserts)
+- Practice/special-event commitments are stored the same way but are informational — reconciliation proposes fines **only for service events**, consistent with the working rules
 
 **Reconcile:**
 - For the selected event, the portal joins commitments against attendance:

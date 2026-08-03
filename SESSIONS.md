@@ -848,6 +848,8 @@ document.addEventListener('keydown', e => {
 
 **Depends on:** Session 15 (fines table), Session 16 (notifications)
 
+**Test data:** a real export lives at `~/Downloads/SVC Weekend Attendance (Responses) - Form Responses 1.csv` (do not commit it — reasons contain personal details). Provide it to the build session for parser validation.
+
 **Tasks:**
 
 *Database (`supabase/migration_commitments.sql` — run in Supabase SQL editor):*
@@ -881,21 +883,23 @@ alter table member_aliases enable row level security;
 
 *`pages/treasurer/commitments.html` (new page):*
 - Auth guard: same pattern as `fines.html` — `requireRole('treasurer')` plus explicit `['treasurer','admin','super_admin']` allowlist
-- **Step 1 — weekend picker:** pick a weekend; the panel lists that weekend's service events (Sat/Sun masses)
+- **Step 1 — weekend picker:** pick a weekend; the panel lists that week's events (masses, practices, specials)
 - **Step 2 — CSV import:** file input (or paste of the raw CSV) for the Form responses export. Current header format:
   `Timestamp,Which weekend is this for,Name,Voice Section,Which masses can you serve this weekend? (Multi-select),Reason if you can't attend`
-  - Locate columns by header keyword (timestamp / name / mass / reason), not position — the Form may change
-  - Filter rows to the selected weekend using the "Which weekend" column (show rows that don't match, unchecked)
-  - Split the multi-select masses cell (comma-separated Form option labels); show a one-time mapping UI: each distinct option label → one of the weekend's service events (persist the mapping choice in the import flow; pre-select by matching day/time keywords)
-  - Empty masses cell + filled reason = can't-attend response → `status='cant_attend'` rows for all weekend events, with the reason
-  - Duplicate names in the file: keep the latest Timestamp only
+  Parse against the real export (sample: June–Aug 2026). Rules, in order:
+  - Use a proper CSV parser (quoted cells contain commas — both in the multi-select and in reasons); locate columns by header keyword (timestamp / name / mass / reason), trimming stray header whitespace
+  - Filter rows to the selected weekend via the "Which weekend" column — values like `"June 28–29, 2026"` with an en-dash; show non-matching rows unchecked
+  - Duplicate names within the weekend: keep the latest Timestamp (format M/D/YYYY H:MM:SS) — members do resubmit to change their answer
+  - Split the multi-select cell on commas; collect the distinct option labels across all filtered rows and show a mapping UI: each label → one of that week's portal events (any category — options include practices like "Wednesday 8pm Practice" and specials like "Sunday 8pm General Assembly") or "Ignore". Pre-select by day/time keyword match; option labels change every week, so mapping is per-import
+  - The literal option `I can't serve this weekend` is NOT an event: it yields `status='cant_attend'` rows (with the reason text) for every **service** event of the weekend the member did not explicitly select. It can coexist with real selections in the same response (e.g. practices committed + weekend masses declined, or Sunday committed + Saturday declined) — explicit selections still become commitments
+  - The reason column is free text and often filled by committed members too ("N/A", ".", partial notes) — never treat it as a can't-attend signal; store it on the member's rows for reference
 - **Step 3 — match review table:** one row per pasted name → matched member
   - Exact `full_name` match (case/whitespace-insensitive) → auto-matched
   - `member_aliases` lookup on the normalized name → auto-matched
   - Otherwise: dropdown of fuzzy suggestions (token overlap against full names) + full member list fallback; a "skip" option per row
   - Manual match confirm offers "Remember this spelling" checkbox → inserts into `member_aliases`
   - "Save Commitments" upserts matched rows into `commitments` — one row per member per weekend event (re-import updates, not duplicates)
-- **Step 4 — reconcile panel:** per event of the weekend (tab or section per mass), join commitments × attendance:
+- **Step 4 — reconcile panel:** per **service** event of the weekend (tab or section per mass; practice/special commitments are stored but informational — no fines, per working rules), join commitments × attendance:
   - present or excused → OK row (muted)
   - `cant_attend` → listed separately with reason, never proposed for a fine
   - committed + absent or no attendance record → proposed fine row with checkbox (checked by default)
@@ -909,11 +913,14 @@ alter table member_aliases enable row level security;
 *Sidebar (`treasurer` section, all portal pages — or `js/sidebar.js` if Session 23 has landed):*
 - Add "Commitments" link to `#treasurer-section` → `../treasurer/commitments.html`
 
-**Acceptance criteria:**
-- [ ] Importing the real Form CSV maps each multi-select mass option to the right weekend event
-- [ ] A can't-attend response (empty masses + reason) never appears in proposed fines and shows its reason
+**Acceptance criteria (test against the real CSV export):**
+- [ ] Importing the real Form CSV maps each multi-select option to the right event, including practices and specials
+- [ ] "I can't serve this weekend" rows never appear in proposed fines and show their reason
+- [ ] A mixed response (e.g. "Sunday 7pm, I can't serve this weekend") commits Sunday and marks the other service events cant_attend
+- [ ] A practices-only + can't-serve response records practice commitments and no mass fines
 - [ ] A member who committed to Saturday only is not proposed for a fine on Sunday
 - [ ] Duplicate responses keep only the latest timestamp
+- [ ] A filled reason on a committed response does not affect reconciliation
 - [ ] Exact and alias name matches auto-resolve
 - [ ] Confirming a fuzzy match with "remember" saves an alias; re-importing the same spelling auto-matches
 - [ ] Reconcile proposes fines only for committed + absent/unmarked members; excused members are excluded
