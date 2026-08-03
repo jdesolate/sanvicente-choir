@@ -153,6 +153,39 @@
 
           </div>
 
+          <!-- ── My Fines ── -->
+          <div id="my-fines" style="display:none;margin-bottom:var(--space-8)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+              <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin:0">
+                My Fines
+              </h3>
+              <div id="fines-outstanding" class="badge badge-at-risk" style="display:none"></div>
+            </div>
+
+            <div id="my-fines-empty" class="empty-state" style="display:none">
+              <div class="empty-icon">◈</div>
+              <p>No fines on your record.</p>
+            </div>
+
+            <div id="my-fines-table-wrap" class="table-wrap" style="display:none">
+              <table class="data-table" aria-label="My fines">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Reason / Note</th>
+                  </tr>
+                </thead>
+                <tbody id="my-fines-tbody"></tbody>
+              </table>
+            </div>
+            <p class="form-hint" style="margin-top:var(--space-3)">
+              A fine can be waived if something genuine came up — message an officer and the reason is recorded here.
+            </p>
+          </div>
+
           <!-- ── History table ── -->
           <div id="att-history" style="display:none">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
@@ -186,39 +219,6 @@
                 <tbody id="history-tbody"></tbody>
               </table>
             </div>
-          </div>
-
-          <!-- ── My Fines ── -->
-          <div id="my-fines" style="display:none;margin-top:var(--space-8)">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
-              <h3 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:600;color:var(--ivory);letter-spacing:0.04em;margin:0">
-                My Fines
-              </h3>
-              <div id="fines-outstanding" class="badge badge-at-risk" style="display:none"></div>
-            </div>
-
-            <div id="my-fines-empty" class="empty-state" style="display:none">
-              <div class="empty-icon">◈</div>
-              <p>No fines on your record.</p>
-            </div>
-
-            <div id="my-fines-table-wrap" class="table-wrap" style="display:none">
-              <table class="data-table" aria-label="My fines">
-                <thead>
-                  <tr>
-                    <th>Event</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Reason / Note</th>
-                  </tr>
-                </thead>
-                <tbody id="my-fines-tbody"></tbody>
-              </table>
-            </div>
-            <p class="form-hint" style="margin-top:var(--space-3)">
-              A fine can be waived if something genuine came up — message an officer and the reason is recorded here.
-            </p>
           </div>
 
         </div>
