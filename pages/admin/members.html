@@ -249,6 +249,11 @@
         </div>
         <p id="edit-name" style="color:var(--ivory-dim);font-size:var(--text-sm);margin-bottom:var(--space-5)"></p>
         <div class="form-group">
+          <label for="edit-full-name">Full Name <span class="required">*</span></label>
+          <input type="text" id="edit-full-name" required autocomplete="off">
+          <p class="form-hint">Keep this identical to the name in the Google Form dropdown.</p>
+        </div>
+        <div class="form-group">
           <label for="edit-role">Role <span class="required">*</span></label>
           <select id="edit-role">
             <option value="member">Member</option>
@@ -724,6 +729,7 @@
       function openEditModal(id, name, role, status, joined) {
         targetId = id;
         document.getElementById('edit-name').textContent         = name;
+        document.getElementById('edit-full-name').value          = name;
         document.getElementById('edit-role').value               = role;
         document.getElementById('edit-status').value             = status;
         document.getElementById('edit-joined-date').value        = joined || '';
@@ -739,8 +745,16 @@
         const btn = document.getElementById('edit-confirm');
         btn.disabled = true; btn.textContent = 'Saving…';
 
+        const fullName  = document.getElementById('edit-full-name').value.trim();
+        if (!fullName) {
+          document.getElementById('edit-error-text').textContent = 'Full name is required.';
+          document.getElementById('edit-error').style.display = 'flex';
+          btn.disabled = false; btn.textContent = 'Save Changes';
+          return;
+        }
         const joinedVal = document.getElementById('edit-joined-date').value;
         const { error } = await supabase.from('profiles').update({
+          full_name:         fullName,
           role:              document.getElementById('edit-role').value,
           status:            document.getElementById('edit-status').value,
           joined_choir_date: joinedVal || null,
