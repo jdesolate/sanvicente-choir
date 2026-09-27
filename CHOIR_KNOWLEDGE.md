@@ -207,7 +207,7 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 5. Admin approves → member gains full access
 
 ### Member Portal
-- **Dashboard** — personalized welcome greeting (first name), liturgical season badge ("Ordinary Time · Week 12"), upcoming feasts timeline, quick stat cards, light/dark mode toggle
+- **Dashboard** — personalized welcome greeting (first name), liturgical season badge ("Ordinary Time · Week 12"), upcoming feasts timeline, quick stat cards, light/dark mode toggle, **"With Gratitude" Monthly Recognition** card (Tier 1: Steady Servers ≥80%, Tier 2: Salamat sa Inyong Pagpadayon 50%–79%, pastoral affirmation, and choir statistics). Driven by the `monthly_recognitions` table — only visible to regular members once leadership confirms and publishes it (`is_published: true`).
 - **My Attendance** — own history table, split into service rate (On Track ≥80% / At Risk <80%) and practice rate (informational), submit absence requests
 - **Song Library** — full-text search, filter by language / liturgical use / season, auto pre-filters to current season on load, expandable song cards with **Copy Lyrics** button, PDF Sheet URL and Guide URL links
   - **Songs for this Weekend** — assigned songs for upcoming service events, ordered by mass part (Entrance → Recessional). Each song has a **Copy** button for its own lyrics; per mass there's **Copy Lineup** (labeled title list, e.g. `Entrance : Song Title`) and **Copy Full Lyrics** (each part heading followed by its lyrics) — built for the president to paste the weekend lineup into the group chat without opening each song on slow chapel data
@@ -216,14 +216,19 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 ### Secretary Portal (inherits all member features)
 - **Attendance Tracker** — select event → mark each member Present / Absent / Excused → save
 - **Absence Requests** — Pending queue (approve / reject) + History tab
-- **Attendance Summary** — leaderboard with filters
+- **Attendance Summary** — accessible to secretaries and officers; custom date range and monthly filters, CSV export (Summary & Raw Log), "With Gratitude" General Assembly Recognition Publisher (with edit & publish workflow), Voice Section Standings, General Assembly Pubmat projector modal, and Copy GC Shoutout
 
 ### Admin Portal (inherits all member + secretary features)
 - **Member Management** — pending registrations queue, all members table, Create Account, View Profile modal, Delete Member (super_admin only)
 - **Event Management** — add/edit/delete events (title, date, type: Core/Major/Special, description)
 - **Song Management** (officer + admin) — add/edit/delete songs with all metadata; instant client-side **search + filters** mirroring the member library (title/tag search, language / liturgical use / season chips, Practicing Now toggle); **Assign** a song to a service event with a required **mass part** so the weekend lineup can be ordered and labeled
 - **Custom Field Management** — add/edit/delete/reorder fields
-- **Attendance Summary** — aggregate leaderboard
+- **Attendance Summary** — full attendance reporting suite:
+  - **CSV Export**: download Member Attendance Summary (aggregated rates, service/practice breakdown) or Complete Attendance Log (event-by-event raw logs) formatted for Microsoft Excel with UTF-8 BOM.
+  - **Date Range Scope**: select custom start & end dates (e.g. `2025-08-01` to `2025-08-31`) or quick presets ("This Month", "Last Month") and recalculate turnout instantly.
+  - **Recognition Publisher**: editorial workflow for the General Assembly "With Gratitude" Hall of Fame. Admin can review, edit names in Tier 1 (80%+) and Tier 2 (50%–79%), customize the Cebuano pastoral quote and choir motto, and click **Confirm & Publish to Dashboard** (or unpublish at any time).
+  - **Voice Section Standings**: real-time Section of the Month standings with turnout percentages and member counts.
+  - **Presentation & Sharing**: projector-ready **General Assembly Pubmat Modal** and **Copy GC Shoutout** button formatted for Messenger/social announcements.
 
 ### Super Admin
 - Hard delete member accounts (cascades all data)
@@ -372,6 +377,32 @@ Secretary, officer, and treasurer are **parallel roles** — each has distinct a
 | is_required | boolean | |
 | sort_order | int | |
 | created_at | timestamptz | |
+
+### `monthly_recognitions`
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid | Primary key (default `gen_random_uuid()`) |
+| title | text | default 'With Gratitude' |
+| period_label | text | e.g. "AUGUST 2025" or "AUG 1 – AUG 31, 2025" |
+| start_date | date | custom range start |
+| end_date | date | custom range end |
+| event_count | int | events tracked in period |
+| members_logged | int | distinct members with attendance |
+| choir_avg_rate | numeric | overall choir turnout % |
+| steady_servers | jsonb | Tier 1 (≥80% attendance) array of objects/names |
+| consistent_servers | jsonb | Tier 2 (50%–79% attendance) array of objects/names |
+| section_standings | jsonb | standings by voice section |
+| affirmation_quote | text | editable Cebuano pastoral affirmation |
+| motto | text | default "Better Music is Built on Steadier People" |
+| is_published | boolean | default false; regular members only read rows where `is_published = true` |
+| published_at | timestamptz | timestamp when admin confirmed & published |
+| published_by | uuid | FK → profiles (leadership user) |
+| created_at | timestamptz | default `now()` |
+| updated_at | timestamptz | default `now()` |
+
+**RLS policies on `monthly_recognitions`:**
+- Authenticated read: `is_published = true or auth_role() in ('secretary','officer','admin','super_admin')`
+- Leadership write: `auth_role() in ('secretary','officer','admin','super_admin')`
 
 ---
 

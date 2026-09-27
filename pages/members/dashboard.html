@@ -14,6 +14,191 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/design-system.css">
     <script>if(localStorage.getItem('svc-theme')==='light'){document.documentElement.className='light';}</script>
+    <style>
+      /* ── "With Gratitude" Pubmat Card ── */
+      .gratitude-card {
+        background: #0E0E0E;
+        border: 1px solid rgba(201, 168, 106, 0.3);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(201, 168, 106, 0.03);
+        padding: var(--space-8) var(--space-6);
+        margin-bottom: var(--space-8);
+        position: relative;
+      }
+      .gratitude-brand {
+        font-family: var(--font-display);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        text-align: center;
+      }
+      .gratitude-tagline {
+        font-family: var(--font-text);
+        font-style: italic;
+        font-size: 0.95rem;
+        color: var(--ivory-dim);
+        text-align: center;
+        margin-top: 2px;
+      }
+      .gratitude-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 12px auto 14px;
+        max-width: 200px;
+      }
+      .gratitude-divider::before,
+      .gratitude-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold-dim));
+      }
+      .gratitude-divider::after {
+        background: linear-gradient(90deg, var(--gold-dim), transparent);
+      }
+      .gratitude-diamond {
+        width: 6px;
+        height: 6px;
+        background: var(--gold);
+        transform: rotate(45deg);
+        display: inline-block;
+      }
+      .gratitude-title {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--ivory);
+        text-align: center;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+        margin-bottom: 4px;
+      }
+      .gratitude-period {
+        font-family: var(--font-text);
+        font-style: italic;
+        font-size: 1.05rem;
+        color: var(--gold-hover);
+        text-align: center;
+        margin-bottom: 22px;
+      }
+      .gratitude-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .gratitude-stat-box {
+        background: rgba(22, 22, 22, 0.7);
+        border: 1px solid rgba(245, 242, 235, 0.1);
+        padding: 14px 8px;
+        text-align: center;
+      }
+      .gratitude-stat-num {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--ivory);
+        line-height: 1;
+      }
+      .gratitude-stat-label {
+        font-family: var(--font-ui);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--ivory-muted);
+        margin-top: 6px;
+        font-weight: 500;
+      }
+      .gratitude-section-label {
+        font-family: var(--font-display);
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--ivory-dim);
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      .gratitude-tier-box {
+        border-radius: 4px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .gratitude-tier-1 {
+        background: rgba(30, 42, 26, 0.4);
+        border: 1px solid rgba(106, 191, 105, 0.35);
+      }
+      .gratitude-tier-2 {
+        background: rgba(22, 22, 22, 0.6);
+        border: 1px solid rgba(201, 168, 106, 0.2);
+      }
+      .gratitude-tier-subtitle {
+        font-family: var(--font-text);
+        font-style: italic;
+        font-size: 0.95rem;
+        display: block;
+        margin-bottom: 10px;
+      }
+      .gratitude-tier-1 .gratitude-tier-subtitle {
+        color: #8FD68F;
+      }
+      .gratitude-tier-2 .gratitude-tier-subtitle {
+        color: var(--gold);
+      }
+      .gratitude-names {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--ivory);
+        line-height: 1.9;
+        letter-spacing: 0.02em;
+      }
+      .gratitude-names-sub {
+        font-family: var(--font-ui);
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: var(--ivory);
+        line-height: 1.9;
+      }
+      .gratitude-dot {
+        color: var(--gold);
+        margin: 0 5px;
+        opacity: 0.7;
+      }
+      .gratitude-footer-affirmation {
+        text-align: center;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(245, 242, 235, 0.06);
+      }
+      .gratitude-quote {
+        font-family: var(--font-text);
+        font-style: italic;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: var(--ivory-dim);
+        max-width: 620px;
+        margin: 0 auto;
+      }
+      .gratitude-motto {
+        font-family: var(--font-display);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-top: 12px;
+      }
+      @media (max-width: 540px) {
+        .gratitude-title { font-size: 1.7rem; }
+        .gratitude-stats { grid-template-columns: 1fr; }
+        .gratitude-names { font-size: 0.95rem; }
+      }
+    </style>
   </head>
   <body class="portal-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -181,6 +366,61 @@
             <div class="stat-card">
               <div class="stat-num" id="stat-sinking">—</div>
               <div class="stat-label">Sinking Fund</div>
+            </div>
+          </div>
+
+          <!-- Monthly "With Gratitude" Assembly Pubmat Banner -->
+          <div class="gratitude-card" id="hall-of-fame-card" style="display:none">
+            <div class="gratitude-brand">San Vicente Choir</div>
+            <div class="gratitude-tagline">Serving through song since 1972</div>
+            <div class="gratitude-divider">
+              <span class="gratitude-diamond"></span>
+            </div>
+
+            <h2 class="gratitude-title">With Gratitude</h2>
+            <div class="gratitude-period" id="gratitude-period-text">—</div>
+
+            <!-- 3 Stat Boxes -->
+            <div class="gratitude-stats">
+              <div class="gratitude-stat-box">
+                <div class="gratitude-stat-num" id="gratitude-stat-events">—</div>
+                <div class="gratitude-stat-label">Events Tracked</div>
+              </div>
+              <div class="gratitude-stat-box">
+                <div class="gratitude-stat-num" id="gratitude-stat-members">—</div>
+                <div class="gratitude-stat-label">Members Logged</div>
+              </div>
+              <div class="gratitude-stat-box">
+                <div class="gratitude-stat-num" id="gratitude-stat-avg">—</div>
+                <div class="gratitude-stat-label">Choir Avg Rate</div>
+              </div>
+            </div>
+
+            <!-- Tier 1: Steady Servers -->
+            <div id="gratitude-tier-1-wrap" style="display:none">
+              <div class="gratitude-section-label">Steady Servers This Period</div>
+              <div class="gratitude-tier-box gratitude-tier-1">
+                <span class="gratitude-tier-subtitle">80%+ attendance across services &amp; practices</span>
+                <div class="gratitude-names" id="gratitude-tier-1-names"></div>
+              </div>
+            </div>
+
+            <!-- Tier 2: Salamat sa Inyong Pagpadayon -->
+            <div id="gratitude-tier-2-wrap" style="display:none">
+              <div class="gratitude-section-label">Salamat sa Inyong Pagpadayon</div>
+              <div class="gratitude-tier-box gratitude-tier-2">
+                <span class="gratitude-tier-subtitle">consistently showing up — practice and service</span>
+                <div class="gratitude-names-sub" id="gratitude-tier-2-names"></div>
+              </div>
+            </div>
+
+            <!-- Affirmation Message -->
+            <div class="gratitude-footer-affirmation">
+              <p class="gratitude-quote">
+                Dili ni ranking — pasalamat lang gyud namo sa mga nagpadayon paghatag panahon ug boses alang sa atong ministeryo.<br>
+                Kung dili ka pa nakaserve og daghan, okay ra — padayon ta together.
+              </p>
+              <div class="gratitude-motto">Better Music is Built on Steadier People</div>
             </div>
           </div>
 
@@ -549,6 +789,87 @@
       if (profile.status === 'pending') {
         document.getElementById('pending-banner').style.display = 'flex';
       }
+
+      // ── Monthly "With Gratitude" Spotlight ──────────────────────
+      (async function loadHallOfFame() {
+        const card        = document.getElementById('hall-of-fame-card');
+        const periodText  = document.getElementById('gratitude-period-text');
+        const statEvents  = document.getElementById('gratitude-stat-events');
+        const statMembers = document.getElementById('gratitude-stat-members');
+        const statAvg     = document.getElementById('gratitude-stat-avg');
+        const tier1Wrap   = document.getElementById('gratitude-tier-1-wrap');
+        const tier1Names  = document.getElementById('gratitude-tier-1-names');
+        const tier2Wrap   = document.getElementById('gratitude-tier-2-wrap');
+        const tier2Names  = document.getElementById('gratitude-tier-2-names');
+
+        function renderGratitudePubmat(data) {
+          if (!data || (!data.steady_servers?.length && !data.consistent_servers?.length)) {
+            card.style.display = 'none';
+            return;
+          }
+
+          periodText.textContent  = data.period_label || data.date_range_label || data.month_label || 'Current Period';
+          statEvents.textContent  = data.event_count || '0';
+          statMembers.textContent = data.members_logged || '0';
+          statAvg.textContent     = (Number(data.choir_avg_rate) || 0).toFixed(1) + '%';
+
+          // Steady Servers (80%+)
+          const steady = data.steady_servers || [];
+          if (steady.length > 0) {
+            tier1Names.innerHTML = steady
+              .map(m => `<span>${escHtml(typeof m === 'string' ? m : (m.full_name || m.name))}</span>`)
+              .join('<span class="gratitude-dot">·</span>');
+            tier1Wrap.style.display = 'block';
+          } else {
+            tier1Wrap.style.display = 'none';
+          }
+
+          // Consistent Servers (50% - 79%)
+          const consistent = data.consistent_servers || [];
+          if (consistent.length > 0) {
+            tier2Names.innerHTML = consistent
+              .map(m => `<span>${escHtml(typeof m === 'string' ? m : (m.full_name || m.name))}</span>`)
+              .join('<span class="gratitude-dot">·</span>');
+            tier2Wrap.style.display = 'block';
+          } else {
+            tier2Wrap.style.display = 'none';
+          }
+
+          // Affirmation note & motto
+          if (data.affirmation_quote) {
+            const quoteEl = card.querySelector('.gratitude-quote');
+            if (quoteEl) quoteEl.textContent = data.affirmation_quote;
+          }
+          if (data.motto) {
+            const mottoEl = card.querySelector('.gratitude-motto');
+            if (mottoEl) mottoEl.textContent = data.motto;
+          }
+
+          card.style.display = 'block';
+        }
+
+        try {
+          // Query the admin-confirmed and published recognition
+          const { data: published, error: pubErr } = await supabase
+            .from('monthly_recognitions')
+            .select('*')
+            .eq('is_published', true)
+            .order('published_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          if (!pubErr && published) {
+            renderGratitudePubmat(published);
+            return;
+          }
+
+          // If no recognition has been confirmed & published yet by admin, keep card hidden
+          card.style.display = 'none';
+        } catch (err) {
+          console.warn('Could not load monthly With Gratitude banner:', err);
+          card.style.display = 'none';
+        }
+      })();
 
       // Show role-gated nav sections
       if (['secretary', 'officer', 'admin', 'super_admin'].includes(profile.role)) {
